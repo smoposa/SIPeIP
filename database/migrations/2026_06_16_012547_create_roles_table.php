@@ -14,14 +14,11 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
 
             $table->id();
-
             $table->string('nombre', 100)->unique();
-
             $table->string('descripcion', 255);
-
             $table->string('estado', 20)->default('Activo');
-
             $table->timestamps();
+
         });
     }
 
