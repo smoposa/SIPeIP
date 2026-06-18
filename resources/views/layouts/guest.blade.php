@@ -25,6 +25,8 @@
                 <div class="w-3/5 bg-[#024687] text-white relative flex flex-col">
 
                     <!-- HEADER -->
+
+                    
                     <div class="text-center pt-6">
                         <p class="text-sm text-gray-300 uppercase tracking-wider">
                             Gobierno del Ecuador
@@ -40,22 +42,27 @@
 
                         <img src="{{ asset('images/logosystem.png') }}"
                             alt="Logo SIPeIP"
-                            class="h-24">
+                            class="h-29">
 
-                        <h1 class="text-xl font-light text-gray-300 text-center">
+                        <!-- <h1 class="text-xl font-light text-gray-300 text-center">
                             Sistema Integral de Planificación <br>
                             e Inversión Pública
-                        </h1>
+                        </h1> -->
 
                     </div>
 
                     <!-- FOOTER -->
-                    <div class="pb-8 text-center text-base text-gray-300">
-                        SIPeIP
-                        <span class="text-gray-300"> | Versión 1.0</span>
+                    <div class="pb-2 flex flex-col items-center">
+                        <img src="{{ asset('images/footer.png') }}"
+                            alt="Gobierno del Ecuador"
+                            class="h-16 mb-3">
+                            <div class="text-sm text-gray-300">
+                                Versión 1.0
+                            </div>
                     </div>
+
                 </div>
-                                
+
 
                 <!-- Panel derecho -->
                 <div class="w-2/5 bg-gray-100 flex items-center justify-center p-16">
