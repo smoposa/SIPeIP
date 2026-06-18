@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sidebar-group {
+    @apply flex items-center justify-between px-3 py-2 rounded-md cursor-pointer text-gray-700 hover:bg-[#edebe9] transition duration-200;
+}
+
+.sidebar-link {
+    @apply block px-3 py-2 rounded-md text-gray-600 hover:bg-[#edebe9] transition duration-200;
+}
+
+.sidebar-active {
+    @apply flex items-center gap-3 px-3 py-2 rounded-md bg-white text-[#024687] font-semibold shadow-sm;
+}

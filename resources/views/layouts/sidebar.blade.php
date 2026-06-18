@@ -1,119 +1,190 @@
-<div>
+<div class="h-screen flex flex-col bg-[#f3f2f1]">
 
-    <div class="text-center py-4">
+    <!-- Logo -->
+    <div class="text-center pt-2 pb-2 border-b">
 
-    <img
-        src="{{ asset('images/logosystem.png') }}"
-        alt="SIPeIP"
-        class="mx-auto h-20">
+        <img
+            src="{{ asset('images/menusidebar.png') }}"
+            alt="SIPeIP"
+            class="mx-auto h-12">
+                    <div class="text-xs text-gray-500">
+             Planificación e Inversión Pública
+        </div>
 
-    <h2 class="mt-3 text-lg font-bold text-gray-800">
-        SIPeIP
-    </h2>
+    </div>
 
-    <p class="text-xs text-gray-500">
-        Sistema Integral de <br> Planificación e Inversión Pública
-    </p>
+    <!-- Menú -->
+    <nav class="flex-1 overflow-y-auto px-3 py-3">
 
-</div>
+        <!-- Inicio -->
+        <a href="#" class="sidebar-active">
 
-    <hr>
-
-    <ul>
-        <li>
             <i class="bi bi-house-door"></i>
-            Inicio
-        </li>
-    </ul>
+            <span>Inicio</span>
 
-    <hr>
+        </a>
 
-    <h4>Gestión Institucional</h4>
+        <!-- Gestión Institucional -->
+        <details class="mt-2">
 
-    <ul>
-        <li>
-            <i class="bi bi-building"></i>
-            Entidades
-        </li>
+            <summary class="sidebar-group">
 
-        <li>
-            <i class="bi bi-people"></i>
-            Usuarios
-        </li>
+                <div class="flex items-center gap-3">
+                    <i class="bi bi-building"></i>
+                    <span>Gestión Institucional</span>
+                </div>
 
-        <li>
-            <i class="bi bi-shield-lock"></i>
-            Roles
-        </li>
-    </ul>
+                <i class="bi bi-chevron-down text-sm"></i>
 
-    <hr>
+            </summary>
 
-    <h4>Planificación</h4>
+            <div class="ml-8 mt-1 space-y-1">
 
-    <ul>
-        <li>
-            <i class="bi bi-journal-text"></i>
-            Planes
-        </li>
+                <a href="#" class="sidebar-link">
+                    Entidades
+                </a>
 
-        <li>
-            <i class="bi bi-bullseye"></i>
-            Objetivos
-        </li>
+                <a href="#" class="sidebar-link">
+                    Usuarios
+                </a>
 
-        <li>
-            <i class="bi bi-graph-up"></i>
-            Metas
-        </li>
+                <a href="#" class="sidebar-link">
+                    Roles
+                </a>
 
-        <li>
-            <i class="bi bi-bar-chart"></i>
-            Indicadores
-        </li>
-    </ul>
+            </div>
 
-    <hr>
+        </details>
 
-    <h4>Inversión Pública</h4>
+        <!-- Planificación -->
+        <details class="mt-2">
 
-    <ul>
-        <li>
-            <i class="bi bi-briefcase"></i>
-            Proyectos
-        </li>
-    </ul>
+            <summary class="sidebar-group">
 
-    <hr>
+                <div class="flex items-center gap-3">
+                    <i class="bi bi-journal-text"></i>
+                    <span>Planificación</span>
+                </div>
 
-    <h4>Seguimiento y Control</h4>
+                <i class="bi bi-chevron-down text-sm"></i>
 
-    <ul>
-        <li>
-            <i class="bi bi-clipboard-check"></i>
-            Seguimientos
-        </li>
+            </summary>
 
-        <li>
-            <i class="bi bi-search"></i>
-            Auditoría
-        </li>
+            <div class="ml-8 mt-1 space-y-1">
 
-        <li>
-            <i class="bi bi-clock-history"></i>
-            Versiones
-        </li>
-    </ul>
+                <a href="#" class="sidebar-link">
+                    Planes
+                </a>
 
-    <hr>
+                <a href="#" class="sidebar-link">
+                    Objetivos
+                </a>
 
-    <h4>Informes</h4>
+                <a href="#" class="sidebar-link">
+                    Metas
+                </a>
 
-    <ul>
-        <li>
-            <i class="bi bi-file-earmark-text"></i>
-            Reportes
-        </li>
-    </ul>
+                <a href="#" class="sidebar-link">
+                    Indicadores
+                </a>
+
+            </div>
+
+        </details>
+
+        <!-- Inversión Pública -->
+        <details class="mt-2">
+
+            <summary class="sidebar-group">
+
+                <div class="flex items-center gap-3">
+                    <i class="bi bi-briefcase"></i>
+                    <span>Inversión Pública</span>
+                </div>
+
+                <i class="bi bi-chevron-down text-sm"></i>
+
+            </summary>
+
+            <div class="ml-8 mt-1">
+
+                <a href="#" class="sidebar-link">
+                    Proyectos
+                </a>
+
+            </div>
+
+        </details>
+
+        <!-- Seguimiento y Control -->
+        <details class="mt-2">
+
+            <summary class="sidebar-group">
+
+                <div class="flex items-center gap-3">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>Seguimiento y Control</span>
+                </div>
+
+                <i class="bi bi-chevron-down text-sm"></i>
+
+            </summary>
+
+            <div class="ml-8 mt-1 space-y-1">
+
+                <a href="#" class="sidebar-link">
+                    Seguimientos
+                </a>
+
+                <a href="#" class="sidebar-link">
+                    Auditoría
+                </a>
+
+                <a href="#" class="sidebar-link">
+                    Versiones
+                </a>
+
+            </div>
+
+        </details>
+
+        <!-- Informes -->
+        <details class="mt-2">
+
+            <summary class="sidebar-group">
+
+                <div class="flex items-center gap-3">
+                    <i class="bi bi-file-earmark-text"></i>
+                    <span>Informes</span>
+                </div>
+
+                <i class="bi bi-chevron-down text-sm"></i>
+
+            </summary>
+
+            <div class="ml-8 mt-1">
+
+                <a href="#" class="sidebar-link">
+                    Reportes
+                </a>
+
+            </div>
+
+        </details>
+
+    </nav>
+
+    <!-- Footer Usuario -->
+    <div class="border-t p-4 text-center">
+
+        <div class="text-sm font-semibold text-gray-800">
+            {{ Auth::user()->name ?? 'Administrador' }}
+        </div>
+
+        <div class="text-xs text-gray-500">
+            Usuario del sistema
+        </div>
+
+    </div>
 
 </div>
