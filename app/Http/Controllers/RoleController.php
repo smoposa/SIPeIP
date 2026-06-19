@@ -9,7 +9,17 @@ class RoleController extends Controller
 {
     public function index()
     {
-        return view('roles.index');
+        $totalRoles = Rol::count();
+
+        $rolesActivos = Rol::where('estado', 'Activo')->count();
+
+        $rolesInactivos = Rol::where('estado', 'Inactivo')->count();
+
+        return view('roles.index', compact(
+            'totalRoles',
+            'rolesActivos',
+            'rolesInactivos'
+        ));
     }
 
     

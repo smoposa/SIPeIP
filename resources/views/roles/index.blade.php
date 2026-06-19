@@ -57,7 +57,7 @@
                 </p>
 
                 <p class="text-4xl font-semibold text-gray-700 mt-4">
-                    0
+                    {{ $totalRoles }}
                 </p>
             </div>
 
@@ -71,7 +71,7 @@
                 </p>
 
                 <p class="text-4xl font-semibold text-gray-700 mt-4">
-                    0
+                    {{ $rolesActivos }}
                 </p>
             </div>
 
@@ -85,7 +85,7 @@
                 </p>
 
                 <p class="text-4xl font-semibold text-gray-700 mt-4">
-                    0
+                    {{ $rolesInactivos }}
                 </p>
                 
             </div>
