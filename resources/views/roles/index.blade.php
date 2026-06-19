@@ -13,17 +13,17 @@
 
             <a href="{{ route('roles.index') }}"
                class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Información General
+                Información general
             </a>
 
             <a href="{{ route('roles.create') }}"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Crear Rol
+                Crear rol
             </a>
 
             <a href="{{ route('roles.listar') }}"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Consultar Roles
+                Consultar roles
             </a>
 
         </div>
