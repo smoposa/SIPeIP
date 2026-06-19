@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    public function informacion()
-    {
-        return view('roles.informacion');
-    }
-
     public function index()
     {
         return view('roles.index');
+    }
+
+    public function listar()
+    {
+        return view('roles.listar');
     }
 
     public function create()

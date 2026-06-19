@@ -20,12 +20,16 @@ Route::middleware('auth')->group(function () {
 
     // Roles
     Route::prefix('roles')->group(function () {
-        Route::get('/informacion', [RoleController::class, 'informacion'])
-            ->name('roles.informacion');
+
         Route::get('/', [RoleController::class, 'index'])
             ->name('roles.index');
+
+        Route::get('/listar', [RoleController::class, 'listar'])
+            ->name('roles.listar');
+
         Route::get('/crear', [RoleController::class, 'create'])
             ->name('roles.create');
+
         Route::get('/desactivados', [RoleController::class, 'desactivados'])
             ->name('roles.desactivados');
 

@@ -1,7 +1,7 @@
-<x-roles-layout title="Crear Rol">
+<x-roles-layout title="Listar Roles">
 
     <h1 class="text-2xl font-bold">
-        Crear Rol
+        Listar Roles
     </h1>
 
 </x-roles-layout>

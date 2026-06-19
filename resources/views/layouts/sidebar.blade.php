@@ -1,23 +1,30 @@
 <div class="h-screen flex flex-col bg-[#f3f2f1]">
 
-    <!-- Logo -->
-    <div class="text-center pt-2 pb-2 border-b">
+<!-- Logo -->
+<div class="text-center pt-2 pb-2 border-b">
+    
+
+    <a href="{{ route('dashboard') }}">
 
         <img
             src="{{ asset('images/menusidebar.png') }}"
             alt="SIPeIP"
             class="mx-auto h-12">
-                    <div class="text-xs text-gray-500">
-             Planificación e Inversión Pública
+
+        <div class="text-xs text-gray-500">
+            Planificación e Inversión Pública
         </div>
 
-    </div>
+    </a>
+
+</div>
 
     <!-- Menú -->
     <nav class="flex-1 overflow-y-auto px-3 py-3">
 
         <!-- Inicio -->
-        <a href="#" class="sidebar-active">
+        <a href="{{ route('dashboard') }}"
+        class="{{ request()->routeIs('dashboard') ? 'sidebar-active' : 'sidebar-link' }}">
 
             <i class="bi bi-house-door"></i>
             <span>Inicio</span>
@@ -25,9 +32,10 @@
         </a>
 
         <!-- Gestión Institucional -->
-        <details class="mt-2">
+        <details class="mt-2"
+            {{ request()->routeIs('roles.*') ? 'open' : '' }}>
 
-            <summary class="sidebar-group">
+            <summary class="{{ request()->routeIs('roles.*') ? 'sidebar-active' : 'sidebar-group' }}">
 
                 <div class="flex items-center gap-3">
                     <i class="bi bi-building"></i>
@@ -48,7 +56,8 @@
                     Usuarios
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('roles.index') }}" 
+                class="{{ request()->routeIs('roles.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
                     Roles
                 </a>
 
