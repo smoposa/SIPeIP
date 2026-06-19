@@ -30,6 +30,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/crear', [RoleController::class, 'create'])
             ->name('roles.create');
 
+        Route::post('/guardar', [RoleController::class, 'store'])
+            ->name('roles.store');
+
+
         Route::get('/desactivados', [RoleController::class, 'desactivados'])
             ->name('roles.desactivados');
 

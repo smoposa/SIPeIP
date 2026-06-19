@@ -11,20 +11,20 @@
 
         <div class="flex">
 
-            <button
-                class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
+            <a href="{{ route('roles.index') }}"
+               class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
                 Información General
-            </button>
+            </a>
 
-            <button
-                class="px-5 py-3 text-sm font-medium text-gray-600 hover:text-black">
+            <a href="{{ route('roles.create') }}"
+               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
                 Crear Rol
-            </button>
+            </a>
 
-            <button
-                class="px-5 py-3 text-sm font-medium text-gray-600 hover:text-black">
+            <a href="{{ route('roles.listar') }}"
+               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
                 Consultar Roles
-            </button>
+            </a>
 
         </div>
 
