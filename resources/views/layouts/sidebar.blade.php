@@ -20,7 +20,7 @@
 </div>
 
     <!-- Menú -->
-    <nav class="flex-1 overflow-y-auto px-3 py-3">
+    <nav class="flex-1 overflow-y-auto px-0 py-3">
 
         <!-- Inicio -->
         <a href="{{ route('dashboard') }}"

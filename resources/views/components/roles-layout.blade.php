@@ -11,7 +11,7 @@
 
         <!-- Submenu -->
         <div id="submenuContainer"
-             class="w-56 border-r border-gray-300">
+             class="w-52 border-r border-gray-300">
 
             @include('submenus.roles')
 
@@ -39,9 +39,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     boton.addEventListener('click', function () {
 
-        if (submenu.classList.contains('w-56')) {
+        if (submenu.classList.contains('w-52')) {
 
-            submenu.classList.remove('w-56');
+            submenu.classList.remove('w-52');
             submenu.classList.add('w-8');
 
             menu.classList.add('hidden');
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
 
             submenu.classList.remove('w-8');
-            submenu.classList.add('w-56');
+            submenu.classList.add('w-52');
 
             menu.classList.remove('hidden');
 

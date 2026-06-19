@@ -25,7 +25,7 @@
             <div class="flex min-h-screen bg-gray-100 dark:bg-gray-900">
 
                 <!-- Sidebar -->
-                <aside class="w-72 bg-white border-r border-gray-200 shadow-sm">
+                <aside class="w-64 bg-white border-r border-gray-200 shadow-sm">
 
                     @include('layouts.sidebar')
 

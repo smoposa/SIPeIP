@@ -1,5 +1,5 @@
 <x-roles-layout title="Página de inicio">
 
-    Contenido...
+    index
 
 </x-roles-layout>
