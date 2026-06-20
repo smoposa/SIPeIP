@@ -31,6 +31,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/crear', [RoleController::class, 'create'])
             ->name('roles.create');
 
+        Route::get('/{id}/detalle', [RoleController::class, 'detalle'])
+            ->name('roles.detalle');
+
         Route::post('/guardar', [RoleController::class, 'store'])
             ->name('roles.store');
 
@@ -46,24 +49,24 @@ Route::middleware('auth')->group(function () {
     });
 
     // Entidades
-        Route::prefix('entidades')->group(function () {
+    Route::prefix('entidades')->group(function () {
 
-            Route::get('/', [EntidadController::class, 'index'])
-                ->name('entidades.index');
+        Route::get('/', [EntidadController::class, 'index'])
+            ->name('entidades.index');
 
-            Route::get('/listar', [EntidadController::class, 'listar'])
-                ->name('entidades.listar');
+        Route::get('/listar', [EntidadController::class, 'listar'])
+            ->name('entidades.listar');
 
-            Route::get('/{id}/detalle', [EntidadController::class, 'detalle'])
-                ->name('entidades.detalle');
+        Route::get('/crear', [EntidadController::class, 'create'])
+            ->name('entidades.create');
 
-            Route::get('/crear', [EntidadController::class, 'create'])
-                ->name('entidades.create');
+        Route::post('/guardar', [EntidadController::class, 'store'])
+            ->name('entidades.store');
 
-            Route::get('/desactivadas', [EntidadController::class, 'desactivadas'])
-                ->name('entidades.desactivadas');
+        Route::get('/{id}/detalle', [EntidadController::class, 'detalle'])
+            ->name('entidades.detalle');
 
-        });
+    });
 
 });
 

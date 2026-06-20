@@ -17,7 +17,7 @@
     <div class="flex">
 
         <!-- Submenu -->
-        {{-- 
+        {{-- desactivado temporalmente
         <div id="submenuContainer"
             class="w-52 border-r border-gray-300">
 
