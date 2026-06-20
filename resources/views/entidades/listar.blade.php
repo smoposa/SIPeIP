@@ -201,7 +201,7 @@
                             <!-- Acciones -->
                             <td class="px-4 py-3 text-center">
 
-                                <a href="#"
+                                <a href="{{ route('entidades.edit', $entidad->id) }}"
                                 class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                     Editar
                                 </a>
