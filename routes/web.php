@@ -33,6 +33,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/guardar', [RoleController::class, 'store'])
             ->name('roles.store');
 
+        Route::get('/{id}/editar', [RoleController::class, 'edit'])
+            ->name('roles.edit');
+
+        Route::put('/{id}', [RoleController::class, 'update'])
+            ->name('roles.update');
 
         Route::get('/desactivados', [RoleController::class, 'desactivados'])
             ->name('roles.desactivados');

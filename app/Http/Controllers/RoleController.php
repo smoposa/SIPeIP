@@ -57,4 +57,34 @@ class RoleController extends Controller
             ->route('roles.create')
             ->with('success', 'Rol registrado correctamente.');
     }
+
+    public function edit($id)
+    {
+        $rol = Rol::findOrFail($id);
+
+        return view('roles.editar', compact('rol'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nombre' => 'required|max:100',
+            'descripcion' => 'nullable|max:255',
+            'estado' => 'required|in:Activo,Inactivo',
+        ]);
+
+        $rol = Rol::findOrFail($id);
+
+        $rol->update([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'estado' => $request->estado,
+        ]);
+
+        return redirect()
+            ->route('roles.listar')
+            ->with('success', 'Rol actualizado correctamente.');
+    }
+
+    
 }

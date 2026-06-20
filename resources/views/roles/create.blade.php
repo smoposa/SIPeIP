@@ -24,7 +24,7 @@
 
             <a href="{{ route('roles.index') }}"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Información general
+                Inicio
             </a>
 
             <a href="{{ route('roles.create') }}"

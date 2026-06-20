@@ -19,18 +19,18 @@
 
         <a href="{{ route('roles.listar') }}"
         class="{{ request()->routeIs('roles.listar') ? 'sidebar-link-active' : 'sidebar-link' }}">
-            Listar Roles
+            Cosultar roles
         </a>
 
         <a href="{{ route('roles.create') }}"
         class="{{ request()->routeIs('roles.create') ? 'sidebar-link-active' : 'sidebar-link' }}">
-            Crear Rol
+            Crear rol
         </a>
 
-        <a href="{{ route('roles.desactivados') }}"
+    <!--         <a href="{{ route('roles.desactivados') }}"
         class="{{ request()->routeIs('roles.desactivados') ? 'sidebar-link-active' : 'sidebar-link' }}">
-            Roles Desactivados
-        </a>
+            Roles desactivados
+        </a>-->
 
     </nav>
 

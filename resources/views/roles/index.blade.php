@@ -13,7 +13,7 @@
 
             <a href="{{ route('roles.index') }}"
                class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Información general
+                Inicio
             </a>
 
             <a href="{{ route('roles.create') }}"
@@ -35,7 +35,7 @@
         <!-- Bienvenida -->
         <div>
             <h2 class="text-2xl font-semibold text-gray-900">
-                Gestión de Roles
+                Información general
             </h2>
 
             <p class="mt-2 text-gray-600">

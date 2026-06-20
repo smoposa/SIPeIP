@@ -1,5 +1,22 @@
 <x-roles-layout title="Consultar Roles">
 
+    @if(session('success'))
+        <div id="alertSuccess"
+            class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+            {{ session('success') }}
+        </div>
+
+        <script>
+            setTimeout(() => {
+                const alerta = document.getElementById('alertSuccess');
+
+                if (alerta) {
+                    alerta.remove();
+                }
+            }, 3000);
+        </script>
+    @endif
+
     <!-- Barra de acciones -->
     <div class="bg-white border-b border-gray-300 mb-6">
 
@@ -7,7 +24,7 @@
 
             <a href="{{ route('roles.index') }}"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Información general
+                Inicio
             </a>
 
             <a href="{{ route('roles.create') }}"
@@ -34,6 +51,9 @@
 
         <p class="mt-1 text-gray-500">
             Visualice y administre los roles institucionales registrados en el Sistema Integral de Planificación e Inversión Pública (SIPeIP).
+        </p>
+        <p class="mt-1 text-gray-500">
+            === agregar un filtro en esta seccion ===
         </p>
 
     </div>
@@ -100,10 +120,10 @@
 
                         <td class="px-4 py-3 text-center">
 
-                            <button
-                                class="text-blue-600 hover:text-blue-800 font-medium">
-                                Editar
-                            </button>
+                        <a href="{{ route('roles.edit', $rol->id) }}"
+                        class="text-blue-600 hover:text-blue-800 font-medium">
+                            Editar
+                        </a>
 
                         </td>
 
