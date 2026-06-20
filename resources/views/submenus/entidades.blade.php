@@ -1,31 +1,37 @@
-<div class="p-4">
+<div class="h-screen bg-[#ffffff]">
 
-    <ul class="space-y-2">
+    <!-- Botón ocultar -->
+    <div class="flex justify-end px-2 py-2 border-b">
 
-        <li>
-            <a href="#" class="sidebar-link">
-                Información General
-            </a>
-        </li>
+        <button id="toggleSubmenu" class="text-gray-600 hover:text-[#024687]">
+            <i class="bi bi-chevron-double-left"></i>
+        </button>
 
-        <li>
-            <a href="#" class="sidebar-link">
-                Todas las Entidades
-            </a>
-        </li>
+    </div>
 
-        <li>
-            <a href="#" class="sidebar-link">
-                Registrar Entidad
-            </a>
-        </li>
+    <!-- Opciones -->
+    <nav id="menuEntidades">
 
-        <li>
-            <a href="#" class="sidebar-link">
-                Entidades Desactivadas
-            </a>
-        </li>
+        <a href="{{ route('entidades.index') }}"
+        class="{{ request()->routeIs('entidades.index') ? 'sidebar-link-active' : 'sidebar-link' }}">
+            Página de inicio
+        </a>
 
-    </ul>
+        <a href="{{ route('entidades.listar') }}"
+        class="{{ request()->routeIs('entidades.listar') ? 'sidebar-link-active' : 'sidebar-link' }}">
+            Consultar entidades
+        </a>
+
+        <a href="{{ route('entidades.create') }}"
+        class="{{ request()->routeIs('entidades.create') ? 'sidebar-link-active' : 'sidebar-link' }}">
+            Crear entidad
+        </a>
+
+        <!--<a href="{{ route('entidades.desactivadas') }}"
+        class="{{ request()->routeIs('entidades.desactivadas') ? 'sidebar-link-active' : 'sidebar-link' }}">
+            Entidades desactivadas
+        </a>-->
+
+    </nav>
 
 </div>

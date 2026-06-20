@@ -27,7 +27,6 @@
             </a>
 
         </div>
-
     </div>
 
     <div class="space-y-6">
@@ -39,14 +38,15 @@
             </h2>
 
             <p class="mt-2 text-gray-600">
-                Administre los roles institucionales del Sistema Integral de
-                Planificación e Inversión Pública (SIPeIP).
+                Administre los roles institucionales del Sistema Integral de Planificación e Inversión Pública (SIPeIP).
             </p>
+
         </div>
 
         <!-- Tarjetas informativas -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
+            <!-- Registrados -->
             <div class="bg-white border border-gray-200 rounded-lg p-5">
                 <h3 class="text-base font-semibold text-gray-800">
                     Roles Registrados
@@ -61,6 +61,7 @@
                 </p>
             </div>
 
+            <!-- Activas -->
             <div class="bg-white border border-gray-200 rounded-lg p-5">
                 <h3 class="text-base font-semibold text-gray-800">
                     Roles Activos
@@ -74,7 +75,8 @@
                     {{ $rolesActivos }}
                 </p>
             </div>
-
+        
+            <!-- Inactivas -->
             <div class="bg-white border border-gray-200 rounded-lg p-5">
                 <h3 class="text-base font-semibold text-gray-800">
                     Roles Inactivos
@@ -87,7 +89,6 @@
                 <p class="text-4xl font-semibold text-gray-700 mt-4">
                     {{ $rolesInactivos }}
                 </p>
-                
             </div>
 
         </div>

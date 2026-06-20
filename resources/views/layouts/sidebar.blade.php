@@ -33,9 +33,9 @@
 
         <!-- Gestión Institucional -->
         <details class="mt-2"
-            {{ request()->routeIs('roles.*') ? 'open' : '' }}>
+            {{ request()->routeIs('roles.*') || request()->routeIs('entidades.*') ? 'open' : '' }}>
 
-            <summary class="{{ request()->routeIs('roles.*') ? 'sidebar-active' : 'sidebar-group' }}">
+            <summary class="{{ request()->routeIs('roles.*') || request()->routeIs('entidades.*') ? 'sidebar-active' : 'sidebar-group' }}">
 
                 <div class="flex items-center gap-3">
                     <i class="bi bi-building"></i>
@@ -48,7 +48,8 @@
 
             <div class="ml-8 mt-1 space-y-1">
 
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('entidades.index') }}"
+                class="{{ request()->routeIs('entidades.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
                     Entidades
                 </a>
 
