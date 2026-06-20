@@ -27,7 +27,7 @@
             Crear rol
         </a>
 
-    <!--         <a href="{{ route('roles.desactivados') }}"
+    <!--<a href="{{ route('roles.desactivados') }}"
         class="{{ request()->routeIs('roles.desactivados') ? 'sidebar-link-active' : 'sidebar-link' }}">
             Roles desactivados
         </a>-->

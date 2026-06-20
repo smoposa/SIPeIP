@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\EntidadController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -43,6 +44,23 @@ Route::middleware('auth')->group(function () {
             ->name('roles.desactivados');
 
     });
+
+    // Entidades
+        Route::prefix('entidades')->group(function () {
+
+            Route::get('/', [EntidadController::class, 'index'])
+                ->name('entidades.index');
+
+            Route::get('/listar', [EntidadController::class, 'listar'])
+                ->name('entidades.listar');
+
+            Route::get('/crear', [EntidadController::class, 'create'])
+                ->name('entidades.create');
+
+            Route::get('/desactivadas', [EntidadController::class, 'desactivadas'])
+                ->name('entidades.desactivadas');
+
+        });
 
 });
 
