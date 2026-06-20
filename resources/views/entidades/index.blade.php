@@ -6,7 +6,7 @@
         </h2>
     </x-slot>
 
-    <!-- Barra de acciones -->
+    <!-- Barra de acciones 
     <div class="bg-white border-b border-gray-300 mb-6">
 
         <div class="flex">
@@ -27,8 +27,9 @@
             </a>
 
         </div>
-    </div>
+    </div>-->
 
+     <!-- Marco general del contenido -->
     <div class="space-y-6">
 
         <!-- Encabezado -->
@@ -37,11 +38,14 @@
                 Información general
             </h2>
 
-            <p class="mt-2 text-gray-600">
+            <p class="mt-2 text-sm text-gray-600">
                 Administre las entidades públicas registradas en el Sistema Integral de Planificación e Inversión Pública (SIPeIP).
             </p>
 
         </div>
+
+    <!-- Scroll vertical -->
+    <div class="overflow-y-auto" style="height: calc(100vh - 210px);">
 
         <!-- Tarjetas Indicadores -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

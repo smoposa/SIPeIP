@@ -17,7 +17,7 @@
         </script>
     @endif
 
-    <!-- Barra de acciones -->
+    <!-- Barra de acciones 
     <div class="bg-white border-b border-gray-300 mb-6">
 
         <div class="flex">
@@ -39,16 +39,16 @@
 
         </div>
 
-    </div>
+    </div>-->
 
     <!-- Encabezado -->
     <div class="mb-6">
 
         <h2 class="text-2xl font-semibold text-gray-800">
-            Consulta de Entidades
+            Consulta de entidades
         </h2>
 
-        <p class="mt-1 text-gray-500">
+        <p class="mt-1 text-sm text-gray-500">
             Visualice y administre las entidades públicas registradas en el Sistema Integral de Planificación e Inversión Pública (SIPeIP).
         </p>
 
@@ -100,7 +100,8 @@
     </div> -->
 
     <!-- Tabla -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 280px);"> <!-- Scroll vertical -->
+    <div class="overflow-y-auto" style="height: calc(100vh - 210px);"> <!-- Scroll vertical -->
+        
 
         <div class="bg-white border border-gray-200 rounded-lg">
 
@@ -133,9 +134,9 @@
                             Estado
                         </th>
 
-                        <th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">
+                        <!-- th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">
                             Acciones
-                        </th>
+                        </th> -->
 
                     </tr>
 
@@ -198,7 +199,7 @@
 
                             </td>
 
-                            <!-- Acciones -->
+                            <!-- Acciones 
                             <td class="px-4 py-3 text-center">
 
                                 <a href="{{ route('entidades.edit', $entidad->id) }}"
@@ -206,7 +207,7 @@
                                     Editar
                                 </a>
 
-                            </td>
+                            </td>-->
 
                         </tr>
 

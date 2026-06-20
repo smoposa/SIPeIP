@@ -16,15 +16,14 @@
     <div class="flex">
 
         <!-- Submenu -->
-        {{-- desactivado temporalmente
+        {{-- desactivado temporalmente--}}
         <div id="submenuContainer"
              class="w-52 border-r border-gray-300">
 
             @include('submenus.entidades')
 
         </div>
-        --}}
-
+        
         <!-- Contenido -->
         <div class="flex-1 p-4">
 

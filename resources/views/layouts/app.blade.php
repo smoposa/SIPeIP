@@ -22,7 +22,7 @@
 
         <body class="font-sans antialiased">
 
-            <div class="flex min-h-screen bg-white">
+            <div class="flex h-screen bg-white">
 
                 <!-- Sidebar -->
                 <aside class="w-64 bg-white border-r border-gray-200 shadow-sm">

@@ -1,4 +1,4 @@
-<div class="h-screen bg-[#ffffff]">
+<div class="h-full bg-[#ffffff]">
 
     <!-- Botón ocultar -->
     <div class="flex justify-end px-2 py-2 border-b">
@@ -27,10 +27,10 @@
             Crear entidad
         </a>
 
-        <!--<a href="{{ route('entidades.desactivadas') }}"
+        <!-- a href="#"
         class="{{ request()->routeIs('entidades.desactivadas') ? 'sidebar-link-active' : 'sidebar-link' }}">
             Entidades desactivadas
-        </a>-->
+        </a> -->
 
     </nav>
 

@@ -1,22 +1,21 @@
 <x-entidades-layout title="Detalle de Entidad">
 
     <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-6">
+    <div class="bg-white border-b border-gray-300 mb-0">
 
         <div class="flex">
 
             <a href="{{ route('entidades.listar') }}"
-            class="px-5 py-3 text-sm font-medium text-blue-600 hover:text-blue-800">
+            class="px-5 py-3 text-sm font-medium text-blue-500 hover:text-blue-800">
                 <i class="bi bi-chevron-left"></i>
                 Regresar
             </a>  
             
-            <a href="{{ route('entidades.detalle', $entidad->id) }}"
-            class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
+            <span class="px-5 py-3 text-sm font-medium text-black">
                 Información General
-            </a>
+            </span>
 
-            <a href="#"
+             <!--<a href="#"
             class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
                 Editar
             </a>
@@ -29,11 +28,14 @@
             <a href="#"
             class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
                 Exportar
-            </a>
+            </a> -->
 
         </div>
 
     </div>
+
+
+
 
     <!-- Encabezado 
     <div class="mb-6">
@@ -49,13 +51,13 @@
     </div>-->
 
     <!-- Scroll vertical -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 200px);">
+    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
         <!-- Información -->
         <div class="bg-white p-6 shadow-sm">
 
             <!-- Cabecera de la entidad -->
-            <div class="flex items-center gap-4 mb-8 pb-6 border-b border-gray-200">
+            <div class="flex items-center gap-4 mb-0 pb-6 ">
 
                 <div class="w-20 h-20 rounded-full bg-[#024687]
                             flex items-center justify-center
@@ -85,8 +87,31 @@
 
             </div>
 
+            
+
+<!-- Encabezado de sección -->
+<div class="bg-gray-100 border-b border-gray-200 mb-4">
+
+    <div class="flex justify-between items-center px-4 py-2">
+
+        <h4 class="text-sm font-semibold text-gray-800">
+            Información básica
+        </h4>
+
+        <a href="{{ route('entidades.edit', $entidad->id) }}"
+           class="text-sm text-blue-600 hover:text-blue-800">
+
+            <i class="bi bi-pencil me-1"></i>
+            Editar
+
+        </a>
+
+    </div>
+
+</div>
+
             <!-- Datos -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 mb-6">
 
                 <div class="flex items-center">
                     <span class="w-40 text-sm font-semibold text-gray-700">
@@ -214,49 +239,103 @@
             </div>
 
 
-<!-- Tarjeta Estado -->
-<div class="mt-8">
+<!-- Encabezado de sección -->
+<div class="bg-gray-100 border-b border-gray-200 mb-4">
 
-    <div class="w-[30%] min-w-[320px] bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
+    <div class="px-4 py-2">
 
-        <div class="flex gap-4">
-
-            <i class="bi bi-building-fill text-4xl text-cyan-500"></i>
-
-            <div>
-
-                <h4 class="text-sm font-semibold text-gray-800">
-                    Estado de la entidad
-                </h4>
-
-                <p class="mt-2 text-sm text-gray-700">
-
-                    @if($entidad->estado == 'Activo')
-                        <i class="bi bi-check-circle-fill"></i>
-                        Habilitado
-                    @else
-                        <i class="bi bi-x-circle-fill"></i>
-                        Deshabilitado
-                    @endif
-
-                </p>
-
-                <a href="#"
-                   class="block mt-2 text-blue-600 text-sm hover:text-blue-800">
-                    Editar
-                </a>
-
-            </div>
-
-        </div>
+        <h4 class="text-sm font-semibold text-gray-800">
+            Estado
+        </h4>
 
     </div>
 
 </div>
+
+<!-- Contenido -->
+<div class="px-4 py-3">
+
+    <div class="flex items-center">
+
+
+                <div class="flex items-center">
+
+                    <span class="w-40 text-sm font-semibold text-gray-700">
+                        Estado de la entidad
+                    </span>
+
+                    @if($entidad->estado == 'Activo')
+
+                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                            Habilitado
+                        </span>
+
+                    @else
+
+                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                            Deshabilitado
+                        </span>
+
+                    @endif
+
+                    <a href="#"
+                    class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                        Editar
+                    </a>
+
+                </div> 
+    </div>
+
+</div>
+
+
+
+
+
+
+        
+            <!-- Tarjeta Estado 
+        <div class="mt-8">
+
+            <div class="w-[30%] min-w-[320px] bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
+
+                <div class="flex gap-4">
+
+                    <i class="bi bi-building-fill text-4xl text-cyan-500"></i>
+
+                    <div>
+
+
+
+                        <p class="mt-2 text-sm text-gray-700">
+
+                            @if($entidad->estado == 'Activo')
+                                <i class="bi bi-check-circle-fill"></i>
+                                Habilitado
+                            @else
+                                <i class="bi bi-x-circle-fill"></i>
+                                Deshabilitado
+                            @endif
+
+                        </p>
+
+                        <a href="#"
+                        class="block mt-2 text-blue-600 text-sm hover:text-blue-800">
+                            Editar
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div> -->
 
             
             
         </div>
     
     </div>
+    
 </x-entidades-layout>
