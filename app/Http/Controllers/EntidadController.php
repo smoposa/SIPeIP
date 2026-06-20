@@ -29,6 +29,13 @@ class EntidadController extends Controller
         return view('entidades.listar', compact('entidades'));
     }
 
+    public function detalle($id)
+    {
+        $entidad = Entidad::findOrFail($id);
+
+        return view('entidades.detalle', compact('entidad'));
+    }
+
     public function create()
     {
         return view('entidades.create');

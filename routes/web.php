@@ -54,6 +54,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/listar', [EntidadController::class, 'listar'])
                 ->name('entidades.listar');
 
+            Route::get('/{id}/detalle', [EntidadController::class, 'detalle'])
+                ->name('entidades.detalle');
+
             Route::get('/crear', [EntidadController::class, 'create'])
                 ->name('entidades.create');
 

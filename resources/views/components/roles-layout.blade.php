@@ -17,12 +17,14 @@
     <div class="flex">
 
         <!-- Submenu -->
+        {{-- 
         <div id="submenuContainer"
-             class="w-52 border-r border-gray-300">
+            class="w-52 border-r border-gray-300">
 
             @include('submenus.roles')
 
         </div>
+        --}}
 
         <!-- Contenido -->
         <div class="flex-1 p-4">
