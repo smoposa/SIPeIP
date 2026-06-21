@@ -90,17 +90,26 @@ Route::middleware('auth')->group(function () {
             Route::get('/crear', [UserController::class, 'crear'])
                 ->name('usuarios.create');
 
+            Route::post('/guardar', [UserController::class, 'store'])
+                ->name('usuarios.store');
+
             Route::get('/desactivados', [UserController::class, 'desactivados'])
                 ->name('usuarios.desactivados');
 
             Route::get('/{usuario}', [UserController::class, 'detalle'])
                 ->name('usuarios.show');
+            
+            Route::put('/{usuario}', [UserController::class, 'update'])
+                ->name('usuarios.update');
 
             Route::get('/{usuario}/editar', [UserController::class, 'editar'])
                 ->name('usuarios.edit');
 
             Route::get('/{usuario}/estado', [UserController::class, 'editarEstado'])
                 ->name('usuarios.estado');
+
+            Route::put('/{usuario}/actualizar-estado', [UserController::class, 'actualizarEstado'])
+                ->name('usuarios.actualizarestado');
 
         });
 });

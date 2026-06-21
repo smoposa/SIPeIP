@@ -1,8 +1,17 @@
 <x-app-layout>
-
+    
+    <!-- Header -->
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $title }}
+        <h2 class="text-xl text-gray-800 leading-tight">
+
+            <span class="font-semibold">
+                Usuarios |
+            </span>
+
+            <span class="font-normal">
+                {{ $title }}
+            </span>
+
         </h2>
     </x-slot>
 
@@ -17,7 +26,7 @@
         </div>
 
         <!-- Contenido -->
-        <div class="flex-1 p-6">
+        <div class="flex-1 p-4">
 
             {{ $slot }}
 
@@ -31,21 +40,36 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const submenu = document.getElementById('submenuContainer');
+    const boton = document.getElementById('toggleSubmenu');
+    const menu = document.getElementById('menuUsuarios');
 
-    if(localStorage.getItem('submenuOculto') === 'true') {
-        submenu.style.display = 'none';
-    }
+    if (!submenu || !boton || !menu) return;
 
-    window.toggleSubmenu = function() {
+    boton.addEventListener('click', function () {
 
-        if(submenu.style.display === 'none') {
-            submenu.style.display = 'block';
-            localStorage.setItem('submenuOculto', 'false');
+        if (submenu.classList.contains('w-52')) {
+
+            submenu.classList.remove('w-52');
+            submenu.classList.add('w-8');
+
+            menu.classList.add('hidden');
+
+            boton.innerHTML =
+                '<i class="bi bi-chevron-double-right"></i>';
+
         } else {
-            submenu.style.display = 'none';
-            localStorage.setItem('submenuOculto', 'true');
+
+            submenu.classList.remove('w-8');
+            submenu.classList.add('w-52');
+
+            menu.classList.remove('hidden');
+
+            boton.innerHTML =
+                '<i class="bi bi-chevron-double-left"></i>';
+
         }
-    }
+
+    });
 
 });
 </script>

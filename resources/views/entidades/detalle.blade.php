@@ -18,8 +18,6 @@
     @endif
 
     <!-- Barra de acciones -->
-
-    <!-- Barra de acciones -->
     <div class="bg-white border-b border-gray-300 mb-0">
 
         <div class="flex">
@@ -129,8 +127,10 @@
 
 </div>
 
-            <!-- Datos -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 mb-6">
+<!-- Datos -->
+<div class="px-4 py-2">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 mb-6">
 
                 <div class="flex items-center">
                     <span class="w-40 text-sm font-semibold text-gray-700">
@@ -254,8 +254,8 @@
 
                 
 
-                
-            </div>
+            </div>        
+        </div>
 
 
 <!-- Encabezado de sección -->

@@ -52,8 +52,8 @@
                 class="{{ request()->routeIs('entidades.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
                     Entidades
                 </a>
-
-                <a href="#" class="sidebar-link">
+                
+                <a href="{{ route('usuarios.index') }}" class="sidebar-link">
                     Usuarios
                 </a>
 
