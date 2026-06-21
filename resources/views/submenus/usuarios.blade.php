@@ -1,37 +1,32 @@
-<div class="p-4">
+<div class="h-full bg-[#ffffff]">
 
-    <ul class="space-y-2">
+    <!-- Botón ocultar -->
+    <div class="flex justify-end px-2 py-2 border-b">
 
-        <li>
-            <a href="#" class="sidebar-link">
-                Información General
-            </a>
-        </li>
+        <button id="toggleSubmenu" class="text-gray-600 hover:text-[#024687]">
+            <i class="bi bi-chevron-double-left"></i>
+        </button>
 
-        <li>
-            <a href="#" class="sidebar-link">
-                Todos los Usuarios
-            </a>
-        </li>
+    </div>
 
-        <li>
-            <a href="#" class="sidebar-link">
-                Registrar Usuario
-            </a>
-        </li>
+    <!-- Opciones -->
+    <nav id="menuUsuarios">
 
-        <li>
-            <a href="#" class="sidebar-link">
-                Usuarios Eliminados
-            </a>
-        </li>
+        <a href="{{ route('usuarios.index') }}"
+        class="{{ request()->routeIs('usuarios.index') ? 'sidebar-link-active' : 'sidebar-link' }}">
+            Consultar usuarios
+        </a>
 
-        <li>
-            <a href="#" class="sidebar-link">
-                Usuarios Desactivados
-            </a>
-        </li>
+        <a href="{{ route('usuarios.create') }}"
+        class="{{ request()->routeIs('usuarios.create') ? 'sidebar-link-active' : 'sidebar-link' }}">
+            Crear usuario
+        </a>
 
-    </ul>
+        <a href="{{ route('usuarios.desactivados') }}"
+        class="{{ request()->routeIs('usuarios.desactivados') ? 'sidebar-link-active' : 'sidebar-link' }}">
+            Usuarios desactivados
+        </a>
+
+    </nav>
 
 </div>

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EntidadController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -80,6 +81,28 @@ Route::middleware('auth')->group(function () {
 
     });
 
+        // Usuarios
+        Route::prefix('usuarios')->group(function () {
+
+            Route::get('/', [UserController::class, 'listar'])
+                ->name('usuarios.index');
+
+            Route::get('/crear', [UserController::class, 'crear'])
+                ->name('usuarios.create');
+
+            Route::get('/desactivados', [UserController::class, 'desactivados'])
+                ->name('usuarios.desactivados');
+
+            Route::get('/{usuario}', [UserController::class, 'detalle'])
+                ->name('usuarios.show');
+
+            Route::get('/{usuario}/editar', [UserController::class, 'editar'])
+                ->name('usuarios.edit');
+
+            Route::get('/{usuario}/estado', [UserController::class, 'editarEstado'])
+                ->name('usuarios.estado');
+
+        });
 });
 
 require __DIR__.'/auth.php';
