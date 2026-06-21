@@ -278,10 +278,10 @@
 
                     @endif
 
-                    <a href="#"
-                    class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
-                        Editar
-                    </a>
+<a href="{{ route('entidades.editarestado', $entidad->id) }}"
+class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
+    Editar
+</a>
 
                 </div> 
     </div>

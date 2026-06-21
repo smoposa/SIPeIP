@@ -72,6 +72,12 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', [EntidadController::class, 'update'])
             ->name('entidades.update');
 
+        Route::get('/{id}/editar-estado', [EntidadController::class, 'editarEstado'])
+            ->name('entidades.editarestado');
+
+        Route::put('/{id}/actualizar-estado', [EntidadController::class, 'actualizarEstado'])
+            ->name('entidades.actualizarestado');
+
     });
 
 });

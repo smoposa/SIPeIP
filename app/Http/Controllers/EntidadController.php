@@ -117,6 +117,28 @@ class EntidadController extends Controller
             ->with('success', 'Entidad actualizada correctamente.');
     }
 
+    public function editarEstado($id)
+    {
+        $entidad = Entidad::findOrFail($id);
+
+        return view('entidades.editarestado', compact('entidad'));
+    }
+
+    public function actualizarEstado(Request $request, $id)
+    {
+        $entidad = Entidad::findOrFail($id);
+
+        $entidad->estado = $request->has('estado')
+            ? 'Activo'
+            : 'Inactivo';
+
+        $entidad->save();
+
+        return redirect()
+            ->route('entidades.detalle', $entidad->id)
+            ->with('success', 'Estado actualizado correctamente.');
+    }
+    
     public function desactivadas()
     {
         return view('entidades.desactivadas');
