@@ -60,18 +60,16 @@
 
 
     <!-- Formulario -->
-    
-
     <form method="POST" action="{{ route('entidades.update', $entidad->id) }}">
         @csrf
         @method('PUT')
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="space-y-4">
 
             <!-- Código Institucional -->
-            <div>
+            <div class="flex items-center">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="w-48 text-sm font-medium text-gray-700">
                     Código Institucional <span class="text-red-500">*</span>
                 </label>
 
@@ -81,14 +79,14 @@
                     maxlength="50"
                     required
                     value="{{ old('codigoInstitucional', $entidad->codigoInstitucional) }}"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
 
             </div>
 
             <!-- RUC -->
-            <div>
+            <div class="flex items-center">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="w-48 text-sm font-medium text-gray-700">
                     RUC <span class="text-red-500">*</span>
                 </label>
 
@@ -98,14 +96,14 @@
                     maxlength="13"
                     required
                     value="{{ old('ruc', $entidad->ruc) }}"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
 
             </div>
 
             <!-- Nombre -->
-            <div class="md:col-span-2">
+            <div class="flex items-center">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="w-48 text-sm font-medium text-gray-700">
                     Nombre de la Entidad <span class="text-red-500">*</span>
                 </label>
 
@@ -115,21 +113,21 @@
                     maxlength="255"
                     required
                     value="{{ old('nombre', $entidad->nombre) }}"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
 
             </div>
 
             <!-- Tipo de Entidad -->
-            <div>
+            <div class="flex items-center">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="w-48 text-sm font-medium text-gray-700">
                     Tipo de Entidad <span class="text-red-500">*</span>
                 </label>
 
                 <select
                     name="tipoEntidad"
                     required
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
 
                     <option value="">Seleccione</option>
 
@@ -152,16 +150,16 @@
             </div>
 
             <!-- Nivel de Gobierno -->
-            <div>
+            <div class="flex items-center">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="w-48 text-sm font-medium text-gray-700">
                     Nivel de Gobierno <span class="text-red-500">*</span>
                 </label>
 
                 <select
                     name="nivelGobierno"
                     required
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
 
                     <option value="">Seleccione</option>
 
@@ -178,9 +176,9 @@
             </div>
 
             <!-- Provincia -->
-            <div>
+            <div class="flex items-center">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="w-48 text-sm font-medium text-gray-700">
                     Provincia
                 </label>
 
@@ -189,14 +187,14 @@
                     name="provincia"
                     maxlength="100"
                     value="{{ old('provincia', $entidad->provincia) }}"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
 
             </div>
 
             <!-- Cantón -->
-            <div>
+            <div class="flex items-center">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="w-48 text-sm font-medium text-gray-700">
                     Cantón
                 </label>
 
@@ -205,14 +203,14 @@
                     name="canton"
                     maxlength="100"
                     value="{{ old('canton', $entidad->canton) }}"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
 
             </div>
 
             <!-- Parroquia -->
-            <div>
+            <div class="flex items-center">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="w-48 text-sm font-medium text-gray-700">
                     Parroquia
                 </label>
 
@@ -221,14 +219,14 @@
                     name="parroquia"
                     maxlength="100"
                     value="{{ old('parroquia', $entidad->parroquia) }}"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
 
             </div>
 
             <!-- Teléfono -->
-            <div>
+            <div class="flex items-center">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="w-48 text-sm font-medium text-gray-700">
                     Teléfono
                 </label>
 
@@ -237,28 +235,28 @@
                     name="telefono"
                     maxlength="20"
                     value="{{ old('telefono', $entidad->telefono) }}"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
 
             </div>
 
             <!-- Dirección -->
-            <div class="md:col-span-2">
+            <div class="flex items-start">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
+                <label class="w-48 text-sm font-medium text-gray-700 pt-2">
                     Dirección
                 </label>
 
                 <textarea
                     name="direccion"
                     rows="3"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">{{ old('direccion', $entidad->direccion) }}</textarea>
+                    class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">{{ old('direccion', $entidad->direccion) }}</textarea>
 
             </div>
 
         </div>
 
         <!-- Botones -->
-        <div class="flex gap-3 mt-6">
+        <div class="flex gap-3 mt-10">
 
             <button
                 type="submit"

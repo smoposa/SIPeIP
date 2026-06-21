@@ -44,7 +44,7 @@
             @csrf
             @method('PUT')
 
-            <div class="flex items-center justify-between max-w-md">
+            <div class="flex items-center gap-20">
 
                 <label class="text-sm font-medium text-gray-700">
                     Entidad habilitada
@@ -58,7 +58,7 @@
                     class="w-5 h-5">
 
             </div>
-<br>
+
             <div class="flex gap-3 mt-20">
 
                 <button
