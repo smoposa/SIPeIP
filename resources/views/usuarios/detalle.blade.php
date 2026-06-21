@@ -230,7 +230,7 @@
 
                             <!-- Columna 1 -->
                             <div>
-                                <i class="bi bi-key-fill text-4xl text-green-500"></i>
+                                <i class="bi bi-key-fill text-4xl text-yellow-500"></i>
                             </div>
 
                             <!-- Columna 2 -->
@@ -256,7 +256,6 @@
                                 <a href="{{ route('usuarios.edit', $usuario->id) }}"
                                 class="text-sm text-blue-600 hover:text-blue-800">
 
-                                    <i class="bi bi-pencil me-1"></i>
                                     Editar
 
                                 </a>
@@ -299,7 +298,6 @@
                                 <a href="{{ route('usuarios.edit', $usuario->id) }}"
                                 class="text-sm text-blue-600 hover:text-blue-800">
 
-                                    <i class="bi bi-pencil me-1"></i>
                                     Editar
 
                                 </a>
