@@ -21,11 +21,11 @@
         class="{{ request()->routeIs('usuarios.create') ? 'sidebar-link-active' : 'sidebar-link' }}">
             Crear usuario
         </a>
-
+<!-- 
         <a href="{{ route('usuarios.desactivados') }}"
         class="{{ request()->routeIs('usuarios.desactivados') ? 'sidebar-link-active' : 'sidebar-link' }}">
             Usuarios desactivados
-        </a>
+        </a> -->
 
     </nav>
 

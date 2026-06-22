@@ -16,34 +16,26 @@
     </script>
 @endif
 
-<!-- Barra de acciones 
-<div class="bg-white border-b border-gray-300 mb-6">
+<!-- Barra de acciones -->
+<div class="bg-white border-b border-gray-300 mb-0">
 
     <div class="flex">
 
-        <a href="{{ route('entidades.index') }}"
-           class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-            Inicio
-        </a>
-
-        <a href="{{ route('entidades.create') }}"
-           class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-            Crear entidad
-        </a>
-
         <a href="{{ route('entidades.listar') }}"
-           class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-            Consultar entidades
+           class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+
+            <i class="bi bi-chevron-left"></i>
+            Regresar
+
         </a>
 
     </div>
 
-</div> -->
-
+</div>
 
 
 <!-- Marco general del contenido -->
-<div class="space-y-6">
+<div class="bg-white p-6 shadow-sm">
     
     <!-- Encabezado -->
     <div class="mb-6">

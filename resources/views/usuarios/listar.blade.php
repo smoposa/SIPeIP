@@ -1,4 +1,4 @@
-<x-usuarios-layout title="Consultar Usuarios">
+<x-usuarios-layout title="Usuarios registrados">
 
     @if(session('success'))
         <div id="alertSuccess"
@@ -21,7 +21,7 @@
     <div class="mb-6">
 
         <h2 class="text-2xl font-semibold text-gray-800">
-            Consulta de usuarios
+            Usuarios registrados
         </h2>
 
         <p class="mt-1 text-sm text-gray-500">
@@ -46,7 +46,7 @@
                         </th>
 
                         <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                            Nombre completo
+                            Nombre
                         </th>
 
                         <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
@@ -57,17 +57,17 @@
                             Correo institucional
                         </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                        <!-- th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                             Cargo
-                        </th>
+                        </th> -->
 
                         <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                             Entidad
                         </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                        <!-- th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                             Rol
-                        </th>
+                        </th> -->
 
                         <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                             Estado
@@ -110,20 +110,20 @@
                                 {{ $usuario->email }}
                             </td>
 
-                            <!-- Cargo -->
+                            <!-- Cargo 
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ $usuario->cargo }}
-                            </td>
+                            </td>-->
 
                             <!-- Entidad -->
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ $usuario->entidad?->nombre ?? 'Sin entidad' }}
                             </td>
 
-                            <!-- Rol -->
+                            <!-- Rol 
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ $usuario->rol?->nombre ?? 'Sin rol' }}
-                            </td>
+                            </td>-->
 
                             <!-- Estado -->
                             <td class="px-4 py-3">

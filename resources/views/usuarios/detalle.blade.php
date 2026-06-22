@@ -41,14 +41,20 @@
 
             <a href="{{ route('usuarios.editroles', $usuario->id) }}"
                 class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-                <i class="bi bi-shield-lock text-blue-500 me-1"></i>
+                <i class="bi bi-briefcase text-blue-500 me-1"></i>
                 Rol
             </a>
 
             <a href="{{ route('usuarios.editpassword', $usuario->id) }}"
                 class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-                <i class="bi bi-key text-blue-500 me-1"></i>
+                <i class="bi bi-key text-blue-500 inline-block rotate-45 me-1"></i>
                 Restablecer contraseña
+            </a>
+
+            <a href="{{ url()->current() }}"
+                class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                <i class="bi bi-arrow-clockwise text-blue-500 me-1"></i>
+                Actualizar
             </a>
 
         </div>

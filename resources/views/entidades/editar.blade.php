@@ -22,16 +22,10 @@
     <div class="flex">
 
             <a href="{{ route('entidades.detalle', $entidad->id) }}"
-            class="px-5 py-3 text-sm font-medium text-blue-500 hover:text-blue-800">
+            class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
                 <i class="bi bi-chevron-left"></i>
                 Regresar
             </a>  
-
-
-        <a href="{{ route('entidades.edit', $entidad->id) }}"
-           class="px-5 py-3 text-sm font-medium text-black">
-            Editar Entidad
-        </a>
 
     </div>
 
