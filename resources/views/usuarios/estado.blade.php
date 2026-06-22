@@ -6,16 +6,11 @@
         <div class="flex">
 
             <a href="{{ route('usuarios.show', $usuario->id) }}"
-               class="px-5 py-3 text-sm font-medium text-blue-500 hover:text-blue-800">
-
+                class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
                 <i class="bi bi-chevron-left"></i>
                 Regresar
 
             </a>
-
-            <span class="px-5 py-3 text-sm font-medium text-black">
-                Estado del usuario
-            </span>
 
         </div>
 

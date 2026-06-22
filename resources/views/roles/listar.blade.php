@@ -20,7 +20,7 @@
     <!-- Barra de acciones -->
     <div class="bg-white border-b border-gray-300 mb-6">
 
-        <div class="flex">
+        <div class="flex gap-6">
 
             <a href="{{ route('roles.index') }}"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
@@ -28,7 +28,7 @@
             </a>
 
             <a href="{{ route('roles.create') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
+               class="px-2 py-3 text-sm font-medium text-gray-500 hover:text-black">
                 Crear rol
             </a>
 

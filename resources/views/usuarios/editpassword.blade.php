@@ -2,20 +2,15 @@
 
     <div class="bg-white border-b border-gray-300">
 
-        <div class="flex">
+        <div class="flex gap-6">
 
             <a href="{{ route('usuarios.show', $usuario->id) }}"
-               class="px-5 py-3 text-sm font-medium text-blue-500 hover:text-blue-800">
+               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
 
                 <i class="bi bi-chevron-left"></i>
                 Regresar
 
             </a>
-
-            <span class="px-5 py-3 text-sm font-medium text-black">
-                Restablecer contraseña
-            </span>
-
         </div>
 
     </div>
@@ -23,7 +18,7 @@
     <div class="overflow-y-auto"
          style="height: calc(100vh - 180px);">
 
-        <div class="p-6">
+        <div class="p-4">
 
             <p class="mt-1 text-sm text-gray-500">
                 Defina una nueva contraseña para el usuario.
