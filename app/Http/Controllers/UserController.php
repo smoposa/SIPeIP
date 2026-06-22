@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Rol;
 use App\Models\Entidad;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -127,4 +128,97 @@ class UserController extends Controller
     {
         return view('usuarios.desactivados');
     }
+
+    public function editRoles($id)
+    {
+        $usuario = User::findOrFail($id);
+
+        $roles = Rol::where('estado', 'Activo')
+                    ->orderBy('nombre')
+                    ->get();
+
+        return view('usuarios.editroles', compact(
+            'usuario',
+            'roles'
+        ));
+    }
+
+public function updateRoles(Request $request, $id)
+{
+    $request->validate([
+        'rol_id' => 'required|exists:roles,id'
+    ]);
+
+    $usuario = User::findOrFail($id);
+
+    $usuario->rol_id = $request->rol_id;
+
+    $usuario->save();
+
+    return redirect()
+        ->route('usuarios.show', $usuario->id)
+        ->with('success', 'Rol asignado correctamente.');
+}
+
+public function editEntidad($id)
+{
+    $usuario = User::findOrFail($id);
+
+    $entidades = Entidad::where('estado', 'Activo')
+                        ->orderBy('nombre')
+                        ->get();
+
+    return view('usuarios.editentidad', compact(
+        'usuario',
+        'entidades'
+    ));
+}
+
+public function updateEntidad(Request $request, $id)
+{
+    $request->validate([
+        'entidad_id' => 'required|exists:entidades,id'
+    ]);
+
+    $usuario = User::findOrFail($id);
+
+    $usuario->entidad_id = $request->entidad_id;
+
+    $usuario->save();
+
+    return redirect()
+        ->route('usuarios.show', $usuario->id)
+        ->with('success', 'Entidad asignada correctamente.');
+}
+
+public function editPassword($id)
+{
+    $usuario = User::findOrFail($id);
+
+    return view('usuarios.editpassword', compact(
+        'usuario'
+    ));
+}
+
+public function updatePassword(Request $request, $id)
+{
+    $request->validate([
+        'password' => 'required|min:8|confirmed'
+    ]);
+
+    $usuario = User::findOrFail($id);
+
+    $usuario->password = Hash::make(
+        $request->password
+    );
+
+    $usuario->save();
+
+    return redirect()
+        ->route('usuarios.show', $usuario->id)
+        ->with('success',
+            'Contraseña restablecida correctamente.');
+}
+
+
 }

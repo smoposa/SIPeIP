@@ -111,6 +111,30 @@ Route::middleware('auth')->group(function () {
             Route::put('/{usuario}/actualizar-estado', [UserController::class, 'actualizarEstado'])
                 ->name('usuarios.actualizarestado');
 
+            Route::get('/usuarios/{id}/editar-rol',
+                [UserController::class, 'editRoles'])
+                ->name('usuarios.editroles');
+
+            Route::put('/usuarios/{id}/actualizar-rol',
+                [UserController::class, 'updateRoles'])
+                ->name('usuarios.actualizarroles');
+
+            Route::get('/{usuario}/editar-entidad',
+                [UserController::class, 'editEntidad'])
+                ->name('usuarios.editentidad');
+
+            Route::put('/{usuario}/actualizar-entidad',
+                [UserController::class, 'updateEntidad'])
+                ->name('usuarios.actualizarentidad');
+
+                Route::get('/{usuario}/restablecer-password',
+    [UserController::class, 'editPassword'])
+    ->name('usuarios.editpassword');
+
+Route::put('/{usuario}/actualizar-password',
+    [UserController::class, 'updatePassword'])
+    ->name('usuarios.actualizarpassword');
+
         });
 });
 

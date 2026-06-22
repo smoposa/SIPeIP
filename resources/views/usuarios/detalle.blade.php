@@ -1,5 +1,22 @@
 <x-usuarios-layout title="Detalle de Usuario">
 
+@if(session('success'))
+    <div id="alertSuccess"
+        class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+        {{ session('success') }}
+    </div>
+
+    <script>
+        setTimeout(() => {
+            const alerta = document.getElementById('alertSuccess');
+
+            if (alerta) {
+                alerta.remove();
+            }
+        }, 3000);
+    </script>
+@endif
+
     <!-- Barra de acciones -->
     <div class="bg-white border-b border-gray-300 mb-0">
 
@@ -16,7 +33,7 @@
                 Información General
             </a>
 
-            <a href="#"
+            <a href="{{ route('usuarios.editpassword', $usuario->id) }}"
             class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
                 Restablecer Contraseña
             </a>
@@ -38,11 +55,9 @@
                             text-white text-4xl">
 
                     <i class="bi bi-person"></i>
-
                 </div>
 
                 <div>
-
                     <h2 class="text-2xl font-semibold text-gray-800">
                         {{ $usuario->nombres }} {{ $usuario->apellidos }}
                     </h2>
@@ -54,7 +69,6 @@
                     <p class="text-gray-500">
                         {{ $usuario->cargo ?: 'Sin cargo asignado' }}
                     </p>
-
                 </div>
 
             </div>
@@ -63,7 +77,6 @@
             <div class="bg-gray-100 border-b border-gray-200">
 
                 <div class="flex justify-between items-center px-4 py-2">
-
                     <h4 class="text-sm font-semibold text-gray-800">
                         Información básica
                     </h4>
@@ -73,94 +86,100 @@
 
                         <i class="bi bi-pencil me-1"></i>
                         Editar
-
                     </a>
-
                 </div>
 
             </div>
 
-
-            <!-- Datos -->
+            <!-- Contenido informacion-->
             <div class="px-4 py-2">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 mb-6">
 
-                    <div class="flex">
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Identificación
-                        </span>
+            <!-- Columna izquierda -->
+            <div class="space-y-4">
 
-                        <span class="text-sm text-gray-600">
-                            {{ $usuario->identificacion }}
-                        </span>
-                    </div>
+                <div class="flex">
+                    <span class="w-40 text-sm font-semibold text-gray-700">
+                        Identificación
+                    </span>
 
-                    <div class="flex">
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Correo
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $usuario->email }}
-                        </span>
-                    </div>
-
-                    <div class="flex">
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Nombres
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $usuario->nombres }}
-                        </span>
-                    </div>
-
-                    <div class="flex">
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Apellidos
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $usuario->apellidos }}
-                        </span>
-                    </div>
-
-                    <div class="flex">
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Cargo
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $usuario->cargo ?: 'No registra' }}
-                        </span>
-                    </div>
-
-                    <div class="flex">
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Rol
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $usuario->rol?->nombre ?: 'No asignado' }}
-                        </span>
-                    </div>
-
-                    <div class="md:col-span-2 flex">
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Entidad
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $usuario->entidad?->nombre ?: 'No asignada' }}
-                        </span>
-                    </div>
-                
+                    <span class="text-sm text-gray-600">
+                        {{ $usuario->identificacion }}
+                    </span>
                 </div>
+
+                <div class="flex">
+                    <span class="w-40 text-sm font-semibold text-gray-700">
+                        Nombres
+                    </span>
+
+                    <span class="text-sm text-gray-600">
+                        {{ $usuario->nombres }}
+                    </span>
+                </div>
+
+                <div class="flex">
+                    <span class="w-40 text-sm font-semibold text-gray-700">
+                        Apellidos
+                    </span>
+
+                    <span class="text-sm text-gray-600">
+                        {{ $usuario->apellidos }}
+                    </span>
+                </div>
+
+                <div class="flex">
+                    <span class="w-40 text-sm font-semibold text-gray-700">
+                        Correo
+                    </span>
+
+                    <span class="text-sm text-gray-600">
+                        {{ $usuario->email }}
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- Columna derecha -->
+            <div class="space-y-4">
+
+                <div class="flex">
+                    <span class="w-40 text-sm font-semibold text-gray-700">
+                        Entidad
+                    </span>
+
+                    <span class="text-sm text-gray-600">
+                        {{ $usuario->entidad?->nombre ?: 'No asignada' }}
+                    </span>
+                </div>
+
+                <div class="flex">
+                    <span class="w-40 text-sm font-semibold text-gray-700">
+                        Cargo
+                    </span>
+
+                    <span class="text-sm text-gray-600">
+                        {{ $usuario->cargo ?: 'No registra' }}
+                    </span>
+                </div>
+
+                <div class="flex">
+                    <span class="w-40 text-sm font-semibold text-gray-700">
+                        Rol
+                    </span>
+
+                    <span class="text-sm text-gray-600">
+                        {{ $usuario->rol?->nombre ?: 'No asignado' }}
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
             </div>
                 
-
-           
                     <!-- Encabezado de Estado -->
             <div class="bg-gray-100 border-b border-gray-200">
 
@@ -224,6 +243,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
 
+                    <!-- Card Roles -->
                     <div class="border border-gray-200 rounded-lg p-6 bg-white">
 
                         <div class="grid grid-cols-[60px_1fr_auto] items-center gap-4">
@@ -253,7 +273,7 @@
                             <!-- Columna 3 -->
                             <div>
 
-                                <a href="{{ route('usuarios.edit', $usuario->id) }}"
+                                <a href="{{ route('usuarios.editroles', $usuario->id) }}"
                                 class="text-sm text-blue-600 hover:text-blue-800">
 
                                     Editar
@@ -266,6 +286,7 @@
 
                     </div>
 
+                    <!-- Card Entidad -->
                     <div class="border border-gray-200 rounded-lg p-6 bg-white">
 
                         <div class="grid grid-cols-[60px_1fr_auto] items-center gap-4">
@@ -279,15 +300,15 @@
                             <div>
 
                                 <h5 class="text-sm font-semibold text-gray-700 mb-2">
-                                    Roles asignados
+                                    Entidad asignada
                                 </h5>
 
                                 <p class="text-sm text-gray-800">
-                                    {{ $usuario->rol->nombre }}
+                                    {{ $usuario->entidad?->nombre ?? 'No asignada' }}
                                 </p>
 
                                 <p class="text-xs text-gray-500 mt-1">
-                                    Creado el {{ $usuario->rol->created_at->format('d/m/Y') }}
+                                    Entidad institucional del usuario
                                 </p>
 
                             </div>
@@ -295,7 +316,7 @@
                             <!-- Columna 3 -->
                             <div>
 
-                                <a href="{{ route('usuarios.edit', $usuario->id) }}"
+                                <a href="{{ route('usuarios.editentidad', $usuario->id) }}"
                                 class="text-sm text-blue-600 hover:text-blue-800">
 
                                     Editar
