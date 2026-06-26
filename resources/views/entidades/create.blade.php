@@ -107,6 +107,21 @@
 
                 </div>
 
+                <!-- Siglas -->
+                <div class="flex items-center">
+
+                    <label class="w-48 text-sm font-medium text-gray-700">
+                        Siglas
+                    </label>
+
+                    <input
+                        type="text"
+                        name="siglas"
+                        maxlength="50"
+                        class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+
+                </div>
+
                 <!-- Tipo de Entidad -->
                 <div class="flex items-center">
 
@@ -211,6 +226,21 @@
                         type="text"
                         name="telefono"
                         maxlength="20"
+                        class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+
+                </div>
+
+                <!-- Correo Institucional -->
+                <div class="flex items-center">
+
+                    <label class="w-48 text-sm font-medium text-gray-700">
+                        Correo Institucional
+                    </label>
+
+                    <input
+                        type="email"
+                        name="correoInstitucional"
+                        maxlength="150"
                         class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
 
                 </div>

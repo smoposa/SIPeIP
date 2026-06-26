@@ -47,26 +47,30 @@ class EntidadController extends Controller
             'codigoInstitucional' => 'required|max:50',
             'ruc'                 => 'required|max:13',
             'nombre'              => 'required|max:255',
+            'siglas'              => 'nullable|max:50',
             'tipoEntidad'         => 'required',
             'nivelGobierno'       => 'required',
             'provincia'           => 'nullable|max:100',
             'canton'              => 'nullable|max:100',
             'parroquia'           => 'nullable|max:100',
-            'direccion'           => 'nullable|max:255',
             'telefono'            => 'nullable|max:20',
+            'correoInstitucional' => 'nullable|email|max:150',
+            'direccion'           => 'nullable|max:255',
         ]);
 
         Entidad::create([
             'codigoInstitucional' => $request->codigoInstitucional,
             'ruc'                 => $request->ruc,
             'nombre'              => $request->nombre,
+            'siglas'              => $request->siglas,
             'tipoEntidad'         => $request->tipoEntidad,
             'nivelGobierno'       => $request->nivelGobierno,
             'provincia'           => $request->provincia,
             'canton'              => $request->canton,
             'parroquia'           => $request->parroquia,
-            'direccion'           => $request->direccion,
             'telefono'            => $request->telefono,
+            'correoInstitucional' => $request->correoInstitucional,
+            'direccion'           => $request->direccion,
             'estado'              => 'Activo'
         ]);
 
@@ -88,13 +92,16 @@ class EntidadController extends Controller
             'codigoInstitucional' => 'required|max:50',
             'ruc'                 => 'required|max:13',
             'nombre'              => 'required|max:255',
+            'siglas'              => 'nullable|max:50',
             'tipoEntidad'         => 'required',
             'nivelGobierno'       => 'required',
             'provincia'           => 'nullable|max:100',
             'canton'              => 'nullable|max:100',
             'parroquia'           => 'nullable|max:100',
-            'direccion'           => 'nullable|max:255',
             'telefono'            => 'nullable|max:20',
+            'correoInstitucional' => 'nullable|email|max:150',
+            'direccion'           => 'nullable|max:255',
+            
         ]);
 
         $entidad = Entidad::findOrFail($id);
@@ -103,13 +110,15 @@ class EntidadController extends Controller
             'codigoInstitucional' => $request->codigoInstitucional,
             'ruc'                 => $request->ruc,
             'nombre'              => $request->nombre,
+            'siglas'              => $request->siglas,
             'tipoEntidad'         => $request->tipoEntidad,
             'nivelGobierno'       => $request->nivelGobierno,
             'provincia'           => $request->provincia,
             'canton'              => $request->canton,
             'parroquia'           => $request->parroquia,
-            'direccion'           => $request->direccion,
             'telefono'            => $request->telefono,
+            'correoInstitucional' => $request->correoInstitucional,
+            'direccion'           => $request->direccion,
         ]);
 
         return redirect()
