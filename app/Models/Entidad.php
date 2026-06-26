@@ -2,16 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Entidad extends Model
 {
+    use HasFactory;
+
     protected $table = 'entidades';
 
     protected $fillable = [
         'codigoInstitucional',
         'ruc',
         'nombre',
+        'siglas',
         'tipoEntidad',
         'nivelGobierno',
         'provincia',
@@ -19,6 +23,7 @@ class Entidad extends Model
         'parroquia',
         'direccion',
         'telefono',
+        'correoInstitucional',
         'estado'
     ];
 
