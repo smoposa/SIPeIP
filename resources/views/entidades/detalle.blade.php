@@ -71,14 +71,13 @@
                         {{ $entidad->nombre }}
                     </h2>
 
+                    
                     <p class="text-gray-500">
-                        {{ $entidad->codigoInstitucional }}
+                        {{ $entidad->siglas ?: 'Sin siglas' }}
                     </p>
 
                     <p class="text-gray-500">
                         {{ $entidad->tipoEntidad }}
-                        |
-                        {{ $entidad->nivelGobierno }}
                     </p>
                 </div>
 
@@ -103,6 +102,7 @@
             <div class="px-4 py-2">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 mb-6">
 
+                    <!-- Código Institucional -->
                     <div class="flex items-center">
                         <span class="w-40 text-sm font-semibold text-gray-700">
                             Código Institucional
@@ -113,6 +113,7 @@
                         </span>
                     </div>
 
+                    <!-- RUC -->
                     <div class="flex">
                         <span class="w-40 text-sm font-semibold text-gray-700">
                             RUC
@@ -123,26 +124,7 @@
                         </span>
                     </div>
 
-                    <div class="flex">
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Tipo de Entidad
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->tipoEntidad }}
-                        </span>
-                    </div>
-
-                    <div class="flex">
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Nivel de Gobierno
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->nivelGobierno }}
-                        </span>
-                    </div>
-
+                    <!-- Provincia -->
                     <div class="flex">
                         <span class="w-40 text-sm font-semibold text-gray-700">
                             Provincia
@@ -153,6 +135,18 @@
                         </span>
                     </div>
 
+                    <!-- Tipo de Entidad -->
+                    <div class="flex">
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            Tipo de Entidad
+                        </span>
+
+                        <span class="text-sm text-gray-600">
+                            {{ $entidad->tipoEntidad }}
+                        </span>
+                    </div>
+
+                    <!-- Cantón -->
                     <div class="flex">
                         <span class="w-40 text-sm font-semibold text-gray-700">
                             Cantón
@@ -163,6 +157,18 @@
                         </span>
                     </div>
 
+                    <!-- Nivel de Gobierno -->
+                    <div class="flex">
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            Nivel de Gobierno
+                        </span>
+
+                        <span class="text-sm text-gray-600">
+                            {{ $entidad->nivelGobierno }}
+                        </span>
+                    </div>
+
+                    <!-- Parroquia -->
                     <div class="flex">
                         <span class="w-40 text-sm font-semibold text-gray-700">
                             Parroquia
@@ -173,6 +179,7 @@
                         </span>
                     </div>
 
+                    <!-- Teléfono -->
                     <div class="flex">
                         <span class="w-40 text-sm font-semibold text-gray-700">
                             Teléfono
@@ -183,13 +190,25 @@
                         </span>
                     </div>
 
-                    <div class="md:col-span-2 flex">
+                    <!-- Dirección -->
+                    <div class="flex">
                         <span class="w-40 text-sm font-semibold text-gray-700">
                             Dirección
                         </span>
 
                         <span class="text-sm text-gray-600">
                             {{ $entidad->direccion ?: 'No registra' }}
+                        </span>
+                    </div>
+
+                    <!-- Correo Institucional -->
+                    <div class="flex">
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            Correo Institucional
+                        </span>
+
+                        <span class="text-sm text-gray-600">
+                            {{ $entidad->correoInstitucional ?: 'No registra' }}
                         </span>
                     </div>
 
