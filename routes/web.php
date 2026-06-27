@@ -5,6 +5,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EntidadController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ObjetivoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +21,62 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Usuarios
+    Route::prefix('usuarios')->group(function () {
+
+        Route::get('/', [UserController::class, 'listar'])
+            ->name('usuarios.index');
+
+        Route::get('/crear', [UserController::class, 'crear'])
+            ->name('usuarios.create');
+
+        Route::post('/guardar', [UserController::class, 'store'])
+            ->name('usuarios.store');
+
+        Route::get('/desactivados', [UserController::class, 'desactivados'])
+            ->name('usuarios.desactivados');
+
+        Route::get('/{usuario}', [UserController::class, 'detalle'])
+            ->name('usuarios.show');
+        
+        Route::put('/{usuario}', [UserController::class, 'update'])
+            ->name('usuarios.update');
+
+        Route::get('/{usuario}/editar', [UserController::class, 'editar'])
+            ->name('usuarios.edit');
+
+        Route::get('/{usuario}/estado', [UserController::class, 'editarEstado'])
+            ->name('usuarios.estado');
+
+        Route::put('/{usuario}/actualizar-estado', [UserController::class, 'actualizarEstado'])
+            ->name('usuarios.actualizarestado');
+
+        Route::get('/usuarios/{id}/editar-rol',
+            [UserController::class, 'editRoles'])
+            ->name('usuarios.editroles');
+
+        Route::put('/usuarios/{id}/actualizar-rol',
+            [UserController::class, 'updateRoles'])
+            ->name('usuarios.actualizarroles');
+
+        Route::get('/{usuario}/editar-entidad',
+            [UserController::class, 'editEntidad'])
+            ->name('usuarios.editentidad');
+
+        Route::put('/{usuario}/actualizar-entidad',
+            [UserController::class, 'updateEntidad'])
+            ->name('usuarios.actualizarentidad');
+
+        Route::get('/{usuario}/restablecer-password',
+            [UserController::class, 'editPassword'])
+            ->name('usuarios.editpassword');
+
+        Route::put('/{usuario}/actualizar-password',
+            [UserController::class, 'updatePassword'])
+            ->name('usuarios.actualizarpassword');
+
+    });
 
     // Roles
     Route::prefix('roles')->group(function () {
@@ -82,92 +139,61 @@ Route::middleware('auth')->group(function () {
 
     });
 
+    // Planes
+    Route::prefix('planes')->group(function () {
 
-        // Planes
-        Route::prefix('planes')->group(function () {
+        Route::get('/', [PlanController::class, 'index'])
+            ->name('planes.index');
 
-            Route::get('/', [PlanController::class, 'index'])
-                ->name('planes.index');
+        Route::get('/listar', [PlanController::class, 'listar'])
+            ->name('planes.listar');
 
-            Route::get('/listar', [PlanController::class, 'listar'])
-                ->name('planes.listar');
+        Route::get('/crear', [PlanController::class, 'create'])
+            ->name('planes.create');
 
-            Route::get('/crear', [PlanController::class, 'create'])
-                ->name('planes.create');
+        Route::post('/guardar', [PlanController::class, 'store'])
+            ->name('planes.store');
 
-            Route::post('/guardar', [PlanController::class, 'store'])
-                ->name('planes.store');
+        Route::get('/{plan}/editar', [PlanController::class, 'editar'])
+            ->name('planes.editar');
 
-            Route::get('/{plan}/editar', [PlanController::class, 'editar'])
-                ->name('planes.editar');
+        Route::put('/{plan}/actualizar', [PlanController::class, 'update'])
+            ->name('planes.actualizar');
 
-            Route::put('/{plan}/actualizar', [PlanController::class, 'update'])
-                ->name('planes.actualizar');
+        Route::put('/{plan}/desactivar', [PlanController::class, 'destroy'])
+            ->name('planes.destroy');
 
-            Route::put('/{plan}/desactivar', [PlanController::class, 'destroy'])
-                ->name('planes.destroy');
+        Route::get('/{plan}/detalle', [PlanController::class, 'detalle'])
+            ->name('planes.detalle');
 
-            Route::get('/{plan}/detalle', [PlanController::class, 'detalle'])
-                ->name('planes.detalle');
+    });
 
-        });
+    // Objetivos 
+    Route::prefix('objetivos')->group(function () {
 
+        Route::get('/', [ObjetivoController::class, 'index'])
+            ->name('objetivos.index');
 
-        // Usuarios
-        Route::prefix('usuarios')->group(function () {
+        Route::get('/crear', [ObjetivoController::class, 'create'])
+            ->name('objetivos.create');
 
-            Route::get('/', [UserController::class, 'listar'])
-                ->name('usuarios.index');
+        Route::post('/guardar', [ObjetivoController::class, 'store'])
+            ->name('objetivos.store');
 
-            Route::get('/crear', [UserController::class, 'crear'])
-                ->name('usuarios.create');
+        Route::get('/listar', [ObjetivoController::class, 'listar'])
+            ->name('objetivos.listar');
 
-            Route::post('/guardar', [UserController::class, 'store'])
-                ->name('usuarios.store');
+        Route::get('/{id}/detalle', [ObjetivoController::class, 'detalle'])
+            ->name('objetivos.detalle');
 
-            Route::get('/desactivados', [UserController::class, 'desactivados'])
-                ->name('usuarios.desactivados');
+        Route::get('/{id}/editar', [ObjetivoController::class, 'edit'])
+            ->name('objetivos.edit');
 
-            Route::get('/{usuario}', [UserController::class, 'detalle'])
-                ->name('usuarios.show');
-            
-            Route::put('/{usuario}', [UserController::class, 'update'])
-                ->name('usuarios.update');
+        Route::put('/{id}', [ObjetivoController::class, 'update'])
+            ->name('objetivos.update');
 
-            Route::get('/{usuario}/editar', [UserController::class, 'editar'])
-                ->name('usuarios.edit');
+    });
 
-            Route::get('/{usuario}/estado', [UserController::class, 'editarEstado'])
-                ->name('usuarios.estado');
-
-            Route::put('/{usuario}/actualizar-estado', [UserController::class, 'actualizarEstado'])
-                ->name('usuarios.actualizarestado');
-
-            Route::get('/usuarios/{id}/editar-rol',
-                [UserController::class, 'editRoles'])
-                ->name('usuarios.editroles');
-
-            Route::put('/usuarios/{id}/actualizar-rol',
-                [UserController::class, 'updateRoles'])
-                ->name('usuarios.actualizarroles');
-
-            Route::get('/{usuario}/editar-entidad',
-                [UserController::class, 'editEntidad'])
-                ->name('usuarios.editentidad');
-
-            Route::put('/{usuario}/actualizar-entidad',
-                [UserController::class, 'updateEntidad'])
-                ->name('usuarios.actualizarentidad');
-
-                Route::get('/{usuario}/restablecer-password',
-    [UserController::class, 'editPassword'])
-    ->name('usuarios.editpassword');
-
-Route::put('/{usuario}/actualizar-password',
-    [UserController::class, 'updatePassword'])
-    ->name('usuarios.actualizarpassword');
-
-        });
 });
 
 require __DIR__.'/auth.php';

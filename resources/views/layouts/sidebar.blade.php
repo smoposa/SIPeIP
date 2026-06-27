@@ -87,7 +87,7 @@
                     Planes
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('objetivos.index') }}" class="sidebar-link">
                     Objetivos
                 </a>
 
