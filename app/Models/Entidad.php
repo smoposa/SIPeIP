@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Plan;
 
 class Entidad extends Model
 {
@@ -30,5 +32,13 @@ class Entidad extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    /**
+     * Una entidad puede tener varios planes.
+     */
+    public function planes(): HasMany
+    {
+        return $this->hasMany(Plan::class);
     }
 }

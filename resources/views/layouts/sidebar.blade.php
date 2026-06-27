@@ -83,7 +83,7 @@
 
             <div class="ml-8 mt-1 space-y-1">
 
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('planes.index') }}" class="sidebar-link">
                     Planes
                 </a>
 

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\EntidadController;
+use App\Http\Controllers\PlanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -80,6 +81,37 @@ Route::middleware('auth')->group(function () {
             ->name('entidades.actualizarestado');
 
     });
+
+
+        // Planes
+        Route::prefix('planes')->group(function () {
+
+            Route::get('/', [PlanController::class, 'index'])
+                ->name('planes.index');
+
+            Route::get('/listar', [PlanController::class, 'listar'])
+                ->name('planes.listar');
+
+            Route::get('/crear', [PlanController::class, 'create'])
+                ->name('planes.create');
+
+            Route::post('/guardar', [PlanController::class, 'store'])
+                ->name('planes.store');
+
+            Route::get('/{plan}/editar', [PlanController::class, 'editar'])
+                ->name('planes.editar');
+
+            Route::put('/{plan}/actualizar', [PlanController::class, 'update'])
+                ->name('planes.actualizar');
+
+            Route::put('/{plan}/desactivar', [PlanController::class, 'destroy'])
+                ->name('planes.destroy');
+
+            Route::get('/{plan}/detalle', [PlanController::class, 'detalle'])
+                ->name('planes.detalle');
+
+        });
+
 
         // Usuarios
         Route::prefix('usuarios')->group(function () {
