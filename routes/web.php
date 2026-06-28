@@ -140,31 +140,23 @@ Route::middleware('auth')->group(function () {
     });
 
     // Planes
-    Route::prefix('planes')->group(function () {
+    Route::prefix('planes')->name('planes.')->group(function () {
 
-        Route::get('/', [PlanController::class, 'index'])
-            ->name('planes.index');
+        Route::get('/', [PlanController::class, 'index'])->name('index');
 
-        Route::get('/listar', [PlanController::class, 'listar'])
-            ->name('planes.listar');
+        Route::get('/create', [PlanController::class, 'create'])->name('create');
 
-        Route::get('/crear', [PlanController::class, 'create'])
-            ->name('planes.create');
+        Route::post('/', [PlanController::class, 'store'])->name('store');
 
-        Route::post('/guardar', [PlanController::class, 'store'])
-            ->name('planes.store');
+        Route::get('/listar', [PlanController::class, 'listar'])->name('listar');
 
-        Route::get('/{plan}/editar', [PlanController::class, 'editar'])
-            ->name('planes.editar');
+        Route::get('/{id}', [PlanController::class, 'detalle'])->name('detalle');
 
-        Route::put('/{plan}/actualizar', [PlanController::class, 'update'])
-            ->name('planes.actualizar');
+        Route::get('/{id}/editar', [PlanController::class, 'edit'])->name('edit');
 
-        Route::put('/{plan}/desactivar', [PlanController::class, 'destroy'])
-            ->name('planes.destroy');
+        Route::put('/{id}', [PlanController::class, 'update'])->name('update');
 
-        Route::get('/{plan}/detalle', [PlanController::class, 'detalle'])
-            ->name('planes.detalle');
+        Route::delete('/{id}', [PlanController::class, 'destroy'])->name('destroy');
 
     });
 

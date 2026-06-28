@@ -2,105 +2,131 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\PlanRequest;
-use App\Models\Entidad;
-use App\Models\Plan;
 use Illuminate\Http\Request;
+use App\Models\Plan;
 
 class PlanController extends Controller
 {
-    /** Página principal del módulo.*/
     public function index()
     {
-        return view('plan.index', [
-            'totalPlanes' => Plan::count(),
-            'planesActivos' => Plan::where('estado', 'Activo')->count(),
-            'planesFinalizados' => Plan::where('estado', 'Finalizado')->count(),
-        ]);
+        return view('planes.index');
     }
 
-    /** Formulario para crear un plan.*/
     public function create()
     {
-        $entidades = Entidad::where('estado', 'Activo')
-            ->orderBy('nombre')
-            ->get();
-
-        $anios = range(date('Y'), date('Y') + 10);
-
-        return view('plan.create', compact('entidades', 'anios'));
+        return view('planes.create');
     }
 
-    /** Guarda un nuevo plan. */
-    public function store(PlanRequest $request)
+    public function store(Request $request)
     {
-        $datos = $request->validated();
+        $request->validate([
+            'codigo' => 'required|max:50|unique:planes,codigo',
+            'nombre' => 'required|max:200',
+            'tipo' => 'required',
+            'fecha_inicio' => 'required|date',
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+            'descripcion' => 'nullable',
+        ]);
 
-        $datos['codigo'] = $this->generarCodigo();
+        Plan::create([
 
-        Plan::create($datos);
+            'codigo' => $request->codigo,
+
+            'nombre' => $request->nombre,
+
+            'tipo' => $request->tipo,
+
+            'fecha_inicio' => $request->fecha_inicio,
+
+            'fecha_fin' => $request->fecha_fin,
+
+            'descripcion' => $request->descripcion,
+
+            'estado' => $request->has('estado')
+                            ? 'Activo'
+                            : 'Inactivo',
+
+        ]);
 
         return redirect()
-            ->route('planes.listar')
-            ->with('success', 'Plan registrado correctamente.');
+                ->route('planes.listar')
+                ->with('success','Plan registrado correctamente.');
     }
 
-    /** Lista todos los planes. */
     public function listar()
     {
-        $planes = Plan::with('entidad')
-            ->orderByDesc('id')
-            ->get();
+        $planes = Plan::orderBy('id','desc')->paginate(10);
 
-        return view('plan.listar', compact('planes'));
+        return view('planes.listar', compact('planes'));
     }
 
-    /** Formulario para editar un plan. */
-     public function editar(Plan $plan)
+    public function detalle($id)
     {
-        $entidades = Entidad::where('estado', 'Activo')
-            ->orderBy('nombre')
-            ->get();
+        $plan = Plan::findOrFail($id);
 
-        $anios = range(date('Y'), date('Y') + 10);
-
-        return view('plan.editar', compact(
-            'plan',
-            'entidades',
-            'anios'
-        ));
+        return view('planes.detalle', compact('plan'));
     }
 
-    /** Actualiza un plan. */
-    public function update(PlanRequest $request, Plan $plan)
+    public function edit($id)
     {
-        $plan->update($request->validated());
+        $plan = Plan::findOrFail($id);
+
+        return view('planes.edit', compact('plan'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $plan = Plan::findOrFail($id);
+
+        $request->validate([
+
+            'codigo' => 'required|max:50|unique:planes,codigo,' . $plan->id,
+
+            'nombre' => 'required|max:200',
+
+            'tipo' => 'required',
+
+            'fecha_inicio' => 'required|date',
+
+            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
+
+            'descripcion' => 'nullable',
+
+        ]);
+
+        $plan->update([
+
+            'codigo' => $request->codigo,
+
+            'nombre' => $request->nombre,
+
+            'tipo' => $request->tipo,
+
+            'fecha_inicio' => $request->fecha_inicio,
+
+            'fecha_fin' => $request->fecha_fin,
+
+            'descripcion' => $request->descripcion,
+
+            'estado' => $request->has('estado')
+                            ? 'Activo'
+                            : 'Inactivo',
+
+        ]);
 
         return redirect()
-            ->route('planes.listar')
-            ->with('success', 'Plan actualizado correctamente.');
+                ->route('planes.detalle', $plan->id)
+                ->with('success', 'Plan actualizado correctamente.');
     }
 
-    /** Detalle.*/
-    public function detalle(Plan $plan)
+    public function destroy($id)
     {
-        return view('plan.detalle', compact('plan'));
-    }
-    
-    
-    /** Elimina un plan.*/
-    public function destroy(Plan $plan)
-    {
-        //
-    }
+        $plan = Plan::findOrFail($id);
 
-    /** Genera el código automático del PEI.*/
-    private function generarCodigo(): string
-    {
-        $anio = date('Y');
+        $plan->delete();
 
-        $ultimo = Plan::where('codigo', 'like', "PEI-$anio-%")->count() + 1;
-
-        return sprintf('PEI-%s-%03d', $anio, $ultimo);
+        return redirect()
+                ->route('planes.listar')
+                ->with('success', 'Plan eliminado correctamente.');
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Ejecutar la migración.
      */
     public function up(): void
     {
@@ -15,27 +15,20 @@ return new class extends Migration
 
             $table->id();
 
-            // Información general
-            $table->string('codigo', 20)->unique();
-            $table->string('nombre', 255);
-            $table->text('descripcion')->nullable();
+            $table->string('codigo', 50)->unique();
 
-            // Período de planificación
-            $table->integer('periodo_inicio');
-            $table->integer('periodo_fin');
+            $table->string('nombre', 200);
 
-            // Vigencia
+            $table->string('tipo', 50);
+
             $table->date('fecha_inicio');
+
             $table->date('fecha_fin');
 
-            // Estado
-            $table->string('estado', 20)->default('Activo');
+            $table->text('descripcion')->nullable();
 
-            // Entidad propietaria del plan
-            $table->foreignId('entidad_id')
-                  ->constrained('entidades')
-                  ->cascadeOnUpdate()
-                  ->restrictOnDelete();
+            $table->enum('estado', ['Activo', 'Inactivo'])
+                  ->default('Activo');
 
             $table->timestamps();
 
@@ -43,7 +36,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Revertir la migración.
      */
     public function down(): void
     {
