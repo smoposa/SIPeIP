@@ -161,28 +161,30 @@ Route::middleware('auth')->group(function () {
     });
 
     // Objetivos 
-    Route::prefix('objetivos')->group(function () {
+    Route::prefix('objetivos')->name('objetivos.')->group(function () {
 
-        Route::get('/', [ObjetivoController::class, 'index'])
-            ->name('objetivos.index');
+        // Información General
+        Route::get('/', [ObjetivoController::class, 'index'])->name('index');
 
-        Route::get('/crear', [ObjetivoController::class, 'create'])
-            ->name('objetivos.create');
+        // Objetivos de Desarrollo Sostenible (ODS)
+        Route::get('/ods', [ObjetivoController::class, 'ods'])->name('ods');
 
-        Route::post('/guardar', [ObjetivoController::class, 'store'])
-            ->name('objetivos.store');
+        // Plan Nacional de Desarrollo (PND)
+        Route::get('/pnd', [ObjetivoController::class, 'pnd'])->name('pnd');
 
-        Route::get('/listar', [ObjetivoController::class, 'listar'])
-            ->name('objetivos.listar');
+        // Objetivos Estratégicos Institucionales (OEI)
+        Route::get('/oei', [ObjetivoController::class, 'oei'])->name('oei');
 
-        Route::get('/{id}/detalle', [ObjetivoController::class, 'detalle'])
-            ->name('objetivos.detalle');
+        Route::get('/ods/create', [ObjetivoController::class, 'createODS'])->name('createODS');
 
-        Route::get('/{id}/editar', [ObjetivoController::class, 'edit'])
-            ->name('objetivos.edit');
+        Route::get('/pnd/create', [ObjetivoController::class, 'createPND'])->name('createPND');
 
-        Route::put('/{id}', [ObjetivoController::class, 'update'])
-            ->name('objetivos.update');
+        Route::get('/oei/create', [ObjetivoController::class, 'createOEI'])->name('createOEI');
+
+        Route::post('/', [ObjetivoController::class, 'store'])->name('store');
+
+        // Detalle del Objetivo Institucional
+        Route::get('/detalle/{id}', [ObjetivoController::class, 'detalle'])->name('detalle');
 
     });
 

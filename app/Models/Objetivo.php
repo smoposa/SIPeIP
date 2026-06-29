@@ -10,26 +10,16 @@ class Objetivo extends Model
 
     protected $fillable = [
         'tipo',
-        'objetivo_padre_id',
         'codigo',
         'nombre',
         'descripcion',
-        'color',
-        'icono',
-        'numero_metas',
-        'documento',
+        'fecha_inicio',
+        'fecha_fin',
         'estado',
     ];
 
-    // Relaciones
-
-    public function padre()
-    {
-        return $this->belongsTo(Objetivo::class, 'objetivo_padre_id');
-    }
-
-    public function hijos()
-    {
-        return $this->hasMany(Objetivo::class, 'objetivo_padre_id');
-    }
+    protected $casts = [
+        'fecha_inicio' => 'date',
+        'fecha_fin'    => 'date',
+    ];
 }

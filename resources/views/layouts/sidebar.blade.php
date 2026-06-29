@@ -87,8 +87,9 @@
                     Planes
                 </a>
 
-                <a href="{{ route('objetivos.index') }}" class="sidebar-link">
-                    Objetivos
+                <a href="{{ route('objetivos.index') }}"
+                class="sidebar-link {{ request()->routeIs('objetivos.*') ? 'active' : '' }}">
+                    Objetivos Estratégicos
                 </a>
 
                 <a href="#" class="sidebar-link">
