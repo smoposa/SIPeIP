@@ -6,7 +6,10 @@ use App\Http\Controllers\EntidadController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ObjetivoController;
+use App\Http\Controllers\MetaController;
+use App\Http\Controllers\IndicadorController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return redirect('/login');
@@ -160,19 +163,15 @@ Route::middleware('auth')->group(function () {
 
     });
 
-    // Objetivos 
+    // Objetivos
     Route::prefix('objetivos')->name('objetivos.')->group(function () {
 
-        // Información General
         Route::get('/', [ObjetivoController::class, 'index'])->name('index');
 
-        // Objetivos de Desarrollo Sostenible (ODS)
         Route::get('/ods', [ObjetivoController::class, 'ods'])->name('ods');
 
-        // Plan Nacional de Desarrollo (PND)
         Route::get('/pnd', [ObjetivoController::class, 'pnd'])->name('pnd');
 
-        // Objetivos Estratégicos Institucionales (OEI)
         Route::get('/oei', [ObjetivoController::class, 'oei'])->name('oei');
 
         Route::get('/ods/create', [ObjetivoController::class, 'createODS'])->name('createODS');
@@ -183,8 +182,53 @@ Route::middleware('auth')->group(function () {
 
         Route::post('/', [ObjetivoController::class, 'store'])->name('store');
 
-        // Detalle del Objetivo Institucional
         Route::get('/detalle/{id}', [ObjetivoController::class, 'detalle'])->name('detalle');
+
+        Route::get('/editar/{id}', [ObjetivoController::class, 'edit'])->name('edit');
+
+        Route::put('/editar/{id}', [ObjetivoController::class, 'update'])->name('update');
+
+    });
+
+    // Metas
+    Route::prefix('metas')->name('metas.')->group(function () {
+
+        Route::get('/objetivo/{objetivo}', [MetaController::class, 'index'])->name('index');
+
+        Route::get('/objetivo/{objetivo}/create', [MetaController::class, 'create'])->name('create');
+
+        Route::post('/objetivo/{objetivo}', [MetaController::class, 'store'])->name('store');
+
+        Route::get('/detalle/{id}', [MetaController::class, 'detalle'])->name('detalle');
+
+        Route::get('/editar/{id}', [MetaController::class, 'edit'])->name('edit');
+
+        Route::put('/editar/{id}', [MetaController::class, 'update'])->name('update');
+
+        Route::get('/indicadores/{id}', [MetaController::class, 'indicadores'])->name('indicadores');
+
+        Route::get('/seguimiento/{id}', [MetaController::class, 'seguimiento'])->name('seguimiento');
+
+        Route::get('/presupuesto/{id}', [MetaController::class, 'presupuesto'])->name('presupuesto');
+
+        Route::get('/historial/{id}', [MetaController::class, 'historial'])->name('historial');
+
+    });
+
+    // Indicadores
+    Route::prefix('indicadores')->name('indicadores.')->group(function () {
+
+        Route::get('/meta/{meta}', [IndicadorController::class, 'index'])->name('index');
+
+        Route::get('/meta/{meta}/create', [IndicadorController::class, 'create'])->name('create');
+
+        Route::post('/meta/{meta}', [IndicadorController::class, 'store'])->name('store');
+
+        Route::get('/detalle/{id}', [IndicadorController::class, 'detalle'])->name('detalle');
+
+        Route::get('/editar/{id}', [IndicadorController::class, 'edit'])->name('edit');
+
+        Route::put('/editar/{id}', [IndicadorController::class, 'update'])->name('update');
 
     });
 

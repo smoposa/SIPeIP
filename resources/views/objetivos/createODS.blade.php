@@ -56,7 +56,7 @@
 
             <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
 
-                <a href="{{ route('objetivos.createODS') }}"
+                <a href="{{ route('objetivos.ods') }}"
                    class="px-5 py-2.5 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100">
 
                     Cancelar

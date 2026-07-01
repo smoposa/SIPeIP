@@ -1,18 +1,29 @@
-<x-objetivos-layout title="Nuevo Objetivo Estratégico Institucional">
+<x-objetivos-layout title="Nuevo Indicador">
 
-    <!-- Barra de navegación -->
+    <!-- Barra principal -->
+
     <div class="bg-white border-b border-gray-300 mb-6">
 
         <div class="flex">
 
-            <a href="{{ route('objetivos.oei') }}"
+            <a href="{{ route('objetivos.index') }}"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Objetivos Institucionales
+                Información General
             </a>
 
-            <a href="#"
+            <a href="{{ route('objetivos.ods') }}"
+               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
+                ODS
+            </a>
+
+            <a href="{{ route('objetivos.pnd') }}"
+               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
+                PND
+            </a>
+
+            <a href="{{ route('objetivos.oei') }}"
                class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Nuevo Objetivo
+                Objetivos Institucionales
             </a>
 
         </div>
@@ -20,23 +31,42 @@
     </div>
 
     <!-- Encabezado -->
+
     <div class="flex items-center justify-between mb-6">
 
         <div>
 
-            <h2 class="text-2xl font-bold text-gray-800">
-                Nuevo Objetivo Estratégico Institucional
-            </h2>
+            <div class="flex items-center gap-3">
 
-            <p class="text-gray-500 mt-1">
-                Registre un nuevo objetivo estratégico institucional.
-            </p>
+                <a href="{{ route('indicadores.index', $meta->id) }}"
+                   class="text-gray-500 hover:text-blue-600">
+
+                    <i class="bi bi-arrow-left text-lg"></i>
+
+                </a>
+
+                <div>
+
+                    <h2 class="text-2xl font-semibold text-gray-800">
+
+                        Nuevo Indicador
+
+                    </h2>
+
+                    <p class="text-gray-500 mt-1">
+
+                        {{ $meta->codigo }} - {{ $meta->nombre }}
+
+                    </p>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
-    <!-- Errores -->
     @if ($errors->any())
 
         <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
@@ -55,12 +85,9 @@
 
     @endif
 
-    <!-- Formulario -->
-    <form action="{{ route('objetivos.store') }}" method="POST">
+    <form action="{{ route('indicadores.store', $meta->id) }}" method="POST">
 
         @csrf
-
-        <input type="hidden" name="tipo" value="OEI">
 
         <div class="bg-white border border-gray-200 rounded-lg">
 
@@ -76,6 +103,7 @@
 
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Código -->
+
                 <div>
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -93,6 +121,7 @@
                 </div>
 
                 <!-- Estado -->
+
                 <div>
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -116,10 +145,11 @@
                 </div>
 
                 <!-- Nombre -->
+
                 <div class="md:col-span-2">
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Nombre del Objetivo <span class="text-red-500">*</span>
+                        Nombre del Indicador <span class="text-red-500">*</span>
                     </label>
 
                     <input
@@ -133,6 +163,7 @@
                 </div>
 
                 <!-- Descripción -->
+
                 <div class="md:col-span-2">
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -146,99 +177,115 @@
 
                 </div>
 
-                <!-- Entidad -->
-                <div>
+                <!-- Fórmula -->
+
+                <div class="md:col-span-2">
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Entidad
-                    </label>
-
-                    <select
-                        name="entidad_id"
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                        <option value="">Seleccione...</option>
-
-                        @foreach($entidades as $entidad)
-
-                            <option
-                                value="{{ $entidad->id }}"
-                                {{ old('entidad_id') == $entidad->id ? 'selected' : '' }}>
-
-                                {{ $entidad->nombre }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </div>
-
-                <!-- Plan -->
-                <div>
-
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Plan
-                    </label>
-
-                    <select
-                        name="plan_id"
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                        <option value="">Seleccione...</option>
-
-                        @foreach($planes as $plan)
-
-                            <option
-                                value="{{ $plan->id }}"
-                                {{ old('plan_id') == $plan->id ? 'selected' : '' }}>
-
-                                {{ $plan->nombre }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </div>
-
-                <!-- Fecha Inicio -->
-                <div>
-
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Fecha de Inicio
+                        Fórmula
                     </label>
 
                     <input
-                        type="date"
-                        name="fecha_inicio"
-                        value="{{ old('fecha_inicio') }}"
+                        type="text"
+                        name="formula"
+                        value="{{ old('formula') }}"
+                        maxlength="255"
                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
 
                 </div>
 
-                <!-- Fecha Fin -->
+                <!-- Línea Base -->
+
                 <div>
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Fecha de Fin
+                        Línea Base
                     </label>
 
                     <input
-                        type="date"
-                        name="fecha_fin"
-                        value="{{ old('fecha_fin') }}"
+                        type="number"
+                        step="0.01"
+                        name="linea_base"
+                        value="{{ old('linea_base') }}"
+                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+
+                </div>
+
+                <!-- Meta -->
+
+                <div>
+
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Meta
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="meta"
+                        value="{{ old('meta') }}"
+                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+
+                </div>
+
+                <!-- Valor Actual -->
+
+                <div>
+
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Valor Actual
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="valor_actual"
+                        value="{{ old('valor_actual') }}"
+                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+
+                </div>
+
+                <!-- Unidad de Medida -->
+
+                <div>
+
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Unidad de Medida
+                    </label>
+
+                    <input
+                        type="text"
+                        name="unidad_medida"
+                        value="{{ old('unidad_medida') }}"
+                        maxlength="100"
+                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+
+                </div>
+
+                <!-- Frecuencia -->
+
+                <div>
+
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Frecuencia
+                    </label>
+
+                    <input
+                        type="text"
+                        name="frecuencia"
+                        value="{{ old('frecuencia') }}"
+                        maxlength="50"
+                        placeholder="Mensual, Trimestral, Semestral..."
                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
 
                 </div>
                             </div>
 
             <!-- Botones -->
+
             <div class="flex justify-end gap-3 px-6 py-4 border-t bg-gray-50 rounded-b-lg">
 
-                <a href="{{ route('objetivos.oei') }}"
+                <a href="{{ route('indicadores.index', $meta->id) }}"
                    class="px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-100">
 
                     Cancelar
@@ -249,9 +296,9 @@
                     type="submit"
                     class="px-5 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
 
-                    <i class="bi bi-check-circle me-1"></i>
+                    <i class="bi bi-check-circle mr-2"></i>
 
-                    Guardar Objetivo
+                    Guardar Indicador
 
                 </button>
 

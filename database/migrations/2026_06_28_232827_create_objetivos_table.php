@@ -9,37 +9,55 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-public function up(): void
-{
-    Schema::create('objetivos', function (Blueprint $table) {
+    public function up(): void
+    {
+        Schema::create('objetivos', function (Blueprint $table) {
 
-        $table->id();
+            $table->id();
 
-        $table->enum('tipo', [
-            'ODS',
-            'PND',
-            'OEI'
-        ]);
+            // Tipo de objetivo
+            $table->enum('tipo', [
+                'ODS',
+                'PND',
+                'OEI'
+            ]);
 
-        $table->string('codigo', 30)->unique();
+            // Relaciones
+            $table->foreignId('entidad_id')
+                  ->nullable()
+                  ->constrained('entidades')
+                  ->nullOnDelete();
 
-        $table->string('nombre');
+            $table->foreignId('plan_id')
+                  ->nullable()
+                  ->constrained('planes')
+                  ->nullOnDelete();
 
-        $table->text('descripcion')->nullable();
+            // Información general
+            $table->string('codigo', 30)->unique();
 
-        $table->date('fecha_inicio')->nullable();
+            $table->string('nombre',255);
 
-        $table->date('fecha_fin')->nullable();
+            $table->text('descripcion')->nullable();
 
-        $table->enum('estado', [
-            'Activo',
-            'Inactivo'
-        ])->default('Activo');
+            // Responsable institucional
+            $table->string('responsable')->nullable();
 
-        $table->timestamps();
+            // Vigencia
+            $table->date('fecha_inicio')->nullable();
 
-    });
-}
+            $table->date('fecha_fin')->nullable();
+
+            // Estado
+            $table->enum('estado', [
+                'Activo',
+                'Inactivo'
+            ])->default('Activo');
+
+            $table->timestamps();
+
+        });
+    }
 
     /**
      * Reverse the migrations.

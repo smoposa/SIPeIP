@@ -19,6 +19,7 @@
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
                 PND
             </a>
+            
 
             <a href="{{ route('objetivos.oei') }}"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">

@@ -1,102 +1,136 @@
 <div class="h-screen flex flex-col bg-[#f3f2f1]">
 
-<!-- Logo -->
-<div class="text-center pt-2 pb-2 border-b">
-    
+    <!-- Logo -->
+    <div class="text-center pt-2 pb-2 border-b">
 
-    <a href="{{ route('dashboard') }}">
+        <a href="{{ route('dashboard') }}">
 
-        <img
-            src="{{ asset('images/menusidebar.png') }}"
-            alt="SIPeIP"
-            class="mx-auto h-12">
+            <img
+                src="{{ asset('images/menusidebar.png') }}"
+                alt="SIPeIP"
+                class="mx-auto h-12">
 
-        <div class="text-xs text-gray-500">
-            Planificación e Inversión Pública
-        </div>
+            <div class="text-xs text-gray-500">
+                Planificación e Inversión Pública
+            </div>
 
-    </a>
+        </a>
 
-</div>
+    </div>
 
     <!-- Menú -->
-    <nav class="flex-1 overflow-y-auto px-0 py-3">
+    <nav class="flex-1 overflow-y-auto py-3">
 
         <!-- Inicio -->
         <a href="{{ route('dashboard') }}"
-        class="{{ request()->routeIs('dashboard') ? 'sidebar-active' : 'sidebar-link' }}">
+           class="{{ request()->routeIs('dashboard') ? 'sidebar-active' : 'sidebar-link' }}">
 
             <i class="bi bi-house-door"></i>
             <span>Inicio</span>
 
         </a>
 
-        <!-- Gestión Institucional -->
-        <details class="mt-2"
-            {{ request()->routeIs('roles.*') || request()->routeIs('entidades.*') || request()->routeIs('usuarios.*') ? 'open' : '' }}>
+        <!-- ================= CONFIGURACIÓN ================= -->
 
-            <summary class="{{ request()->routeIs('roles.*') || request()->routeIs('entidades.*') || request()->routeIs('usuarios.*') ? 'sidebar-active' : 'sidebar-group' }}">
+        <details class="mt-2"
+            {{ request()->routeIs('roles.*')
+            || request()->routeIs('usuarios.*')
+            || request()->routeIs('entidades.*')
+            || request()->routeIs('unidades.*')
+            ? 'open' : '' }}>
+
+            <summary class="{{ request()->routeIs('roles.*')
+                || request()->routeIs('usuarios.*')
+                || request()->routeIs('entidades.*')
+                || request()->routeIs('unidades.*')
+                ? 'sidebar-active'
+                : 'sidebar-group' }}">
 
                 <div class="flex items-center gap-3">
-                    <i class="bi bi-building"></i>
-                    <span>Gestión Institucional</span>
+
+                    <i class="bi bi-gear"></i>
+
+                    <span>Configuración</span>
+
                 </div>
 
                 <i class="bi bi-chevron-down text-sm"></i>
 
             </summary>
 
-            <div class="ml-8 mt-1 space-y-1">
+            <div class="ml-4 mt-1 space-y-0.5">
 
-                <a href="{{ route('entidades.index') }}"
-                class="{{ request()->routeIs('entidades.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
-                    Entidades
+                <a href="{{ route('roles.index') }}"
+                    class="{{ request()->routeIs('roles.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                    Roles
                 </a>
-                
+
                 <a href="{{ route('usuarios.index') }}"
-                class="{{ request()->routeIs('usuarios.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                    class="{{ request()->routeIs('usuarios.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
                     Usuarios
                 </a>
 
-                <a href="{{ route('roles.index') }}" 
-                class="{{ request()->routeIs('roles.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
-                    Roles
+                <a href="{{ route('entidades.index') }}"
+                    class="{{ request()->routeIs('entidades.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                    Entidades
+                </a>
+
+                <a href="#"
+                    class="sidebar-link">
+                    Unidades Organizacionales
                 </a>
 
             </div>
 
         </details>
 
-        <!-- Planificación -->
-        <details class="mt-2">
+        <!-- ================= PLANIFICACIÓN ================= -->
 
-            <summary class="sidebar-group">
+        <details class="mt-2"
+            {{ request()->routeIs('planes.*')
+            || request()->routeIs('objetivos.*')
+            || request()->routeIs('metas.*')
+            || request()->routeIs('indicadores.*')
+            ? 'open' : '' }}>
+
+            <summary class="{{ request()->routeIs('planes.*')
+                || request()->routeIs('objetivos.*')
+                || request()->routeIs('metas.*')
+                || request()->routeIs('indicadores.*')
+                ? 'sidebar-active'
+                : 'sidebar-group' }}">
 
                 <div class="flex items-center gap-3">
-                    <i class="bi bi-journal-text"></i>
+
+                    <i class="bi bi-diagram-3"></i>
+
                     <span>Planificación</span>
+
                 </div>
 
                 <i class="bi bi-chevron-down text-sm"></i>
 
             </summary>
 
-            <div class="ml-8 mt-1 space-y-1">
+            <div class="ml-4 mt-1 space-y-0.5">
 
-                <a href="{{ route('planes.index') }}" class="sidebar-link">
+                <a href="{{ route('planes.index') }}"
+                    class="{{ request()->routeIs('planes.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
                     Planes
                 </a>
 
                 <a href="{{ route('objetivos.index') }}"
-                class="sidebar-link {{ request()->routeIs('objetivos.*') ? 'active' : '' }}">
-                    Objetivos Estratégicos
+                    class="{{ request()->routeIs('objetivos.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                    Objetivos
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="#"
+                    class="sidebar-link">
                     Metas
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="#"
+                    class="sidebar-link">
                     Indicadores
                 </a>
 
@@ -104,38 +138,86 @@
 
         </details>
 
-        <!-- Inversión Pública -->
+        <!-- ================= INVERSIÓN ================= -->
+
         <details class="mt-2">
 
             <summary class="sidebar-group">
 
                 <div class="flex items-center gap-3">
-                    <i class="bi bi-briefcase"></i>
-                    <span>Inversión Pública</span>
+
+                    <i class="bi bi-cash-stack"></i>
+
+                    <span>Inversión</span>
+
                 </div>
 
                 <i class="bi bi-chevron-down text-sm"></i>
 
             </summary>
 
-            <div class="ml-8 mt-1">
+            <div class="ml-4 mt-1 space-y-0.5">
 
                 <a href="#" class="sidebar-link">
                     Proyectos
+                </a>
+
+                <a href="#" class="sidebar-link">
+                    POA
+                </a>
+
+                <a href="#" class="sidebar-link">
+                    Presupuesto
                 </a>
 
             </div>
 
         </details>
 
-        <!-- Seguimiento y Control -->
+        <!-- ================= SEGUIMIENTO ================= -->
+
         <details class="mt-2">
 
             <summary class="sidebar-group">
 
                 <div class="flex items-center gap-3">
+
                     <i class="bi bi-clipboard-check"></i>
-                    <span>Seguimiento y Control</span>
+
+                    <span>Seguimiento</span>
+
+                </div>
+
+                <i class="bi bi-chevron-down text-sm"></i>
+
+            </summary>
+
+            <div class="ml-4 mt-1 space-y-0.5">
+
+                <a href="#" class="sidebar-link">
+                    Seguimiento
+                </a>
+
+                <a href="#" class="sidebar-link">
+                    Evaluación
+                </a>
+
+            </div>
+
+        </details>
+
+        <!-- ================= ADMINISTRACIÓN ================= -->
+
+        <details class="mt-2">
+
+            <summary class="sidebar-group">
+
+                <div class="flex items-center gap-3">
+
+                    <i class="bi bi-shield-check"></i>
+
+                    <span>Administración</span>
+
                 </div>
 
                 <i class="bi bi-chevron-down text-sm"></i>
@@ -145,39 +227,11 @@
             <div class="ml-8 mt-1 space-y-1">
 
                 <a href="#" class="sidebar-link">
-                    Seguimientos
+                    Reportes
                 </a>
 
                 <a href="#" class="sidebar-link">
                     Auditoría
-                </a>
-
-                <a href="#" class="sidebar-link">
-                    Versiones
-                </a>
-
-            </div>
-
-        </details>
-
-        <!-- Informes -->
-        <details class="mt-2">
-
-            <summary class="sidebar-group">
-
-                <div class="flex items-center gap-3">
-                    <i class="bi bi-file-earmark-text"></i>
-                    <span>Informes</span>
-                </div>
-
-                <i class="bi bi-chevron-down text-sm"></i>
-
-            </summary>
-
-            <div class="ml-8 mt-1">
-
-                <a href="#" class="sidebar-link">
-                    Reportes
                 </a>
 
             </div>
@@ -186,7 +240,8 @@
 
     </nav>
 
-    <!-- Footer Usuario -->
+    <!-- Footer -->
+
     <div class="border-t p-4 text-center">
 
         <div class="text-sm font-semibold text-gray-800">

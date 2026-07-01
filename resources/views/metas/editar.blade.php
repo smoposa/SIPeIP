@@ -1,18 +1,29 @@
-<x-objetivos-layout title="Nuevo Objetivo Estratégico Institucional">
+<x-objetivos-layout title="Editar Meta">
 
-    <!-- Barra de navegación -->
+    <!-- Barra principal -->
+
     <div class="bg-white border-b border-gray-300 mb-6">
 
         <div class="flex">
 
-            <a href="{{ route('objetivos.oei') }}"
+            <a href="{{ route('objetivos.index') }}"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Objetivos Institucionales
+                Información General
             </a>
 
-            <a href="#"
+            <a href="{{ route('objetivos.ods') }}"
+               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
+                ODS
+            </a>
+
+            <a href="{{ route('objetivos.pnd') }}"
+               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
+                PND
+            </a>
+
+            <a href="{{ route('objetivos.oei') }}"
                class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Nuevo Objetivo
+                Objetivos Institucionales
             </a>
 
         </div>
@@ -20,23 +31,42 @@
     </div>
 
     <!-- Encabezado -->
+
     <div class="flex items-center justify-between mb-6">
 
         <div>
 
-            <h2 class="text-2xl font-bold text-gray-800">
-                Nuevo Objetivo Estratégico Institucional
-            </h2>
+            <div class="flex items-center gap-3">
 
-            <p class="text-gray-500 mt-1">
-                Registre un nuevo objetivo estratégico institucional.
-            </p>
+                <a href="{{ route('metas.detalle', $meta->id) }}"
+                   class="text-gray-500 hover:text-blue-600">
+
+                    <i class="bi bi-arrow-left text-lg"></i>
+
+                </a>
+
+                <div>
+
+                    <h2 class="text-2xl font-semibold text-gray-800">
+
+                        Editar Meta
+
+                    </h2>
+
+                    <p class="text-gray-500 mt-1">
+
+                        {{ $meta->codigo }} - {{ $meta->nombre }}
+
+                    </p>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
 
-    <!-- Errores -->
     @if ($errors->any())
 
         <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
@@ -55,12 +85,11 @@
 
     @endif
 
-    <!-- Formulario -->
-    <form action="{{ route('objetivos.store') }}" method="POST">
+    <form action="{{ route('metas.update', $meta->id) }}" method="POST">
 
         @csrf
 
-        <input type="hidden" name="tipo" value="OEI">
+        @method('PUT')
 
         <div class="bg-white border border-gray-200 rounded-lg">
 
@@ -76,6 +105,7 @@
 
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Código -->
+
                 <div>
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -85,7 +115,7 @@
                     <input
                         type="text"
                         name="codigo"
-                        value="{{ old('codigo') }}"
+                        value="{{ old('codigo', $meta->codigo) }}"
                         maxlength="30"
                         required
                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
@@ -93,6 +123,7 @@
                 </div>
 
                 <!-- Estado -->
+
                 <div>
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -103,11 +134,13 @@
                         name="estado"
                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
 
-                        <option value="Activo" {{ old('estado') == 'Activo' ? 'selected' : '' }}>
+                        <option value="Activo"
+                            {{ old('estado', $meta->estado) == 'Activo' ? 'selected' : '' }}>
                             Activo
                         </option>
 
-                        <option value="Inactivo" {{ old('estado') == 'Inactivo' ? 'selected' : '' }}>
+                        <option value="Inactivo"
+                            {{ old('estado', $meta->estado) == 'Inactivo' ? 'selected' : '' }}>
                             Inactivo
                         </option>
 
@@ -116,16 +149,17 @@
                 </div>
 
                 <!-- Nombre -->
+
                 <div class="md:col-span-2">
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Nombre del Objetivo <span class="text-red-500">*</span>
+                        Nombre de la Meta <span class="text-red-500">*</span>
                     </label>
 
                     <input
                         type="text"
                         name="nombre"
-                        value="{{ old('nombre') }}"
+                        value="{{ old('nombre', $meta->nombre) }}"
                         maxlength="255"
                         required
                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
@@ -133,6 +167,7 @@
                 </div>
 
                 <!-- Descripción -->
+
                 <div class="md:col-span-2">
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -142,69 +177,46 @@
                     <textarea
                         name="descripcion"
                         rows="4"
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">{{ old('descripcion') }}</textarea>
+                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">{{ old('descripcion', $meta->descripcion) }}</textarea>
 
                 </div>
 
-                <!-- Entidad -->
+                <!-- Valor Meta -->
+
                 <div>
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Entidad
+                        Valor Meta
                     </label>
 
-                    <select
-                        name="entidad_id"
+                    <input
+                        type="number"
+                        step="0.01"
+                        name="valor_meta"
+                        value="{{ old('valor_meta', $meta->valor_meta) }}"
                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                        <option value="">Seleccione...</option>
-
-                        @foreach($entidades as $entidad)
-
-                            <option
-                                value="{{ $entidad->id }}"
-                                {{ old('entidad_id') == $entidad->id ? 'selected' : '' }}>
-
-                                {{ $entidad->nombre }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
 
                 </div>
 
-                <!-- Plan -->
+                <!-- Unidad de Medida -->
+
                 <div>
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Plan
+                        Unidad de Medida
                     </label>
 
-                    <select
-                        name="plan_id"
+                    <input
+                        type="text"
+                        name="unidad_medida"
+                        value="{{ old('unidad_medida', $meta->unidad_medida) }}"
+                        maxlength="100"
                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                        <option value="">Seleccione...</option>
-
-                        @foreach($planes as $plan)
-
-                            <option
-                                value="{{ $plan->id }}"
-                                {{ old('plan_id') == $plan->id ? 'selected' : '' }}>
-
-                                {{ $plan->nombre }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
 
                 </div>
 
                 <!-- Fecha Inicio -->
+
                 <div>
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -214,12 +226,13 @@
                     <input
                         type="date"
                         name="fecha_inicio"
-                        value="{{ old('fecha_inicio') }}"
+                        value="{{ old('fecha_inicio', optional($meta->fecha_inicio)->format('Y-m-d')) }}"
                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
 
                 </div>
 
                 <!-- Fecha Fin -->
+
                 <div>
 
                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -229,16 +242,17 @@
                     <input
                         type="date"
                         name="fecha_fin"
-                        value="{{ old('fecha_fin') }}"
+                        value="{{ old('fecha_fin', optional($meta->fecha_fin)->format('Y-m-d')) }}"
                         class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
 
                 </div>
                             </div>
 
             <!-- Botones -->
+
             <div class="flex justify-end gap-3 px-6 py-4 border-t bg-gray-50 rounded-b-lg">
 
-                <a href="{{ route('objetivos.oei') }}"
+                <a href="{{ route('metas.detalle', $meta->id) }}"
                    class="px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-100">
 
                     Cancelar
@@ -249,9 +263,9 @@
                     type="submit"
                     class="px-5 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
 
-                    <i class="bi bi-check-circle me-1"></i>
+                    <i class="bi bi-check-circle mr-2"></i>
 
-                    Guardar Objetivo
+                    Actualizar Meta
 
                 </button>
 

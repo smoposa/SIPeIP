@@ -6,27 +6,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Objetivo extends Model
+class Meta extends Model
 {
-    protected $table = 'objetivos';
+    protected $table = 'metas';
 
     protected $fillable = [
 
-        'tipo',
-        'entidad_id',
-        'plan_id',
+        'objetivo_id',
+
         'codigo',
+
         'nombre',
+
         'descripcion',
+
+        'valor_meta',
+
+        'unidad_medida',
+
         'fecha_inicio',
+
         'fecha_fin',
+
         'estado',
 
     ];
 
     protected $casts = [
 
+        'valor_meta'   => 'decimal:2',
+
         'fecha_inicio' => 'date',
+
         'fecha_fin'    => 'date',
 
     ];
@@ -37,18 +48,13 @@ class Objetivo extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function entidad(): BelongsTo
+    public function objetivo(): BelongsTo
     {
-        return $this->belongsTo(Entidad::class);
+        return $this->belongsTo(Objetivo::class);
     }
 
-    public function plan(): BelongsTo
+    public function indicadores(): HasMany
     {
-        return $this->belongsTo(Plan::class);
-    }
-
-    public function metas(): HasMany
-    {
-        return $this->hasMany(Meta::class);
+        return $this->hasMany(Indicador::class);
     }
 }

@@ -2,18 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-.sidebar-group {
-    @apply flex items-center justify-between px-3 py-2 rounded-md cursor-pointer text-gray-700 hover:bg-[#edebe9] transition duration-200;
+.sidebar-link{
+    @apply block w-full px-4 py-2 text-sm text-gray-700 rounded-md hover:bg-[#edebe9] transition;
 }
 
-.sidebar-link {
-    @apply block w-full px-4 py-3 text-gray-700 hover:bg-[#edebe9] transition duration-150;
+.sidebar-link-active{
+    @apply block w-full px-4 py-2 text-sm bg-[#edebe9] text-[#024687] font-semibold rounded-md;
 }
 
-.sidebar-active {
-    @apply flex items-center gap-3 px-4 py-3 bg-white text-[#024687] font-semibold shadow-sm;
+.sidebar-group{
+    @apply flex items-center justify-between px-3 py-2 text-sm rounded-md cursor-pointer text-gray-700 hover:bg-[#edebe9];
 }
 
-.sidebar-link-active {
-    @apply block w-full px-4 py-3 bg-[#edebe9] text-gray-900 font-semibold;
+.sidebar-active{
+    @apply flex items-center gap-3 px-4 py-2 text-sm bg-white text-[#024687] font-semibold rounded-md shadow-sm;
 }

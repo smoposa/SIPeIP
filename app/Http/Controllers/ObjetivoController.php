@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Objetivo;
+use App\Models\Entidad;
+use App\Models\Plan;
 
 class ObjetivoController extends Controller
 {
-
-    // Página principal del módulo.
+    /**
+     * Página principal del módulo.
+     */
     public function index()
     {
         $totalODS = Objetivo::where('tipo', 'ODS')->count();
@@ -23,7 +26,6 @@ class ObjetivoController extends Controller
             'totalOEI'
         ));
     }
-
 
     // Catálogo de Objetivos de Desarrollo Sostenible (ODS).
     public function ods()
@@ -48,33 +50,52 @@ class ObjetivoController extends Controller
     // Gestión de Objetivos Estratégicos Institucionales (OEI).
     public function oei()
     {
-        $objetivos = Objetivo::where('tipo', 'OEI')
+        $objetivos = Objetivo::with(['entidad', 'plan'])
+            ->where('tipo', 'OEI')
             ->orderBy('codigo')
             ->get();
 
         return view('objetivos.oei', compact('objetivos'));
     }
 
+    //Formulario para crear ODS.
     public function createODS()
     {
         return view('objetivos.createODS');
     }
 
+    // Formulario para crear PND.
     public function createPND()
     {
         return view('objetivos.createPND');
     }
 
+    // Formulario para crear OEI.
     public function createOEI()
     {
-        return view('objetivos.createOEI');
+        return view('objetivos.createOEI', [
+
+            'entidades' => Entidad::where('estado', 'Activo')
+                ->orderBy('nombre')
+                ->get(),
+
+            'planes' => Plan::where('estado', 'Activo')
+                ->orderBy('nombre')
+                ->get(),
+
+        ]);
     }
 
+    // Guardar objetivo.
     public function store(Request $request)
     {
         $request->validate([
 
             'tipo' => 'required|in:ODS,PND,OEI',
+
+            'entidad_id' => 'nullable|exists:entidades,id',
+
+            'plan_id' => 'nullable|exists:planes,id',
 
             'codigo' => 'required|max:30|unique:objetivos,codigo',
 
@@ -84,7 +105,7 @@ class ObjetivoController extends Controller
 
             'fecha_inicio' => 'nullable|date',
 
-            'fecha_fin' => 'nullable|date',
+            'fecha_fin' => 'nullable|date|after_or_equal:fecha_inicio',
 
             'estado' => 'required|in:Activo,Inactivo',
 
@@ -93,6 +114,10 @@ class ObjetivoController extends Controller
         Objetivo::create([
 
             'tipo' => $request->tipo,
+
+            'entidad_id' => $request->entidad_id,
+
+            'plan_id' => $request->plan_id,
 
             'codigo' => $request->codigo,
 
@@ -109,15 +134,28 @@ class ObjetivoController extends Controller
         ]);
 
         return redirect()
-            ->route('objetivos.ods')
+            ->route('objetivos.' . strtolower($request->tipo))
             ->with('success', 'Objetivo registrado correctamente.');
     }
 
-    // Detalle de un Objetivo Estratégico Institucional.
+    // Detalle del objetivo.
     public function detalle($id)
+    {
+        $objetivo = Objetivo::with(['entidad', 'plan'])
+            ->findOrFail($id);
+
+        return view('objetivos.detalle', compact('objetivo'));
+    }
+
+    public function edit($id)
     {
         $objetivo = Objetivo::findOrFail($id);
 
-        return view('objetivos.detalle', compact('objetivo'));
+        return view('objetivos.editar', compact('objetivo'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Lo implementaremos enseguida
     }
 }
