@@ -36,12 +36,12 @@
             <a href="{{ route('entidades.editarestado', $entidad->id) }}"
                 class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
                 <i class="bi bi-check2-circle text-blue-500 me-2"></i>
-                Estado
+                Editar estado
             </a>
 
             <a href="{{ url()->current() }}"
                 class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-                <i class="bi bi-arrow-clockwise text-blue-500 me-1"></i>
+                <i class="bi bi-arrow-clockwise text-blue-500 me-2"></i>
                 Actualizar
             </a>
 
@@ -52,30 +52,25 @@
     <!-- Scroll vertical -->
     <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
-        <!-- Información -->
+        <!-- Información básica-->
         <div class="bg-white p-6 shadow-sm">
 
             <!-- Cabecera de la entidad -->
-            <div class="flex items-center gap-4 mb-0 pb-6 ">
+            <div class="flex items-center gap-4 mb-0 pb-6">
 
                 <div class="w-20 h-20 rounded-full bg-[#024687]
                             flex items-center justify-center
                             text-white text-4xl">
-
                     <i class="bi bi-building"></i>
-
                 </div>
 
                 <div>
                     <h2 class="text-2xl font-semibold text-gray-800">
                         {{ $entidad->nombre }}
                     </h2>
-
-                    
                     <p class="text-gray-500">
                         {{ $entidad->siglas ?: 'Sin siglas' }}
                     </p>
-
                     <p class="text-gray-500">
                         {{ $entidad->tipoEntidad }}
                     </p>
@@ -83,8 +78,8 @@
 
             </div>
 
-            <!-- Encabezado de sección -->
-            <div class="bg-gray-100 border-b border-gray-200 mb-4">
+            <!-- Información General -->
+            <div class="bg-gray-100 border-b border-gray-200">
 
                 <div class="flex justify-between items-center px-4 py-2">
                     <h4 class="text-sm font-semibold text-gray-800">
@@ -216,26 +211,21 @@
             </div>
 
 
-            <!-- Encabezado de sección -->
-            <div class="bg-gray-100 border-b border-gray-200 mb-4">
-
+            <!-- Estado -->
+            <div class="bg-gray-100 border-b border-gray-200">
                 <div class="px-4 py-2">
-
                     <h4 class="text-sm font-semibold text-gray-800">
-                        Estado
+                        Estado de la entidad
                     </h4>
-
                 </div>
-
             </div>
 
-            <!-- Contenido -->
-            <div class="px-4 py-3">
-                <div class="flex items-center">
+            <div class="px-4 py-2">
+                <div class="flex items-center mb-4">
                     <div class="flex items-center">
 
                         <span class="w-40 text-sm font-semibold text-gray-700">
-                            Estado de la entidad
+                            Estado
                         </span>
 
                         @if($entidad->estado == 'Activo')
@@ -261,44 +251,53 @@
                 </div>
             </div>
         
-            <!-- Tarjeta Estado 
-            <div class="mt-8">
+            <!-- Auditoría -->
+            <div class="bg-gray-100 border-b border-gray-200">
 
-                <div class="w-[30%] min-w-[320px] bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
+                <div class="px-4 py-2">
 
-                    <div class="flex gap-4">
+                    <h4 class="text-sm font-semibold text-gray-800">
+                        Auditoría
+                    </h4>
 
-                        <i class="bi bi-building-fill text-4xl text-cyan-500"></i>
+                </div>
 
-                        <div>
+            </div>
 
+            <div class="px-4 py-5">
 
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                            <p class="mt-2 text-sm text-gray-700">
+                    <!-- Fecha de creación -->
+                    <div>
 
-                                @if($entidad->estado == 'Activo')
-                                    <i class="bi bi-check-circle-fill"></i>
-                                    Habilitado
-                                @else
-                                    <i class="bi bi-x-circle-fill"></i>
-                                    Deshabilitado
-                                @endif
+                        <p class="text-sm font-semibold text-gray-700">
+                            Fecha de creación
+                        </p>
 
-                            </p>
+                        <p class="mt-1 text-sm text-gray-600">
+                            {{ $entidad->created_at->format('d/m/Y H:i') }}
+                        </p>
 
-                            <a href="#"
-                            class="block mt-2 text-blue-600 text-sm hover:text-blue-800">
-                                Editar
-                            </a>
+                    </div>
 
-                        </div>
+                    <!-- Última actualización -->
+                    <div>
+
+                        <p class="text-sm font-semibold text-gray-700">
+                            Última actualización
+                        </p>
+
+                        <p class="mt-1 text-sm text-gray-600">
+                            {{ $entidad->updated_at->format('d/m/Y H:i') }}
+                        </p>
 
                     </div>
 
                 </div>
 
-            </div> -->
-
+            </div>
+            
         </div>
     
     </div>

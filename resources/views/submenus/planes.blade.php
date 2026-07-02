@@ -1,18 +1,33 @@
-<nav class="py-4">
+<div class="h-full bg-[#ffffff]">
 
-    <a href="{{ route('planes.index') }}"
-       class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-100">
-        Información General
-    </a>
+    <!-- Botón ocultar -->
+    <div class="flex justify-end px-2 py-2 border-b">
 
-    <a href="{{ route('planes.create') }}"
-       class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-100">
-        Crear Plan
-    </a>
+        <button id="toggleSubmenu" class="text-gray-600 hover:text-[#024687]">
+            <i class="bi bi-chevron-double-left"></i>
+        </button>
 
-    <a href="{{ route('planes.listar') }}"
-       class="block px-5 py-3 text-sm text-gray-700 hover:bg-gray-100">
-        Consultar Planes
-    </a>
+    </div>
 
-</nav>
+    <!-- Opciones -->
+    <nav id="menuPlanes">
+
+        <a href="{{ route('planes.index') }}"
+           class="{{ request()->routeIs('planes.index') ? 'sidebar-link-active' : 'sidebar-link' }}">
+            Página de inicio
+        </a>
+
+        <a href="{{ route('planes.listar') }}"
+           class="{{ request()->routeIs('planes.listar') ? 'sidebar-link-active' : 'sidebar-link' }}">
+            Planes registrados
+        </a>
+
+        <a href="{{ route('planes.create') }}"
+           class="{{ request()->routeIs('planes.create') ? 'sidebar-link-active' : 'sidebar-link' }}">
+            Crear plan
+        </a>
+
+
+    </nav>
+
+</div>

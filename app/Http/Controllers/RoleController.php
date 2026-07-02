@@ -22,13 +22,11 @@ class RoleController extends Controller
         ));
     }
 
-    
     public function listar()
     {
         $roles = Rol::orderBy('nombre', 'asc')->get();
         return view('roles.listar', compact('roles'));
     }
-
 
     public function create()
     {
@@ -54,7 +52,7 @@ class RoleController extends Controller
         ]);
 
         return redirect()
-            ->route('roles.create')
+            ->route('roles.listar')
             ->with('success', 'Rol registrado correctamente.');
     }
 
@@ -70,7 +68,6 @@ class RoleController extends Controller
         $request->validate([
             'nombre' => 'required|max:100',
             'descripcion' => 'nullable|max:255',
-            'estado' => 'required|in:Activo,Inactivo',
         ]);
 
         $rol = Rol::findOrFail($id);
@@ -78,13 +75,39 @@ class RoleController extends Controller
         $rol->update([
             'nombre' => $request->nombre,
             'descripcion' => $request->descripcion,
-            'estado' => $request->estado,
         ]);
 
         return redirect()
-            ->route('roles.listar')
-            ->with('success', 'Rol actualizado correctamente.');
+            ->route('roles.detalle', $rol->id)
+            ->with('success', 'Información del rol actualizada correctamente.');
     }
 
+    public function detalle($id)
+    {
+        $rol = Rol::findOrFail($id);
+
+        return view('roles.detalle', compact('rol'));
+    }
     
+    public function editarEstado($id)
+    {
+        $rol = Rol::findOrFail($id);
+
+        return view('roles.editarestado', compact('rol'));
+    }
+
+    public function actualizarEstado(Request $request, $id)
+    {
+        $rol = Rol::findOrFail($id);
+
+        $rol->estado = $request->has('estado')
+            ? 'Activo'
+            : 'Inactivo';
+
+        $rol->save();
+
+        return redirect()
+            ->route('roles.detalle', $rol->id)
+            ->with('success', 'Estado del rol actualizado correctamente.');
+    }
 }

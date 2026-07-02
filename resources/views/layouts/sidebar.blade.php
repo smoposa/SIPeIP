@@ -60,23 +60,23 @@
 
             <div class="ml-4 mt-1 space-y-0.5">
 
-                <a href="{{ route('roles.index') }}"
-                    class="{{ request()->routeIs('roles.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                <a href="{{ route('roles.listar') }}"
+                   class="{{ request()->routeIs('roles.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                     Roles
                 </a>
 
                 <a href="{{ route('usuarios.index') }}"
-                    class="{{ request()->routeIs('usuarios.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                   class="{{ request()->routeIs('usuarios.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                     Usuarios
                 </a>
 
                 <a href="{{ route('entidades.index') }}"
-                    class="{{ request()->routeIs('entidades.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                   class="{{ request()->routeIs('entidades.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                     Entidades
                 </a>
 
                 <a href="#"
-                    class="sidebar-link">
+                   class="sidebar-submenu">
                     Unidades Organizacionales
                 </a>
 
@@ -115,22 +115,22 @@
             <div class="ml-4 mt-1 space-y-0.5">
 
                 <a href="{{ route('planes.index') }}"
-                    class="{{ request()->routeIs('planes.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                   class="{{ request()->routeIs('planes.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                     Planes
                 </a>
 
                 <a href="{{ route('objetivos.index') }}"
-                    class="{{ request()->routeIs('objetivos.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                   class="{{ request()->routeIs('objetivos.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                     Objetivos
                 </a>
 
                 <a href="#"
-                    class="sidebar-link">
+                   class="{{ request()->routeIs('metas.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                     Metas
                 </a>
 
                 <a href="#"
-                    class="sidebar-link">
+                   class="{{ request()->routeIs('indicadores.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                     Indicadores
                 </a>
 
@@ -158,15 +158,18 @@
 
             <div class="ml-4 mt-1 space-y-0.5">
 
-                <a href="#" class="sidebar-link">
+                <a href="#"
+                   class="sidebar-submenu">
                     Proyectos
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="#"
+                   class="sidebar-submenu">
                     POA
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="#"
+                   class="sidebar-submenu">
                     Presupuesto
                 </a>
 
@@ -194,11 +197,13 @@
 
             <div class="ml-4 mt-1 space-y-0.5">
 
-                <a href="#" class="sidebar-link">
+                <a href="#"
+                   class="sidebar-submenu">
                     Seguimiento
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="#"
+                   class="sidebar-submenu">
                     Evaluación
                 </a>
 
@@ -224,13 +229,15 @@
 
             </summary>
 
-            <div class="ml-8 mt-1 space-y-1">
+            <div class="ml-4 mt-1 space-y-0.5">
 
-                <a href="#" class="sidebar-link">
+                <a href="#"
+                   class="sidebar-submenu">
                     Reportes
                 </a>
 
-                <a href="#" class="sidebar-link">
+                <a href="#"
+                   class="sidebar-submenu">
                     Auditoría
                 </a>
 
@@ -241,7 +248,6 @@
     </nav>
 
     <!-- Footer -->
-
     <div class="border-t p-4 text-center">
 
         <div class="text-sm font-semibold text-gray-800">

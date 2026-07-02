@@ -19,7 +19,7 @@
 
         <a href="{{ route('entidades.listar') }}"
         class="{{ request()->routeIs('entidades.listar') ? 'sidebar-link-active' : 'sidebar-link' }}">
-            Consultar entidades
+            Entidades registradas
         </a>
 
         <a href="{{ route('entidades.create') }}"

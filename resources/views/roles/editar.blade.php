@@ -9,6 +9,7 @@
         <script>
             setTimeout(() => {
                 const alerta = document.getElementById('alertSuccess');
+
                 if (alerta) {
                     alerta.remove();
                 }
@@ -17,136 +18,98 @@
     @endif
 
     <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-6">
+    <div class="bg-white border-b border-gray-300 mb-0">
 
-        <div class="flex">
-
-            <a href="{{ route('roles.index') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Información general
+        <div class="flex gap-6">
+            <a href="{{ route('roles.detalle', $rol->id) }}"
+                class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+                <i class="bi bi-chevron-left"></i>
+                Regresar
             </a>
-
-            <a href="{{ route('roles.create') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Crear rol
-            </a>
-
-            <a href="{{ route('roles.listar') }}"
-               class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Consultar roles
-            </a>
-
         </div>
 
     </div>
 
-    <!-- Encabezado -->
-    <div class="mb-6">
+    <!-- Información -->
+    <div class="bg-white p-6 shadow-sm">
 
-        <h2 class="text-2xl font-semibold text-gray-800">
-            Editar rol
-        </h2>
+        <!-- Encabezado -->
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold text-gray-800">
+                Actualizar información del rol
+            </h2>
+            <p class="mt-1 text-sm text-gray-500">
+                A continuación puede actualizar la información general del rol.
+            </p>
+        </div>
 
-        <p class="mt-1 text-gray-500">
-            Actualice la información del rol institucional registrado en el Sistema Integral de Planificación e Inversión Pública (SIPeIP).
-        </p>
+        <!-- Scroll -->
+        <div class="overflow-y-auto" style="height: calc(100vh - 300px);">
 
-    </div>
+            <form method="POST" action="{{ route('roles.update', $rol->id) }}">
 
-    <!-- Formulario -->
-    <div class="bg-white border border-gray-200 rounded-lg p-6">
+                @csrf
+                @method('PUT')
 
-        <form method="POST" action="{{ route('roles.update', $rol->id) }}">
-            @csrf
-            @method('PUT')
+                <div class="space-y-4">
 
-            <!-- Nombre -->
-            <div class="mb-5">
+                    <!-- Nombre -->
+                    <div class="flex items-center">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Nombre del Rol <span class="text-red-500">*</span>
-                </label>
+                        <label class="w-48 text-sm font-medium text-gray-700">
+                            Nombre del Rol <span class="text-red-500">*</span>
+                        </label>
 
-                <input
-                    type="text"
-                    name="nombre"
-                    maxlength="100"
-                    required
-                    value="{{ old('nombre', $rol->nombre) }}"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                        <input
+                            type="text"
+                            name="nombre"
+                            maxlength="100"
+                            required
+                            value="{{ old('nombre', $rol->nombre) }}"
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
 
-                <p class="mt-1 text-xs text-gray-500">
-                    Máximo 100 caracteres.
-                </p>
+                    </div>
 
-            </div>
+                    <!-- Descripción -->
+                    <div class="flex items-start">
 
-            <!-- Descripción -->
-            <div class="mb-6">
+                        <label class="w-48 text-sm font-medium text-gray-700 pt-2">
+                            Descripción
+                        </label>
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Descripción
-                </label>
+                        <textarea
+                            name="descripcion"
+                            rows="4"
+                            maxlength="255"
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">{{ old('descripcion', $rol->descripcion) }}</textarea>
 
-                <textarea
-                    name="descripcion"
-                    rows="4"
-                    maxlength="255"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">{{ old('descripcion', $rol->descripcion) }}</textarea>
+                    </div>
 
-                <p class="mt-1 text-xs text-gray-500">
-                    Máximo 255 caracteres.
-                </p>
+                </div>
 
-            </div>
+                <!-- Botones -->
+                <div class="flex gap-3 mt-10">
 
-            <!-- Estado -->
-            <div class="mb-6">
+                    <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
 
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Estado <span class="text-red-500">*</span>
-                </label>
+                        Actualizar
 
-                <select
-                    name="estado"
-                    required
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                    </button>
 
-                    <option value="Activo"
-                        {{ old('estado', $rol->estado) == 'Activo' ? 'selected' : '' }}>
-                        Activo
-                    </option>
+                    <a href="{{ route('roles.detalle', $rol->id) }}"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
 
-                    <option value="Inactivo"
-                        {{ old('estado', $rol->estado) == 'Inactivo' ? 'selected' : '' }}>
-                        Inactivo
-                    </option>
+                        Cancelar
 
-                </select>
+                    </a>
 
-                <p class="mt-1 text-xs text-gray-500">
-                    Seleccione el estado actual del rol.
-                </p>
+                </div>
 
-            </div>
+            </form>
 
-            <!-- Botones -->
-            <div class="flex gap-3">
-
-                <button
-                    type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
-                    Actualizar
-                </button>
-
-                <a href="{{ route('roles.listar') }}"
-                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
-                    Cancelar
-                </a>
-
-            </div>
-
-        </form>
+        </div>
 
     </div>
 

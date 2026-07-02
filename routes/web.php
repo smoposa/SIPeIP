@@ -105,6 +105,12 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}', [RoleController::class, 'update'])
             ->name('roles.update');
 
+        Route::get('/{id}/estado', [RoleController::class, 'editarEstado'])
+            ->name('roles.estado');
+
+        Route::put('/{id}/estado', [RoleController::class, 'actualizarEstado'])
+            ->name('roles.actualizarestado');
+
         Route::get('/desactivados', [RoleController::class, 'desactivados'])
             ->name('roles.desactivados');
 

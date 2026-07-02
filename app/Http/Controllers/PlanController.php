@@ -9,7 +9,17 @@ class PlanController extends Controller
 {
     public function index()
     {
-        return view('planes.index');
+        $totalPlanes = Plan::count();
+
+        $planesActivos = Plan::where('estado', 'Activo')->count();
+
+        $planesInactivos = Plan::where('estado', 'Inactivo')->count();
+
+        return view('planes.index', compact(
+            'totalPlanes',
+            'planesActivos',
+            'planesInactivos'
+        ));
     }
 
     public function create()
@@ -129,4 +139,5 @@ class PlanController extends Controller
                 ->route('planes.listar')
                 ->with('success', 'Plan eliminado correctamente.');
     }
+
 }

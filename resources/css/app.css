@@ -2,18 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Grupo principal (Configuración, Planificación, etc.) */
+.sidebar-active{
+    @apply flex items-center justify-between px-5 py-3 text-sm bg-white text-[#024687] font-semibold;
+}
+
+/* Opciones del menú principal (Roles, Usuarios, Entidades...) */
+.sidebar-submenu{
+    @apply block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors;
+}
+
+.sidebar-submenu-active{
+    @apply block px-4 py-3 text-sm bg-white text-[#024687] font-semibold;
+}
+
+/* Submenú derecho */
 .sidebar-link{
-    @apply block w-full px-4 py-2 text-sm text-gray-700 rounded-md hover:bg-[#edebe9] transition;
+    @apply block px-5 py-3 text-sm text-gray-700 hover:text-[#024687] hover:underline underline-offset-4 transition-colors;
 }
 
 .sidebar-link-active{
-    @apply block w-full px-4 py-2 text-sm bg-[#edebe9] text-[#024687] font-semibold rounded-md;
+    @apply block px-5 py-3 text-sm text-[#024687] border-l-4 border-blue-600 font-semibold;
 }
 
+/* Grupos desplegables */
 .sidebar-group{
-    @apply flex items-center justify-between px-3 py-2 text-sm rounded-md cursor-pointer text-gray-700 hover:bg-[#edebe9];
-}
-
-.sidebar-active{
-    @apply flex items-center gap-3 px-4 py-2 text-sm bg-white text-[#024687] font-semibold rounded-md shadow-sm;
+    @apply flex items-center justify-between px-5 py-3 text-sm cursor-pointer text-gray-700 hover:bg-gray-100 transition-colors;
 }

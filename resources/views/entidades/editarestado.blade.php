@@ -22,9 +22,9 @@
 
     <div class="p-6">
 
-        <!-- h2 class="text-2xl font-semibold text-gray-800">
-            Editar Estado de Entidad
-        </h2> -->
+        <h2 class="text-2xl font-semibold text-gray-800">
+            Editar estado de entidad
+        </h2>
 
         <p class="mt-1 text-sm text-gray-500">
             Habilite o deshabilite la entidad dentro del sistema.

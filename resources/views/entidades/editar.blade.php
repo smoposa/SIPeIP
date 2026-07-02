@@ -1,4 +1,5 @@
 <x-entidades-layout title="Editar Entidad">
+
     @if(session('success'))
         <div id="alertSuccess"
             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
@@ -22,7 +23,7 @@
             <a href="{{ route('entidades.detalle', $entidad->id) }}"
                 class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
                 <i class="bi bi-chevron-left"></i>
-                    Regresar
+                Regresar
             </a>  
         </div>
 

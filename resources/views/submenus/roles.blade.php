@@ -1,4 +1,4 @@
-<div class="h-screen bg-[#ffffff]">
+<div class="h-full bg-[#ffffff]">
 
     <!-- Botón ocultar -->
     <div class="flex justify-end px-2 py-2 border-b">
@@ -19,17 +19,17 @@
 
         <a href="{{ route('roles.listar') }}"
         class="{{ request()->routeIs('roles.listar') ? 'sidebar-link-active' : 'sidebar-link' }}">
-            Cosultar roles
+            Roles registrados
         </a>
 
-        <a href="{{ route('roles.create') }}"
-        class="{{ request()->routeIs('roles.create') ? 'sidebar-link-active' : 'sidebar-link' }}">
-            Crear rol
-        </a>
+       <a href="{{ route('roles.create') }}"
+            class="{{ request()->routeIs('roles.create') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                Crear rol
+            </a>
 
-    <!--<a href="{{ route('roles.desactivados') }}"
-        class="{{ request()->routeIs('roles.desactivados') ? 'sidebar-link-active' : 'sidebar-link' }}">
-            Roles desactivados
+         <!--<a href="{{ route('roles.desactivados') }}"
+            class="{{ request()->routeIs('roles.desactivados') ? 'sidebar-link-active' : 'sidebar-link' }}">
+                Roles desactivados
         </a>-->
 
     </nav>

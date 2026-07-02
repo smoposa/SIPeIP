@@ -17,98 +17,56 @@
         </script>
     @endif
 
-    <!-- Barra de acciones 
-    <div class="bg-white border-b border-gray-300 mb-6">
-
-        <div class="flex">
-
-            <a href="{{ route('entidades.index') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Inicio
-            </a>
-
-            <a href="{{ route('entidades.create') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Crear entidad
-            </a>
-
-            <a href="{{ route('entidades.listar') }}"
-               class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Consultar entidades
-            </a>
-
-        </div>
-
-    </div>-->
-
     <!-- Encabezado -->
-    <div class="mb-6">
-
+    <div class="mb-2">
         <h2 class="text-2xl font-semibold text-gray-800">
             Consulta de entidades
         </h2>
-
-        <p class="mt-1 text-sm text-gray-500">
+        <!--<p class="mt-1 text-sm text-gray-500">
             Visualice y administre las entidades públicas registradas en el Sistema Integral de Planificación e Inversión Pública (SIPeIP).
-        </p>
+        </p -->
+    </div>
+
+    <!-- Resumen -->
+    <div class="flex items-center justify-between mb-4">
+
+        <div>
+            <p class="text-sm text-gray-500">
+                {{ $entidades->count() }} registros ·
+                <span class="text-green-600 font-medium">
+                    {{ $entidades->where('estado','Activo')->count() }}
+                </span>
+                activas ·
+                <span class="text-red-600 font-medium">
+                    {{ $entidades->where('estado','Inactivo')->count() }}
+                </span>
+                inactivas
+            </p>
+        </div>
+
+        <a href="{{ route('entidades.create') }}"
+        class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+
+            <i class="bi bi-plus-lg"></i>
+
+            Crear entidad
+
+        </a>
 
     </div>
 
-    <!-- Filtros (solo visual por ahora)
-    <div class="bg-white border border-gray-200 rounded-lg p-4 mb-6">
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-            <input
-                type="text"
-                placeholder="Nombre de la entidad"
-                class="border border-gray-300 rounded-md px-3 py-2">
-
-            <input
-                type="text"
-                placeholder="Código institucional"
-                class="border border-gray-300 rounded-md px-3 py-2">
-
-            <select
-                class="border border-gray-300 rounded-md px-3 py-2">
-
-                <option value="">
-                    Todos los tipos
-                </option>
-
-            </select>
-
-            <select
-                class="border border-gray-300 rounded-md px-3 py-2">
-
-                <option value="">
-                    Todos los estados
-                </option>
-
-                <option value="Activo">
-                    Activo
-                </option>
-
-                <option value="Inactivo">
-                    Inactivo
-                </option>
-
-            </select>
-
-        </div>
-
-    </div> -->
+    <!-- Filtros
+    <div>
+    ... aqui codigo de filtro 
+    </div>-->
 
     <!-- Tabla -->
     <div class="overflow-y-auto" style="height: calc(100vh - 210px);"> <!-- Scroll vertical -->
         
-
         <div class="bg-white border border-gray-200 rounded-lg">
 
             <table class="min-w-full">
-
                 <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
-
                     <tr>
                         <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                             Nro
@@ -127,7 +85,7 @@
                         </th>
 
                         <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                            Nivel de Gobierno
+                            Nivel
                         </th>
 
                         <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
@@ -137,7 +95,6 @@
                         <!-- th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">
                             Acciones
                         </th> -->
-
                     </tr>
 
                 </thead>
@@ -147,7 +104,6 @@
                     @forelse($entidades as $entidad)
 
                         <tr class="border-b border-gray-100 hover:bg-gray-50">
-
                             <!-- Nro -->
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 {{ $loop->iteration }}
@@ -155,14 +111,10 @@
 
                             <!-- Nombre -->
                             <td class="px-4 py-3 text-sm font-medium">
-
                                 <a href="{{ route('entidades.detalle', $entidad->id) }}"
                                 class="text-blue-600 hover:text-blue-800 hover:underline">
-
                                     {{ $entidad->nombre }}
-
                                 </a>
-
                             </td>
 
                             <!-- RUC -->
@@ -182,21 +134,15 @@
 
                             <!-- Estado -->
                             <td class="px-4 py-3">
-
                                 @if($entidad->estado == 'Activo')
-
                                     <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
                                         Habilitado
                                     </span>
-
                                 @else
-
                                     <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
                                         Deshabilitado
                                     </span>
-
                                 @endif
-
                             </td>
 
                             <!-- Acciones 
@@ -208,20 +154,15 @@
                                 </a>
 
                             </td>-->
-
                         </tr>
 
                     @empty
 
                         <tr>
-
                             <td colspan="7"
                                 class="px-4 py-6 text-center text-gray-500">
-
                                 No existen entidades registradas.
-
                             </td>
-
                         </tr>
 
                     @endforelse
