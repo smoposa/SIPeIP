@@ -165,6 +165,12 @@ Route::middleware('auth')->group(function () {
 
         Route::put('/{id}', [PlanController::class, 'update'])->name('update');
 
+        Route::get('/{id}/estado', [PlanController::class, 'editarEstado'])
+            ->name('editarestado');
+
+        Route::put('/{id}/estado', [PlanController::class, 'actualizarEstado'])
+            ->name('actualizarestado');
+
         Route::delete('/{id}', [PlanController::class, 'destroy'])->name('destroy');
 
     });

@@ -18,7 +18,6 @@
 
     <!-- Barra de acciones -->
     <div class="bg-white border-b border-gray-300 mb-0">
-
         <div class="flex">
             <a href="{{ route('entidades.detalle', $entidad->id) }}"
                 class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
@@ -26,7 +25,6 @@
                 Regresar
             </a>  
         </div>
-
     </div>
 
     <!-- Información -->
@@ -41,6 +39,17 @@
                 Acontinuacion puede actualizar los datos de la entidad.
             </p>
         </div>
+
+        <!-- Validaciones -->
+        @if ($errors->any())
+            <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
+                <ul class="list-disc list-inside text-sm text-red-700">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <!-- Scroll del contenido  -->
         <div class="overflow-y-auto" style="height: calc(100vh - 300px);">
@@ -62,7 +71,7 @@
                             maxlength="50"
                             required
                             value="{{ old('codigoInstitucional', $entidad->codigoInstitucional) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
                     </div>
 
@@ -78,7 +87,8 @@
                             maxlength="13"
                             required
                             value="{{ old('ruc', $entidad->ruc) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                            
                     </div>
 
                     <!-- Nombre -->
@@ -93,7 +103,7 @@
                             maxlength="255"
                             required
                             value="{{ old('nombre', $entidad->nombre) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- Siglas -->
@@ -108,7 +118,7 @@
                             name="siglas"
                             maxlength="50"
                             value="{{ old('siglas', $entidad->siglas) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
                     </div>
 
@@ -120,7 +130,7 @@
                         <select
                             name="tipoEntidad"
                             required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Seleccione</option>
                             <option value="Ministerio" {{ old('tipoEntidad', $entidad->tipoEntidad) == 'Ministerio' ? 'selected' : '' }}>Ministerio</option>
                             <option value="Secretaría" {{ old('tipoEntidad', $entidad->tipoEntidad) == 'Secretaría' ? 'selected' : '' }}>Secretaría</option>
@@ -140,7 +150,7 @@
                         <select
                             name="nivelGobierno"
                             required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Seleccione</option>
                             <option value="Nacional" {{ old('nivelGobierno', $entidad->nivelGobierno) == 'Nacional' ? 'selected' : '' }}>Nacional</option>
                             <option value="Provincial" {{ old('nivelGobierno', $entidad->nivelGobierno) == 'Provincial' ? 'selected' : '' }}>Provincial</option>
@@ -159,7 +169,7 @@
                             name="provincia"
                             maxlength="100"
                             value="{{ old('provincia', $entidad->provincia) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- Cantón -->
@@ -172,7 +182,7 @@
                             name="canton"
                             maxlength="100"
                             value="{{ old('canton', $entidad->canton) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- Parroquia -->
@@ -185,7 +195,7 @@
                             name="parroquia"
                             maxlength="100"
                             value="{{ old('parroquia', $entidad->parroquia) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- Teléfono -->
@@ -199,7 +209,7 @@
                             name="telefono"
                             maxlength="20"
                             value="{{ old('telefono', $entidad->telefono) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- Correo Institucional -->
@@ -213,7 +223,7 @@
                             name="correoInstitucional"
                             maxlength="150"
                             value="{{ old('correoInstitucional', $entidad->correoInstitucional) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- Dirección -->
@@ -231,16 +241,29 @@
                 </div>
 
                 <!-- Botones -->
-                <div class="flex gap-3 mt-10">
-                    <button
-                        type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
-                        Actualizar
-                    </button>
-                    <a href="{{ route('entidades.detalle', $entidad->id) }}"
-                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
-                        Cancelar
-                    </a>
+                <div class="flex mt-6">
+
+                    <div class="w-48 flex-shrink-0"></div>
+
+                    <div class="w-2/3 flex justify-end gap-3">
+
+                        <button
+                            type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+
+                            Actualizar
+
+                        </button>
+
+                        <a href="{{ route('entidades.detalle', $entidad->id) }}"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+
+                            Cancelar
+
+                        </a>
+
+                    </div>
+
                 </div>
 
             </form>

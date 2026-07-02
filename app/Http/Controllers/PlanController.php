@@ -30,37 +30,62 @@ class PlanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'codigo' => 'required|max:50|unique:planes,codigo',
-            'nombre' => 'required|max:200',
-            'tipo' => 'required',
-            'fecha_inicio' => 'required|date',
-            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
-            'descripcion' => 'nullable',
+            'nombre'          => 'required|max:255',
+            'descripcion'     => 'nullable',
+            'periodo_inicio'  => 'required|integer',
+            'periodo_fin'     => 'required|integer|gte:periodo_inicio',
+            'fecha_inicio'    => 'required|date',
+            'fecha_fin'       => 'required|date|after_or_equal:fecha_inicio',
         ]);
+
+        // Generar código automático
+        $anio = $request->periodo_inicio;
+
+        $ultimoPlan = Plan::where('periodo_inicio', $anio)
+            ->where('codigo', 'like', "PEI-{$anio}-%")
+            ->orderByDesc('codigo')
+            ->first();
+            
+        if ($ultimoPlan) {
+
+            $ultimoNumero = (int) substr($ultimoPlan->codigo, -3);
+
+            $nuevoNumero = str_pad($ultimoNumero + 1, 3, '0', STR_PAD_LEFT);
+
+        } else {
+
+            $nuevoNumero = '001';
+
+        }
+
+        $codigo = "PEI-{$anio}-{$nuevoNumero}";
 
         Plan::create([
 
-            'codigo' => $request->codigo,
+            'codigo'          => $codigo,
 
-            'nombre' => $request->nombre,
+            'nombre'          => $request->nombre,
 
-            'tipo' => $request->tipo,
+            'descripcion'     => $request->descripcion,
 
-            'fecha_inicio' => $request->fecha_inicio,
+            'periodo_inicio'  => $request->periodo_inicio,
 
-            'fecha_fin' => $request->fecha_fin,
+            'periodo_fin'     => $request->periodo_fin,
 
-            'descripcion' => $request->descripcion,
+            'fecha_inicio'    => $request->fecha_inicio,
 
-            'estado' => $request->has('estado')
-                            ? 'Activo'
-                            : 'Inactivo',
+            'fecha_fin'       => $request->fecha_fin,
+
+            'estado'          => 'Activo',
+
+            // Cuando implementemos entidades:
+            // 'entidad_id' => auth()->user()->entidad_id,
 
         ]);
 
         return redirect()
-                ->route('planes.listar')
-                ->with('success','Plan registrado correctamente.');
+            ->route('planes.listar')
+            ->with('success', 'Plan registrado correctamente.');
     }
 
     public function listar()
@@ -92,15 +117,17 @@ class PlanController extends Controller
 
             'codigo' => 'required|max:50|unique:planes,codigo,' . $plan->id,
 
-            'nombre' => 'required|max:200',
+            'nombre' => 'required|max:255',
 
-            'tipo' => 'required',
+            'descripcion' => 'nullable',
+
+            'periodo_inicio' => 'required|integer',
+
+            'periodo_fin' => 'required|integer|gte:periodo_inicio',
 
             'fecha_inicio' => 'required|date',
 
             'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
-
-            'descripcion' => 'nullable',
 
         ]);
 
@@ -110,17 +137,15 @@ class PlanController extends Controller
 
             'nombre' => $request->nombre,
 
-            'tipo' => $request->tipo,
+            'descripcion' => $request->descripcion,
+
+            'periodo_inicio' => $request->periodo_inicio,
+
+            'periodo_fin' => $request->periodo_fin,
 
             'fecha_inicio' => $request->fecha_inicio,
 
             'fecha_fin' => $request->fecha_fin,
-
-            'descripcion' => $request->descripcion,
-
-            'estado' => $request->has('estado')
-                            ? 'Activo'
-                            : 'Inactivo',
 
         ]);
 
@@ -138,6 +163,28 @@ class PlanController extends Controller
         return redirect()
                 ->route('planes.listar')
                 ->with('success', 'Plan eliminado correctamente.');
+    }
+
+        public function editarEstado($id)
+    {
+        $plan = Plan::findOrFail($id);
+
+        return view('planes.editarestado', compact('plan'));
+    }
+
+    public function actualizarEstado(Request $request, $id)
+    {
+        $plan = Plan::findOrFail($id);
+
+        $plan->estado = $request->has('estado')
+                        ? 'Activo'
+                        : 'Inactivo';
+
+        $plan->save();
+
+        return redirect()
+                ->route('planes.detalle', $plan->id)
+                ->with('success', 'Estado del plan actualizado correctamente.');
     }
 
 }

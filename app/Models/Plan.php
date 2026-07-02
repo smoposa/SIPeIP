@@ -14,15 +14,19 @@ class Plan extends Model
 
         'nombre',
 
-        'tipo',
+        'descripcion',
+
+        'periodo_inicio',
+
+        'periodo_fin',
 
         'fecha_inicio',
 
         'fecha_fin',
 
-        'descripcion',
+        'estado',
 
-        'estado'
+        'entidad_id',
 
     ];
 

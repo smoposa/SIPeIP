@@ -65,14 +65,14 @@
             <!-- Cabecera del usuario + Logo -->
             <div class="flex items-center gap-4 mb-0 pb-6">
                 
-                <div class="w-20 h-20 rounded-full bg-[#024687]
+                <div class="w-16 h-16 rounded-full bg-[#7C3AED]
                             flex items-center justify-center
-                            text-white text-4xl">
-                    <i class="bi bi-key-fill text-white text-4xl"></i>
+                            text-white text-3xl">
+                    <i class="bi bi-key-fill text-white text-3xl"></i>
                 </div>
 
                 <div>
-                    <h2 class="text-2xl font-semibold text-gray-800">
+                    <h2 class="text-xl font-semibold text-gray-800">
                         {{ $rol->nombre }}
                     </h2>
                     <p class="text-gray-500">

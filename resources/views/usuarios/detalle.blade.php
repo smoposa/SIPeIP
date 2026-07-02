@@ -18,7 +18,7 @@
     @endif
 
     <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300">
+    <div class="bg-white border-b border-gray-300 mb-0">
         <div class="flex">
             
             <a href="{{ route('usuarios.index') }}"
@@ -63,26 +63,23 @@
     <!-- Scroll vertical -->
     <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
+        <!-- Información básica-->
         <div class="bg-white p-6 shadow-sm">
 
             <!-- Cabecera del usuario + Logo -->
             <div class="flex items-center gap-4 mb-0 pb-6">
 
-                <div class="w-20 h-20 rounded-full bg-[#024687]
+                <div class="w-16 h-16 rounded-full bg-[#2563EB]
                             flex items-center justify-center
                             text-white text-4xl">
 
-                    <i class="bi bi-person"></i>
+                    <i class="bi bi-person text-white text-4xl"></i>
                 </div>
 
                 <div>
-                    <h2 class="text-2xl font-semibold text-gray-800">
+                    <h2 class="text-xl font-semibold text-gray-800">
                         {{ $usuario->nombres }} {{ $usuario->apellidos }}
                     </h2>
-
-                    <p class="text-gray-500">
-                        {{ $usuario->email }}
-                    </p>
 
                     <p class="text-gray-500">
                         {{ $usuario->cargo ?: 'Sin cargo asignado' }}

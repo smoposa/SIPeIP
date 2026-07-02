@@ -16,11 +16,20 @@
 
     <div class="flex">
 
-        <!-- Submenu -->
+        @if(
+            request()->routeIs('roles.index') ||
+            request()->routeIs('roles.listar') ||
+            request()->routeIs('roles.create')
+        )
+
         <div id="submenuContainer"
             class="w-52 border-r border-gray-300">
+
             @include('submenus.roles')
+
         </div>
+
+        @endif
 
         <!-- Contenido -->
         <div class="flex-1 px-4 pt-1 pb-4">

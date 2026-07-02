@@ -15,11 +15,20 @@
 
     <div class="flex">
 
-        <!-- Submenu -->
+        @if(
+            request()->routeIs('entidades.index') ||
+            request()->routeIs('entidades.listar') ||
+            request()->routeIs('entidades.create')
+        )
+
         <div id="submenuContainer"
-             class="w-52 border-r border-gray-300">
+            class="w-52 border-r border-gray-300">
+
             @include('submenus.entidades')
+
         </div>
+
+        @endif
         
         <!-- Contenido -->
         <div class="flex-1 px-4 pt-1 pb-4">

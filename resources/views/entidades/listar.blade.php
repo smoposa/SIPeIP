@@ -46,11 +46,8 @@
 
         <a href="{{ route('entidades.create') }}"
         class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
-
             <i class="bi bi-plus-lg"></i>
-
             Crear entidad
-
         </a>
 
     </div>
@@ -68,31 +65,31 @@
             <table class="min-w-full">
                 <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
                     <tr>
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                        <th class="px-42 py-2 text-left text-sm font-semibold text-gray-700">
                             Nro
                         </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
                             Nombre
                         </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
                             RUC
                         </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
                             Tipo de Entidad
                         </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
                             Nivel
                         </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
                             Estado
                         </th>
 
-                        <!-- th class="px-4 py-3 text-center text-sm font-semibold text-gray-700">
+                        <!-- th class="px-2 py-2 text-center text-sm font-semibold text-gray-700">
                             Acciones
                         </th> -->
                     </tr>
@@ -105,12 +102,12 @@
 
                         <tr class="border-b border-gray-100 hover:bg-gray-50">
                             <!-- Nro -->
-                            <td class="px-4 py-3 text-sm text-gray-600">
+                            <td class="px-2 py-2 text-sm text-gray-600">
                                 {{ $loop->iteration }}
                             </td>
 
                             <!-- Nombre -->
-                            <td class="px-4 py-3 text-sm font-medium">
+                            <td class="px-2 py-2 text-sm font-medium">
                                 <a href="{{ route('entidades.detalle', $entidad->id) }}"
                                 class="text-blue-600 hover:text-blue-800 hover:underline">
                                     {{ $entidad->nombre }}
@@ -118,22 +115,22 @@
                             </td>
 
                             <!-- RUC -->
-                            <td class="px-4 py-3 text-sm text-gray-600">
+                            <td class="px-2 py-2 text-sm text-gray-600">
                                 {{ $entidad->ruc }}
                             </td>
 
                             <!-- Tipo de Entidad -->
-                            <td class="px-4 py-3 text-sm text-gray-600">
+                            <td class="px-2 py-2 text-sm text-gray-600">
                                 {{ $entidad->tipoEntidad }}
                             </td>
 
                             <!-- Nivel de Gobierno -->
-                            <td class="px-4 py-3 text-sm text-gray-600">
+                            <td class="px-2 py-2 text-sm text-gray-600">
                                 {{ $entidad->nivelGobierno }}
                             </td>
 
                             <!-- Estado -->
-                            <td class="px-4 py-3">
+                            <td class="px-2 py-2">
                                 @if($entidad->estado == 'Activo')
                                     <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
                                         Habilitado

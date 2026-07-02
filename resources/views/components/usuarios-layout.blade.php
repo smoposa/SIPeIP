@@ -17,16 +17,23 @@
 
     <div class="flex">
 
-        <!-- Submenu -->
+        @if(
+            request()->routeIs('usuarios.index') ||
+            request()->routeIs('usuarios.listar') ||
+            request()->routeIs('usuarios.create')
+        )
+
         <div id="submenuContainer"
-             class="w-52 border-r border-gray-300">
+            class="w-52 border-r border-gray-300">
 
             @include('submenus.usuarios')
 
         </div>
 
+        @endif
+
         <!-- Contenido -->
-        <div class="flex-1 p-4">
+        <div class="flex-1 px-4 pt-1 pb-4">
 
             {{ $slot }}
 

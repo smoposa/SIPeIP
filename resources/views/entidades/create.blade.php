@@ -260,21 +260,25 @@
                 </div>
                     
                 <!-- Botones -->
-                <div class="flex justify-end gap-3 mt-6">
+                <div class="flex mt-6">
 
-                    <button
-                        type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
-                        Guardar
-                    </button>
+                    <div class="w-48 flex-shrink-0"></div>
 
-                    <a href="{{ route('entidades.index') }}"
-                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
-                        Cancelar
-                    </a>
+                        <div class="w-2/3 flex justify-end gap-3">
+                            <button
+                                type="submit"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+                                Guardar
+                            </button>
 
+                            <a href="{{ route('entidades.index') }}"
+                            class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+                                Cancelar
+                            </a>
+                        </div>
+                    </div>
                 </div>
-
+                
             </form>
 
     </div>

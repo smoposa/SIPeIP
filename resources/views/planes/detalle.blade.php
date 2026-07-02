@@ -1,254 +1,227 @@
 <x-planes-layout title="Detalle del Plan Institucional">
 
+    @if(session('success'))
+        <div id="alertSuccess"
+             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+
+            {{ session('success') }}
+
+        </div>
+
+        <script>
+            setTimeout(() => {
+                const alerta = document.getElementById('alertSuccess');
+
+                if (alerta) {
+                    alerta.remove();
+                }
+            }, 3000);
+        </script>
+    @endif
+
     <!-- Barra de acciones -->
-
-    <div class="bg-white border-b border-gray-300 mb-6">
-
+    <div class="bg-white border-b border-gray-300 mb-0">
         <div class="flex">
 
-            <a href="{{ route('planes.index') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Información General
-            </a>
-
-            <a href="{{ route('planes.create') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Crear Plan
-            </a>
-
             <a href="{{ route('planes.listar') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Consultar Planes
+                class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+                <i class="bi bi-chevron-left"></i>
+                Regresar
             </a>
 
-            <a href="{{ route('planes.detalle', $plan->id) }}"
-               class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Detalle del Plan
+            <a href="{{ route('planes.edit', $plan->id) }}"
+                class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                <i class="bi bi-pencil text-blue-500 me-2"></i>
+                Editar información
             </a>
 
-        </div>
+            <a href="{{ route('planes.editarestado', $plan->id) }}"
+                class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                <i class="bi bi-check2-circle text-blue-500 me-2"></i>
+                Editar estado
+            </a>
 
+            <a href="{{ url()->current() }}"
+                class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                <i class="bi bi-arrow-clockwise text-blue-500 me-2"></i>
+                Actualizar
+            </a>
+        </div>
     </div>
 
-    <!-- Encabezado -->
+    <!-- Scroll vertical -->
+    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
-    <div class="flex justify-between items-center mb-8">
+        <!-- Información básica-->
+        <div class="bg-white p-6 shadow-sm">
 
-        <div>
-
-            <h2 class="text-3xl font-semibold text-gray-800">
-
-                {{ $plan->nombre }}
-
-            </h2>
-
-            <p class="mt-2 text-gray-600">
-
-                Información general del plan institucional.
-
-            </p>
-
-        </div>
-
-        <a href="{{ route('planes.edit', $plan->id) }}"
-           class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg">
-
-            <i class="bi bi-pencil-square me-2"></i>
-
-            Editar
-
-        </a>
-
-    </div>
-
-    <!-- Información -->
-
-    <div class="bg-white border rounded-lg shadow-sm">
-
-        <div class="px-8 py-6 border-b border-gray-200">
-
-            <h3 class="text-xl font-semibold text-gray-800">
-
-                Datos Generales
-
-            </h3>
-
-        </div>
-
-        <div class="p-8">
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <!-- Código -->
-
-                <div>
-
-                    <h5 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-
-                        Código del Plan
-
-                    </h5>
-
-                    <p class="mt-2 text-gray-800">
-
-                        {{ $plan->codigo }}
-
-                    </p>
-
+            <!-- Cabecera del plan -->
+            <div class="flex items-center gap-4 mb-0 pb-6">
+                
+                <div class="w-16 h-16 rounded-full bg-[#0F766E]
+                            flex items-center justify-center
+                            text-white text-3xl">
+                    <i class="bi bi-file-earmark-text"></i>
                 </div>
 
-                <!-- Nombre -->
-
                 <div>
-
-                    <h5 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-
-                        Nombre del Plan
-
-                    </h5>
-
-                    <p class="mt-2 text-gray-800">
-
+                    <h2 class="text-xl font-semibold text-gray-800">
                         {{ $plan->nombre }}
-
+                    </h2>
+                    <p class="text-gray-500">
+                        Período {{ $plan->periodo_inicio }} - {{ $plan->periodo_fin }}
                     </p>
-
-                </div>
-
-                <!-- Tipo -->
-
-                <div>
-
-                    <h5 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-
-                        Tipo de Plan
-
-                    </h5>
-
-                    <p class="mt-2 text-gray-800">
-
-                        {{ $plan->tipo }}
-
-                    </p>
-
-                </div>
-
-                <!-- Fecha Inicio -->
-
-                <div>
-
-                    <h5 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-
-                        Fecha de Inicio
-
-                    </h5>
-
-                    <p class="mt-2 text-gray-800">
-
-                        {{ $plan->fecha_inicio }}
-
-                    </p>
-
-                </div>
-
-                <!-- Fecha Fin -->
-
-                <div>
-
-                    <h5 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-
-                        Fecha de Finalización
-
-                    </h5>
-
-                    <p class="mt-2 text-gray-800">
-
-                        {{ $plan->fecha_fin }}
-
-                    </p>
-
-                </div>
-
-                <!-- Estado -->
-
-                <div>
-
-                    <h5 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-
-                        Estado
-
-                    </h5>
-
-                    <p class="mt-2">
-
-                        @if($plan->estado == 'Activo')
-
-                            <span class="inline-flex px-3 py-1 rounded-full text-xs bg-green-100 text-green-700">
-
-                                Activo
-
-                            </span>
-
-                        @else
-
-                            <span class="inline-flex px-3 py-1 rounded-full text-xs bg-red-100 text-red-700">
-
-                                Inactivo
-
-                            </span>
-
-                        @endif
-
-                    </p>
-
                 </div>
 
             </div>
 
-            <!-- Descripción -->
+            <!-- Información General -->
+            <div class="bg-gray-100 border-b border-gray-200">
 
-            <div class="mt-10">
+                <div class="flex justify-between items-center px-4 py-2">
 
-                <h5 class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                    <h4 class="text-sm font-semibold text-gray-800">
+                        Información general
+                    </h4>
 
-                    Descripción
+                    <a href="{{ route('planes.edit', $plan->id) }}"
+                    class="text-sm text-blue-600 hover:text-blue-800">
+                        Editar
+                    </a>
 
-                </h5>
-
-                <p class="mt-3 text-gray-700 leading-relaxed">
-
-                    {{ $plan->descripcion }}
-
-                </p>
+                </div>
 
             </div>
+            
+            <!-- Datos -->
+            <div class="px-4 py-3">
+                <div class="space-y-4 mb-6">
+
+                    <!-- Código -->
+                    <div class="flex">
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            Código del Plan
+                        </span>
+                        <span class="text-sm text-gray-600">
+                            {{ $plan->codigo }}
+                        </span>
                     </div>
 
-        <!-- Pie -->
+                    <!-- Nombre -->
+                    <div class="flex">
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            Nombre
+                        </span>
+                        <span class="text-sm font-medium text-[#0F766E]">
+                            {{ $plan->nombre }}
+                        </span>
+                    </div>
 
-        <div class="px-8 py-6 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+                    <!-- Descripción -->
+                    <div class="flex items-start">
+                        <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
+                            Descripción
+                        </span>
+                        <span class="text-sm text-gray-600 leading-relaxed">
+                            {{ $plan->descripcion ?: 'No registra' }}
+                        </span>
+                    </div>
 
-            <div class="flex justify-between items-center">
+                    <!-- Período -->
+                    <div class="flex">
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            Período
+                        </span>
+                        <span class="text-sm text-gray-600">
+                            {{ $plan->periodo_inicio }} - {{ $plan->periodo_fin }}
+                        </span>
+                    </div>
 
-                <a href="{{ route('planes.listar') }}"
-                   class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100">
+                    <!-- Fecha Inicio -->
+                    <div class="flex">
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            Fecha de Inicio
+                        </span>
+                        <span class="text-sm text-gray-600">
+                            {{ \Carbon\Carbon::parse($plan->fecha_inicio)->format('d/m/Y') }}
+                        </span>
+                    </div>
 
-                    <i class="bi bi-arrow-left me-2"></i>
+                    <!-- Fecha Finalización -->
+                    <div class="flex">
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            Fecha de Finalización
+                        </span>
+                        <span class="text-sm text-gray-600">
+                            {{ \Carbon\Carbon::parse($plan->fecha_fin)->format('d/m/Y') }}
+                        </span>
+                    </div>
 
-                    Volver
-
-                </a>
-
-                <a href="{{ route('planes.edit', $plan->id) }}"
-                   class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-
-                    <i class="bi bi-pencil-square me-2"></i>
-
-                    Editar Plan
-
-                </a>
-
+                </div>
             </div>
 
+            <!-- Estado -->
+            <div class="bg-gray-100 border-b border-gray-200">
+                <div class="px-4 py-2">
+                    <h4 class="text-sm font-semibold text-gray-800">
+                        Estado del Plan
+                    </h4>
+                </div>
+            </div>
+
+            <div class="px-4 py-2 mb-6">
+                <div class="flex items-center">
+                    <span class="w-40 text-sm font-semibold text-gray-700">
+                        Estado
+                    </span>
+                    @if($plan->estado == 'Activo')
+                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                            Habilitado
+                        </span>
+                    @else
+                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                            Deshabilitado
+                        </span>
+                    @endif
+                    <a href="{{ route('planes.editarestado', $plan->id) }}"
+                    class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                        Editar
+                    </a>
+                </div>
+            </div>
+
+            <!-- Auditoría -->
+            <div class="bg-gray-100 border-b border-gray-200">
+                <div class="px-4 py-2">
+                    <h4 class="text-sm font-semibold text-gray-800">
+                        Auditoría
+                    </h4>
+                </div>
+            </div>
+
+            <div class="px-4 py-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700">
+                            Fecha de creación
+                        </p>
+                        <p class="mt-1 text-sm text-gray-600">
+                            {{ $plan->created_at->format('d/m/Y H:i') }}
+                        </p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-semibold text-gray-700">
+                            Última actualización
+                        </p>
+                        <p class="mt-1 text-sm text-gray-600">
+                            {{ $plan->updated_at->format('d/m/Y H:i') }}
+                        </p>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
     </div>
