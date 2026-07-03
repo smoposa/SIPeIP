@@ -178,27 +178,37 @@ Route::middleware('auth')->group(function () {
     // Objetivos
     Route::prefix('objetivos')->name('objetivos.')->group(function () {
 
+        // Página principal
         Route::get('/', [ObjetivoController::class, 'index'])->name('index');
 
+        // Catálogos
         Route::get('/ods', [ObjetivoController::class, 'ods'])->name('ods');
-
         Route::get('/pnd', [ObjetivoController::class, 'pnd'])->name('pnd');
-
         Route::get('/oei', [ObjetivoController::class, 'oei'])->name('oei');
 
-        Route::get('/ods/create', [ObjetivoController::class, 'createODS'])->name('createODS');
+        // Crear
+        Route::get('/ods/crear', [ObjetivoController::class, 'createODS'])->name('createODS');
+        Route::get('/pnd/crear', [ObjetivoController::class, 'createPND'])->name('createPND');
+        Route::get('/oei/crear', [ObjetivoController::class, 'createOEI'])->name('createOEI');
 
-        Route::get('/pnd/create', [ObjetivoController::class, 'createPND'])->name('createPND');
-
-        Route::get('/oei/create', [ObjetivoController::class, 'createOEI'])->name('createOEI');
-
+        // Guardar
         Route::post('/', [ObjetivoController::class, 'store'])->name('store');
 
+        // Detalle (ODS, PND y OEI)
         Route::get('/detalle/{id}', [ObjetivoController::class, 'detalle'])->name('detalle');
 
+        // Editar información
         Route::get('/editar/{id}', [ObjetivoController::class, 'edit'])->name('edit');
-
         Route::put('/editar/{id}', [ObjetivoController::class, 'update'])->name('update');
+
+        // Editar estado
+        Route::get('/editar-estado/{id}', [ObjetivoController::class, 'editarEstado'])
+            ->name('editarestado');
+
+        Route::put('/editar-estado/{id}', [ObjetivoController::class, 'actualizarEstado'])
+            ->name('actualizarestado');
+        // Route::get('/editar-estado/{id}', [ObjetivoController::class, 'editarEstado'])->name('editarestado');
+        // Route::put('/editar-estado/{id}', [ObjetivoController::class, 'actualizarEstado'])->name('actualizarEstado');
 
     });
 

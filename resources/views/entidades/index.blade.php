@@ -1,12 +1,6 @@
 <x-entidades-layout title="Página de inicio">
 
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Gestión de Entidades
-        </h2>
-    </x-slot>
-
-    <!-- Barra de acciones -->
+    <!-- Barra de acciones
     <div class="bg-white border-b border-gray-300 mb-6">
 
         <div class="flex">
@@ -15,7 +9,7 @@
                 Inicio
             </a>
         </div>
-    </div>
+    </div> -->
 
      <!-- Marco general del contenido -->
     <div class="space-y-6">
@@ -33,7 +27,9 @@
         </div>
 
         <!-- Scroll vertical -->
-        <div class="overflow-y-auto" style="height: calc(100vh - 280px);">
+        <div class="overflow-y-auto" style="height: calc(100vh - 220px);">
+
+            <div class="space-y-6">
 
             <!-- Tarjetas Indicadores -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

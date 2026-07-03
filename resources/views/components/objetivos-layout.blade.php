@@ -1,23 +1,38 @@
 <x-app-layout>
 
+    <!-- Header -->
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $title }}
+        <h2 class="text-xl text-gray-800 leading-tight">
+            <span class="font-semibold">
+                Objetivos |
+            </span>
+            <span class="font-normal">
+                {{ $title }}
+            </span>
         </h2>
     </x-slot>
 
     <div class="flex">
 
         <!-- Submenú -->
+        @if(
+            request()->routeIs('objetivos.index') ||
+            request()->routeIs('objetivos.ods') ||
+            request()->routeIs('objetivos.pnd') ||
+            request()->routeIs('objetivos.oei')
+        )
+
         <div id="submenuContainer"
-             class="w-52 border-r border-gray-300">
+            class="w-52 border-r border-gray-300">
 
             @include('submenus.objetivos')
 
         </div>
 
+        @endif
+
         <!-- Contenido -->
-        <div class="flex-1 p-6">
+        <div class="flex-1 px-4 pt-1 pb-4">
 
             {{ $slot }}
 
@@ -28,48 +43,61 @@
 </x-app-layout>
 
 <script>
-
 document.addEventListener('DOMContentLoaded', function () {
 
     const submenu = document.getElementById('submenuContainer');
+    const boton = document.getElementById('toggleSubmenu');
+    const menu = document.getElementById('menuObjetivos');
 
-    const boton = document.createElement('button');
+    if (!submenu || !boton || !menu) return;
 
-    boton.innerHTML = '&laquo;';
+    // Mostrar u ocultar automáticamente en pantallas pequeñas
+    function ajustarSubmenu() {
 
-    boton.className =
-        'absolute -left-3 top-4 bg-white border border-gray-300 rounded-full w-6 h-6 text-gray-600 hover:bg-gray-100';
+        const ancho = window.innerWidth;
 
-    submenu.style.position = 'relative';
+        if (ancho < 768) {
 
-    submenu.appendChild(boton);
-
-    let abierto = true;
-
-    boton.addEventListener('click', function () {
-
-        if (abierto) {
-
-            submenu.style.width = '0px';
-
-            submenu.style.overflow = 'hidden';
-
-            boton.innerHTML = '&raquo;';
+            submenu.classList.add('hidden');
 
         } else {
 
-            submenu.style.width = '208px';
-
-            submenu.style.overflow = 'visible';
-
-            boton.innerHTML = '&laquo;';
+            submenu.classList.remove('hidden');
 
         }
 
-        abierto = !abierto;
+    }
+
+    ajustarSubmenu();
+
+    window.addEventListener('resize', ajustarSubmenu);
+
+    // Contraer / expandir el submenú
+    boton.addEventListener('click', function () {
+
+        if (submenu.classList.contains('w-52')) {
+
+            submenu.classList.remove('w-52');
+            submenu.classList.add('w-8');
+
+            menu.classList.add('hidden');
+
+            boton.innerHTML =
+                '<i class="bi bi-chevron-double-right"></i>';
+
+        } else {
+
+            submenu.classList.remove('w-8');
+            submenu.classList.add('w-52');
+
+            menu.classList.remove('hidden');
+
+            boton.innerHTML =
+                '<i class="bi bi-chevron-double-left"></i>';
+
+        }
 
     });
 
 });
-
 </script>

@@ -1,240 +1,199 @@
-<x-objetivos-layout title="Plan Nacional de Desarrollo">
+<x-objetivos-layout title="PND">
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-6">
-
-        <div class="flex">
-
-            <a href="{{ route('objetivos.index') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Información General
-            </a>
-
-            <a href="{{ route('objetivos.ods') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                ODS
-            </a>
-
-            <a href="{{ route('objetivos.pnd') }}"
-               class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                PND
-            </a>
-
-            <a href="{{ route('objetivos.oei') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Objetivos Institucionales
-            </a>
-
+    @if(session('success'))
+        <div id="alertSuccess"
+            class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+            {{ session('success') }}
         </div>
+
+        <script>
+            setTimeout(() => {
+                const alerta = document.getElementById('alertSuccess');
+
+                if (alerta) {
+                    alerta.remove();
+                }
+            }, 3000);
+        </script>
+    @endif
+
+    <!-- Encabezado -->
+    <div class="mb-2">
+
+        <h2 class="text-2xl font-semibold text-gray-800">
+            Plan Nacional de Desarrollo
+        </h2>
+
+        <!--<p class="mt-1 text-gray-500">
+            Consulte y administre el catálogo de Objetivos del Plan Nacional de Desarrollo (PND).
+        </p>-->
 
     </div>
 
-    <!-- Encabezado -->
-
-    <div class="flex items-center justify-between mb-6">
+    <!-- Resumen -->
+    <div class="flex items-center justify-between mb-4">
 
         <div>
 
-            <h2 class="text-2xl font-semibold text-gray-800">
-                Plan Nacional de Desarrollo
-            </h2>
+            <p class="text-sm text-gray-500">
 
-            <p class="text-gray-600 mt-1">
-                Catálogo oficial de los objetivos del Plan Nacional de Desarrollo.
+                {{ $objetivos->count() }} registros ·
+
+                <span class="text-green-600 font-medium">
+                    {{ $objetivos->where('estado','Activo')->count() }}
+                </span>
+
+                activos ·
+
+                <span class="text-red-600 font-medium">
+                    {{ $objetivos->where('estado','Inactivo')->count() }}
+                </span>
+
+                inactivos
+
             </p>
 
         </div>
 
-        <a href="#"
-           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+        <a href="{{ route('objetivos.createPND') }}"
+            class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
 
-            <i class="bi bi-plus-circle mr-2"></i>
+            <i class="bi bi-plus-lg"></i>
 
-            Registrar Objetivo PND
+            Crear PND
 
         </a>
 
     </div>
 
+    <!-- Filtros
+    <div>
+        ...
+    </div>-->
+
     <!-- Tabla -->
+    <div class="overflow-y-auto" style="height: calc(100vh - 210px);">
 
-    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div class="bg-white border border-gray-200 rounded-lg">
 
-        <table class="min-w-full">
+            <table class="min-w-full">
 
-            <thead class="bg-gray-50 border-b border-gray-200">
+                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
 
-                <tr>
+                    <tr>
 
-                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-600">
-                        Código
-                    </th>
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Nro
+                        </th>
 
-                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-600">
-                        Nombre
-                    </th>
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Código
+                        </th>
 
-                    <th class="px-4 py-3 text-center text-xs font-semibold uppercase text-gray-600">
-                        Estado
-                    </th>
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Nombre
+                        </th>
 
-                    <th class="px-4 py-3 text-center text-xs font-semibold uppercase text-gray-600">
-                        Acciones
-                    </th>
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Eje
+                        </th>
 
-                </tr>
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Descripción
+                        </th>
 
-            </thead>
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Estado
+                        </th>
 
-            <tbody class="divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
+                    </tr>
 
-                    <td class="px-4 py-3 text-sm text-gray-700">
-                        PND-01
-                    </td>
+                </thead>
 
-                    <td class="px-4 py-3">
+                <tbody>
+                                        @forelse($objetivos as $objetivo)
 
-                        <a href="#"
-                           class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
 
-                            Incrementar y fomentar, de manera inclusiva, las oportunidades de empleo y las condiciones laborales.
+                            <!-- Nro -->
+                            <td class="px-2 py-2 text-sm text-gray-600">
+                                {{ $loop->iteration }}
+                            </td>
 
-                        </a>
+                            <!-- Código -->
+                            <td class="px-2 py-2 text-sm text-gray-600">
+                                {{ $objetivo->codigo }}
+                            </td>
 
-                    </td>
+                            <!-- Nombre -->
+                            <td class="px-2 py-2 text-sm font-medium">
 
-                    <td class="px-4 py-3 text-center">
+                                <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
+                                   class="text-blue-600 hover:text-blue-800 hover:underline">
 
-                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
-                            Activo
-                        </span>
+                                    {{ $objetivo->nombre }}
 
-                    </td>
+                                </a>
 
-                    <td class="px-4 py-3 text-center">
+                            </td>
 
-                        <button class="text-blue-600 hover:text-blue-800 mr-3">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
+                            <!-- Eje -->
+                            <td class="px-2 py-2 text-sm text-gray-600">
+                                {{ \Illuminate\Support\Str::limit($objetivo->eje, 20) }}
+                            </td>
 
-                        <button class="text-red-600 hover:text-red-800">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                            <!-- Descripción -->
+                            <td class="px-2 py-2 text-sm text-gray-600">
+                                {{ \Illuminate\Support\Str::limit($objetivo->descripcion, 40) }}
+                            </td>
 
-                    </td>
+                            <!-- Estado -->
+                            <td class="px-2 py-2">
 
-                </tr>
+                                @if($objetivo->estado == 'Activo')
 
-                <tr class="hover:bg-gray-50">
+                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                                        Activo
+                                    </span>
 
-                    <td class="px-4 py-3 text-sm text-gray-700">
-                        PND-02
-                    </td>
+                                @else
 
-                    <td class="px-4 py-3">
+                                    <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                                        Inactivo
+                                    </span>
 
-                        <a href="#"
-                           class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                                @endif
 
-                            Garantizar el acceso equitativo y permanente a servicios de salud y educación de calidad.
+                            </td>
 
-                        </a>
+                        </tr>
 
-                    </td>
+                    @empty
 
-                    <td class="px-4 py-3 text-center">
+                        <tr>
 
-                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
-                            Activo
-                        </span>
+                            <td colspan="6"
+                                class="px-4 py-6 text-center text-gray-500">
 
-                    </td>
+                                No existen Objetivos del Plan Nacional de Desarrollo registrados.
 
-                    <td class="px-4 py-3 text-center">
+                            </td>
 
-                        <button class="text-blue-600 hover:text-blue-800 mr-3">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
+                        </tr>
 
-                        <button class="text-red-600 hover:text-red-800">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                    @endforelse
 
-                    </td>
+                </tbody>
 
-                </tr>
+            </table>
 
-                <tr class="hover:bg-gray-50">
+        </div>
+                <!-- Pie de tabla -->
+        <div class="flex items-center justify-between mt-6">
 
-                    <td class="px-4 py-3 text-sm text-gray-700">
-                        PND-03
-                    </td>
-
-                    <td class="px-4 py-3">
-
-                        <a href="#"
-                           class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
-
-                            Impulsar el desarrollo sostenible mediante una gestión eficiente de los recursos públicos.
-
-                        </a>
-
-                    </td>
-
-                    <td class="px-4 py-3 text-center">
-
-                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
-                            Activo
-                        </span>
-
-                    </td>
-
-                    <td class="px-4 py-3 text-center">
-
-                        <button class="text-blue-600 hover:text-blue-800 mr-3">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
-
-                        <button class="text-red-600 hover:text-red-800">
-                            <i class="bi bi-trash"></i>
-                        </button>
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-        <!-- Pie de tabla -->
-
-    <div class="flex items-center justify-between mt-6">
-
-        <p class="text-sm text-gray-600">
-            Mostrando <span class="font-medium">3</span> registros.
-        </p>
-
-        <!-- Paginación (Temporal) -->
-
-        <div class="flex items-center space-x-2">
-
-            <button
-                class="px-3 py-1 border border-gray-300 rounded-md text-gray-400 cursor-not-allowed">
-                Anterior
-            </button>
-
-            <button
-                class="px-3 py-1 bg-blue-600 text-white rounded-md">
-                1
-            </button>
-
-            <button
-                class="px-3 py-1 border border-gray-300 rounded-md text-gray-400 cursor-not-allowed">
-                Siguiente
-            </button>
+            <p class="text-sm text-gray-600">
+                Mostrando <span class="font-medium">{{ $objetivos->count() }}</span> registros.
+            </p>
 
         </div>
 

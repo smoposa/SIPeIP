@@ -26,7 +26,7 @@
            class="{{ request()->routeIs('dashboard') ? 'sidebar-active' : 'sidebar-link' }}">
 
             <i class="bi bi-house-door"></i>
-            <span>Inicio</span>
+            <span class="text-red-600">Inicio</span>
 
         </a>
 
@@ -74,11 +74,13 @@
                    class="{{ request()->routeIs('entidades.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                     Entidades
                 </a>
-
+                <!--
                 <a href="#"
-                   class="sidebar-submenu">
-                    Unidades Organizacionales
-                </a>
+                class="sidebar-submenu">
+                    <span class="text-red-500">
+                        Unidades Organizacionales
+                    </span>
+                </a> -->
 
             </div>
 
@@ -129,9 +131,18 @@
                     Metas
                 </a>
 
-                <a href="#"
+                <!-- <a href="#"
                    class="{{ request()->routeIs('indicadores.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                     Indicadores
+                </a> -->
+
+
+                
+                <a href="#"
+                class="sidebar-submenu">
+                    <span class="text-red-500">
+                        Indicadores
+                    </span>
                 </a>
 
             </div>
@@ -148,7 +159,7 @@
 
                     <i class="bi bi-cash-stack"></i>
 
-                    <span>Inversión</span>
+                    <span class="text-red-600">Inversión</span>
 
                 </div>
 
@@ -187,7 +198,7 @@
 
                     <i class="bi bi-clipboard-check"></i>
 
-                    <span>Seguimiento</span>
+                    <span class="text-red-600">Seguimiento</span>
 
                 </div>
 
@@ -221,7 +232,7 @@
 
                     <i class="bi bi-shield-check"></i>
 
-                    <span>Administración</span>
+                    <span class="text-red-600">Administración</span>
 
                 </div>
 

@@ -93,6 +93,8 @@ class ObjetivoController extends Controller
 
             'tipo' => 'required|in:ODS,PND,OEI',
 
+            'eje' => 'nullable|max:100',
+
             'entidad_id' => 'nullable|exists:entidades,id',
 
             'plan_id' => 'nullable|exists:planes,id',
@@ -111,27 +113,31 @@ class ObjetivoController extends Controller
 
         ]);
 
-        Objetivo::create([
+        
 
-            'tipo' => $request->tipo,
+$objetivo = Objetivo::create([
 
-            'entidad_id' => $request->entidad_id,
+    'tipo' => $request->tipo,
 
-            'plan_id' => $request->plan_id,
+    'eje' => $request->eje,
 
-            'codigo' => $request->codigo,
+    'entidad_id' => $request->entidad_id,
 
-            'nombre' => $request->nombre,
+    'plan_id' => $request->plan_id,
 
-            'descripcion' => $request->descripcion,
+    'codigo' => $request->codigo,
 
-            'fecha_inicio' => $request->fecha_inicio,
+    'nombre' => $request->nombre,
 
-            'fecha_fin' => $request->fecha_fin,
+    'descripcion' => $request->descripcion,
 
-            'estado' => $request->estado,
+    'fecha_inicio' => $request->fecha_inicio,
 
-        ]);
+    'fecha_fin' => $request->fecha_fin,
+
+    'estado' => $request->estado,
+
+]);
 
         return redirect()
             ->route('objetivos.' . strtolower($request->tipo))
@@ -144,18 +150,141 @@ class ObjetivoController extends Controller
         $objetivo = Objetivo::with(['entidad', 'plan'])
             ->findOrFail($id);
 
-        return view('objetivos.detalle', compact('objetivo'));
+        switch ($objetivo->tipo) {
+
+            case 'ODS':
+                return view('objetivos.detalleODS', compact('objetivo'));
+
+            case 'PND':
+                return view('objetivos.detallePND', compact('objetivo'));
+
+            case 'OEI':
+                return view('objetivos.detalleOEI', compact('objetivo'));
+
+            default:
+                abort(404);
+
+        }
     }
 
+    // Editar ODS
     public function edit($id)
+    {
+        $objetivo = Objetivo::with(['entidad', 'plan'])
+            ->findOrFail($id);
+
+        switch ($objetivo->tipo) {
+
+            case 'ODS':
+                return view('objetivos.editarODS', compact('objetivo'));
+
+            case 'PND':
+                return view('objetivos.editarPND', compact('objetivo'));
+
+            case 'OEI':
+
+                return view('objetivos.editarOEI', [
+
+                    'objetivo'   => $objetivo,
+
+                    'entidades' => Entidad::where('estado', 'Activo')
+                        ->orderBy('nombre')
+                        ->get(),
+
+                    'planes' => Plan::where('estado', 'Activo')
+                        ->orderBy('nombre')
+                        ->get(),
+
+                ]);
+
+            default:
+                abort(404);
+
+        }
+    }
+
+    // Actualizar objetivo
+    public function update(Request $request, $id)
     {
         $objetivo = Objetivo::findOrFail($id);
 
-        return view('objetivos.editar', compact('objetivo'));
+        $request->validate([
+
+            'tipo' => 'required|in:ODS,PND,OEI',
+            'codigo' => 'required|max:30|unique:objetivos,codigo,' . $objetivo->id,
+            'eje' => 'nullable|max:100',
+            'nombre' => 'required|max:255',
+            'descripcion' => 'nullable',
+            'entidad_id' => 'nullable|exists:entidades,id',
+            'plan_id' => 'nullable|exists:planes,id',
+            'fecha_inicio' => 'nullable|date',
+            'fecha_fin' => 'nullable|date|after_or_equal:fecha_inicio',
+
+        ]);
+
+        $objetivo->update([
+
+            'tipo' => $request->tipo,
+
+            'eje' => $request->eje,
+
+            'codigo' => $request->codigo,
+
+            'nombre' => $request->nombre,
+
+            'descripcion' => $request->descripcion,
+
+            'entidad_id' => $request->input('entidad_id'),
+
+            'plan_id' => $request->input('plan_id'),
+
+            'fecha_inicio' => $request->input('fecha_inicio'),
+
+            'fecha_fin' => $request->input('fecha_fin'),
+
+        ]);
+
+        return redirect()
+            ->route('objetivos.detalle', $objetivo->id)
+            ->with('success', 'Objetivo actualizado correctamente.');
     }
 
-    public function update(Request $request, $id)
+    // Formulario para editar estado
+    public function editarEstado($id)
     {
-        // Lo implementaremos enseguida
+        $objetivo = Objetivo::findOrFail($id);
+
+        switch ($objetivo->tipo) {
+
+            case 'ODS':
+                return view('objetivos.editarEstadoODS', compact('objetivo'));
+
+            case 'PND':
+                return view('objetivos.editarEstadoPND', compact('objetivo'));
+
+            case 'OEI':
+                return view('objetivos.editarEstadoOEI', compact('objetivo'));
+
+            default:
+                abort(404);
+
+        }
     }
+
+    // Actualizar estado
+    public function actualizarEstado(Request $request, $id)
+    {
+        $objetivo = Objetivo::findOrFail($id);
+
+        $objetivo->estado = $request->has('estado')
+            ? 'Activo'
+            : 'Inactivo';
+
+        $objetivo->save();
+
+        return redirect()
+            ->route('objetivos.detalle', $objetivo->id)
+            ->with('success', 'Estado actualizado correctamente.');
+    }
+
 }

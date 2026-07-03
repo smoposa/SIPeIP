@@ -1,84 +1,70 @@
-<x-objetivos-layout title="Detalle de la Meta">
+<x-objetivos-layout title="Detalle OEI">
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-0">
+    @if(session('success'))
+        <div id="alertSuccess"
+             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
 
-        <div class="flex">
-
-            <a href="{{ route('metas.index', $meta->objetivo_id) }}"
-            class="py-2 text-sm font-medium text-blue-600 hover:text-green-800 mr-8">
-
-                <i class="bi bi-chevron-left"></i>
-
-                Regresar
-
-            </a>
-
-            <a href="{{ route('metas.detalle', $meta->id) }}"
-            class="{{ request()->routeIs('metas.detalle')
-                        ? 'px-3 py-2 text-sm text-green-700 bg-gray-100 transition'
-                        : 'px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition' }}">
-
-                <i class="bi bi-info-circle text-green-600 me-2"></i>
-
-                Información General
-
-            </a>
-
-            <a href="#"
-            class="{{ request()->routeIs('metas.indicadores')
-                        ? 'px-3 py-2 text-sm text-green-700 bg-gray-100 transition'
-                        : 'px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition' }}">
-
-                <i class="bi bi-graph-up text-green-600 me-2"></i>
-
-                Indicadores
-
-            </a>
-
-            <a href="#"
-            class="{{ request()->routeIs('metas.seguimiento')
-                        ? 'px-3 py-2 text-sm text-green-700 bg-gray-100 transition'
-                        : 'px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition' }}">
-
-                <i class="bi bi-clipboard-data text-green-600 me-2"></i>
-
-                Seguimiento
-
-            </a>
-
-            <a href="#"
-            class="{{ request()->routeIs('metas.presupuesto')
-                        ? 'px-3 py-2 text-sm text-green-700 bg-gray-100 transition'
-                        : 'px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition' }}">
-
-                <i class="bi bi-cash-stack text-green-600 me-2"></i>
-
-                Presupuesto
-
-            </a>
-
-            <a href="#"
-            class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-
-                <i class="bi bi-clock-history text-green-600 me-2"></i>
-
-                Historial
-
-            </a>
-
-            <a href="{{ url()->current() }}"
-            class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-
-                <i class="bi bi-arrow-clockwise text-green-600 me-2"></i>
-
-                Actualizar
-
-            </a>
+            {{ session('success') }}
 
         </div>
 
+        <script>
+            setTimeout(() => {
+                const alerta = document.getElementById('alertSuccess');
+
+                if (alerta) {
+                    alerta.remove();
+                }
+            }, 3000);
+        </script>
+    @endif
+
+<!-- Barra de acciones -->
+<div class="bg-white border-b border-gray-300 mb-0">
+
+    <div class="flex items-center">
+
+        <a href="{{ route('objetivos.oei') }}"
+           class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+
+            <i class="bi bi-chevron-left"></i>
+
+            Regresar
+
+        </a>
+
+        <a href="{{ route('objetivos.edit', $objetivo->id) }}"
+           class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+
+            <i class="bi bi-pencil text-blue-500 me-2"></i>
+
+            Editar información
+
+        </a>
+
+        <a href="{{ url()->current() }}"
+           class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+
+            <i class="bi bi-arrow-clockwise text-blue-500 me-2"></i>
+
+            Actualizar
+
+        </a>
+
+        <span class="px-2 text-gray-300">|</span>
+
+        <a href="{{ route('metas.index', $objetivo->id) }}"
+        class="px-3 py-2 text-sm text-green-700 hover:bg-green-50 transition">
+
+            <i class="bi bi-list-ul text-green-600 me-2"></i>
+
+            Gestionar metas
+
+        </a>
+
     </div>
+
+</div>
 
     <!-- Scroll -->
     <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
@@ -88,7 +74,7 @@
             <!-- Cabecera -->
             <div class="flex items-center gap-4 mb-0 pb-6">
 
-                <div class="w-16 h-16 rounded-full bg-[#16A34A]
+                <div class="w-16 h-16 rounded-full bg-[#C227F5]
                             flex items-center justify-center
                             text-white text-3xl">
 
@@ -99,11 +85,11 @@
                 <div>
 
                     <h2 class="text-xl font-semibold text-gray-800">
-                        {{ $meta->nombre }}
+                        {{ $objetivo->nombre }}
                     </h2>
 
                     <p class="text-gray-500">
-                        {{ $meta->codigo }}
+                        {{ $objetivo->codigo }}
                     </p>
 
                 </div>
@@ -119,8 +105,8 @@
                         Información general
                     </h4>
 
-                    <a href="{{ route('metas.edit', $meta->id) }}"
-                    class="text-sm text-blue-600 hover:text-blue-800">
+                    <a href="{{ route('objetivos.edit', $objetivo->id) }}"
+                       class="text-sm text-blue-600 hover:text-blue-800">
 
                         Editar
 
@@ -143,33 +129,45 @@
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ $meta->codigo }}
+                            {{ $objetivo->codigo }}
                         </span>
 
                     </div>
 
-                    <!-- Objetivo -->
+                    <!-- Institución -->
                     <div class="flex">
 
                         <span class="w-40 text-sm font-semibold text-gray-700">
-                            Objetivo
+                            Institución
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ $meta->objetivo->codigo }} - {{ $meta->objetivo->nombre }}
+                            {{ $objetivo->entidad?->nombre ?? 'No registra' }}
                         </span>
 
                     </div>
 
-                    <!-- Nombre -->
+                    <!-- Plan -->
+                    <div class="flex">
+
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            Plan Institucional
+                        </span>
+
+                        <span class="text-sm text-gray-600">
+                            {{ $objetivo->plan?->nombre ?? 'No registra' }}
+                        </span>
+
+                    </div>
+                                        <!-- Nombre -->
                     <div class="flex">
 
                         <span class="w-40 text-sm font-semibold text-gray-700">
                             Nombre
                         </span>
 
-                        <span class="text-sm font-medium text-[#16A34A]">
-                            {{ $meta->nombre }}
+                        <span class="text-sm font-medium text-[#024687]">
+                            {{ $objetivo->nombre }}
                         </span>
 
                     </div>
@@ -182,38 +180,12 @@
                         </span>
 
                         <span class="text-sm text-gray-600 leading-relaxed">
-                            {{ $meta->descripcion ?: 'No registra' }}
+                            {{ $objetivo->descripcion ?: 'No registra' }}
                         </span>
 
                     </div>
 
-                    <!-- Valor Meta -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Valor meta
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $meta->valor_meta ?? 'No registra' }}
-                        </span>
-
-                    </div>
-
-                    <!-- Unidad de medida -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Unidad de medida
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $meta->unidad_medida ?? 'No registra' }}
-                        </span>
-
-                    </div>
-
-                    <!-- Fecha de inicio -->
+                                        <!-- Fecha de inicio -->
                     <div class="flex">
 
                         <span class="w-40 text-sm font-semibold text-gray-700">
@@ -221,7 +193,7 @@
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ $meta->fecha_inicio?->format('d/m/Y') ?? 'No registra' }}
+                            {{ $objetivo->fecha_inicio?->format('d/m/Y') ?? 'No registra' }}
                         </span>
 
                     </div>
@@ -234,7 +206,7 @@
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ $meta->fecha_fin?->format('d/m/Y') ?? 'No registra' }}
+                            {{ $objetivo->fecha_fin?->format('d/m/Y') ?? 'No registra' }}
                         </span>
 
                     </div>
@@ -242,13 +214,14 @@
                 </div>
 
             </div>
+
             <!-- Estado -->
             <div class="bg-gray-100 border-b border-gray-200">
 
                 <div class="px-4 py-2">
 
                     <h4 class="text-sm font-semibold text-gray-800">
-                        Estado de la meta
+                        Estado del objetivo
                     </h4>
 
                 </div>
@@ -265,22 +238,22 @@
                             Estado
                         </span>
 
-                        @if($meta->estado == 'Activo')
+                        @if($objetivo->estado == 'Activo')
 
                             <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                                Habilitada
+                                Habilitado
                             </span>
 
                         @else
 
                             <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                                Deshabilitada
+                                Deshabilitado
                             </span>
 
                         @endif
 
-                        <a href="#"
-                        class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                        <a href="{{ route('objetivos.editarestado', $objetivo->id) }}"
+                           class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
 
                             Editar
 
@@ -308,8 +281,7 @@
             <div class="px-4 py-2">
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                    <!-- Fecha de creación -->
+                                        <!-- Fecha de creación -->
                     <div>
 
                         <p class="text-sm font-semibold text-gray-700">
@@ -317,7 +289,7 @@
                         </p>
 
                         <p class="mt-1 text-sm text-gray-600">
-                            {{ $meta->created_at?->format('d/m/Y H:i') ?? 'No registra' }}
+                            {{ $objetivo->created_at?->format('d/m/Y H:i') ?? 'No registra' }}
                         </p>
 
                     </div>
@@ -330,7 +302,7 @@
                         </p>
 
                         <p class="mt-1 text-sm text-gray-600">
-                            {{ $meta->updated_at?->format('d/m/Y H:i') ?? 'No registra' }}
+                            {{ $objetivo->updated_at?->format('d/m/Y H:i') ?? 'No registra' }}
                         </p>
 
                     </div>
@@ -338,7 +310,9 @@
                 </div>
 
             </div>
+
         </div>
+
     </div>
 
 </x-objetivos-layout>

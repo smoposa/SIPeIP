@@ -1,57 +1,37 @@
-<div class="bg-white h-full">
+<div class="h-full bg-[#ffffff]">
 
-    <!-- Título -->
-    <div class="px-6 py-5 border-b border-gray-200">
+    <!-- Botón ocultar -->
+    <div class="flex justify-end px-2 py-2 border-b">
 
-        <h3 class="text-lg font-semibold text-gray-800">
-            Objetivos Estratégicos
-        </h3>
-
-        <p class="text-sm text-gray-500 mt-1">
-            Gestión de Objetivos
-        </p>
+        <button id="toggleSubmenu" class="text-gray-600 hover:text-[#024687]">
+            <i class="bi bi-chevron-double-left"></i>
+        </button>
 
     </div>
 
     <!-- Opciones -->
-    <nav class="py-3">
+<nav id="menuObjetivos">
 
-        <a href="{{ route('objetivos.index') }}"
-           class="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">
+    <a href="{{ route('objetivos.index') }}"
+       class="{{ request()->routeIs('objetivos.index') ? 'sidebar-link-active' : 'sidebar-link' }}">
+        Página de inicio
+    </a>
 
-            <i class="bi bi-house-door mr-3"></i>
+    <a href="{{ route('objetivos.ods') }}"
+       class="{{ request()->routeIs('objetivos.ods') ? 'sidebar-link-active' : 'sidebar-link' }}">
+        Objetivos de Desarrollo Sostenible (ODS)
+    </a>
 
-            Información General
+    <a href="{{ route('objetivos.pnd') }}"
+       class="{{ request()->routeIs('objetivos.pnd') ? 'sidebar-link-active' : 'sidebar-link' }}">
+        Plan Nacional de Desarrollo (PND)
+    </a>
 
-        </a>
+    <a href="{{ route('objetivos.oei') }}"
+       class="{{ request()->routeIs('objetivos.oei') ? 'sidebar-link-active' : 'sidebar-link' }}">
+        Objetivos Estratégicos Institucionales (OEI)
+    </a>
 
-        <a href="{{ route('objetivos.ods') }}"
-           class="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">
-
-            <i class="bi bi-globe-americas mr-3"></i>
-
-            ODS
-
-        </a>
-
-        <a href="{{ route('objetivos.pnd') }}"
-           class="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">
-
-            <i class="bi bi-diagram-3 mr-3"></i>
-
-            PND
-
-        </a>
-
-        <a href="{{ route('objetivos.oei') }}"
-           class="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">
-
-            <i class="bi bi-bullseye mr-3"></i>
-
-            Objetivos Institucionales
-
-        </a>
-
-    </nav>
+</nav>
 
 </div>

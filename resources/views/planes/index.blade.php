@@ -1,6 +1,6 @@
 <x-planes-layout title="Página de inicio">
 
-    <!-- Barra de acciones -->
+    <!-- Barra de acciones 
     <div class="bg-white border-b border-gray-300 mb-6">
 
         <div class="flex">
@@ -12,13 +12,13 @@
 
         </div>
 
-    </div>
+    </div>-->
 
     <!-- Marco general del contenido -->
     <div class="space-y-6">
 
         <!-- Encabezado -->
-        <div>
+          <div>
 
             <h2 class="text-2xl font-semibold text-gray-900">
                 Gestión de Planes
@@ -27,13 +27,12 @@
             <p class="mt-2 text-gray-600">
                 Administre los planes institucionales que servirán de base para la planificación estratégica y la inversión pública.
             </p>
-
         </div>
 
         <!-- Scroll vertical -->
         <div class="overflow-y-auto" style="height: calc(100vh - 280px);">
 
-            <div class="space-y-8">
+            <div class="space-y-6">
 
                 <!-- Información adicional -->
                 <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">

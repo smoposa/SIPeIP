@@ -1,278 +1,279 @@
 <x-objetivos-layout title="Editar Meta">
 
-    <!-- Barra principal -->
+    @if(session('success'))
+        <div id="alertSuccess"
+             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
 
-    <div class="bg-white border-b border-gray-300 mb-6">
+            {{ session('success') }}
+
+        </div>
+
+        <script>
+            setTimeout(() => {
+                const alerta = document.getElementById('alertSuccess');
+
+                if (alerta) {
+                    alerta.remove();
+                }
+            }, 3000);
+        </script>
+    @endif
+
+    <!-- Barra de acciones -->
+    <div class="bg-white border-b border-gray-300 mb-0">
 
         <div class="flex">
 
-            <a href="{{ route('objetivos.index') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Información General
-            </a>
+            <a href="{{ route('metas.detalle', $meta->id) }}"
+               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
 
-            <a href="{{ route('objetivos.ods') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                ODS
-            </a>
+                <i class="bi bi-chevron-left"></i>
 
-            <a href="{{ route('objetivos.pnd') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                PND
-            </a>
+                Regresar
 
-            <a href="{{ route('objetivos.oei') }}"
-               class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Objetivos Institucionales
             </a>
 
         </div>
 
     </div>
 
-    <!-- Encabezado -->
+    <!-- Información -->
+    <div class="bg-white p-6 shadow-sm">
 
-    <div class="flex items-center justify-between mb-6">
+        <!-- Encabezado -->
+        <div class="mb-6">
 
-        <div>
+            <h2 class="text-2xl font-semibold text-gray-800">
+                Actualizar Meta
+            </h2>
 
-            <div class="flex items-center gap-3">
+            <p class="mt-1 text-sm text-gray-500">
+                Modifique la información de la Meta Institucional.
+            </p>
 
-                <a href="{{ route('metas.detalle', $meta->id) }}"
-                   class="text-gray-500 hover:text-blue-600">
+        </div>
 
-                    <i class="bi bi-arrow-left text-lg"></i>
+        <!-- Validaciones -->
+        @if ($errors->any())
 
-                </a>
+            <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
 
-                <div>
+                <ul class="list-disc list-inside text-sm text-red-700">
 
-                    <h2 class="text-2xl font-semibold text-gray-800">
+                    @foreach ($errors->all() as $error)
 
-                        Editar Meta
+                        <li>{{ $error }}</li>
 
-                    </h2>
+                    @endforeach
 
-                    <p class="text-gray-500 mt-1">
+                </ul>
 
-                        {{ $meta->codigo }} - {{ $meta->nombre }}
+            </div>
 
-                    </p>
+        @endif
+
+        <!-- Scroll -->
+        <div class="overflow-y-auto" style="height: calc(100vh - 300px);">
+
+            <form method="POST"
+                  action="{{ route('metas.update', $meta->id) }}">
+
+                @csrf
+                @method('PUT')
+
+                <div class="space-y-4">
+                                        <!-- Código -->
+                    <div class="flex items-center">
+
+                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
+                            Código <span class="text-red-500">*</span>
+                        </label>
+
+                        <div class="flex-1">
+
+                            <input
+                                type="text"
+                                name="codigo"
+                                maxlength="30"
+                                required
+                                value="{{ old('codigo', $meta->codigo) }}"
+                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="flex items-center">
+
+                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
+                            Estado
+                        </label>
+
+                        <div class="flex-1">
+
+                            <select
+                                name="estado"
+                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                                <option value="Activo"
+                                    {{ old('estado', $meta->estado) == 'Activo' ? 'selected' : '' }}>
+                                    Activo
+                                </option>
+
+                                <option value="Inactivo"
+                                    {{ old('estado', $meta->estado) == 'Inactivo' ? 'selected' : '' }}>
+                                    Inactivo
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Nombre -->
+                    <div class="flex items-center">
+
+                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
+                            Nombre <span class="text-red-500">*</span>
+                        </label>
+
+                        <div class="flex-1">
+
+                            <input
+                                type="text"
+                                name="nombre"
+                                maxlength="255"
+                                required
+                                value="{{ old('nombre', $meta->nombre) }}"
+                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="flex items-start">
+
+                        <label class="w-40 flex-shrink-0 pt-2 text-sm font-medium text-gray-700">
+                            Descripción
+                        </label>
+
+                        <div class="flex-1">
+
+                            <textarea
+                                name="descripcion"
+                                rows="4"
+                                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500">{{ old('descripcion', $meta->descripcion) }}</textarea>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Valor Meta -->
+                    <div class="flex items-center">
+
+                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
+                            Valor Meta
+                        </label>
+
+                        <div class="flex-1">
+
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="valor_meta"
+                                value="{{ old('valor_meta', $meta->valor_meta) }}"
+                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Unidad de medida -->
+                    <div class="flex items-center">
+
+                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
+                            Unidad de medida
+                        </label>
+
+                        <div class="flex-1">
+
+                            <input
+                                type="text"
+                                name="unidad_medida"
+                                maxlength="100"
+                                value="{{ old('unidad_medida', $meta->unidad_medida) }}"
+                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Fecha inicio -->
+                    <div class="flex items-center">
+
+                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
+                            Fecha inicio
+                        </label>
+
+                        <div class="flex-1">
+
+                            <input
+                                type="date"
+                                name="fecha_inicio"
+                                value="{{ old('fecha_inicio', optional($meta->fecha_inicio)->format('Y-m-d')) }}"
+                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Fecha fin -->
+                    <div class="flex items-center">
+
+                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
+                            Fecha fin
+                        </label>
+
+                        <div class="flex-1">
+
+                            <input
+                                type="date"
+                                name="fecha_fin"
+                                value="{{ old('fecha_fin', optional($meta->fecha_fin)->format('Y-m-d')) }}"
+                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                        </div>
+
+                    </div>
+                                        <!-- Botones -->
+                    <div class="flex justify-end gap-3 mt-6">
+
+                        <button
+                            type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+
+                            Actualizar
+
+                        </button>
+
+                        <a href="{{ route('metas.detalle', $meta->id) }}"
+                           class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+
+                            Cancelar
+
+                        </a>
+
+                    </div>
 
                 </div>
 
-            </div>
+            </form>
 
         </div>
 
     </div>
-
-    @if ($errors->any())
-
-        <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
-
-            <ul class="list-disc list-inside text-sm text-red-600">
-
-                @foreach ($errors->all() as $error)
-
-                    <li>{{ $error }}</li>
-
-                @endforeach
-
-            </ul>
-
-        </div>
-
-    @endif
-
-    <form action="{{ route('metas.update', $meta->id) }}" method="POST">
-
-        @csrf
-
-        @method('PUT')
-
-        <div class="bg-white border border-gray-200 rounded-lg">
-
-            <div class="px-6 py-5 border-b">
-
-                <h3 class="text-lg font-semibold text-gray-800">
-
-                    Información General
-
-                </h3>
-
-            </div>
-
-            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <!-- Código -->
-
-                <div>
-
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Código <span class="text-red-500">*</span>
-                    </label>
-
-                    <input
-                        type="text"
-                        name="codigo"
-                        value="{{ old('codigo', $meta->codigo) }}"
-                        maxlength="30"
-                        required
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                </div>
-
-                <!-- Estado -->
-
-                <div>
-
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Estado
-                    </label>
-
-                    <select
-                        name="estado"
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                        <option value="Activo"
-                            {{ old('estado', $meta->estado) == 'Activo' ? 'selected' : '' }}>
-                            Activo
-                        </option>
-
-                        <option value="Inactivo"
-                            {{ old('estado', $meta->estado) == 'Inactivo' ? 'selected' : '' }}>
-                            Inactivo
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <!-- Nombre -->
-
-                <div class="md:col-span-2">
-
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Nombre de la Meta <span class="text-red-500">*</span>
-                    </label>
-
-                    <input
-                        type="text"
-                        name="nombre"
-                        value="{{ old('nombre', $meta->nombre) }}"
-                        maxlength="255"
-                        required
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                </div>
-
-                <!-- Descripción -->
-
-                <div class="md:col-span-2">
-
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Descripción
-                    </label>
-
-                    <textarea
-                        name="descripcion"
-                        rows="4"
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">{{ old('descripcion', $meta->descripcion) }}</textarea>
-
-                </div>
-
-                <!-- Valor Meta -->
-
-                <div>
-
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Valor Meta
-                    </label>
-
-                    <input
-                        type="number"
-                        step="0.01"
-                        name="valor_meta"
-                        value="{{ old('valor_meta', $meta->valor_meta) }}"
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                </div>
-
-                <!-- Unidad de Medida -->
-
-                <div>
-
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Unidad de Medida
-                    </label>
-
-                    <input
-                        type="text"
-                        name="unidad_medida"
-                        value="{{ old('unidad_medida', $meta->unidad_medida) }}"
-                        maxlength="100"
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                </div>
-
-                <!-- Fecha Inicio -->
-
-                <div>
-
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Fecha de Inicio
-                    </label>
-
-                    <input
-                        type="date"
-                        name="fecha_inicio"
-                        value="{{ old('fecha_inicio', optional($meta->fecha_inicio)->format('Y-m-d')) }}"
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                </div>
-
-                <!-- Fecha Fin -->
-
-                <div>
-
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Fecha de Fin
-                    </label>
-
-                    <input
-                        type="date"
-                        name="fecha_fin"
-                        value="{{ old('fecha_fin', optional($meta->fecha_fin)->format('Y-m-d')) }}"
-                        class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
-
-                </div>
-                            </div>
-
-            <!-- Botones -->
-
-            <div class="flex justify-end gap-3 px-6 py-4 border-t bg-gray-50 rounded-b-lg">
-
-                <a href="{{ route('metas.detalle', $meta->id) }}"
-                   class="px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-100">
-
-                    Cancelar
-
-                </a>
-
-                <button
-                    type="submit"
-                    class="px-5 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700">
-
-                    <i class="bi bi-check-circle mr-2"></i>
-
-                    Actualizar Meta
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </form>
 
 </x-objetivos-layout>

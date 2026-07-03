@@ -1,249 +1,249 @@
 <x-usuarios-layout title="Crear Usuario">
 
-@if(session('success'))
-    <div id="alertSuccess"
-        class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-        {{ session('success') }}
-    </div>
+    @if(session('success'))
+        <div id="alertSuccess"
+            class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+            {{ session('success') }}
+        </div>
 
-    <script>
-        setTimeout(() => {
-            const alerta = document.getElementById('alertSuccess');
-            if (alerta) {
-                alerta.remove();
-            }
-        }, 3000);
-    </script>
-@endif
+        <script>
+            setTimeout(() => {
+                const alerta = document.getElementById('alertSuccess');
+                if (alerta) {
+                    alerta.remove();
+                }
+            }, 3000);
+        </script>
+    @endif
 
-<!-- Barra de acciones -->
-<div class="bg-white border-b border-gray-300 mb-0">
+    <!-- Barra de acciones -->
+    <div class="bg-white border-b border-gray-300 mb-0">
 
-    <div class="flex">
+        <div class="flex">
 
-        <a href="{{ route('usuarios.index') }}"
-           class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+            <a href="{{ route('usuarios.index') }}"
+            class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
 
-            <i class="bi bi-chevron-left"></i>
-            Regresar
+                <i class="bi bi-chevron-left"></i>
+                Regresar
 
-        </a>
+            </a>
 
-    </div>
-
-</div>
-
-<!-- Información -->
-<div class="bg-white p-6 shadow-sm">
-
-    <!-- Encabezado -->
-    <div class="mb-6">
-
-        <h2 class="text-2xl font-semibold text-gray-800">
-            Registro de usuario
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-500">
-            Ingrese la información requerida para registrar un nuevo usuario en el sistema.
-        </p>
+        </div>
 
     </div>
 
-    <!-- Scroll -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 300px);">
+    <!-- Información -->
+    <div class="bg-white p-6 shadow-sm">
 
-        <form method="POST"
-              action="{{ route('usuarios.store') }}">
+        <!-- Encabezado -->
+        <div class="mb-6">
 
-            @csrf
+            <h2 class="text-2xl font-semibold text-gray-800">
+                Registro de usuario
+            </h2>
 
-            <div class="space-y-4">
+            <p class="mt-1 text-sm text-gray-500">
+                Ingrese la información requerida para registrar un nuevo usuario en el sistema.
+            </p>
 
-                <!-- Identificación -->
-                <div class="flex items-center">
+        </div>
 
-                    <label class="w-48 text-sm font-medium text-gray-700">
-                        Identificación <span class="text-red-500">*</span>
-                    </label>
+        <!-- Scroll -->
+        <div class="overflow-y-auto" style="height: calc(100vh - 300px);">
 
-                    <input
-                        type="text"
-                        name="identificacion"
-                        maxlength="20"
-                        required
-                        value="{{ old('identificacion') }}"
-                        class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+            <form method="POST"
+                action="{{ route('usuarios.store') }}">
 
-                </div>
+                @csrf
 
-                <!-- Nombres -->
-                <div class="flex items-center">
+                <div class="space-y-4">
 
-                    <label class="w-48 text-sm font-medium text-gray-700">
-                        Nombres <span class="text-red-500">*</span>
-                    </label>
+                    <!-- Identificación -->
+                    <div class="flex items-center">
 
-                    <input
-                        type="text"
-                        name="nombres"
-                        maxlength="150"
-                        required
-                        value="{{ old('nombres') }}"
-                        class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                        <label class="w-48 text-sm font-medium text-gray-700">
+                            Identificación <span class="text-red-500">*</span>
+                        </label>
 
-                </div>
+                        <input
+                            type="text"
+                            name="identificacion"
+                            maxlength="20"
+                            required
+                            value="{{ old('identificacion') }}"
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
 
-                <!-- Apellidos -->
-                <div class="flex items-center">
+                    </div>
 
-                    <label class="w-48 text-sm font-medium text-gray-700">
-                        Apellidos <span class="text-red-500">*</span>
-                    </label>
+                    <!-- Nombres -->
+                    <div class="flex items-center">
 
-                    <input
-                        type="text"
-                        name="apellidos"
-                        maxlength="150"
-                        required
-                        value="{{ old('apellidos') }}"
-                        class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                        <label class="w-48 text-sm font-medium text-gray-700">
+                            Nombres <span class="text-red-500">*</span>
+                        </label>
 
-                </div>
+                        <input
+                            type="text"
+                            name="nombres"
+                            maxlength="150"
+                            required
+                            value="{{ old('nombres') }}"
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
 
-                <!-- Correo -->
-                <div class="flex items-center">
+                    </div>
 
-                    <label class="w-48 text-sm font-medium text-gray-700">
-                        Correo Institucional <span class="text-red-500">*</span>
-                    </label>
+                    <!-- Apellidos -->
+                    <div class="flex items-center">
 
-                    <input
-                        type="email"
-                        name="email"
-                        required
-                        value="{{ old('email') }}"
-                        class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                        <label class="w-48 text-sm font-medium text-gray-700">
+                            Apellidos <span class="text-red-500">*</span>
+                        </label>
 
-                </div>
+                        <input
+                            type="text"
+                            name="apellidos"
+                            maxlength="150"
+                            required
+                            value="{{ old('apellidos') }}"
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
 
-                <!-- Cargo -->
-                <div class="flex items-center">
+                    </div>
 
-                    <label class="w-48 text-sm font-medium text-gray-700">
-                        Cargo
-                    </label>
+                    <!-- Correo -->
+                    <div class="flex items-center">
 
-                    <input
-                        type="text"
-                        name="cargo"
-                        maxlength="255"
-                        value="{{ old('cargo') }}"
-                        class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                        <label class="w-48 text-sm font-medium text-gray-700">
+                            Correo Institucional <span class="text-red-500">*</span>
+                        </label>
 
-                </div>
+                        <input
+                            type="email"
+                            name="email"
+                            required
+                            value="{{ old('email') }}"
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
 
-                <!-- Rol -->
-                <div class="flex items-center">
+                    </div>
 
-                    <label class="w-48 text-sm font-medium text-gray-700">
-                        Rol <span class="text-red-500">*</span>
-                    </label>
+                    <!-- Cargo -->
+                    <div class="flex items-center">
 
-                    <select
-                        name="rol_id"
-                        required
-                        class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                        <label class="w-48 text-sm font-medium text-gray-700">
+                            Cargo
+                        </label>
 
-                        <option value="">
-                            Seleccione
-                        </option>
+                        <input
+                            type="text"
+                            name="cargo"
+                            maxlength="255"
+                            value="{{ old('cargo') }}"
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
 
-                        @foreach($roles as $rol)
+                    </div>
 
-                            <option value="{{ $rol->id }}"
-                                {{ old('rol_id') == $rol->id ? 'selected' : '' }}>
+                    <!-- Rol -->
+                    <div class="flex items-center">
 
-                                {{ $rol->nombre }}
+                        <label class="w-48 text-sm font-medium text-gray-700">
+                            Rol <span class="text-red-500">*</span>
+                        </label>
 
+                        <select
+                            name="rol_id"
+                            required
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+
+                            <option value="">
+                                Seleccione
                             </option>
 
-                        @endforeach
+                            @foreach($roles as $rol)
 
-                    </select>
+                                <option value="{{ $rol->id }}"
+                                    {{ old('rol_id') == $rol->id ? 'selected' : '' }}>
 
-                </div>
+                                    {{ $rol->nombre }}
 
-                <!-- Entidad -->
-                <div class="flex items-center">
+                                </option>
 
-                    <label class="w-48 text-sm font-medium text-gray-700">
-                        Entidad <span class="text-red-500">*</span>
-                    </label>
+                            @endforeach
 
-                    <select
-                        name="entidad_id"
-                        required
-                        class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                        </select>
 
-                        <option value="">
-                            Seleccione
-                        </option>
+                    </div>
 
-                        @foreach($entidades as $entidad)
+                    <!-- Entidad -->
+                    <div class="flex items-center">
 
-                            <option value="{{ $entidad->id }}"
-                                {{ old('entidad_id') == $entidad->id ? 'selected' : '' }}>
+                        <label class="w-48 text-sm font-medium text-gray-700">
+                            Entidad <span class="text-red-500">*</span>
+                        </label>
 
-                                {{ $entidad->nombre }}
+                        <select
+                            name="entidad_id"
+                            required
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
 
+                            <option value="">
+                                Seleccione
                             </option>
 
-                        @endforeach
+                            @foreach($entidades as $entidad)
 
-                    </select>
+                                <option value="{{ $entidad->id }}"
+                                    {{ old('entidad_id') == $entidad->id ? 'selected' : '' }}>
+
+                                    {{ $entidad->nombre }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
 
                 </div>
 
-            </div>
+                <!-- Información de contraseña -->
+                <div class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-md">
 
-            <!-- Información de contraseña -->
-            <div class="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                    <p class="text-sm text-blue-800">
 
-                <p class="text-sm text-blue-800">
+                        <i class="bi bi-info-circle"></i>
 
-                    <i class="bi bi-info-circle"></i>
+                        El usuario será creado con la contraseña temporal:
+                        <strong>12345678</strong>
 
-                    El usuario será creado con la contraseña temporal:
-                    <strong>12345678</strong>
+                    </p>
 
-                </p>
+                </div>
 
-            </div>
+                <!-- Botones -->
+                <div class="flex gap-3 mt-10">
 
-            <!-- Botones -->
-            <div class="flex gap-3 mt-10">
+                    <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
 
-                <button
-                    type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+                        Guardar
 
-                    Guardar
+                    </button>
 
-                </button>
+                    <a href="{{ route('usuarios.index') }}"
+                    class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
 
-                <a href="{{ route('usuarios.index') }}"
-                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+                        Cancelar
 
-                    Cancelar
+                    </a>
 
-                </a>
+                </div>
 
-            </div>
+            </form>
 
-        </form>
+        </div>
 
     </div>
-
-</div>
 
 </x-usuarios-layout>

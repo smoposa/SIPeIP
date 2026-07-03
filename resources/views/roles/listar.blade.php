@@ -62,7 +62,6 @@
 
     <!-- Tabla -->
     <div class="overflow-y-auto" style="height: calc(100vh - 210px);"> <!-- Scroll vertical -->
-
         <div class="bg-white border border-gray-200 rounded-lg">
 
             <table class="min-w-full">

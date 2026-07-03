@@ -1,283 +1,292 @@
 <x-objetivos-layout title="Metas del Objetivo">
 
-    <!-- Barra principal -->
-    <div class="bg-white border-b border-gray-300 mb-6">
+    <!-- Barra de acciones -->
+    <div class="bg-white border-b border-gray-300 mb-0">
 
         <div class="flex">
 
-            <a href="{{ route('objetivos.index') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Información General
+            <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
+            class="py-2 text-sm font-medium text-blue-600 hover:text-green-800 mr-8">
+
+                <i class="bi bi-chevron-left"></i>
+
+                Regresar
+
             </a>
 
-            <a href="{{ route('objetivos.ods') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                ODS
+            <a href="{{ route('metas.index', $objetivo->id) }}"
+            class="{{ request()->routeIs('metas.*')
+                    ? 'px-3 py-2 text-sm text-green-700 bg-gray-100 transition'
+                    : 'px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition' }}">
+
+                <i class="bi bi-bullseye text-green-600 me-2"></i>
+
+                Metas
+
             </a>
 
-            <a href="{{ route('objetivos.pnd') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                PND
+            <a href="#"
+            class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+
+                <i class="bi bi-folder2-open text-green-600 me-2"></i>
+
+                Proyectos
+
             </a>
 
-            <a href="{{ route('objetivos.oei') }}"
-               class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Objetivos Institucionales
+            <a href="#"
+            class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+
+                <i class="bi bi-diagram-3 text-green-600 me-2"></i>
+
+                Alineación
+
+            </a>
+
+            <a href="#"
+            class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+
+                <i class="bi bi-clock-history text-green-600 me-2"></i>
+
+                Historial
+
+            </a>
+
+            <a href="{{ url()->current() }}"
+            class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+
+                <i class="bi bi-arrow-clockwise text-green-600 me-2"></i>
+
+                Actualizar
+
             </a>
 
         </div>
 
     </div>
 
-    <!-- Encabezado -->
+    <!-- Scroll -->
+    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
-    <div class="flex items-start justify-between mb-6">
+        <div class="bg-white p-6 shadow-sm">
 
-        <div>
+            <!-- Cabecera -->
+            <div class="flex items-center gap-4 mb-0 pb-2">
 
-            <div class="flex items-center gap-3">
+                <div class="w-16 h-16 rounded-full bg-[#16A34A]
+                            flex items-center justify-center
+                            text-white text-3xl">
 
-                <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
-                   class="text-gray-500 hover:text-blue-600">
+                    <i class="bi bi-bullseye"></i>
 
-                    <i class="bi bi-arrow-left text-lg"></i>
-
-                </a>
+                </div>
 
                 <div>
 
-                    <h2 class="text-2xl font-semibold text-gray-800">
-
+                    <h2 class="text-xl font-semibold text-gray-800">
                         {{ $objetivo->nombre }}
-
                     </h2>
 
-                    <p class="text-gray-500 mt-1">
-
+                    <p class="text-gray-500">
                         {{ $objetivo->codigo }}
-
                     </p>
 
                 </div>
 
             </div>
 
-        </div>
+            <!-- Barra de navegación -->
+            <div class="bg-white mb-6">
 
-        <a href="{{ route('metas.create', $objetivo->id) }}"
-           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                <div class="flex items-center">
 
-            <i class="bi bi-plus-circle mr-2"></i>
+                    <a href="{{ route('metas.index', $objetivo->id) }}"
+                    class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
+                        Inicio
+                    </a>
 
-            Nueva Meta
+                    <a href="#"
+                    class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-blue-700">
+                        Buscar
+                    </a>
 
-        </a>
+                    <a href="#"
+                    class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-blue-700">
+                        Reportes
+                    </a>
 
-    </div>
+                    <a href="#"
+                    class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-blue-700">
+                        Estadísticas
+                    </a>
 
-    <!-- Barra del Objetivo -->
+                    <span class="mx-3 text-gray-300">|</span>
 
-    <div class="bg-white border-b border-gray-300 mb-6">
+                    <a href="{{ route('metas.create', $objetivo->id) }}"
+                    class="px-5 py-3 text-sm font-medium text-blue-600 hover:text-blue-800">
 
-        <div class="flex">
+                        <i class="bi bi-pencil-square me-2"></i>
 
-            <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Información General
-            </a>
+                        Registrar Meta
 
-            <a href="{{ route('metas.index', $objetivo->id) }}"
-               class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Metas
-            </a>
+                    </a>
 
-            <a href="#"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Proyectos
-            </a>
+                </div>
 
-            <a href="#"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Alineación
-            </a>
+            </div>
+            
+            <!-- Tabla -->
+            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
 
-            <a href="#"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Historial
-            </a>
+                <table class="min-w-full">
 
-        </div>
+                    <thead class="bg-gray-50 border-b border-gray-200">
 
-    </div>
+                        <tr>
 
-    <!-- Tabla -->
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-600">
+                                Código
+                            </th>
 
-    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                            <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-600">
+                                Meta
+                            </th>
 
-        <table class="min-w-full">
+                            <th class="px-4 py-3 text-center text-xs font-semibold uppercase text-gray-600">
+                                Valor
+                            </th>
 
-            <thead class="bg-gray-50 border-b border-gray-200">
+                            <th class="px-4 py-3 text-center text-xs font-semibold uppercase text-gray-600">
+                                Estado
+                            </th>
 
-                <tr>
+                        </tr>
 
-                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-600">
-                        Código
-                    </th>
+                    </thead>
 
-                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-600">
-                        Meta
-                    </th>
+                    <tbody class="divide-y divide-gray-200">
+                                        @forelse($metas as $meta)
 
-                    <th class="px-4 py-3 text-center text-xs font-semibold uppercase text-gray-600">
-                        Valor
-                    </th>
+                            <tr class="hover:bg-gray-50">
 
-                    <th class="px-4 py-3 text-center text-xs font-semibold uppercase text-gray-600">
-                        Estado
-                    </th>
+                                <td class="px-4 py-3 text-sm text-gray-700">
 
-                    <th class="px-4 py-3 text-center text-xs font-semibold uppercase text-gray-600">
-                        Acciones
-                    </th>
+                                    {{ $meta->codigo }}
 
-                </tr>
+                                </td>
 
-            </thead>
+                                <td class="px-4 py-3">
 
-            <tbody class="divide-y divide-gray-200">
-                                @forelse($metas as $meta)
+                                    <a href="{{ route('metas.detalle', $meta->id) }}"
+                                    class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
 
-                    <tr class="hover:bg-gray-50">
+                                        {{ $meta->nombre }}
 
-                        <td class="px-4 py-3 text-sm text-gray-700">
+                                    </a>
 
-                            {{ $meta->codigo }}
+                                </td>
 
-                        </td>
+                                <td class="px-4 py-3 text-center text-sm text-gray-700">
 
-                        <td class="px-4 py-3">
+                                    {{ $meta->valor_meta ?? '-' }}
 
-                            <a href="{{ route('metas.detalle', $meta->id) }}"
-                               class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                                    @if($meta->unidad_medida)
 
-                                {{ $meta->nombre }}
+                                        {{ $meta->unidad_medida }}
 
-                            </a>
+                                    @endif
 
-                        </td>
+                                </td>
 
-                        <td class="px-4 py-3 text-center text-sm text-gray-700">
+                                <td class="px-4 py-3 text-center">
 
-                            {{ $meta->valor_meta ?? '-' }}
+                                    @if($meta->estado == 'Activo')
 
-                            @if($meta->unidad_medida)
+                                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
 
-                                {{ $meta->unidad_medida }}
+                                            Activo
 
-                            @endif
+                                        </span>
 
-                        </td>
+                                    @else
 
-                        <td class="px-4 py-3 text-center">
+                                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700">
 
-                            @if($meta->estado == 'Activo')
+                                            Inactivo
 
-                                <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
+                                        </span>
 
-                                    Activo
+                                    @endif
 
-                                </span>
+                                </td>
 
-                            @else
+                            </tr>
 
-                                <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-700">
+                        @empty
 
-                                    Inactivo
+                            <tr>
 
-                                </span>
+                                <td colspan="5" class="px-6 py-10 text-center text-gray-500">
 
-                            @endif
+                                    <i class="bi bi-inbox text-4xl block mb-3"></i>
 
-                        </td>
+                                    No existen metas registradas para este objetivo.
 
-                        <td class="px-4 py-3 text-center">
+                                </td>
 
-                            <a href="{{ route('metas.edit', $meta->id) }}"
-                               class="text-blue-600 hover:text-blue-800 mr-3">
+                            </tr>
 
-                                <i class="bi bi-pencil-square"></i>
+                        @endforelse
 
-                            </a>
+                    </tbody>
 
-                        </td>
+                </table>
 
-                    </tr>
+            </div>
 
-                @empty
+            <!-- Pie de tabla -->
+            <div class="flex items-center justify-between mt-6">
 
-                    <tr>
+                <p class="text-sm text-gray-600">
 
-                        <td colspan="5" class="px-6 py-10 text-center text-gray-500">
+                    Mostrando
+                    <span class="font-medium">
 
-                            <i class="bi bi-inbox text-4xl block mb-3"></i>
+                        {{ $metas->count() }}
 
-                            No existen metas registradas para este objetivo.
+                    </span>
 
-                        </td>
+                    registros.
 
-                    </tr>
+                </p>
 
-                @endforelse
+                <!-- Paginación (Temporal) -->
 
-            </tbody>
+                <div class="flex items-center space-x-2">
 
-        </table>
+                    <button
+                        class="px-3 py-1 border border-gray-300 rounded-md text-gray-400 cursor-not-allowed">
 
-    </div>
-        <!-- Pie de tabla -->
+                        Anterior
 
-    <div class="flex items-center justify-between mt-6">
+                    </button>
 
-        <p class="text-sm text-gray-600">
+                    <button
+                        class="px-3 py-1 bg-blue-600 text-white rounded-md">
 
-            Mostrando
-            <span class="font-medium">
+                        1
 
-                {{ $metas->count() }}
+                    </button>
 
-            </span>
+                    <button
+                        class="px-3 py-1 border border-gray-300 rounded-md text-gray-400 cursor-not-allowed">
 
-            registros.
+                        Siguiente
 
-        </p>
+                    </button>
 
-        <!-- Paginación (Temporal) -->
+                </div>
 
-        <div class="flex items-center space-x-2">
-
-            <button
-                class="px-3 py-1 border border-gray-300 rounded-md text-gray-400 cursor-not-allowed">
-
-                Anterior
-
-            </button>
-
-            <button
-                class="px-3 py-1 bg-blue-600 text-white rounded-md">
-
-                1
-
-            </button>
-
-            <button
-                class="px-3 py-1 border border-gray-300 rounded-md text-gray-400 cursor-not-allowed">
-
-                Siguiente
-
-            </button>
-
-        </div>
-
-    </div>
+            </div>
 
 </x-objetivos-layout>

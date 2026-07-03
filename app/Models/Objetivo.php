@@ -16,6 +16,7 @@ class Objetivo extends Model
         'entidad_id',
         'plan_id',
         'codigo',
+        'eje',
         'nombre',
         'descripcion',
         'fecha_inicio',

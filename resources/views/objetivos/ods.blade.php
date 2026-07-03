@@ -1,242 +1,180 @@
-<x-objetivos-layout title="Objetivos de Desarrollo Sostenible">
+<x-objetivos-layout title="ODS">
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-6">
-
-        <div class="flex">
-
-            <a href="{{ route('objetivos.index') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Información General
-            </a>
-
-            <a href="{{ route('objetivos.ods') }}"
-               class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                ODS
-            </a>
-
-            <a href="{{ route('objetivos.pnd') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                PND
-            </a>
-
-            <a href="{{ route('objetivos.oei') }}"
-               class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
-                Objetivos Institucionales
-            </a>
-
+    @if(session('success'))
+        <div id="alertSuccess"
+            class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+            {{ session('success') }}
         </div>
+
+        <script>
+            setTimeout(() => {
+                const alerta = document.getElementById('alertSuccess');
+
+                if (alerta) {
+                    alerta.remove();
+                }
+            }, 3000);
+        </script>
+    @endif
+
+    <!-- Encabezado -->
+    <div class="mb-2">
+
+        <h2 class="text-2xl font-semibold text-gray-800">
+            Objetivos de Desarrollo Sostenible
+        </h2>
+
+        <!--<p class="mt-1 text-gray-500">
+            Consulte y administre el catálogo de Objetivos de Desarrollo Sostenible (ODS).
+        </p>-->
 
     </div>
 
-    <!-- Encabezado -->
-
-    <div class="flex items-center justify-between mb-6">
-
+    <!-- Resumen -->
+    <div class="flex items-center justify-between mb-4">
+        
         <div>
-
-            <h2 class="text-2xl font-semibold text-gray-800">
-                Objetivos de Desarrollo Sostenible
-            </h2>
-
-            <p class="text-gray-600 mt-1">
-                Catálogo oficial de los Objetivos de Desarrollo Sostenible (ODS).
+            <p class="text-sm text-gray-500">
+                {{ $objetivos->count() }} registros ·
+                <span class="text-green-600 font-medium">
+                    {{ $objetivos->where('estado','Activo')->count() }}
+                </span>
+                activos ·
+                <span class="text-red-600 font-medium">
+                    {{ $objetivos->where('estado','Inactivo')->count() }}
+                </span>
+                inactivos
             </p>
-
         </div>
 
         <a href="{{ route('objetivos.createODS') }}"
-           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-
-            <i class="bi bi-plus-circle mr-2"></i>
-
-            Registrar ODS
-
+            class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+            <i class="bi bi-plus-lg"></i>
+            Crear ODS
         </a>
 
     </div>
 
+    <!-- Filtros
+    <div>
+    ... aqui codigo de filtro 
+    </div>-->
+
     <!-- Tabla -->
+    <div class="overflow-y-auto" style="height: calc(100vh - 210px);"> <!-- Scroll vertical -->
+        <div class="bg-white border border-gray-200 rounded-lg">
+     
+            <table class="min-w-full">
 
-    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
 
-        <table class="min-w-full">
+                    <tr>
 
-            <thead class="bg-gray-50 border-b border-gray-200">
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Nro
+                        </th>
 
-                <tr>
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Código
+                        </th>
 
-                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-600">
-                        Código
-                    </th>
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Nombre
+                        </th>
 
-                    <th class="px-4 py-3 text-left text-xs font-semibold uppercase text-gray-600">
-                        Nombre
-                    </th>
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Descripción
+                        </th>
 
-                    <th class="px-4 py-3 text-center text-xs font-semibold uppercase text-gray-600">
-                        Estado
-                    </th>
+                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                            Estado
+                        </th>
 
-                    <th class="px-4 py-3 text-center text-xs font-semibold uppercase text-gray-600">
-                        Acciones
-                    </th>
+                    </tr>
 
-                </tr>
+                </thead>
 
-            </thead>
+                <tbody>
 
-            <tbody class="divide-y divide-gray-200">
-                                <tr class="hover:bg-gray-50">
+                    @forelse($objetivos as $objetivo)
 
-                    <td class="px-4 py-3 text-sm text-gray-700">
-                        ODS-01
-                    </td>
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
 
-                    <td class="px-4 py-3">
+                            <!-- Nro -->
+                            <td class="px-2 py-2 text-sm text-gray-600">
+                                {{ $loop->iteration }}
+                            </td>
 
-                        <a href="#"
-                           class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                            <!-- Código -->
+                            <td class="px-2 py-2 text-sm text-gray-600">
+                                {{ $objetivo->codigo }}
+                            </td>
 
-                            Fin de la pobreza
+                            <!-- Nombre -->
+                            <td class="px-2 py-2 text-sm font-medium">
 
-                        </a>
+                                <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
+                                class="text-blue-600 hover:text-blue-800 hover:underline">
 
-                    </td>
+                                    {{ $objetivo->nombre }}
 
-                    <td class="px-4 py-3 text-center">
+                                </a>
 
-                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
-                            Activo
-                        </span>
+                            </td>
 
-                    </td>
+                            <!-- Descripción -->
+                            <td class="px-2 py-2 text-sm text-gray-600">
+                                {{ \Illuminate\Support\Str::limit($objetivo->descripcion, 50) }}
+                            </td>
 
-                    <td class="px-4 py-3 text-center">
+                            <!-- Estado -->
+                            <td class="px-2 py-2">
 
-                        <button class="text-blue-600 hover:text-blue-800 mr-3">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
+                                @if($objetivo->estado == 'Activo')
 
-                        <button class="text-red-600 hover:text-red-800">
-                            <i class="bi bi-trash"></i>
-                        </button>
+                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                                        Activo
+                                    </span>
 
-                    </td>
+                                @else
 
-                </tr>
+                                    <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                                        Inactivo
+                                    </span>
 
-                <tr class="hover:bg-gray-50">
+                                @endif
 
-                    <td class="px-4 py-3 text-sm text-gray-700">
-                        ODS-02
-                    </td>
+                            </td>
 
-                    <td class="px-4 py-3">
+                        </tr>
 
-                        <a href="#"
-                           class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
+                    @empty
 
-                            Hambre cero
+                        <tr>
 
-                        </a>
+                            <td colspan="4"
+                                class="px-4 py-6 text-center text-gray-500">
 
-                    </td>
+                                No existen Objetivos de Desarrollo Sostenible registrados.
 
-                    <td class="px-4 py-3 text-center">
+                            </td>
 
-                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
-                            Activo
-                        </span>
+                        </tr>
 
-                    </td>
+                    @endforelse
 
-                    <td class="px-4 py-3 text-center">
+                </tbody>
 
-                        <button class="text-blue-600 hover:text-blue-800 mr-3">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
+            </table>
 
-                        <button class="text-red-600 hover:text-red-800">
-                            <i class="bi bi-trash"></i>
-                        </button>
-
-                    </td>
-
-                </tr>
-
-                <tr class="hover:bg-gray-50">
-
-                    <td class="px-4 py-3 text-sm text-gray-700">
-                        ODS-03
-                    </td>
-
-                    <td class="px-4 py-3">
-
-                        <a href="#"
-                           class="text-blue-600 hover:text-blue-800 hover:underline font-medium">
-
-                            Salud y bienestar
-
-                        </a>
-
-                    </td>
-
-                    <td class="px-4 py-3 text-center">
-
-                        <span class="inline-flex px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">
-                            Activo
-                        </span>
-
-                    </td>
-
-                    <td class="px-4 py-3 text-center">
-
-                        <button class="text-blue-600 hover:text-blue-800 mr-3">
-                            <i class="bi bi-pencil-square"></i>
-                        </button>
-
-                        <button class="text-red-600 hover:text-red-800">
-                            <i class="bi bi-trash"></i>
-                        </button>
-
-                    </td>
-
-                </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-        <!-- Pie de tabla -->
-
+        </div>
+        
+    <!-- Pie de tabla -->
     <div class="flex items-center justify-between mt-6">
 
         <p class="text-sm text-gray-600">
-            Mostrando <span class="font-medium">3</span> registros.
+            Mostrando <span class="font-medium">{{ $objetivos->count() }}</span> registros.
         </p>
-
-        <!-- Paginación (Temporal) -->
-
-        <div class="flex items-center space-x-2">
-
-            <button
-                class="px-3 py-1 border border-gray-300 rounded-md text-gray-400 cursor-not-allowed">
-                Anterior
-            </button>
-
-            <button
-                class="px-3 py-1 bg-blue-600 text-white rounded-md">
-                1
-            </button>
-
-            <button
-                class="px-3 py-1 border border-gray-300 rounded-md text-gray-400 cursor-not-allowed">
-                Siguiente
-            </button>
-
-        </div>
 
     </div>
 

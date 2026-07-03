@@ -1,6 +1,6 @@
 <x-roles-layout title="Página de inicio">
 
-    <!-- Barra de acciones -->
+    <!-- Barra de acciones 
     <div class="bg-white border-b border-gray-300 mb-6">
 
         <div class="flex">
@@ -9,7 +9,7 @@
                 Inicio
             </a>
         </div>
-    </div>
+    </div>-->
      
     <!-- Marco general del contenido -->
     <div class="space-y-6">

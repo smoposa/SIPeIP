@@ -1,4 +1,4 @@
-<x-entidades-layout title="Editar Estado de Entidad">
+<x-entidades-layout title="Editar Estado">
 
     <!-- Barra de acciones -->
     <div class="bg-white border-b border-gray-300">
