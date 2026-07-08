@@ -6,10 +6,38 @@ use App\Models\User;
 use App\Models\Rol;
 use App\Models\Entidad;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+    public function index()
+    {
+        $totalUsuarios = User::count();
+
+        $usuariosActivos = User::where('estado', 'Activo')->count();
+
+        $usuariosInactivos = User::where('estado', 'Inactivo')->count();
+
+        $usuariosPorTipo = Entidad::with('usuarios.rol')
+            ->orderBy('nombre')
+            ->get()
+            ->groupBy('tipoEntidad')
+            ->sortByDesc(function ($entidades) {
+                return $entidades->sum(function ($entidad) {
+                    return $entidad->usuarios->count();
+                });
+            });
+
+        return view('usuarios.index', compact(
+            'totalUsuarios',
+            'usuariosActivos',
+            'usuariosInactivos',
+            'usuariosPorTipo'
+        ));
+    }
+    
     public function listar()
     {
         $usuarios = User::with(['rol', 'entidad'])->get();
@@ -143,82 +171,81 @@ class UserController extends Controller
         ));
     }
 
-public function updateRoles(Request $request, $id)
-{
-    $request->validate([
-        'rol_id' => 'required|exists:roles,id'
-    ]);
+    public function updateRoles(Request $request, $id)
+    {
+        $request->validate([
+            'rol_id' => 'required|exists:roles,id'
+        ]);
 
-    $usuario = User::findOrFail($id);
+        $usuario = User::findOrFail($id);
 
-    $usuario->rol_id = $request->rol_id;
+        $usuario->rol_id = $request->rol_id;
 
-    $usuario->save();
+        $usuario->save();
 
-    return redirect()
-        ->route('usuarios.show', $usuario->id)
-        ->with('success', 'Rol asignado correctamente.');
-}
+        return redirect()
+            ->route('usuarios.show', $usuario->id)
+            ->with('success', 'Rol asignado correctamente.');
+    }
 
-public function editEntidad($id)
-{
-    $usuario = User::findOrFail($id);
+    public function editEntidad($id)
+    {
+        $usuario = User::findOrFail($id);
 
-    $entidades = Entidad::where('estado', 'Activo')
-                        ->orderBy('nombre')
-                        ->get();
+        $entidades = Entidad::where('estado', 'Activo')
+                            ->orderBy('nombre')
+                            ->get();
 
-    return view('usuarios.editentidad', compact(
-        'usuario',
-        'entidades'
-    ));
-}
+        return view('usuarios.editentidad', compact(
+            'usuario',
+            'entidades'
+        ));
+    }
 
-public function updateEntidad(Request $request, $id)
-{
-    $request->validate([
-        'entidad_id' => 'required|exists:entidades,id'
-    ]);
+    public function updateEntidad(Request $request, $id)
+    {
+        $request->validate([
+            'entidad_id' => 'required|exists:entidades,id'
+        ]);
 
-    $usuario = User::findOrFail($id);
+        $usuario = User::findOrFail($id);
 
-    $usuario->entidad_id = $request->entidad_id;
+        $usuario->entidad_id = $request->entidad_id;
 
-    $usuario->save();
+        $usuario->save();
 
-    return redirect()
-        ->route('usuarios.show', $usuario->id)
-        ->with('success', 'Entidad asignada correctamente.');
-}
+        return redirect()
+            ->route('usuarios.show', $usuario->id)
+            ->with('success', 'Entidad asignada correctamente.');
+    }
 
-public function editPassword($id)
-{
-    $usuario = User::findOrFail($id);
+    public function editPassword($id)
+    {
+        $usuario = User::findOrFail($id);
 
-    return view('usuarios.editpassword', compact(
-        'usuario'
-    ));
-}
+        return view('usuarios.editpassword', compact(
+            'usuario'
+        ));
+    }
 
-public function updatePassword(Request $request, $id)
-{
-    $request->validate([
-        'password' => 'required|min:8|confirmed'
-    ]);
+    public function updatePassword(Request $request, $id)
+    {
+        $request->validate([
+            'password' => 'required|min:8|confirmed'
+        ]);
 
-    $usuario = User::findOrFail($id);
+        $usuario = User::findOrFail($id);
 
-    $usuario->password = Hash::make(
-        $request->password
-    );
+        $usuario->password = Hash::make(
+            $request->password
+        );
 
-    $usuario->save();
+        $usuario->save();
 
-    return redirect()
-        ->route('usuarios.show', $usuario->id)
-        ->with('success',
-            'Contraseña restablecida correctamente.');
-}
-
+        return redirect()
+            ->route('usuarios.show', $usuario->id)
+            ->with('success',
+                'Contraseña restablecida correctamente.');
+    }
 
 }

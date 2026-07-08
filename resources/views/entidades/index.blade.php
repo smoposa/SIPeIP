@@ -32,51 +32,122 @@
             <div class="space-y-6">
 
             <!-- Tarjetas Indicadores -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white border border-gray-200 rounded-lg">
 
-                <!-- Entidades Registradas -->
-                <div class="bg-white border border-gray-200 rounded-lg p-5">
-                    <h3 class="text-base font-semibold text-gray-800">
-                        Entidades Registradas
-                    </h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2">
 
-                    <p class="text-sm text-gray-500 mt-1">
-                        Total de entidades registradas
-                    </p>
+                    <!-- Indicadores -->
+                    <div class="p-8 border-r border-gray-200">
 
-                    <p class="text-4xl font-semibold text-gray-700 mt-4">
-                        {{ $totalEntidades }}
-                    </p>
-                </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-6">
+                            Resumen General
+                        </h3>
 
-                <!-- Activas -->
-                <div class="bg-white border border-gray-200 rounded-lg p-5">
-                    <h3 class="text-base font-semibold text-gray-800">
-                        Entidades Activas
-                    </h3>
+                        <div class="space-y-6">
 
-                    <p class="text-sm text-gray-500 mt-1">
-                        Habilitadas en el sistema
-                    </p>
+                            <div class="flex justify-between items-center">
 
-                    <p class="text-4xl font-semibold text-gray-700 mt-4">
-                        {{ $entidadesActivas }}
-                    </p>
-                </div>
+                                <span class="text-gray-600">
+                                    Entidades registradas
+                                </span>
 
-                <!-- Inactivas -->
-                <div class="bg-white border border-gray-200 rounded-lg p-5">
-                    <h3 class="text-base font-semibold text-gray-800">
-                        Entidades Inactivas
-                    </h3>
+                                <span class="text-2xl font-semibold text-gray-800">
+                                    {{ $totalEntidades }}
+                                </span>
 
-                    <p class="text-sm text-gray-500 mt-1">
-                        Entidades deshabilitadas
-                    </p>
+                            </div>
 
-                    <p class="text-4xl font-semibold text-gray-700 mt-4">
-                        {{ $entidadesInactivas }}
-                    </p>
+                            <div class="flex justify-between items-center">
+
+                                <span class="text-gray-600">
+                                    Entidades activas
+                                </span>
+
+                                <span class="text-2xl font-semibold text-green-600">
+                                    {{ $entidadesActivas }}
+                                </span>
+
+                            </div>
+
+                            <div class="flex justify-between items-center">
+
+                                <span class="text-gray-600">
+                                    Entidades inactivas
+                                </span>
+
+                                <span class="text-2xl font-semibold text-red-500">
+                                    {{ $entidadesInactivas }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Distribución -->
+                    <div class="p-8">
+
+                        <h3 class="text-lg font-semibold text-gray-800 mb-6">
+                            Distribución por tipo
+                        </h3>
+
+                        <div class="space-y-5">
+
+                            <div class="flex justify-between border-b pb-2">
+
+                                <span>Secretarías</span>
+
+                                <span class="font-semibold">
+                                    {{ $totalSecretarias }}
+                                </span>
+
+                            </div>
+
+                            <div class="flex justify-between border-b pb-2">
+
+                                <span>Ministerios</span>
+
+                                <span class="font-semibold">
+                                    {{ $totalMinisterios }}
+                                </span>
+
+                            </div>
+
+                            <div class="flex justify-between border-b pb-2">
+
+                                <span>GAD Provinciales</span>
+
+                                <span class="font-semibold">
+                                    {{ $totalGadProvinciales }}
+                                </span>
+
+                            </div>
+
+                            <div class="flex justify-between border-b pb-2">
+
+                                <span>GAD Municipales</span>
+
+                                <span class="font-semibold">
+                                    {{ $totalGadMunicipales }}
+                                </span>
+
+                            </div>
+
+                            <div class="flex justify-between">
+
+                                <span>GAD Parroquiales</span>
+
+                                <span class="font-semibold">
+                                    {{ $totalGadParroquiales }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>

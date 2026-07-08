@@ -21,7 +21,7 @@
     <div class="bg-white border-b border-gray-300 mb-0">
         <div class="flex">
             
-            <a href="{{ route('usuarios.index') }}"
+            <a href="{{ route('usuarios.listar') }}"
                 class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
                 <i class="bi bi-chevron-left"></i>
                 Regresar

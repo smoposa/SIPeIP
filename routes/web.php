@@ -28,8 +28,11 @@ Route::middleware('auth')->group(function () {
     // Usuarios
     Route::prefix('usuarios')->group(function () {
 
-        Route::get('/', [UserController::class, 'listar'])
+        Route::get('/', [UserController::class, 'index'])
             ->name('usuarios.index');
+
+        Route::get('/listar', [UserController::class, 'listar'])
+            ->name('usuarios.listar');
 
         Route::get('/crear', [UserController::class, 'crear'])
             ->name('usuarios.create');
@@ -42,7 +45,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/{usuario}', [UserController::class, 'detalle'])
             ->name('usuarios.show');
-        
+
         Route::put('/{usuario}', [UserController::class, 'update'])
             ->name('usuarios.update');
 

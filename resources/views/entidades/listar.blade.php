@@ -62,111 +62,132 @@
         
         <div class="bg-white border border-gray-200 rounded-lg">
 
-            <table class="min-w-full">
-                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
-                    <tr>
-                        <th class="px-42 py-2 text-left text-sm font-semibold text-gray-700">
-                            Nro
-                        </th>
+<table class="min-w-full">
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Nombre
-                        </th>
+    <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            RUC
-                        </th>
+        <tr>
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Tipo de Entidad
-                        </th>
+            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+                Nro
+            </th>
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Nivel
-                        </th>
+            <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                Código
+            </th>
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Estado
-                        </th>
+            <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                Nombre
+            </th>
 
-                        <!-- th class="px-2 py-2 text-center text-sm font-semibold text-gray-700">
-                            Acciones
-                        </th> -->
-                    </tr>
+            <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                Siglas
+            </th>
 
-                </thead>
-                
-                <tbody>
+            <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                Tipo de Entidad
+            </th>
 
-                    @forelse($entidades as $entidad)
+            <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                Provincia
+            </th>
 
-                        <tr class="border-b border-gray-100 hover:bg-gray-50">
-                            <!-- Nro -->
-                            <td class="px-2 py-2 text-sm text-gray-600">
-                                {{ $loop->iteration }}
-                            </td>
+            <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                Estado
+            </th>
 
-                            <!-- Nombre -->
-                            <td class="px-2 py-2 text-sm font-medium">
-                                <a href="{{ route('entidades.detalle', $entidad->id) }}"
-                                class="text-blue-600 hover:text-blue-800 hover:underline">
-                                    {{ $entidad->nombre }}
-                                </a>
-                            </td>
+        </tr>
 
-                            <!-- RUC -->
-                            <td class="px-2 py-2 text-sm text-gray-600">
-                                {{ $entidad->ruc }}
-                            </td>
+    </thead>
 
-                            <!-- Tipo de Entidad -->
-                            <td class="px-2 py-2 text-sm text-gray-600">
-                                {{ $entidad->tipoEntidad }}
-                            </td>
+    <tbody>
 
-                            <!-- Nivel de Gobierno -->
-                            <td class="px-2 py-2 text-sm text-gray-600">
-                                {{ $entidad->nivelGobierno }}
-                            </td>
+        @forelse($entidades as $entidad)
 
-                            <!-- Estado -->
-                            <td class="px-2 py-2">
-                                @if($entidad->estado == 'Activo')
-                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                                        Habilitado
-                                    </span>
-                                @else
-                                    <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                                        Deshabilitado
-                                    </span>
-                                @endif
-                            </td>
+            <tr class="border-b border-gray-100 hover:bg-gray-50">
 
-                            <!-- Acciones 
-                            <td class="px-4 py-3 text-center">
+                <!-- Nro -->
+                <td class="px-4 py-2 text-sm text-gray-600">
+                    {{ $loop->iteration }}
+                </td>
 
-                                <a href="{{ route('entidades.edit', $entidad->id) }}"
-                                class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                                    Editar
-                                </a>
+                <!-- Código -->
+                <td class="px-2 py-2 text-xs text-gray-600 whitespace-nowrap">
+                    {{ $entidad->codigoInstitucional }}
+                </td>
 
-                            </td>-->
-                        </tr>
+                <!-- Nombre -->
+                <td class="px-2 py-2 text-xs font-medium max-w-md">
 
-                    @empty
+                    <a href="{{ route('entidades.detalle', $entidad->id) }}"
+                    class="text-blue-600 hover:text-blue-800 hover:underline">
 
-                        <tr>
-                            <td colspan="7"
-                                class="px-4 py-6 text-center text-gray-500">
-                                No existen entidades registradas.
-                            </td>
-                        </tr>
+                        <span
+                            class="block overflow-hidden text-ellipsis line-clamp-2"
+                            title="{{ $entidad->nombre }}">
 
-                    @endforelse
+                            {{ $entidad->nombre }}
 
-                </tbody>
+                        </span>
 
-            </table>
+                    </a>
+
+                </td>
+
+                <!-- Siglas -->
+                <td class="px-2 py-2 text-xs text-gray-600">
+                    {{ $entidad->siglas }}
+                </td>
+
+                <!-- Tipo -->
+                <td class="px-2 py-2 text-xs text-gray-600">
+                    {{ $entidad->tipoEntidad }}
+                </td>
+
+                <!-- Provincia -->
+                <td class="px-2 py-2 text-xs text-gray-600">
+                    {{ $entidad->provincia }}
+                </td>
+
+                <!-- Estado -->
+                <td class="px-2 py-2">
+
+                    @if($entidad->estado == 'Activo')
+
+                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                            Habilitado
+                        </span>
+
+                    @else
+
+                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                            Deshabilitado
+                        </span>
+
+                    @endif
+
+                </td>
+
+            </tr>
+
+        @empty
+
+            <tr>
+
+                <td colspan="7"
+                    class="px-4 py-6 text-center text-gray-500">
+
+                    No existen entidades registradas.
+
+                </td>
+
+            </tr>
+
+        @endforelse
+
+    </tbody>
+
+</table>
 
         </div>
     </div>

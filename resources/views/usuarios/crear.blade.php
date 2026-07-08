@@ -72,7 +72,7 @@
                             maxlength="20"
                             required
                             value="{{ old('identificacion') }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                     </div>
 
@@ -89,7 +89,7 @@
                             maxlength="150"
                             required
                             value="{{ old('nombres') }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                     </div>
 
@@ -106,7 +106,7 @@
                             maxlength="150"
                             required
                             value="{{ old('apellidos') }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                     </div>
 
@@ -122,7 +122,7 @@
                             name="email"
                             required
                             value="{{ old('email') }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                     </div>
 
@@ -138,7 +138,7 @@
                             name="cargo"
                             maxlength="255"
                             value="{{ old('cargo') }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                     </div>
 
@@ -152,7 +152,7 @@
                         <select
                             name="rol_id"
                             required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                             <option value="">
                                 Seleccione
@@ -183,7 +183,7 @@
                         <select
                             name="entidad_id"
                             required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                             <option value="">
                                 Seleccione
@@ -221,7 +221,7 @@
                 </div>
 
                 <!-- Botones -->
-                <div class="flex gap-3 mt-10">
+                <div class="flex justify-end gap-3 mt-10 pr-8">
 
                     <button
                         type="submit"

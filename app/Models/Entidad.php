@@ -28,17 +28,19 @@ class Entidad extends Model
         'correoInstitucional',
         'estado'
     ];
+/**
+ * Una entidad puede tener varios usuarios.
+ */
+public function usuarios(): HasMany
+{
+    return $this->hasMany(User::class, 'entidad_id');
+}
 
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
-
-    /**
-     * Una entidad puede tener varios planes.
-     */
-    public function planes(): HasMany
-    {
-        return $this->hasMany(Plan::class);
-    }
+/**
+ * Una entidad puede tener varios planes.
+ */
+public function planes(): HasMany
+{
+    return $this->hasMany(Plan::class);
+}
 }

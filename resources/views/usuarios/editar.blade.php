@@ -64,7 +64,7 @@
                             maxlength="20"
                             required
                             value="{{ old('identificacion', $usuario->identificacion) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                     </div>
 
@@ -81,7 +81,7 @@
                             maxlength="150"
                             required
                             value="{{ old('nombres', $usuario->nombres) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                     </div>
 
@@ -97,7 +97,7 @@
                             maxlength="150"
                             required
                             value="{{ old('apellidos', $usuario->apellidos) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
                     </div>
 
                     <!-- Correo -->
@@ -111,7 +111,7 @@
                             name="email"
                             required
                             value="{{ old('email', $usuario->email) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
                     </div>
 
                     <!-- Cargo -->
@@ -125,7 +125,7 @@
                             name="cargo"
                             maxlength="255"
                             value="{{ old('cargo', $usuario->cargo) }}"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
                     </div>
 
                     <!-- Rol -->
@@ -137,7 +137,7 @@
                         <select
                             name="rol_id"
                             required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                             <option value="">
                                 Seleccione
@@ -167,7 +167,7 @@
                         <select
                             name="entidad_id"
                             required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
                             <option value="">
                                 Seleccione
@@ -190,7 +190,7 @@
                 </div>
 
                 <!-- Botones -->
-                <div class="flex gap-3 mt-10">
+                <div class="flex justify-end gap-3 mt-10 pr-8">
                     <button
                         type="submit"
                         class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">

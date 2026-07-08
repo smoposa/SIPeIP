@@ -70,7 +70,7 @@
                             name="codigoInstitucional"
                             maxlength="50"
                             required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- RUC -->
@@ -85,7 +85,7 @@
                             name="ruc"
                             maxlength="13"
                             required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
                     </div>
 
@@ -101,7 +101,7 @@
                             name="nombre"
                             maxlength="255"
                             required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
                     </div>
 
@@ -116,7 +116,7 @@
                             type="text"
                             name="siglas"
                             maxlength="50"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
                     </div>
 
@@ -127,21 +127,24 @@
                             Tipo de Entidad <span class="text-red-500">*</span>
                         </label>
 
-                        <select
-                            name="tipoEntidad"
-                            required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            <select
+                                name="tipoEntidad"
+                                required
+                                class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
-                            <option value="">Seleccione</option>
-                            <option value="Ministerio">Ministerio</option>
-                            <option value="Secretaría">Secretaría</option>
-                            <option value="GAD Provincial">GAD Provincial</option>
-                            <option value="GAD Cantonal">GAD Cantonal</option>
-                            <option value="GAD Parroquial">GAD Parroquial</option>
-                            <option value="Empresa Pública">Empresa Pública</option>
-                            <option value="Universidad Pública">Universidad Pública</option>
+                                <option value="">Seleccione</option>
 
-                        </select>
+                                <option value="Secretaría">Secretaría</option>
+
+                                <option value="Ministerio">Ministerio</option>
+
+                                <option value="GAD Provincial">GAD Provincial</option>
+
+                                <option value="GAD Municipal">GAD Municipal</option>
+
+                                <option value="GAD Parroquial">GAD Parroquial</option>
+
+                            </select>
 
                     </div>
 
@@ -152,19 +155,22 @@
                             Nivel de Gobierno <span class="text-red-500">*</span>
                         </label>
 
-                        <select
-                            name="nivelGobierno"
-                            required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
-                            
+                            <select
+                                name="nivelGobierno"
+                                required
+                                class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
-                            <option value="">Seleccione</option>
-                            <option value="Nacional">Nacional</option>
-                            <option value="Provincial">Provincial</option>
-                            <option value="Cantonal">Cantonal</option>
-                            <option value="Parroquial">Parroquial</option>
+                                <option value="">Seleccione</option>
 
-                        </select>
+                                <option value="Central">Central</option>
+
+                                <option value="Provincial">Provincial</option>
+
+                                <option value="Municipal">Municipal</option>
+
+                                <option value="Parroquial">Parroquial</option>
+
+                            </select>
 
                     </div>
 
@@ -179,7 +185,7 @@
                             type="text"
                             name="provincia"
                             maxlength="100"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
                     </div>
 
@@ -194,7 +200,7 @@
                             type="text"
                             name="canton"
                             maxlength="100"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
                     </div>
 
@@ -209,7 +215,7 @@
                             type="text"
                             name="parroquia"
                             maxlength="100"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
                     </div>
 
@@ -224,7 +230,7 @@
                             type="text"
                             name="telefono"
                             maxlength="20"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
                     </div>
 
@@ -239,7 +245,7 @@
                             type="email"
                             name="correoInstitucional"
                             maxlength="150"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
 
                     </div>
 
@@ -253,7 +259,7 @@
                         <textarea
                             name="direccion"
                             rows="3"
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
 
                     </div>
 

@@ -35,135 +35,123 @@
 
         <div class="bg-white border border-gray-200 rounded-lg">
 
-            <table class="min-w-full">
+<table class="min-w-full">
 
-                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+    <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
 
-                    <tr>
+        <tr>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                            Nro
-                        </th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Nro
+            </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                            Nombre
-                        </th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Usuario
+            </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                            Identificación
-                        </th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Cargo
+            </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                            Correo institucional
-                        </th>
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Entidad
+            </th>
 
-                        <!-- th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                            Cargo
-                        </th> -->
+            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                Estado
+            </th>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                            Entidad
-                        </th>
+        </tr>
 
-                        <!-- th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                            Rol
-                        </th> -->
+    </thead>
 
-                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                            Estado
-                        </th>
+    <tbody>
 
-                    </tr>
+        @forelse($usuarios as $usuario)
 
-                </thead>
+            <tr class="border-b border-gray-100 hover:bg-gray-50">
 
-                <tbody>
+                <!-- Nro -->
+                <td class="px-4 py-3 text-sm text-gray-600">
+                    {{ $loop->iteration }}
+                </td>
 
-                    @forelse($usuarios as $usuario)
+                <!-- Usuario -->
+                <td class="px-4 py-3">
 
-                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+<a href="{{ route('usuarios.show', $usuario->id) }}"
+   class="text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium">
 
-                            <!-- Nro -->
-                            <td class="px-4 py-3 text-sm text-gray-600">
-                                {{ $loop->iteration }}
-                            </td>
+    {{ $usuario->nombres }} {{ $usuario->apellidos }}
 
-                            <!-- Nombre -->
-                            <td class="px-4 py-3 text-sm font-medium">
+</a>
 
-                                <a href="{{ route('usuarios.show', $usuario->id) }}"
-                                   class="text-blue-600 hover:text-blue-800 hover:underline">
+<p class="text-xs text-gray-500 mt-0.5">
 
-                                    {{ $usuario->nombres }} {{ $usuario->apellidos }}
+    {{ $usuario->email }}
 
-                                </a>
+</p>
 
-                            </td>
+                </td>
 
-                            <!-- Identificación -->
-                            <td class="px-4 py-3 text-sm text-gray-600">
-                                {{ $usuario->identificacion }}
-                            </td>
+                <!-- Cargo -->
+                <td class="px-4 py-3 text-sm text-gray-600">
 
-                            <!-- Correo -->
-                            <td class="px-4 py-3 text-sm text-gray-600">
-                                {{ $usuario->email }}
-                            </td>
+                    {{ $usuario->cargo }}
 
-                            <!-- Cargo 
-                            <td class="px-4 py-3 text-sm text-gray-600">
-                                {{ $usuario->cargo }}
-                            </td>-->
+                </td>
 
-                            <!-- Entidad -->
-                            <td class="px-4 py-3 text-sm text-gray-600">
-                                {{ $usuario->entidad?->nombre ?? 'Sin entidad' }}
-                            </td>
+                <!-- Entidad -->
+                <td class="px-4 py-3 text-sm text-gray-600 max-w-sm">
 
-                            <!-- Rol 
-                            <td class="px-4 py-3 text-sm text-gray-600">
-                                {{ $usuario->rol?->nombre ?? 'Sin rol' }}
-                            </td>-->
+                    <span class="block line-clamp-2"
+                          title="{{ $usuario->entidad?->nombre }}">
 
-                            <!-- Estado -->
-                            <td class="px-4 py-3">
+                        {{ $usuario->entidad?->nombre ?? 'Sin entidad' }}
 
-                                @if($usuario->estado == 'Activo')
+                    </span>
 
-                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                                        Habilitado
-                                    </span>
+                </td>
 
-                                @else
+                <!-- Estado -->
+                <td class="px-4 py-3">
 
-                                    <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                                        Deshabilitado
-                                    </span>
+                    @if($usuario->estado == 'Activo')
 
-                                @endif
+                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                            Habilitado
+                        </span>
 
-                            </td>
+                    @else
 
-                        </tr>
+                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                            Deshabilitado
+                        </span>
 
-                    @empty
+                    @endif
 
-                        <tr>
+                </td>
 
-                            <td colspan="8"
-                                class="px-4 py-6 text-center text-gray-500">
+            </tr>
 
-                                No existen usuarios registrados.
+        @empty
 
-                            </td>
+            <tr>
 
-                        </tr>
+                <td colspan="5"
+                    class="px-4 py-6 text-center text-gray-500">
 
-                    @endforelse
+                    No existen usuarios registrados.
 
-                </tbody>
+                </td>
 
-            </table>
+            </tr>
+
+        @endforelse
+
+    </tbody>
+
+</table>
 
         </div>
 

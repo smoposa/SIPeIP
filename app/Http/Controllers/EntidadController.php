@@ -7,20 +7,36 @@ use App\Models\Entidad;
 
 class EntidadController extends Controller
 {
-    public function index()
-    {
-        $totalEntidades = Entidad::count();
+    
+public function index()
+{
+    $totalEntidades = Entidad::count();
 
-        $entidadesActivas = Entidad::where('estado', 'Activo')->count();
+    $entidadesActivas = Entidad::where('estado', 'Activo')->count();
 
-        $entidadesInactivas = Entidad::where('estado', 'Inactivo')->count();
+    $entidadesInactivas = Entidad::where('estado', 'Inactivo')->count();
 
-        return view('entidades.index', compact(
-            'totalEntidades',
-            'entidadesActivas',
-            'entidadesInactivas'
-        ));
-    }
+    $totalSecretarias = Entidad::where('tipoEntidad', 'Secretaría')->count();
+
+    $totalMinisterios = Entidad::where('tipoEntidad', 'Ministerio')->count();
+
+    $totalGadProvinciales = Entidad::where('tipoEntidad', 'GAD Provincial')->count();
+
+    $totalGadMunicipales = Entidad::where('tipoEntidad', 'GAD Municipal')->count();
+
+    $totalGadParroquiales = Entidad::where('tipoEntidad', 'GAD Parroquial')->count();
+
+    return view('entidades.index', compact(
+        'totalEntidades',
+        'entidadesActivas',
+        'entidadesInactivas',
+        'totalSecretarias',
+        'totalMinisterios',
+        'totalGadProvinciales',
+        'totalGadMunicipales',
+        'totalGadParroquiales'
+    ));
+}
 
     public function listar()
     {

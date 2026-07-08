@@ -127,19 +127,39 @@
                         <label class="w-48 text-sm font-medium text-gray-700">
                             Tipo de Entidad <span class="text-red-500">*</span>
                         </label>
-                        <select
-                            name="tipoEntidad"
-                            required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Seleccione</option>
-                            <option value="Ministerio" {{ old('tipoEntidad', $entidad->tipoEntidad) == 'Ministerio' ? 'selected' : '' }}>Ministerio</option>
-                            <option value="Secretaría" {{ old('tipoEntidad', $entidad->tipoEntidad) == 'Secretaría' ? 'selected' : '' }}>Secretaría</option>
-                            <option value="GAD Provincial" {{ old('tipoEntidad', $entidad->tipoEntidad) == 'GAD Provincial' ? 'selected' : '' }}>GAD Provincial</option>
-                            <option value="GAD Cantonal" {{ old('tipoEntidad', $entidad->tipoEntidad) == 'GAD Cantonal' ? 'selected' : '' }}>GAD Cantonal</option>
-                            <option value="GAD Parroquial" {{ old('tipoEntidad', $entidad->tipoEntidad) == 'GAD Parroquial' ? 'selected' : '' }}>GAD Parroquial</option>
-                            <option value="Empresa Pública" {{ old('tipoEntidad', $entidad->tipoEntidad) == 'Empresa Pública' ? 'selected' : '' }}>Empresa Pública</option>
-                            <option value="Universidad Pública" {{ old('tipoEntidad', $entidad->tipoEntidad) == 'Universidad Pública' ? 'selected' : '' }}>Universidad Pública</option>
-                        </select>
+                            <select
+                                name="tipoEntidad"
+                                required
+                                class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+
+                                <option value="">Seleccione</option>
+
+                                <option value="Secretaría"
+                                    {{ old('tipoEntidad', $entidad->tipoEntidad) == 'Secretaría' ? 'selected' : '' }}>
+                                    Secretaría
+                                </option>
+
+                                <option value="Ministerio"
+                                    {{ old('tipoEntidad', $entidad->tipoEntidad) == 'Ministerio' ? 'selected' : '' }}>
+                                    Ministerio
+                                </option>
+
+                                <option value="GAD Provincial"
+                                    {{ old('tipoEntidad', $entidad->tipoEntidad) == 'GAD Provincial' ? 'selected' : '' }}>
+                                    GAD Provincial
+                                </option>
+
+                                <option value="GAD Municipal"
+                                    {{ old('tipoEntidad', $entidad->tipoEntidad) == 'GAD Municipal' ? 'selected' : '' }}>
+                                    GAD Municipal
+                                </option>
+
+                                <option value="GAD Parroquial"
+                                    {{ old('tipoEntidad', $entidad->tipoEntidad) == 'GAD Parroquial' ? 'selected' : '' }}>
+                                    GAD Parroquial
+                                </option>
+
+                            </select>
                     </div>
 
                     <!-- Nivel de Gobierno -->
@@ -147,16 +167,34 @@
                         <label class="w-48 text-sm font-medium text-gray-700">
                             Nivel de Gobierno <span class="text-red-500">*</span>
                         </label>
-                        <select
-                            name="nivelGobierno"
-                            required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Seleccione</option>
-                            <option value="Nacional" {{ old('nivelGobierno', $entidad->nivelGobierno) == 'Nacional' ? 'selected' : '' }}>Nacional</option>
-                            <option value="Provincial" {{ old('nivelGobierno', $entidad->nivelGobierno) == 'Provincial' ? 'selected' : '' }}>Provincial</option>
-                            <option value="Cantonal" {{ old('nivelGobierno', $entidad->nivelGobierno) == 'Cantonal' ? 'selected' : '' }}>Cantonal</option>
-                            <option value="Parroquial" {{ old('nivelGobierno', $entidad->nivelGobierno) == 'Parroquial' ? 'selected' : '' }}>Parroquial</option>
-                        </select>
+                            <select
+                                name="nivelGobierno"
+                                required
+                                class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+
+                                <option value="">Seleccione</option>
+
+                                <option value="Central"
+                                    {{ old('nivelGobierno', $entidad->nivelGobierno) == 'Central' ? 'selected' : '' }}>
+                                    Central
+                                </option>
+
+                                <option value="Provincial"
+                                    {{ old('nivelGobierno', $entidad->nivelGobierno) == 'Provincial' ? 'selected' : '' }}>
+                                    Provincial
+                                </option>
+
+                                <option value="Municipal"
+                                    {{ old('nivelGobierno', $entidad->nivelGobierno) == 'Municipal' ? 'selected' : '' }}>
+                                    Municipal
+                                </option>
+
+                                <option value="Parroquial"
+                                    {{ old('nivelGobierno', $entidad->nivelGobierno) == 'Parroquial' ? 'selected' : '' }}>
+                                    Parroquial
+                                </option>
+
+                            </select>
                     </div>
 
                     <!-- Provincia -->
