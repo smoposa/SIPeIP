@@ -31,230 +31,264 @@
         </a>
 
         <!-- ================= CONFIGURACIÓN ================= -->
-
-        <details class="mt-2"
-            {{ request()->routeIs('roles.*')
-            || request()->routeIs('usuarios.*')
-            || request()->routeIs('entidades.*')
-            || request()->routeIs('unidades.*')
-            ? 'open' : '' }}>
-
-            <summary class="{{ request()->routeIs('roles.*')
+        @if(puedeVer('usuarios') || puedeVer('roles') || puedeVer('entidades'))
+            <details class="mt-2"
+                {{ request()->routeIs('roles.*')
                 || request()->routeIs('usuarios.*')
                 || request()->routeIs('entidades.*')
                 || request()->routeIs('unidades.*')
-                ? 'sidebar-active'
-                : 'sidebar-group' }}">
+                ? 'open' : '' }}>
 
-                <div class="flex items-center gap-3">
+                <summary class="{{ request()->routeIs('roles.*')
+                    || request()->routeIs('usuarios.*')
+                    || request()->routeIs('entidades.*')
+                    || request()->routeIs('unidades.*')
+                    ? 'sidebar-active'
+                    : 'sidebar-group' }}">
 
-                    <i class="bi bi-gear"></i>
+                    <div class="flex items-center gap-3">
 
-                    <span>Configuración</span>
+                        <i class="bi bi-gear"></i>
+
+                        <span>Configuración</span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-down text-sm"></i>
+
+                </summary>
+
+                <div class="ml-4 mt-1 space-y-0.5">
+
+                @if(puedeVer('roles'))
+                    <a href="{{ route('roles.listar') }}"
+                    class="{{ request()->routeIs('roles.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                        Roles
+                    </a>
+                @endif
+
+                @if(puedeVer('usuarios'))
+                    <a href="{{ route('usuarios.index') }}"
+                    class="{{ request()->routeIs('usuarios.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                        Usuarios
+                    </a>
+                @endif
+
+                @if(puedeVer('entidades'))
+                    <a href="{{ route('entidades.index') }}"
+                    class="{{ request()->routeIs('entidades.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                        Entidades
+                    </a>
+                @endif
+
+                    <!--
+                    <a href="#"
+                    class="sidebar-submenu">
+                        <span class="text-red-500">
+                            Unidades Organizacionales
+                        </span>
+                    </a> -->
 
                 </div>
 
-                <i class="bi bi-chevron-down text-sm"></i>
-
-            </summary>
-
-            <div class="ml-4 mt-1 space-y-0.5">
-
-                <a href="{{ route('roles.listar') }}"
-                   class="{{ request()->routeIs('roles.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
-                    Roles
-                </a>
-
-                <a href="{{ route('usuarios.index') }}"
-                   class="{{ request()->routeIs('usuarios.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
-                    Usuarios
-                </a>
-
-                <a href="{{ route('entidades.index') }}"
-                   class="{{ request()->routeIs('entidades.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
-                    Entidades
-                </a>
-                <!--
-                <a href="#"
-                class="sidebar-submenu">
-                    <span class="text-red-500">
-                        Unidades Organizacionales
-                    </span>
-                </a> -->
-
-            </div>
-
-        </details>
+            </details>
+        @endif
 
         <!-- ================= PLANIFICACIÓN ================= -->
-
-        <details class="mt-2"
-            {{ request()->routeIs('planes.*')
-            || request()->routeIs('objetivos.*')
-            || request()->routeIs('metas.*')
-            || request()->routeIs('indicadores.*')
-            ? 'open' : '' }}>
-
-            <summary class="{{ request()->routeIs('planes.*')
+        @if(puedeVer('planes') || puedeVer('objetivos') || puedeVer('metas') || puedeVer('indicadores'))
+            <details class="mt-2"
+                {{ request()->routeIs('planes.*')
                 || request()->routeIs('objetivos.*')
                 || request()->routeIs('metas.*')
                 || request()->routeIs('indicadores.*')
-                ? 'sidebar-active'
-                : 'sidebar-group' }}">
+                ? 'open' : '' }}>
 
-                <div class="flex items-center gap-3">
+                <summary class="{{ request()->routeIs('planes.*')
+                    || request()->routeIs('objetivos.*')
+                    || request()->routeIs('metas.*')
+                    || request()->routeIs('indicadores.*')
+                    ? 'sidebar-active'
+                    : 'sidebar-group' }}">
 
-                    <i class="bi bi-diagram-3"></i>
+                    <div class="flex items-center gap-3">
 
-                    <span>Planificación</span>
+                        <i class="bi bi-diagram-3"></i>
+
+                        <span>Planificación</span>
+
+                    </div>
+
+                    <i class="bi bi-chevron-down text-sm"></i>
+
+                </summary>
+
+                <div class="ml-4 mt-1 space-y-0.5">
+
+                    @if(puedeVer('planes'))    
+                        <a href="{{ route('planes.index') }}"
+                        class="{{ request()->routeIs('planes.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                            Planes
+                        </a>
+                        @endif
+
+                    @if(puedeVer('objetivos'))
+                        <a href="{{ route('objetivos.index') }}"
+                        class="{{ request()->routeIs('objetivos.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                            Objetivos
+                        </a>
+                        @endif
+
+                    @if(puedeVer('metas'))
+                        <a href="#"
+                        class="{{ request()->routeIs('metas.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                            Metas
+                        </a>
+                        @endif
+
+                    @if(puedeVer('indicadores'))
+                        <!-- <a href="#"
+                        class="{{ request()->routeIs('indicadores.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                            Indicadores
+                        </a> -->
+                    @endif
+
+
+                    
+                    <a href="#"
+                    class="sidebar-submenu">
+                        <span class="text-red-500">
+                            Indicadores
+                        </span>
+                    </a>
 
                 </div>
 
-                <i class="bi bi-chevron-down text-sm"></i>
-
-            </summary>
-
-            <div class="ml-4 mt-1 space-y-0.5">
-
-                <a href="{{ route('planes.index') }}"
-                   class="{{ request()->routeIs('planes.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
-                    Planes
-                </a>
-
-                <a href="{{ route('objetivos.index') }}"
-                   class="{{ request()->routeIs('objetivos.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
-                    Objetivos
-                </a>
-
-                <a href="#"
-                   class="{{ request()->routeIs('metas.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
-                    Metas
-                </a>
-
-                <!-- <a href="#"
-                   class="{{ request()->routeIs('indicadores.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
-                    Indicadores
-                </a> -->
-
-
-                
-                <a href="#"
-                class="sidebar-submenu">
-                    <span class="text-red-500">
-                        Indicadores
-                    </span>
-                </a>
-
-            </div>
-
-        </details>
+            </details>
+        @endif
 
         <!-- ================= INVERSIÓN ================= -->
+        @if(puedeVer('proyectos') || puedeVer('presupuesto'))
+            <details class="mt-2">
 
-        <details class="mt-2">
+                <summary class="sidebar-group">
 
-            <summary class="sidebar-group">
+                    <div class="flex items-center gap-3">
 
-                <div class="flex items-center gap-3">
+                        <i class="bi bi-cash-stack"></i>
 
-                    <i class="bi bi-cash-stack"></i>
+                        <span class="text-red-600">Inversión</span>
 
-                    <span class="text-red-600">Inversión</span>
+                    </div>
+
+                    <i class="bi bi-chevron-down text-sm"></i>
+
+                </summary>
+
+                <div class="ml-4 mt-1 space-y-0.5">
+
+                @if(puedeVer('proyectos'))
+                    <a href="#"
+                    class="sidebar-submenu">
+                        Proyectos
+                    </a>
+                @endif
+
+                @if(puedeVer('proyectos'))
+                    <a href="#"
+                    class="sidebar-submenu">
+                        POA
+                    </a>
+                @endif
+                
+                @if(puedeVer('presupuesto'))
+                    <a href="#"
+                    class="sidebar-submenu">
+                        Presupuesto
+                    </a>
+                @endif
 
                 </div>
 
-                <i class="bi bi-chevron-down text-sm"></i>
-
-            </summary>
-
-            <div class="ml-4 mt-1 space-y-0.5">
-
-                <a href="#"
-                   class="sidebar-submenu">
-                    Proyectos
-                </a>
-
-                <a href="#"
-                   class="sidebar-submenu">
-                    POA
-                </a>
-
-                <a href="#"
-                   class="sidebar-submenu">
-                    Presupuesto
-                </a>
-
-            </div>
-
-        </details>
+            </details>
+        @endif     
 
         <!-- ================= SEGUIMIENTO ================= -->
+        @if(puedeVer('seguimiento') || puedeVer('evaluacion'))
+            <details class="mt-2">
 
-        <details class="mt-2">
+                <summary class="sidebar-group">
 
-            <summary class="sidebar-group">
+                    <div class="flex items-center gap-3">
 
-                <div class="flex items-center gap-3">
+                        <i class="bi bi-clipboard-check"></i>
 
-                    <i class="bi bi-clipboard-check"></i>
+                        <span class="text-red-600">Seguimiento</span>
 
-                    <span class="text-red-600">Seguimiento</span>
+                    </div>
+
+                    <i class="bi bi-chevron-down text-sm"></i>
+
+                </summary>
+
+                <div class="ml-4 mt-1 space-y-0.5">
+
+                    @if(puedeVer('seguimiento'))    
+                        <a href="#"
+                        class="sidebar-submenu">
+                            Seguimiento
+                        </a>
+                    @endif  
+
+                    @if(puedeVer('evaluacion'))
+                        <a href="#"
+                        class="sidebar-submenu">
+                            Evaluación
+                        </a>
+                    @endif  
 
                 </div>
 
-                <i class="bi bi-chevron-down text-sm"></i>
-
-            </summary>
-
-            <div class="ml-4 mt-1 space-y-0.5">
-
-                <a href="#"
-                   class="sidebar-submenu">
-                    Seguimiento
-                </a>
-
-                <a href="#"
-                   class="sidebar-submenu">
-                    Evaluación
-                </a>
-
-            </div>
-
-        </details>
+            </details>
+        @endif  
 
         <!-- ================= ADMINISTRACIÓN ================= -->
+        @if(puedeVer('reportes') || puedeVer('auditoria'))
+            <details class="mt-2">
 
-        <details class="mt-2">
+                <summary class="sidebar-group">
 
-            <summary class="sidebar-group">
+                    <div class="flex items-center gap-3">
 
-                <div class="flex items-center gap-3">
+                        <i class="bi bi-shield-check"></i>
 
-                    <i class="bi bi-shield-check"></i>
+                        <span class="text-red-600">Administración</span>
 
-                    <span class="text-red-600">Administración</span>
+                    </div>
+
+                    <i class="bi bi-chevron-down text-sm"></i>
+
+                </summary>
+
+                <div class="ml-4 mt-1 space-y-0.5">
+
+                    @if(puedeVer('reportes'))    
+                        <a href="#"
+                        class="sidebar-submenu">
+                            Reportes
+                        </a>
+                    @endif
+
+                    @if(puedeVer('auditoria'))
+                        <a href="#"
+                        class="sidebar-submenu">
+                            Auditoría
+                        </a>
+                    @endif
 
                 </div>
 
-                <i class="bi bi-chevron-down text-sm"></i>
-
-            </summary>
-
-            <div class="ml-4 mt-1 space-y-0.5">
-
-                <a href="#"
-                   class="sidebar-submenu">
-                    Reportes
-                </a>
-
-                <a href="#"
-                   class="sidebar-submenu">
-                    Auditoría
-                </a>
-
-            </div>
-
-        </details>
+            </details>
+        @endif  
 
     </nav>
 

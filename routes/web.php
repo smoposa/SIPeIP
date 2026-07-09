@@ -26,7 +26,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Usuarios
-    Route::prefix('usuarios')->group(function () {
+    Route::prefix('usuarios')
+        ->middleware('role:usuarios')
+        ->group(function () {
 
         Route::get('/', [UserController::class, 'index'])
             ->name('usuarios.index');
@@ -85,7 +87,9 @@ Route::middleware('auth')->group(function () {
     });
 
     // Roles
-    Route::prefix('roles')->group(function () {
+    Route::prefix('roles')
+        ->middleware('role:roles')
+        ->group(function () {
 
         Route::get('/', [RoleController::class, 'index'])
             ->name('roles.index');
@@ -120,7 +124,9 @@ Route::middleware('auth')->group(function () {
     });
 
     // Entidades
-    Route::prefix('entidades')->group(function () {
+    Route::prefix('entidades')
+        ->middleware('role:entidades')
+        ->group(function () {
 
         Route::get('/', [EntidadController::class, 'index'])
             ->name('entidades.index');
@@ -152,7 +158,10 @@ Route::middleware('auth')->group(function () {
     });
 
     // Planes
-    Route::prefix('planes')->name('planes.')->group(function () {
+    Route::prefix('planes')
+        ->name('planes.')
+        ->middleware('role:planes')
+        ->group(function () {
 
         Route::get('/', [PlanController::class, 'index'])->name('index');
 
@@ -179,7 +188,10 @@ Route::middleware('auth')->group(function () {
     });
 
     // Objetivos
-    Route::prefix('objetivos')->name('objetivos.')->group(function () {
+    Route::prefix('objetivos')
+        ->name('objetivos.')
+        ->middleware('role:objetivos')
+        ->group(function () {
 
         // Página principal
         Route::get('/', [ObjetivoController::class, 'index'])->name('index');
@@ -216,7 +228,10 @@ Route::middleware('auth')->group(function () {
     });
 
     // Metas
-    Route::prefix('metas')->name('metas.')->group(function () {
+    Route::prefix('metas')
+        ->name('metas.')
+        ->middleware('role:metas')
+        ->group(function () {
 
         Route::get('/objetivo/{objetivo}', [MetaController::class, 'index'])->name('index');
 
@@ -241,7 +256,10 @@ Route::middleware('auth')->group(function () {
     });
 
     // Indicadores
-    Route::prefix('indicadores')->name('indicadores.')->group(function () {
+    Route::prefix('indicadores')
+        ->name('indicadores.')
+        ->middleware('role:indicadores')
+        ->group(function () {
 
         Route::get('/meta/{meta}', [IndicadorController::class, 'index'])->name('index');
 

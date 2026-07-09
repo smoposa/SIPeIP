@@ -1,4 +1,4 @@
-<x-usuarios-layout title="Usuarios registrados">
+<x-usuarios-layout title="Consultar Usuarios">
 
     @if(session('success'))
         <div id="alertSuccess"
@@ -18,15 +18,50 @@
     @endif
 
     <!-- Encabezado -->
-    <div class="mb-6">
+    <div class="mb-2">
 
         <h2 class="text-2xl font-semibold text-gray-800">
             Usuarios registrados
         </h2>
+         <!--<p class="mt-1 text-gray-500">
+            Consulte, registre y administre los roles institucionales del Sistema Integral de Planificación e Inversión Pública (SIPeIP).
+        </p -->
 
-        <p class="mt-1 text-sm text-gray-500">
-            Visualice y administre los usuarios registrados en el Sistema Integral de Planificación e Inversión Pública (SIPeIP).
-        </p>
+    </div>
+
+    <!-- Resumen -->
+    <div class="flex items-center justify-between mb-4">
+
+        <div>
+
+            <p class="text-sm text-gray-500">
+                {{ $usuarios->count() }} registros ·
+
+                <span class="text-green-600 font-medium">
+                    {{ $usuarios->where('estado','Activo')->count() }}
+                </span>
+
+                activos ·
+
+                <span class="text-red-600 font-medium">
+                    {{ $usuarios->where('estado','Inactivo')->count() }}
+                </span>
+
+                inactivos
+            </p>
+
+        </div>
+****
+        @if(puedeHacer('usuarios', 'crear'))
+            <a href="{{ route('usuarios.create') }}"
+            class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+
+                <i class="bi bi-plus-lg"></i>
+
+                Crear usuario
+
+            </a>
+        @endif
 
     </div>
 
@@ -35,123 +70,125 @@
 
         <div class="bg-white border border-gray-200 rounded-lg">
 
-<table class="min-w-full">
+            <table class="min-w-full">
 
-    <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
 
-        <tr>
+                    <tr>
 
-            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                Nro
-            </th>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                            Nro
+                        </th>
 
-            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                Usuario
-            </th>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                            Usuario
+                        </th>
 
-            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                Cargo
-            </th>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                            Cargo
+                        </th>
 
-            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                Entidad
-            </th>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                            Entidad
+                        </th>
 
-            <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                Estado
-            </th>
+                        <th class="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                            Estado
+                        </th>
 
-        </tr>
+                    </tr>
 
-    </thead>
+                </thead>
 
-    <tbody>
+                <tbody>
 
-        @forelse($usuarios as $usuario)
+                    @forelse($usuarios as $usuario)
 
-            <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <tr class="border-b border-gray-100 hover:bg-gray-50">
 
-                <!-- Nro -->
-                <td class="px-4 py-3 text-sm text-gray-600">
-                    {{ $loop->iteration }}
-                </td>
+                            <!-- Nro -->
+                            <td class="px-4 py-3 text-sm text-gray-600">
+                                {{ $loop->iteration }}
+                            </td>
 
-                <!-- Usuario -->
-                <td class="px-4 py-3">
+                            <!-- Usuario -->
+                            <td class="px-4 py-3">
 
-<a href="{{ route('usuarios.show', $usuario->id) }}"
-   class="text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium">
+                            <a href="{{ route('usuarios.show', $usuario->id) }}"
+                            class="text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium">
 
-    {{ $usuario->nombres }} {{ $usuario->apellidos }}
+                                {{ $usuario->nombres }} {{ $usuario->apellidos }}
 
-</a>
+                            </a>
 
-<p class="text-xs text-gray-500 mt-0.5">
+                            <p class="text-xs text-gray-500 mt-0.5">
+                                {{ $usuario->email }}
+                            </p>
 
-    {{ $usuario->email }}
+                            <p class="text-xs text-gray-600 mt-1">
+                                {{ $usuario->rol?->nombre ?? 'Sin rol asignado' }}
+                            </p>
 
-</p>
+                            </td>
 
-                </td>
+                            <!-- Cargo -->
+                            <td class="px-4 py-3 text-sm text-gray-600">
 
-                <!-- Cargo -->
-                <td class="px-4 py-3 text-sm text-gray-600">
+                                {{ $usuario->cargo }}
 
-                    {{ $usuario->cargo }}
+                            </td>
 
-                </td>
+                            <!-- Entidad -->
+                            <td class="px-4 py-3 text-sm text-gray-600 max-w-sm">
 
-                <!-- Entidad -->
-                <td class="px-4 py-3 text-sm text-gray-600 max-w-sm">
+                                <span class="block line-clamp-2"
+                                    title="{{ $usuario->entidad?->nombre }}">
 
-                    <span class="block line-clamp-2"
-                          title="{{ $usuario->entidad?->nombre }}">
+                                    {{ $usuario->entidad?->nombre ?? 'Sin entidad' }}
 
-                        {{ $usuario->entidad?->nombre ?? 'Sin entidad' }}
+                                </span>
 
-                    </span>
+                            </td>
 
-                </td>
+                            <!-- Estado -->
+                            <td class="px-4 py-3">
 
-                <!-- Estado -->
-                <td class="px-4 py-3">
+                                @if($usuario->estado == 'Activo')
 
-                    @if($usuario->estado == 'Activo')
+                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                                        Habilitado
+                                    </span>
 
-                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                            Habilitado
-                        </span>
+                                @else
 
-                    @else
+                                    <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                                        Deshabilitado
+                                    </span>
 
-                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                            Deshabilitado
-                        </span>
+                                @endif
 
-                    @endif
+                            </td>
 
-                </td>
+                        </tr>
 
-            </tr>
+                    @empty
 
-        @empty
+                        <tr>
 
-            <tr>
+                            <td colspan="5"
+                                class="px-4 py-6 text-center text-gray-500">
 
-                <td colspan="5"
-                    class="px-4 py-6 text-center text-gray-500">
+                                No existen usuarios registrados.
 
-                    No existen usuarios registrados.
+                            </td>
 
-                </td>
+                        </tr>
 
-            </tr>
+                    @endforelse
 
-        @endforelse
+                </tbody>
 
-    </tbody>
-
-</table>
+            </table>
 
         </div>
 

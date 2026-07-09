@@ -27,11 +27,13 @@
                 Regresar
             </a>
             
-            <a href="{{ route('usuarios.edit', $usuario->id) }}"
+            @if(puedeHacer('usuarios', 'editar'))
+                <a href="{{ route('usuarios.edit', $usuario->id) }}"
                 class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-                <i class="bi bi-pencil text-blue-500 me-2"></i>
-                Editar información
-            </a>
+                    <i class="bi bi-pencil text-blue-500 me-2"></i>
+                    Editar información
+                </a>
+            @endif
 
             <a href="{{ route('usuarios.estado', $usuario->id) }}"
                 class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
@@ -96,12 +98,12 @@
                         Información básica
                     </h4>
 
-                    <a href="{{ route('usuarios.edit', $usuario->id) }}"
-                       class="text-sm text-blue-600 hover:text-blue-800">
-
-                        
-                        Editar
-                    </a>
+                    @if(puedeHacer('usuarios', 'editar'))
+                        <a href="{{ route('usuarios.edit', $usuario->id) }}"
+                        class="text-sm text-blue-600 hover:text-blue-800">
+                            Editar
+                        </a>
+                    @endif
                 </div>
 
             </div>
@@ -225,12 +227,12 @@
 
                     @endif
 
-                    <a href="{{ route('usuarios.estado', $usuario->id) }}"
-                       class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
-
-                        Editar
-
-                    </a>
+                    @if(puedeHacer('usuarios', 'estado'))
+                        <a href="{{ route('usuarios.estado', $usuario->id) }}"
+                        class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                            Editar
+                        </a>
+                    @endif
 
                 </div>
             </div>
@@ -271,10 +273,12 @@
 
                             <!-- Columna 3 -->
                             <div>
+                            @if(puedeHacer('usuarios', 'editarRol'))
                                 <a href="{{ route('usuarios.editroles', $usuario->id) }}"
                                 class="text-sm text-blue-600 hover:text-blue-800">
                                     Editar
                                 </a>
+                            @endif
                             </div>
 
                         </div>
@@ -307,10 +311,12 @@
 
                             <!-- Columna 3 -->
                             <div>
-                                <a href="{{ route('usuarios.editentidad', $usuario->id) }}"
-                                class="text-sm text-blue-600 hover:text-blue-800">
-                                    Editar
-                                </a>
+                                @if(puedeHacer('usuarios', 'editarEntidad'))
+                                    <a href="{{ route('usuarios.editentidad', $usuario->id) }}"
+                                    class="text-sm text-blue-600 hover:text-blue-800">
+                                        Editar
+                                    </a>
+                                @endif
                             </div>
 
                         </div>

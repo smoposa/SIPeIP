@@ -47,11 +47,13 @@
 
         </div>
 
-        <a href="{{ route('roles.create') }}"
+        @if(puedeHacer('roles', 'crear'))
+            <a href="{{ route('roles.create') }}"
             class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
-            <i class="bi bi-plus-lg"></i>
-            Crear rol
-        </a>
+                <i class="bi bi-plus-lg"></i>
+                Crear rol
+            </a>
+        @endif
 
     </div>
 

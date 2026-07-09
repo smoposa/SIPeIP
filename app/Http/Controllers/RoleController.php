@@ -30,6 +30,8 @@ class RoleController extends Controller
 
     public function create()
     {
+        $this->autorizar('roles', 'crear');
+
         return view('roles.create');
     }
 
@@ -40,6 +42,8 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
+        $this->autorizar('roles', 'crear');
+        
         $request->validate([
             'nombre' => 'required|max:100',
             'descripcion' => 'nullable|max:255',
@@ -58,6 +62,8 @@ class RoleController extends Controller
 
     public function edit($id)
     {
+        $this->autorizar('roles', 'editar');
+
         $rol = Rol::findOrFail($id);
 
         return view('roles.editar', compact('rol'));
@@ -65,6 +71,8 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->autorizar('roles', 'editar');
+
         $request->validate([
             'nombre' => 'required|max:100',
             'descripcion' => 'nullable|max:255',
@@ -91,6 +99,8 @@ class RoleController extends Controller
     
     public function editarEstado($id)
     {
+        $this->autorizar('roles', 'estado');
+
         $rol = Rol::findOrFail($id);
 
         return view('roles.editarestado', compact('rol'));
@@ -98,6 +108,8 @@ class RoleController extends Controller
 
     public function actualizarEstado(Request $request, $id)
     {
+        $this->autorizar('roles', 'estado');
+        
         $rol = Rol::findOrFail($id);
 
         $rol->estado = $request->has('estado')
@@ -110,4 +122,5 @@ class RoleController extends Controller
             ->route('roles.detalle', $rol->id)
             ->with('success', 'Estado del rol actualizado correctamente.');
     }
+
 }
