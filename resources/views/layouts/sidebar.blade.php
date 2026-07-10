@@ -181,7 +181,7 @@
                         @endif
 
                     @if(puedeVer('metas'))
-                        <a href="#"
+                        <a href="{{ route('metas.listar') }}"
                         class="{{ request()->routeIs('metas.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                             Metas
                         </a>

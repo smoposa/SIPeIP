@@ -5,7 +5,7 @@
 
         <div class="flex">
 
-            <a href="{{ route('metas.index', $meta->objetivo_id) }}"
+            <a href="{{ route('metas.listar') }}"
             class="py-2 text-sm font-medium text-blue-600 hover:text-green-800 mr-8">
 
                 <i class="bi bi-chevron-left"></i>
@@ -138,7 +138,7 @@
                     <!-- Código -->
                     <div class="flex">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
+                        <span class="w-44 text-sm font-semibold text-gray-700">
                             Código
                         </span>
 
@@ -151,8 +151,8 @@
                     <!-- Objetivo -->
                     <div class="flex">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Objetivo
+                        <span class="w-44 text-sm font-semibold text-gray-700">
+                            Objetivo Estratégico
                         </span>
 
                         <span class="text-sm text-gray-600">
@@ -161,10 +161,23 @@
 
                     </div>
 
+                    <!-- Plan -->
+                    <div class="flex">
+
+                        <span class="w-44 text-sm font-semibold text-gray-700">
+                            Plan
+                        </span>
+
+                        <span class="text-sm text-gray-600">
+                            {{ $meta->objetivo->plan->codigo }} - {{ $meta->objetivo->plan->nombre }}
+                        </span>
+
+                    </div>
+
                     <!-- Nombre -->
                     <div class="flex">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
+                        <span class="w-44 text-sm font-semibold text-gray-700">
                             Nombre
                         </span>
 
@@ -177,7 +190,7 @@
                     <!-- Descripción -->
                     <div class="flex items-start">
 
-                        <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Descripción
                         </span>
 
@@ -187,54 +200,92 @@
 
                     </div>
 
-                    <!-- Valor Meta -->
+                    <!-- Línea base -->
                     <div class="flex">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
+                        <span class="w-44 text-sm font-semibold text-gray-700">
+                            Línea base
+                        </span>
+
+                        <span class="text-sm text-gray-600">
+                            {{ number_format($meta->linea_base, 2) }}
+                            {{ $meta->unidad_medida }}
+                        </span>
+
+                    </div>
+
+                    <!-- Valor meta -->
+                    <div class="flex">
+
+                        <span class="w-44 text-sm font-semibold text-gray-700">
                             Valor meta
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ $meta->valor_meta ?? 'No registra' }}
+                            {{ number_format($meta->valor_meta, 2) }}
+                            {{ $meta->unidad_medida }}
                         </span>
 
                     </div>
 
-                    <!-- Unidad de medida -->
+                    <!-- Unidad -->
                     <div class="flex">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
+                        <span class="w-44 text-sm font-semibold text-gray-700">
                             Unidad de medida
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ $meta->unidad_medida ?? 'No registra' }}
+                            {{ $meta->unidad_medida }}
                         </span>
 
                     </div>
 
-                    <!-- Fecha de inicio -->
+                    <!-- Período -->
                     <div class="flex">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Fecha de inicio
+                        <span class="w-44 text-sm font-semibold text-gray-700">
+                            Período
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ $meta->fecha_inicio?->format('d/m/Y') ?? 'No registra' }}
+                            {{ $meta->periodo_inicio }} - {{ $meta->periodo_fin }}
                         </span>
 
                     </div>
 
-                    <!-- Fecha de fin -->
+                    <!-- Responsable -->
                     <div class="flex">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Fecha de fin
+                        <span class="w-44 text-sm font-semibold text-gray-700">
+                            Responsable
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ $meta->fecha_fin?->format('d/m/Y') ?? 'No registra' }}
+
+                            {{ $meta->responsable->nombres }}
+                            {{ $meta->responsable->apellidos }}
+
+                            @if($meta->responsable->cargo)
+                                - {{ $meta->responsable->cargo }}
+                            @endif
+
+                        </span>
+
+                    </div>
+
+                    <!-- Registrado por -->
+                    <div class="flex">
+
+                        <span class="w-44 text-sm font-semibold text-gray-700">
+                            Registrado por
+                        </span>
+
+                        <span class="text-sm text-gray-600">
+
+                            {{ $meta->usuario->nombres }}
+                            {{ $meta->usuario->apellidos }}
+
                         </span>
 
                     </div>
@@ -242,6 +293,8 @@
                 </div>
 
             </div>
+
+
             <!-- Estado -->
             <div class="bg-gray-100 border-b border-gray-200">
 

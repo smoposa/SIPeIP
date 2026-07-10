@@ -12,6 +12,7 @@ use App\Http\Controllers\OdsController;
 use App\Http\Controllers\PndController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ObjetivoController;
+use App\Http\Controllers\MetaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -282,5 +283,44 @@ Route::prefix('objetivos')
         });
 
     });
+
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Metas
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('metas')->name('metas.')->group(function () {
+
+    Route::get('/', [MetaController::class, 'index'])
+        ->name('index');
+
+    Route::get('/listar', [MetaController::class, 'listar'])
+        ->name('listar');
+
+    Route::get('/crear', [MetaController::class, 'create'])
+        ->name('create');
+
+    Route::post('/guardar', [MetaController::class, 'store'])
+        ->name('store');
+
+    Route::get('/{id}/detalle', [MetaController::class, 'detalle'])
+        ->name('detalle');
+
+    Route::get('/{id}/editar', [MetaController::class, 'edit'])
+        ->name('edit');
+
+    Route::put('/{id}', [MetaController::class, 'update'])
+        ->name('update');
+
+    Route::patch('/{id}/estado', [MetaController::class, 'cambiarEstado'])
+        ->name('estado');
+
+});
+
+
 
 require __DIR__.'/auth.php';

@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Meta extends Model
 {
@@ -13,32 +11,17 @@ class Meta extends Model
     protected $fillable = [
 
         'objetivo_id',
-
         'codigo',
-
         'nombre',
-
         'descripcion',
-
+        'linea_base',
         'valor_meta',
-
         'unidad_medida',
-
-        'fecha_inicio',
-
-        'fecha_fin',
-
+        'periodo_inicio',
+        'periodo_fin',
+        'responsable_id',
         'estado',
-
-    ];
-
-    protected $casts = [
-
-        'valor_meta'   => 'decimal:2',
-
-        'fecha_inicio' => 'date',
-
-        'fecha_fin'    => 'date',
+        'usuario_id',
 
     ];
 
@@ -48,12 +31,26 @@ class Meta extends Model
     |--------------------------------------------------------------------------
     */
 
-    public function objetivo(): BelongsTo
+    // Objetivo al que pertenece
+    public function objetivo()
     {
         return $this->belongsTo(Objetivo::class);
     }
 
-    public function indicadores(): HasMany
+    // Responsable de la meta
+    public function responsable()
+    {
+        return $this->belongsTo(User::class, 'responsable_id');
+    }
+
+    // Usuario que registró la meta
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
+
+    // Indicadores de la meta
+    public function indicadores()
     {
         return $this->hasMany(Indicador::class);
     }

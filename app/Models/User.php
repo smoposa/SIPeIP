@@ -14,6 +14,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Rol;
 use App\Models\Entidad;
 use App\Models\Plan;
+use App\Models\Meta;
 
 #[Fillable([
     'name',
@@ -68,6 +69,23 @@ class User extends Authenticatable
     {
         return $this->hasMany(Objetivo::class, 'usuario_id');
     }
+
+
+/**
+ * Metas registradas por el usuario.
+ */
+public function metasRegistradas()
+{
+    return $this->hasMany(Meta::class, 'usuario_id');
+}
+
+/**
+ * Metas bajo responsabilidad del usuario.
+ */
+public function metasResponsables()
+{
+    return $this->hasMany(Meta::class, 'responsable_id');
+}
 
 
 }

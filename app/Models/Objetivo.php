@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Meta;
+
 class Objetivo extends Model
 {
     use HasFactory;
@@ -53,4 +55,13 @@ class Objetivo extends Model
     {
         return $this->belongsTo(User::class, 'usuario_id');
     }
+
+/**
+ * Metas del objetivo.
+ */
+public function metas()
+{
+    return $this->hasMany(Meta::class);
+}
+
 }
