@@ -14,22 +14,24 @@
 
     <div class="flex">
 
-    
-        <!-- Submenu -->
-        @if(
-            request()->routeIs('planes.index') ||
-            request()->routeIs('planes.listar') ||
-            request()->routeIs('planes.create')
-        )
+        {{--
+            <!-- Submenu -->
+            @if(
+                request()->routeIs('planes.index') ||
+                request()->routeIs('planes.listar') ||
+                request()->routeIs('planes.create')
+            )
 
-        <div id="submenuContainer"
-            class="w-52 border-r border-gray-300">
+            <div id="submenuContainer"
+                class="w-52 border-r border-gray-300">
 
-            @include('submenus.planes')
+                @include('submenus.planes')
 
-        </div>
+            </div>
 
-        @endif
+            @endif
+        --}}
+
 
         <!-- Contenido -->
         <div class="flex-1 px-4 pt-1 pb-4">

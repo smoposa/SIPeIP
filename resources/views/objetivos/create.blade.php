@@ -43,7 +43,7 @@
 
         <div class="flex">
 
-            <a href="{{ route('objetivos.oei') }}"
+            <a href="{{ route('objetivos.listar') }}"
                class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
 
                 <i class="bi bi-chevron-left"></i>
@@ -77,50 +77,11 @@
 
             <!-- Formulario -->
             <form method="POST"
-                  action="{{ route('objetivos.store') }}">
+                action="{{ route('objetivos.store') }}">
 
                 @csrf
 
-                <input type="hidden"
-                       name="tipo"
-                       value="OEI">
-
                 <div class="space-y-4">
-
-                    <!-- Institución -->
-                    <div class="flex items-center">
-
-                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
-                            Institución <span class="text-red-500">*</span>
-                        </label>
-
-                        <div class="flex-1">
-
-                            <select
-                                name="entidad_id"
-                                required
-                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-                                <option value="">
-                                    Seleccione
-                                </option>
-
-                                @foreach($entidades as $entidad)
-
-                                    <option value="{{ $entidad->id }}"
-                                        {{ old('entidad_id') == $entidad->id ? 'selected' : '' }}>
-
-                                        {{ $entidad->nombre }}
-
-                                    </option>
-
-                                @endforeach
-
-                            </select>
-
-                        </div>
-
-                    </div>
 
                     <!-- Plan Institucional -->
                     <div class="flex items-center">
@@ -156,7 +117,8 @@
                         </div>
 
                     </div>
-                                        <!-- Código -->
+
+                    <!-- Código -->
                     <div class="flex items-center">
 
                         <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
@@ -170,8 +132,79 @@
                                 name="codigo"
                                 maxlength="30"
                                 value="{{ old('codigo') }}"
+                                placeholder="Ej.: OEI-01"
                                 required
                                 class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                        </div>
+
+                    </div>
+
+                    <!-- Objetivo PND -->
+                    <div class="flex items-center">
+
+                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
+                            Objetivo PND <span class="text-red-500">*</span>
+                        </label>
+
+                        <div class="flex-1">
+
+                            <select
+                                name="pnd_id"
+                                required
+                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                                <option value="">
+                                    Seleccione
+                                </option>
+
+                                @foreach($pnd as $item)
+
+                                    <option value="{{ $item->id }}"
+                                        {{ old('pnd_id') == $item->id ? 'selected' : '' }}>
+
+                                        {{ $item->codigo }} - {{ $item->nombre }}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <!-- ODS -->
+                    <div class="flex items-center">
+
+                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
+                            ODS <span class="text-red-500">*</span>
+                        </label>
+
+                        <div class="flex-1">
+
+                            <select
+                                name="ods_id"
+                                required
+                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                                <option value="">
+                                    Seleccione
+                                </option>
+
+                                @foreach($ods as $item)
+
+                                    <option value="{{ $item->id }}"
+                                        {{ old('ods_id') == $item->id ? 'selected' : '' }}>
+
+                                        {{ $item->codigo }} - {{ $item->nombre }}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
 
                         </div>
 
@@ -216,74 +249,7 @@
 
                     </div>
 
-                    <!-- Fecha de inicio -->
-                    <div class="flex items-center">
-
-                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
-                            Fecha inicio
-                        </label>
-
-                        <div class="flex-1">
-
-                            <input
-                                type="date"
-                                name="fecha_inicio"
-                                value="{{ old('fecha_inicio') }}"
-                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-                        </div>
-
-                    </div>
-
-                    <!-- Fecha fin -->
-                    <div class="flex items-center">
-
-                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
-                            Fecha fin
-                        </label>
-
-                        <div class="flex-1">
-
-                            <input
-                                type="date"
-                                name="fecha_fin"
-                                value="{{ old('fecha_fin') }}"
-                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-                        </div>
-
-                    </div>
-
-                    <!-- Estado -->
-                    <div class="flex items-center">
-
-                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
-                            Estado <span class="text-red-500">*</span>
-                        </label>
-
-                        <div class="flex-1">
-
-                            <select
-                                name="estado"
-                                required
-                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-                                <option value="Activo"
-                                    {{ old('estado', 'Activo') == 'Activo' ? 'selected' : '' }}>
-                                    Activo
-                                </option>
-
-                                <option value="Inactivo"
-                                    {{ old('estado') == 'Inactivo' ? 'selected' : '' }}>
-                                    Inactivo
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                    </div>
-                                        <!-- Botones -->
+                    <!-- Botones -->
                     <div class="flex justify-end gap-3 mt-6">
 
                         <button
@@ -294,8 +260,8 @@
 
                         </button>
 
-                        <a href="{{ route('objetivos.oei') }}"
-                           class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+                        <a href="{{ route('objetivos.listar') }}"
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
 
                             Cancelar
 

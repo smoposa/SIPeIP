@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             OdsSeeder::class,
             PndSeeder::class,
+            PlanesSeeder::class,
         ]);
     }
 }

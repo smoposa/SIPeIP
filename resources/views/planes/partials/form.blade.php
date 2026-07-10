@@ -15,16 +15,16 @@
                     type="text"
                     name="codigo"
                     value="{{ old('codigo', $plan->codigo) }}"
-                    maxlength="50"
+                    maxlength="30"
                     class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
 
             @else
 
                 <input
                     type="text"
-                    value="Se generará automáticamente"
+                    value="{{ $codigo }}"
                     readonly
-                    class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-500 cursor-not-allowed">
+                    class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-600 cursor-not-allowed">
 
             @endif
 
@@ -44,38 +44,82 @@
             <input
                 type="text"
                 name="nombre"
-                maxlength="200"
+                maxlength="255"
                 required
                 value="{{ old('nombre', $plan->nombre ?? '') }}"
                 placeholder="Ingrese el nombre del plan"
                 class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-                
 
         </div>
 
     </div>
 
-    <!-- Descripción -->
-    <div class="flex items-start">
+    <!-- Entidad -->
+    <div class="flex items-center">
 
-        <label class="w-44 flex-shrink-0 pt-2 text-sm font-medium text-gray-700">
-            Descripción
+        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+            Entidad
         </label>
 
         <div class="w-2/3">
 
-            <textarea
-                name="descripcion"
-                rows="4"
-                maxlength="500"
-                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Ingrese una descripción del plan...">{{ old('descripcion', $plan->descripcion ?? '') }}</textarea>
+            <input
+                type="text"
+                value="{{ auth()->user()->entidad->nombre }}"
+                readonly
+                class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-600 cursor-not-allowed">
+
+            <input
+                type="hidden"
+                name="entidad_id"
+                value="{{ auth()->user()->entidad_id }}">
 
         </div>
 
     </div>
 
-        <!-- Período -->
+    <!-- Tipo -->
+    <div class="flex items-center">
+
+        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+            Tipo
+        </label>
+
+        <div class="w-2/3">
+
+            @if(isset($plan))
+
+                <select
+                    name="tipo"
+                    class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+                    <option value="Plan Estratégico Institucional"
+                        {{ old('tipo', $plan->tipo) == 'Plan Estratégico Institucional' ? 'selected' : '' }}>
+                        Plan Estratégico Institucional
+                    </option>
+
+                </select>
+
+            @else
+
+                <input
+                    type="text"
+                    value="Plan Estratégico Institucional"
+                    readonly
+                    class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-600 cursor-not-allowed">
+
+                <input
+                    type="hidden"
+                    name="tipo"
+                    value="Plan Estratégico Institucional">
+
+            @endif
+
+        </div>
+
+    </div>
+
+    <!-- Período -->
     <div class="flex items-center">
 
         <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
@@ -91,7 +135,7 @@
                 max="2100"
                 required
                 value="{{ old('periodo_inicio', $plan->periodo_inicio ?? '') }}"
-                placeholder="2025"
+                placeholder="2026"
                 class="w-28 h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
 
             <span class="text-gray-500">-</span>
@@ -110,41 +154,21 @@
 
     </div>
 
-    <!-- Fecha Inicio -->
-    <div class="flex items-center">
+    <!-- Descripción -->
+    <div class="flex items-start">
 
-        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-            Fecha de Inicio <span class="text-red-500">*</span>
+        <label class="w-44 flex-shrink-0 pt-2 text-sm font-medium text-gray-700">
+            Descripción
         </label>
 
-        <div class="w-64">
+        <div class="w-2/3">
 
-            <input
-                type="date"
-                name="fecha_inicio"
-                required
-                value="{{ old('fecha_inicio', $plan->fecha_inicio ?? '') }}"
-                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-        </div>
-
-    </div>
-
-    <!-- Fecha Fin -->
-    <div class="flex items-center">
-
-        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-            Fecha de Finalización <span class="text-red-500">*</span>
-        </label>
-
-        <div class="w-64">
-
-            <input
-                type="date"
-                name="fecha_fin"
-                required
-                value="{{ old('fecha_fin', $plan->fecha_fin ?? '') }}"
-                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+            <textarea
+                name="descripcion"
+                rows="4"
+                maxlength="1000"
+                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                placeholder="Ingrese una descripción del plan...">{{ old('descripcion', $plan->descripcion ?? '') }}</textarea>
 
         </div>
 
@@ -152,22 +176,28 @@
 
     <!-- Botones -->
     <div class="flex mt-6">
-        <div class="w-48 flex-shrink-0"></div>
-            <div class="w-2/3 flex justify-end gap-3">
 
-                <button
-                    type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
-                    Actualizar
-                </button>
+        <div class="w-44 flex-shrink-0"></div>
 
-                <a href="{{ route('planes.listar') }}"
-                class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
-                    Cancelar
-                </a>
+        <div class="w-2/3 flex justify-end gap-3">
 
-            </div>
+            <button
+                type="submit"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+
+                {{ isset($plan) ? 'Actualizar' : 'Guardar' }}
+
+            </button>
+
+            <a href="{{ route('planes.listar') }}"
+               class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+
+                Cancelar
+
+            </a>
+
         </div>
+
     </div>
 
 </div>

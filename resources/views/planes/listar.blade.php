@@ -48,11 +48,13 @@
 
         </div>
 
-        <a href="{{ route('planes.create') }}"
-            class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
-            <i class="bi bi-plus-lg"></i>
-            Crear plan
-        </a>
+            
+            <a href="{{ route('planes.create') }}"
+                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+                <i class="bi bi-plus-lg"></i>
+                Crear plan
+            </a>
+            
 
     </div>
 
@@ -105,12 +107,21 @@
                                 {{ $plan->codigo }}
                             </td>
 
-                            <td class="px-2 py-2 text-sm font-medium">
+                            <td class="px-2 py-2">
+
                                 <a href="{{ route('planes.detalle', $plan->id) }}"
-                                class="text-blue-600 hover:text-blue-800 hover:underline">
+                                class="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+
                                     {{ $plan->nombre }}
+
                                 </a>
+
+                                <span class="block text-xs text-gray-500 mt-1">
+                                    {{ $plan->entidad->nombre }}
+                                </span>
+
                             </td>
+                            
                             <td class="px-2 py-2 text-sm text-gray-700">
                                 {{ $plan->periodo_inicio }} - {{ $plan->periodo_fin }}
                             </td>

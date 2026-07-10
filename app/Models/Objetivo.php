@@ -2,54 +2,55 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Objetivo extends Model
 {
+    use HasFactory;
+
     protected $table = 'objetivos';
 
     protected $fillable = [
-
-        'tipo',
-        'entidad_id',
         'plan_id',
+        'pnd_id',
+        'ods_id',
         'codigo',
-        'eje',
         'nombre',
         'descripcion',
-        'fecha_inicio',
-        'fecha_fin',
         'estado',
-
+        'usuario_id',
     ];
 
-    protected $casts = [
-
-        'fecha_inicio' => 'date',
-        'fecha_fin'    => 'date',
-
-    ];
-
-    /*
-    |--------------------------------------------------------------------------
-    | Relaciones
-    |--------------------------------------------------------------------------
-    */
-
-    public function entidad(): BelongsTo
-    {
-        return $this->belongsTo(Entidad::class);
-    }
-
-    public function plan(): BelongsTo
+    /**
+     * Plan al que pertenece el objetivo.
+     */
+    public function plan()
     {
         return $this->belongsTo(Plan::class);
     }
 
-    public function metas(): HasMany
+    /**
+     * Objetivo del Plan Nacional de Desarrollo.
+     */
+    public function pnd()
     {
-        return $this->hasMany(Meta::class);
+        return $this->belongsTo(Pnd::class);
+    }
+
+    /**
+     * Objetivo de Desarrollo Sostenible.
+     */
+    public function ods()
+    {
+        return $this->belongsTo(Ods::class);
+    }
+
+    /**
+     * Usuario que registró el objetivo.
+     */
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
     }
 }

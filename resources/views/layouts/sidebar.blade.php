@@ -166,15 +166,15 @@
 
                 <div class="ml-4 mt-1 space-y-0.5">
 
-                    @if(puedeVer('planes'))    
-                        <a href="#"
-                        class="{{ request()->routeIs('planes.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
-                            Planes
-                        </a>
-                        @endif
+@if(puedeVer('planes'))    
+    <a href="{{ route('planes.listar') }}"
+    class="{{ request()->routeIs('planes.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+        Planes
+    </a>
+@endif
 
                     @if(puedeVer('objetivos'))
-                        <a href="#"
+                        <a href="{{ route('objetivos.listar') }}"
                         class="{{ request()->routeIs('objetivos.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                             Objetivos
                         </a>

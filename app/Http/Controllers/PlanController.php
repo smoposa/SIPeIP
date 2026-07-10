@@ -24,31 +24,18 @@ class PlanController extends Controller
 
     public function create()
     {
-        return view('planes.create');
-    }
+        $entidad = auth()->user()->entidad;
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nombre'          => 'required|max:255',
-            'descripcion'     => 'nullable',
-            'periodo_inicio'  => 'required|integer',
-            'periodo_fin'     => 'required|integer|gte:periodo_inicio',
-            'fecha_inicio'    => 'required|date',
-            'fecha_fin'       => 'required|date|after_or_equal:fecha_inicio',
-        ]);
-
-        // Generar código automático
-        $anio = $request->periodo_inicio;
-
-        $ultimoPlan = Plan::where('periodo_inicio', $anio)
-            ->where('codigo', 'like', "PEI-{$anio}-%")
-            ->orderByDesc('codigo')
+        // Buscar el último plan de la entidad
+        $ultimoPlan = Plan::where('entidad_id', $entidad->id)
+            ->orderByDesc('id')
             ->first();
-            
+
         if ($ultimoPlan) {
 
-            $ultimoNumero = (int) substr($ultimoPlan->codigo, -3);
+            $partes = explode('-', $ultimoPlan->codigo);
+
+            $ultimoNumero = (int) end($partes);
 
             $nuevoNumero = str_pad($ultimoNumero + 1, 3, '0', STR_PAD_LEFT);
 
@@ -58,28 +45,64 @@ class PlanController extends Controller
 
         }
 
-        $codigo = "PEI-{$anio}-{$nuevoNumero}";
+        $codigo = 'PEI-' . $entidad->siglas . '-' . $nuevoNumero;
+
+        return view('planes.create', compact('codigo'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nombre' => 'required|max:255',
+            'periodo_inicio' => 'required|integer',
+            'periodo_fin' => 'required|integer|gte:periodo_inicio',
+            'descripcion' => 'nullable|max:1000',
+        ]);
+
+        // Entidad del usuario autenticado
+        $entidad = auth()->user()->entidad;
+
+        // Buscar el último plan de la entidad
+        $ultimoPlan = Plan::where('entidad_id', $entidad->id)
+            ->orderByDesc('id')
+            ->first();
+
+        if ($ultimoPlan) {
+
+            $partes = explode('-', $ultimoPlan->codigo);
+
+            $ultimoNumero = (int) end($partes);
+
+            $nuevoNumero = str_pad($ultimoNumero + 1, 3, '0', STR_PAD_LEFT);
+
+        } else {
+
+            $nuevoNumero = '001';
+
+        }
+
+        // Código automático
+        $codigo = 'PEI-' . $entidad->siglas . '-' . $nuevoNumero;
 
         Plan::create([
 
-            'codigo'          => $codigo,
+            'codigo' => $codigo,
 
-            'nombre'          => $request->nombre,
+            'nombre' => $request->nombre,
 
-            'descripcion'     => $request->descripcion,
+            'entidad_id' => $entidad->id,
 
-            'periodo_inicio'  => $request->periodo_inicio,
+            'tipo' => 'Plan Estratégico Institucional',
 
-            'periodo_fin'     => $request->periodo_fin,
+            'periodo_inicio' => $request->periodo_inicio,
 
-            'fecha_inicio'    => $request->fecha_inicio,
+            'periodo_fin' => $request->periodo_fin,
 
-            'fecha_fin'       => $request->fecha_fin,
+            'descripcion' => $request->descripcion,
 
-            'estado'          => 'Activo',
+            'estado' => 'Activo',
 
-            // Cuando implementemos entidades:
-            // 'entidad_id' => auth()->user()->entidad_id,
+            'usuario_id' => auth()->id(),
 
         ]);
 
@@ -125,9 +148,6 @@ class PlanController extends Controller
 
             'periodo_fin' => 'required|integer|gte:periodo_inicio',
 
-            'fecha_inicio' => 'required|date',
-
-            'fecha_fin' => 'required|date|after_or_equal:fecha_inicio',
 
         ]);
 
@@ -165,7 +185,7 @@ class PlanController extends Controller
                 ->with('success', 'Plan eliminado correctamente.');
     }
 
-        public function editarEstado($id)
+    public function editarEstado($id)
     {
         $plan = Plan::findOrFail($id);
 

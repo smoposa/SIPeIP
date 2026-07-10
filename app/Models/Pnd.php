@@ -18,4 +18,12 @@ class Pnd extends Model
         'descripcion',
         'estado',
     ];
+
+    /**
+     * Objetivos Estratégicos Institucionales
+     */
+    public function objetivos()
+    {
+        return $this->hasMany(Objetivo::class);
+    }
 }

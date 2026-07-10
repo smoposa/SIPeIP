@@ -10,6 +10,8 @@ use App\Http\Controllers\EntidadController;
 
 use App\Http\Controllers\OdsController;
 use App\Http\Controllers\PndController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\ObjetivoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -146,7 +148,8 @@ Route::middleware('auth')->group(function () {
 
         });
 
-    // Entidades
+  
+        // Entidades
     Route::prefix('entidades')
         ->middleware('role:entidades')
         ->group(function () {
@@ -204,6 +207,80 @@ Route::middleware('auth')->group(function () {
 
         });
 
-});
+// Objetivos
+Route::prefix('objetivos')
+    ->middleware('role:objetivos')
+    ->group(function () {
+
+        Route::get('/', [ObjetivoController::class, 'index'])
+            ->name('objetivos.index');
+
+        Route::get('/listar', [ObjetivoController::class, 'listar'])
+            ->name('objetivos.listar');
+
+        Route::get('/crear', [ObjetivoController::class, 'create'])
+            ->name('objetivos.create');
+
+        Route::post('/crear', [ObjetivoController::class, 'store'])
+            ->name('objetivos.store');
+
+        Route::get('/{id}/detalle', [ObjetivoController::class, 'detalle'])
+            ->name('objetivos.detalle');
+
+        Route::get('/{id}/editar', [ObjetivoController::class, 'edit'])
+            ->name('objetivos.edit');
+
+        Route::put('/{id}/editar', [ObjetivoController::class, 'update'])
+            ->name('objetivos.update');
+
+        Route::get('/{id}/estado', [ObjetivoController::class, 'editarEstado'])
+            ->name('objetivos.editarestado');
+
+        Route::put('/{id}/estado', [ObjetivoController::class, 'actualizarEstado'])
+            ->name('objetivos.actualizarestado');
+
+    });
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Planificación Nacional
+        |--------------------------------------------------------------------------
+        */
+
+    Route::prefix('planes')
+        ->middleware('role:planes')
+        ->group(function () {
+
+            Route::get('/', [PlanController::class, 'index'])
+                ->name('planes.index');
+
+            Route::get('/listar', [PlanController::class, 'listar'])
+                ->name('planes.listar');
+
+            Route::get('/crear', [PlanController::class, 'create'])
+                ->name('planes.create');
+
+            Route::post('/crear', [PlanController::class, 'store'])
+                ->name('planes.store');
+
+            Route::get('/{id}/detalle', [PlanController::class, 'detalle'])
+                ->name('planes.detalle');
+
+            Route::get('/{id}/editar', [PlanController::class, 'edit'])
+                ->name('planes.edit');
+
+            Route::put('/{id}/editar', [PlanController::class, 'update'])
+                ->name('planes.update');
+
+            Route::get('/{id}/estado', [PlanController::class, 'editarEstado'])
+                ->name('planes.editarestado');
+
+            Route::put('/{id}/estado', [PlanController::class, 'actualizarEstado'])
+                ->name('planes.actualizarestado');
+
+        });
+
+    });
 
 require __DIR__.'/auth.php';

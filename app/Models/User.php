@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+
 use App\Models\Rol;
 use App\Models\Entidad;
+use App\Models\Plan;
 
 #[Fillable([
     'name',
@@ -56,4 +58,16 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Entidad::class);
     }
+
+    public function planes()
+    {
+        return $this->hasMany(Plan::class, 'usuario_id');
+    }
+
+    public function objetivos()
+    {
+        return $this->hasMany(Objetivo::class, 'usuario_id');
+    }
+
+
 }

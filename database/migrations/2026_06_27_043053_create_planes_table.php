@@ -15,20 +15,32 @@ return new class extends Migration
 
             $table->id();
 
-            $table->string('codigo', 50)->unique();
+            $table->string('codigo', 30)->unique();
 
-            $table->string('nombre', 200);
+            $table->string('nombre', 255);
 
-            $table->string('tipo', 50);
+            $table->foreignId('entidad_id')
+                  ->constrained('entidades')
+                  ->cascadeOnUpdate()
+                  ->restrictOnDelete();
 
-            $table->date('fecha_inicio');
+            $table->string('tipo', 100);
 
-            $table->date('fecha_fin');
+            $table->year('periodo_inicio');
+
+            $table->year('periodo_fin');
 
             $table->text('descripcion')->nullable();
 
-            $table->enum('estado', ['Activo', 'Inactivo'])
-                  ->default('Activo');
+            $table->enum('estado', [
+                'Activo',
+                'Inactivo'
+            ])->default('Activo');
+
+            $table->foreignId('usuario_id')
+                  ->constrained('users')
+                  ->cascadeOnUpdate()
+                  ->restrictOnDelete();
 
             $table->timestamps();
 
