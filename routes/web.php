@@ -13,6 +13,7 @@ use App\Http\Controllers\PndController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ObjetivoController;
 use App\Http\Controllers\MetaController;
+use App\Http\Controllers\IndicadorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -321,6 +322,29 @@ Route::prefix('metas')->name('metas.')->group(function () {
 
 });
 
+Route::prefix('indicadores')->group(function () {
 
+    Route::get('/listar', [IndicadorController::class, 'listar'])
+        ->name('indicadores.listar');
+
+    Route::get('/crear', [IndicadorController::class, 'create'])
+        ->name('indicadores.create');
+
+    Route::post('/guardar', [IndicadorController::class, 'store'])
+        ->name('indicadores.store');
+
+    Route::get('/detalle/{id}', [IndicadorController::class, 'detalle'])
+        ->name('indicadores.detalle');
+
+    Route::get('/editar/{id}', [IndicadorController::class, 'editar'])
+        ->name('indicadores.edit');
+
+    Route::put('/actualizar/{id}', [IndicadorController::class, 'update'])
+        ->name('indicadores.update');
+
+    Route::patch('/estado/{id}', [IndicadorController::class, 'cambiarEstado'])
+        ->name('indicadores.estado');
+
+});
 
 require __DIR__.'/auth.php';

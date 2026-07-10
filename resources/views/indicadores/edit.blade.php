@@ -1,6 +1,7 @@
-<x-objetivos-layout title="Crear Indicador">
+<x-objetivos-layout title="Editar Indicador">
 
     @if ($errors->any())
+
         <div class="mb-4 rounded-md border border-red-300 bg-red-50 p-4">
 
             <h3 class="text-sm font-semibold text-red-800 mb-2">
@@ -10,12 +11,15 @@
             <ul class="list-disc list-inside text-sm text-red-700">
 
                 @foreach ($errors->all() as $error)
+
                     <li>{{ $error }}</li>
+
                 @endforeach
 
             </ul>
 
         </div>
+
     @endif
 
     <!-- Barra -->
@@ -41,20 +45,27 @@
         <div class="mb-6">
 
             <h2 class="text-2xl font-semibold text-gray-800">
-                Crear Indicador
+
+                Editar Indicador
+
             </h2>
 
             <p class="mt-1 text-sm text-gray-500">
-                Complete la información para registrar un nuevo indicador institucional.
+
+                Actualice la información del indicador institucional.
+
             </p>
 
         </div>
 
-        <div class="overflow-y-auto" style="height: calc(100vh - 270px);">
+        <div class="overflow-y-auto"
+             style="height: calc(100vh - 270px);">
 
-            <form method="POST" action="{{ route('indicadores.store') }}">
+            <form method="POST"
+                  action="{{ route('indicadores.update', $indicador->id) }}">
 
                 @csrf
+                @method('PUT')
 
                 <div class="space-y-8">
 
@@ -63,7 +74,9 @@
                     <div>
 
                         <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">
+
                             Información General
+
                         </h3>
 
                         <!-- Meta -->
@@ -73,6 +86,7 @@
                             <label class="w-44 text-sm font-medium text-gray-700">
 
                                 Meta
+
                                 <span class="text-red-500">*</span>
 
                             </label>
@@ -85,14 +99,16 @@
                                     class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
 
                                     <option value="">
+
                                         Seleccione...
+
                                     </option>
 
                                     @foreach($metas as $meta)
 
                                         <option
                                             value="{{ $meta->id }}"
-                                            {{ old('meta_id') == $meta->id ? 'selected' : '' }}>
+                                            {{ old('meta_id', $indicador->meta_id) == $meta->id ? 'selected' : '' }}>
 
                                             {{ $meta->codigo }}
                                             -
@@ -113,26 +129,27 @@
                         <div class="flex items-center mb-4">
 
                             <label class="w-44 text-sm font-medium text-gray-700">
+
                                 Código
+
                             </label>
 
                             <div class="flex-1">
 
                                 <input
                                     type="text"
-                                    value="{{ $codigo }}"
+                                    value="{{ $indicador->codigo }}"
                                     disabled
                                     class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm">
+
+                                <input
+                                    type="hidden"
+                                    name="codigo"
+                                    value="{{ $indicador->codigo }}">
 
                             </div>
 
                         </div>
-
-                        <!-- Campo oculto -->
-
-                        <input type="hidden"
-                               name="codigo"
-                               value="{{ $codigo }}">
 
                         <!-- Nombre -->
 
@@ -141,6 +158,7 @@
                             <label class="w-44 text-sm font-medium text-gray-700">
 
                                 Nombre
+
                                 <span class="text-red-500">*</span>
 
                             </label>
@@ -151,7 +169,7 @@
                                     type="text"
                                     name="nombre"
                                     maxlength="255"
-                                    value="{{ old('nombre') }}"
+                                    value="{{ old('nombre', $indicador->nombre) }}"
                                     required
                                     class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
 
@@ -166,6 +184,7 @@
                             <label class="w-44 text-sm font-medium text-gray-700">
 
                                 Tipo
+
                                 <span class="text-red-500">*</span>
 
                             </label>
@@ -177,12 +196,39 @@
                                     required
                                     class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
 
-                                    <option value="">Seleccione...</option>
+                                    <option value="">
 
-                                    <option value="Resultado">Resultado</option>
-                                    <option value="Producto">Producto</option>
-                                    <option value="Proceso">Proceso</option>
-                                    <option value="Impacto">Impacto</option>
+                                        Seleccione...
+
+                                    </option>
+
+                                    <option value="Resultado"
+                                        {{ old('tipo', $indicador->tipo) == 'Resultado' ? 'selected' : '' }}>
+
+                                        Resultado
+
+                                    </option>
+
+                                    <option value="Producto"
+                                        {{ old('tipo', $indicador->tipo) == 'Producto' ? 'selected' : '' }}>
+
+                                        Producto
+
+                                    </option>
+
+                                    <option value="Proceso"
+                                        {{ old('tipo', $indicador->tipo) == 'Proceso' ? 'selected' : '' }}>
+
+                                        Proceso
+
+                                    </option>
+
+                                    <option value="Impacto"
+                                        {{ old('tipo', $indicador->tipo) == 'Impacto' ? 'selected' : '' }}>
+
+                                        Impacto
+
+                                    </option>
 
                                 </select>
 
@@ -197,7 +243,9 @@
                     <div>
 
                         <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">
+
                             Medición
+
                         </h3>
 
                         <!-- Fórmula -->
@@ -207,6 +255,7 @@
                             <label class="w-44 pt-2 text-sm font-medium text-gray-700">
 
                                 Fórmula
+
                                 <span class="text-red-500">*</span>
 
                             </label>
@@ -217,19 +266,20 @@
                                     name="formula"
                                     rows="3"
                                     required
-                                    class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm">{{ old('formula') }}</textarea>
+                                    class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm">{{ old('formula', $indicador->formula) }}</textarea>
 
                             </div>
 
                         </div>
 
-                        <!-- Unidad -->
+                        <!-- Unidad de medida -->
 
                         <div class="flex items-center mb-4">
 
                             <label class="w-44 text-sm font-medium text-gray-700">
 
                                 Unidad de medida
+
                                 <span class="text-red-500">*</span>
 
                             </label>
@@ -243,30 +293,39 @@
 
                                     <option value="">Seleccione...</option>
 
-                                    <option>Porcentaje</option>
-                                    <option>Número</option>
-                                    <option>Cantidad</option>
-                                    <option>Índice</option>
-                                    <option>Tasa</option>
-                                    <option>Razón</option>
-                                    <option>Promedio</option>
-                                    <option>Días</option>
-                                    <option>Horas</option>
-                                    <option>Minutos</option>
+                                    <option value="Porcentaje" {{ old('unidad_medida', $indicador->unidad_medida) == 'Porcentaje' ? 'selected' : '' }}>Porcentaje</option>
+
+                                    <option value="Número" {{ old('unidad_medida', $indicador->unidad_medida) == 'Número' ? 'selected' : '' }}>Número</option>
+
+                                    <option value="Cantidad" {{ old('unidad_medida', $indicador->unidad_medida) == 'Cantidad' ? 'selected' : '' }}>Cantidad</option>
+
+                                    <option value="Índice" {{ old('unidad_medida', $indicador->unidad_medida) == 'Índice' ? 'selected' : '' }}>Índice</option>
+
+                                    <option value="Tasa" {{ old('unidad_medida', $indicador->unidad_medida) == 'Tasa' ? 'selected' : '' }}>Tasa</option>
+
+                                    <option value="Razón" {{ old('unidad_medida', $indicador->unidad_medida) == 'Razón' ? 'selected' : '' }}>Razón</option>
+
+                                    <option value="Promedio" {{ old('unidad_medida', $indicador->unidad_medida) == 'Promedio' ? 'selected' : '' }}>Promedio</option>
+
+                                    <option value="Días" {{ old('unidad_medida', $indicador->unidad_medida) == 'Días' ? 'selected' : '' }}>Días</option>
+
+                                    <option value="Horas" {{ old('unidad_medida', $indicador->unidad_medida) == 'Horas' ? 'selected' : '' }}>Horas</option>
+
+                                    <option value="Minutos" {{ old('unidad_medida', $indicador->unidad_medida) == 'Minutos' ? 'selected' : '' }}>Minutos</option>
 
                                 </select>
 
                             </div>
 
                         </div>
-
-                        <!-- Frecuencia -->
+                                                <!-- Frecuencia -->
 
                         <div class="flex items-center">
 
                             <label class="w-44 text-sm font-medium text-gray-700">
 
                                 Frecuencia
+
                                 <span class="text-red-500">*</span>
 
                             </label>
@@ -280,12 +339,35 @@
 
                                     <option value="">Seleccione...</option>
 
-                                    <option>Mensual</option>
-                                    <option>Bimestral</option>
-                                    <option>Trimestral</option>
-                                    <option>Cuatrimestral</option>
-                                    <option>Semestral</option>
-                                    <option>Anual</option>
+                                    <option value="Mensual"
+                                        {{ old('frecuencia', $indicador->frecuencia) == 'Mensual' ? 'selected' : '' }}>
+                                        Mensual
+                                    </option>
+
+                                    <option value="Bimestral"
+                                        {{ old('frecuencia', $indicador->frecuencia) == 'Bimestral' ? 'selected' : '' }}>
+                                        Bimestral
+                                    </option>
+
+                                    <option value="Trimestral"
+                                        {{ old('frecuencia', $indicador->frecuencia) == 'Trimestral' ? 'selected' : '' }}>
+                                        Trimestral
+                                    </option>
+
+                                    <option value="Cuatrimestral"
+                                        {{ old('frecuencia', $indicador->frecuencia) == 'Cuatrimestral' ? 'selected' : '' }}>
+                                        Cuatrimestral
+                                    </option>
+
+                                    <option value="Semestral"
+                                        {{ old('frecuencia', $indicador->frecuencia) == 'Semestral' ? 'selected' : '' }}>
+                                        Semestral
+                                    </option>
+
+                                    <option value="Anual"
+                                        {{ old('frecuencia', $indicador->frecuencia) == 'Anual' ? 'selected' : '' }}>
+                                        Anual
+                                    </option>
 
                                 </select>
 
@@ -300,7 +382,9 @@
                     <div>
 
                         <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">
+
                             Administración
+
                         </h3>
 
                         <!-- Responsable -->
@@ -310,6 +394,7 @@
                             <label class="w-44 text-sm font-medium text-gray-700">
 
                                 Responsable
+
                                 <span class="text-red-500">*</span>
 
                             </label>
@@ -326,7 +411,8 @@
                                     @foreach($responsables as $responsable)
 
                                         <option
-                                            value="{{ $responsable->id }}">
+                                            value="{{ $responsable->id }}"
+                                            {{ old('responsable_id', $indicador->responsable_id) == $responsable->id ? 'selected' : '' }}>
 
                                             {{ $responsable->nombres }}
                                             {{ $responsable->apellidos }}
@@ -349,6 +435,7 @@
                             <label class="w-44 text-sm font-medium text-gray-700">
 
                                 Estado
+
                                 <span class="text-red-500">*</span>
 
                             </label>
@@ -359,8 +446,15 @@
                                     name="estado"
                                     class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
 
-                                    <option value="Activo">Activo</option>
-                                    <option value="Inactivo">Inactivo</option>
+                                    <option value="Activo"
+                                        {{ old('estado', $indicador->estado) == 'Activo' ? 'selected' : '' }}>
+                                        Activo
+                                    </option>
+
+                                    <option value="Inactivo"
+                                        {{ old('estado', $indicador->estado) == 'Inactivo' ? 'selected' : '' }}>
+                                        Inactivo
+                                    </option>
 
                                 </select>
 
@@ -374,7 +468,7 @@
 
                     <div class="flex justify-end gap-3 pt-6 border-t">
 
-                        <a href="{{ route('indicadores.listar') }}"
+                        <a href="{{ route('indicadores.detalle', $indicador->id) }}"
                             class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
 
                             Cancelar
@@ -385,7 +479,7 @@
                             type="submit"
                             class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
 
-                            Guardar Indicador
+                            Guardar cambios
 
                         </button>
 

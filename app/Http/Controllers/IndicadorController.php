@@ -2,175 +2,225 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Indicador;
 use App\Models\Meta;
+use App\Models\User;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class IndicadorController extends Controller
 {
     /**
-     * Listado de indicadores de una meta.
+     * Página principal del módulo.
      */
-    public function index($meta)
+    public function index()
     {
-        $meta = Meta::findOrFail($meta);
-
-        $indicadores = Indicador::where('meta_id', $meta->id)
-            ->orderBy('codigo')
-            ->get();
-
-        return view('indicadores.index', compact(
-            'meta',
-            'indicadores'
-        ));
+        //
     }
 
     /**
-     * Formulario de nuevo indicador.
+     * Listado de indicadores.
      */
-    public function create($meta)
-    {
-        $meta = Meta::findOrFail($meta);
+public function listar()
+{
+    $indicadores = Indicador::with([
+            'meta.objetivo.plan.entidad',
+            'responsable'
+        ])
+        ->orderBy('codigo')
+        ->paginate(10);
 
-        return view('indicadores.create', compact('meta'));
-    }
+    return view('indicadores.listar', compact('indicadores'));
+}
+
+    /**
+     * Formulario de creación.
+     */
+public function create()
+{
+    $ultimo = Indicador::latest('id')->first();
+
+    $numero = $ultimo
+        ? ((int) substr($ultimo->codigo, 4)) + 1
+        : 1;
+
+    $codigo = 'IND-' . str_pad($numero, 2, '0', STR_PAD_LEFT);
+
+    $metas = Meta::with([
+            'objetivo.plan.entidad'
+        ])
+        ->where('estado', 'Activo')
+        ->orderBy('codigo')
+        ->get();
+
+$responsables = User::where('estado', 'Activo')
+    ->where('entidad_id', auth()->user()->entidad_id)
+    ->orderBy('nombres')
+    ->get();
+
+    return view('indicadores.create', compact(
+        'codigo',
+        'metas',
+        'responsables'
+    ));
+}
 
     /**
      * Guardar indicador.
      */
-    public function store(Request $request, $meta)
-    {
-        $request->validate([
+public function store(Request $request)
+{
+    $request->validate([
+        'meta_id' => 'required|exists:metas,id',
+        'codigo' => 'required|string|max:30|unique:indicadores,codigo',
+        'nombre' => 'required|string|max:255',
+        'tipo' => 'required|string|max:50',
+        'formula' => 'required|string',
+        'unidad_medida' => 'required|string|max:50',
+        'frecuencia' => 'required|string|max:50',
+        'responsable_id' => 'required|exists:users,id',
+        'estado' => 'required|in:Activo,Inactivo',
+    ]);
 
-            'codigo' => 'required|max:30|unique:indicadores,codigo',
+    $indicador = Indicador::create([
 
-            'nombre' => 'required|max:255',
+        'meta_id' => $request->meta_id,
 
-            'descripcion' => 'nullable',
+        'codigo' => strtoupper($request->codigo),
 
-            'formula' => 'nullable|max:255',
+        'nombre' => $request->nombre,
 
-            'linea_base' => 'nullable|numeric',
+        'tipo' => $request->tipo,
 
-            'meta' => 'nullable|numeric',
+        'formula' => $request->formula,
 
-            'valor_actual' => 'nullable|numeric',
+        'unidad_medida' => $request->unidad_medida,
 
-            'unidad_medida' => 'nullable|max:100',
+        'frecuencia' => $request->frecuencia,
 
-            'frecuencia' => 'nullable|max:50',
+        'responsable_id' => $request->responsable_id,
 
-            'estado' => 'required|in:Activo,Inactivo',
+        'estado' => $request->estado,
 
-        ]);
+        'usuario_id' => Auth::id(),
 
-        Indicador::create([
+    ]);
 
-            'meta_id' => $meta,
 
-            'codigo' => $request->codigo,
-
-            'nombre' => $request->nombre,
-
-            'descripcion' => $request->descripcion,
-
-            'formula' => $request->formula,
-
-            'linea_base' => $request->linea_base,
-
-            'meta' => $request->meta,
-
-            'valor_actual' => $request->valor_actual,
-
-            'unidad_medida' => $request->unidad_medida,
-
-            'frecuencia' => $request->frecuencia,
-
-            'estado' => $request->estado,
-
-        ]);
-
-        return redirect()
-            ->route('indicadores.index', $meta)
-            ->with('success', 'Indicador registrado correctamente.');
-    }
+    return redirect()
+        ->route('indicadores.listar')
+        ->with('success', 'Indicador registrado correctamente.');
+}
 
     /**
-     * Detalle del indicador.
+     * Ver detalle.
      */
-    public function detalle($id)
-    {
-        $indicador = Indicador::with('meta')->findOrFail($id);
+public function detalle($id)
+{
+    $indicador = Indicador::with([
+            'meta.objetivo.plan.entidad',
+            'responsable',
+            'usuario'
+        ])
+        ->findOrFail($id);
 
-        return view('indicadores.detalle', compact('indicador'));
-    }
+    return view('indicadores.detalle', compact('indicador'));
+}
 
     /**
-     * Editar indicador.
+     * Formulario de edición.
      */
-    public function edit($id)
-    {
-        $indicador = Indicador::findOrFail($id);
+public function editar($id)
+{
+    $indicador = Indicador::findOrFail($id);
 
-        return view('indicadores.editar', compact('indicador'));
-    }
+    $metas = Meta::with([
+            'objetivo.plan.entidad'
+        ])
+        ->where('estado', 'Activo')
+        ->orderBy('codigo')
+        ->get();
+
+$responsables = User::where('estado', 'Activo')
+    ->where('entidad_id', auth()->user()->entidad_id)
+    ->orderBy('nombres')
+    ->get();
+
+    return view('indicadores.edit', compact(
+        'indicador',
+        'metas',
+        'responsables'
+    ));
+}
+
+    /**
+     * Actualizar indicador.
+     */
+public function update(Request $request, $id)
+{
+    $indicador = Indicador::findOrFail($id);
+
+    $request->validate([
+        'meta_id' => 'required|exists:metas,id',
+        'codigo' => 'required|string|max:30|unique:indicadores,codigo,' . $indicador->id,
+        'nombre' => 'required|string|max:255',
+        'tipo' => 'required|string|max:50',
+        'formula' => 'required|string',
+        'unidad_medida' => 'required|string|max:50',
+        'frecuencia' => 'required|string|max:50',
+        'responsable_id' => 'required|exists:users,id',
+        'estado' => 'required|in:Activo,Inactivo',
+    ]);
+
+    $indicador->update([
+
+        'meta_id' => $request->meta_id,
+
+        'codigo' => strtoupper($request->codigo),
+
+        'nombre' => $request->nombre,
+
+        'tipo' => $request->tipo,
+
+        'formula' => $request->formula,
+
+        'unidad_medida' => $request->unidad_medida,
+
+        'frecuencia' => $request->frecuencia,
+
+        'responsable_id' => $request->responsable_id,
+
+        'estado' => $request->estado,
+
+    ]);
 
 
-    // Actualizar indicador.
-    public function update(Request $request, $id)
-    {
-        $indicador = Indicador::findOrFail($id);
+    return redirect()
+        ->route('indicadores.detalle', $indicador->id)
+        ->with('success', 'Indicador actualizado correctamente.');
+}
 
-        $request->validate([
+    /**
+     * Activar / Desactivar.
+     */
+ public function cambiarEstado($id)
+{
+    $indicador = Indicador::findOrFail($id);
 
-            'codigo' => 'required|max:30|unique:indicadores,codigo,' . $indicador->id,
+    $indicador->estado = $indicador->estado === 'Activo'
+        ? 'Inactivo'
+        : 'Activo';
 
-            'nombre' => 'required|max:255',
+    $indicador->save();
 
-            'descripcion' => 'nullable',
 
-            'formula' => 'nullable|max:255',
-
-            'linea_base' => 'nullable|numeric',
-
-            'meta' => 'nullable|numeric',
-
-            'valor_actual' => 'nullable|numeric',
-
-            'unidad_medida' => 'nullable|max:100',
-
-            'frecuencia' => 'nullable|max:50',
-
-            'estado' => 'required|in:Activo,Inactivo',
-
-        ]);
-
-        $indicador->update([
-
-            'codigo' => $request->codigo,
-
-            'nombre' => $request->nombre,
-
-            'descripcion' => $request->descripcion,
-
-            'formula' => $request->formula,
-
-            'linea_base' => $request->linea_base,
-
-            'meta' => $request->meta,
-
-            'valor_actual' => $request->valor_actual,
-
-            'unidad_medida' => $request->unidad_medida,
-
-            'frecuencia' => $request->frecuencia,
-
-            'estado' => $request->estado,
-
-        ]);
-
-        return redirect()
-            ->route('indicadores.detalle', $indicador->id)
-            ->with('success', 'Indicador actualizado correctamente.');
-    }
+    return redirect()
+        ->back()
+        ->with(
+            'success',
+            'Estado del indicador actualizado correctamente.'
+        );
+}
 }

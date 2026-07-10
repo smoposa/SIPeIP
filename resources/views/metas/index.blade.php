@@ -5,6 +5,14 @@
 
         <div class="flex">
 
+            <a href="{{ route('metas.detalle', $objetivo->id) }}"
+            class="py-2 text-sm font-medium text-blue-600 hover:text-green-800 mr-8">
+
+                <i class="bi bi-chevron-left"></i>
+
+                Regresar
+
+            </a>
 
             <a href="{{ route('metas.index', $objetivo->id) }}"
             class="{{ request()->routeIs('metas.*')

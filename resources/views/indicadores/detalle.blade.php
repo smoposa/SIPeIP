@@ -6,22 +6,22 @@
 
         <div class="flex">
 
-            <a href="{{ route('objetivos.index') }}"
+            <a href="#"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
                 Información General
             </a>
 
-            <a href="{{ route('objetivos.ods') }}"
+            <a href="#"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
                 ODS
             </a>
 
-            <a href="{{ route('objetivos.pnd') }}"
+            <a href="#"
                class="px-5 py-3 text-sm font-medium text-gray-500 hover:text-black">
                 PND
             </a>
 
-            <a href="{{ route('objetivos.oei') }}"
+            <a href="#"
                class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
                 Objetivos Institucionales
             </a>
@@ -30,392 +30,307 @@
 
     </div>
 
-    <!-- Encabezado -->
+<!-- Cabecera -->
+<div class="flex items-center gap-4 mb-0 pb-6">
 
-    <div class="flex items-start justify-between mb-6">
+    <div class="w-16 h-16 rounded-full bg-[#16A34A]
+                flex items-center justify-center
+                text-white text-3xl">
 
-        <div>
+        <i class="bi bi-graph-up-arrow"></i>
 
-            <div class="flex items-center gap-3">
+    </div>
 
-                <a href="{{ route('indicadores.index', $indicador->meta_id) }}"
-                   class="text-gray-500 hover:text-blue-600">
+    <div>
 
-                    <i class="bi bi-arrow-left text-lg"></i>
+        <h2 class="text-xl font-semibold text-gray-800">
+            {{ $indicador->nombre }}
+        </h2>
 
-                </a>
+        <p class="text-gray-500">
+            {{ $indicador->codigo }} • {{ $indicador->tipo }}
+        </p>
 
-                <div>
+    </div>
 
-                    <h2 class="text-2xl font-semibold text-gray-800">
+</div>
 
-                        {{ $indicador->nombre }}
+<!-- Información General -->
+<div class="bg-gray-100 border-b border-gray-200">
 
-                    </h2>
+    <div class="flex justify-between items-center px-4 py-2">
 
-                    <p class="text-gray-500 mt-1">
-
-                        {{ $indicador->codigo }}
-
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
+        <h4 class="text-sm font-semibold text-gray-800">
+            Información general
+        </h4>
 
         <a href="{{ route('indicadores.edit', $indicador->id) }}"
-           class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+        class="text-sm text-blue-600 hover:text-blue-800">
 
-            <i class="bi bi-pencil-square mr-2"></i>
-
-            Editar Indicador
+            Editar
 
         </a>
 
     </div>
 
-    <!-- Tarjeta -->
+</div>
 
-    <div class="bg-white border border-gray-200 rounded-lg mb-6">
+<!-- Datos -->
+<div class="px-4 py-3">
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-6">
+    <div class="space-y-4 mb-6">
 
-            <div>
+        <!-- Código -->
+        <div class="flex">
 
-                <p class="text-xs uppercase text-gray-500">
+            <span class="w-44 text-sm font-semibold text-gray-700">
+                Código
+            </span>
 
-                    Meta
+            <span class="text-sm text-gray-600">
+                {{ $indicador->codigo }}
+            </span>
 
-                </p>
+        </div>
 
-                <p class="mt-1 font-medium text-gray-800">
+        <!-- Meta -->
+        <div class="flex">
 
-                    {{ $indicador->meta->codigo }}
+            <span class="w-44 text-sm font-semibold text-gray-700">
+                Meta
+            </span>
 
-                </p>
+            <span class="text-sm text-gray-600">
+                {{ $indicador->meta->codigo }} - {{ $indicador->meta->nombre }}
+            </span>
 
-            </div>
+        </div>
 
-            <div>
+        <!-- Objetivo -->
+        <div class="flex">
 
-                <p class="text-xs uppercase text-gray-500">
+            <span class="w-44 text-sm font-semibold text-gray-700">
+                Objetivo Estratégico
+            </span>
 
-                    Valor Actual
+            <span class="text-sm text-gray-600">
+                {{ $indicador->meta->objetivo->codigo }} -
+                {{ $indicador->meta->objetivo->nombre }}
+            </span>
 
-                </p>
+        </div>
 
-                <p class="mt-1 font-medium text-gray-800">
+        <!-- Plan -->
+        <div class="flex">
 
-                    {{ $indicador->valor_actual }}
+            <span class="w-44 text-sm font-semibold text-gray-700">
+                Plan
+            </span>
 
-                    {{ $indicador->unidad_medida }}
+            <span class="text-sm text-gray-600">
+                {{ $indicador->meta->objetivo->plan->codigo }} -
+                {{ $indicador->meta->objetivo->plan->nombre }}
+            </span>
 
-                </p>
+        </div>
 
-            </div>
+        <!-- Nombre -->
+        <div class="flex">
 
-            <div>
+            <span class="w-44 text-sm font-semibold text-gray-700">
+                Nombre
+            </span>
 
-                <p class="text-xs uppercase text-gray-500">
+            <span class="text-sm font-medium text-[#16A34A]">
+                {{ $indicador->nombre }}
+            </span>
 
-                    Frecuencia
+        </div>
 
-                </p>
+        <!-- Tipo -->
+        <div class="flex">
 
-                <p class="mt-1 font-medium text-gray-800">
+            <span class="w-44 text-sm font-semibold text-gray-700">
+                Tipo
+            </span>
 
-                    {{ $indicador->frecuencia ?? '-' }}
+            <span class="text-sm text-gray-600">
+                {{ $indicador->tipo }}
+            </span>
 
-                </p>
+        </div>
 
-            </div>
+        <!-- Fórmula -->
+        <div class="flex items-start">
 
-            <div>
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Fórmula
+            </span>
 
-                <p class="text-xs uppercase text-gray-500">
+            <span class="text-sm text-gray-600 leading-relaxed">
+                {{ $indicador->formula }}
+            </span>
 
-                    Estado
+        </div>
 
-                </p>
+        <!-- Unidad -->
+        <div class="flex">
 
-                @if($indicador->estado == 'Activo')
+            <span class="w-44 text-sm font-semibold text-gray-700">
+                Unidad de medida
+            </span>
 
-                    <span class="inline-flex mt-1 px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+            <span class="text-sm text-gray-600">
+                {{ $indicador->unidad_medida }}
+            </span>
 
-                        Activo
+        </div>
 
-                    </span>
+        <!-- Frecuencia -->
+        <div class="flex">
 
-                @else
+            <span class="w-44 text-sm font-semibold text-gray-700">
+                Frecuencia de medición
+            </span>
 
-                    <span class="inline-flex mt-1 px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+            <span class="text-sm text-gray-600">
+                {{ $indicador->frecuencia }}
+            </span>
 
-                        Inactivo
+        </div>
 
-                    </span>
+        <!-- Responsable -->
+        <div class="flex">
 
+            <span class="w-44 text-sm font-semibold text-gray-700">
+                Responsable
+            </span>
+
+            <span class="text-sm text-gray-600">
+
+                {{ $indicador->responsable->nombres }}
+                {{ $indicador->responsable->apellidos }}
+
+                @if($indicador->responsable->cargo)
+                    - {{ $indicador->responsable->cargo }}
                 @endif
 
-            </div>
+            </span>
+
+        </div>
+
+        <!-- Registrado por -->
+        <div class="flex">
+
+            <span class="w-44 text-sm font-semibold text-gray-700">
+                Registrado por
+            </span>
+
+            <span class="text-sm text-gray-600">
+
+                {{ $indicador->usuario->nombres }}
+                {{ $indicador->usuario->apellidos }}
+
+            </span>
 
         </div>
 
     </div>
 
-    <!-- Información General -->
+</div>
 
-    <div class="bg-white border border-gray-200 rounded-lg">
+<!-- Estado -->
+<div class="bg-gray-100 border-b border-gray-200">
 
-        <div class="px-6 py-4 border-b border-gray-200">
+    <div class="px-4 py-2">
 
-            <h3 class="text-lg font-semibold text-gray-800">
+        <h4 class="text-sm font-semibold text-gray-800">
+            Estado del indicador
+        </h4>
 
-                Información General
+    </div>
 
-            </h3>
+</div>
 
-            <p class="text-sm text-gray-500 mt-1">
+<div class="px-4 py-2">
 
-                Información principal del indicador.
+    <div class="flex items-center mb-4">
 
+        <div class="flex items-center">
+
+            <span class="w-40 text-sm font-semibold text-gray-700">
+                Estado
+            </span>
+
+            @if($indicador->estado == 'Activo')
+
+                <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                    Habilitado
+                </span>
+
+            @else
+
+                <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                    Deshabilitado
+                </span>
+
+            @endif
+
+            <a href="#"
+            class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
+
+                Editar
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Auditoría -->
+<div class="bg-gray-100 border-b border-gray-200">
+
+    <div class="px-4 py-2">
+
+        <h4 class="text-sm font-semibold text-gray-800">
+            Auditoría
+        </h4>
+
+    </div>
+
+</div>
+
+<div class="px-4 py-2">
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div>
+
+            <p class="text-sm font-semibold text-gray-700">
+                Fecha de creación
+            </p>
+
+            <p class="mt-1 text-sm text-gray-600">
+                {{ $indicador->created_at?->format('d/m/Y H:i') ?? 'No registra' }}
             </p>
 
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
-                        <!-- Código -->
-
-            <div>
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Código
-                </label>
-
-                <p class="text-gray-800 font-medium">
-
-                    {{ $indicador->codigo }}
-
-                </p>
-
-            </div>
-
-            <!-- Estado -->
-
-            <div>
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Estado
-                </label>
-
-                <p class="text-gray-800 font-medium">
-
-                    {{ $indicador->estado }}
-
-                </p>
-
-            </div>
-
-            <!-- Nombre -->
-
-            <div class="md:col-span-2">
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Nombre del Indicador
-                </label>
-
-                <p class="text-gray-800">
-
-                    {{ $indicador->nombre }}
-
-                </p>
-
-            </div>
-
-            <!-- Descripción -->
-
-            <div class="md:col-span-2">
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Descripción
-                </label>
-
-                <p class="text-gray-700 leading-relaxed">
-
-                    {{ $indicador->descripcion ?: 'No se ha registrado una descripción para este indicador.' }}
-
-                </p>
-
-            </div>
-
-            <!-- Fórmula -->
-
-            <div class="md:col-span-2">
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Fórmula
-                </label>
-
-                <p class="text-gray-800">
-
-                    {{ $indicador->formula ?: '-' }}
-
-                </p>
-
-            </div>
-
-            <!-- Línea Base -->
-
-            <div>
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Línea Base
-                </label>
-
-                <p class="text-gray-800">
-
-                    {{ $indicador->linea_base ?? '-' }}
-
-                </p>
-
-            </div>
-
-            <!-- Meta -->
-
-            <div>
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Meta
-                </label>
-
-                <p class="text-gray-800">
-
-                    {{ $indicador->meta ?? '-' }}
-
-                </p>
-
-            </div>
-
-            <!-- Valor Actual -->
-
-            <div>
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Valor Actual
-                </label>
-
-                <p class="text-gray-800">
-
-                    {{ $indicador->valor_actual ?? '-' }}
-
-                </p>
-
-            </div>
-
-            <!-- Unidad de Medida -->
-
-            <div>
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Unidad de Medida
-                </label>
-
-                <p class="text-gray-800">
-
-                    {{ $indicador->unidad_medida ?? '-' }}
-
-                </p>
-
-            </div>
-
-            <!-- Frecuencia -->
-
-            <div>
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Frecuencia
-                </label>
-
-                <p class="text-gray-800">
-
-                    {{ $indicador->frecuencia ?? '-' }}
-
-                </p>
-
-            </div>
-
-            <!-- Meta Asociada -->
-
-            <div class="md:col-span-2">
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Meta Asociada
-                </label>
-
-                <p class="text-gray-800">
-
-                    {{ $indicador->meta->codigo }} - {{ $indicador->meta->nombre }}
-
-                </p>
-
-            </div>
-                        <!-- Fecha de Registro -->
-
-            <div>
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Fecha de Registro
-                </label>
-
-                <p class="text-gray-800">
-
-                    {{ $indicador->created_at->format('d/m/Y H:i') }}
-
-                </p>
-
-            </div>
-
-            <!-- Última Actualización -->
-
-            <div>
-
-                <label class="block text-xs font-semibold uppercase text-gray-500 mb-1">
-                    Última Actualización
-                </label>
-
-                <p class="text-gray-800">
-
-                    {{ $indicador->updated_at->format('d/m/Y H:i') }}
-
-                </p>
-
-            </div>
-
-        </div>
-
-        <!-- Pie -->
-
-        <div class="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg">
-
-            <a href="{{ route('indicadores.index', $indicador->meta_id) }}"
-               class="px-5 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-100">
-
-                Volver
-
-            </a>
-
-            <a href="{{ route('indicadores.edit', $indicador->id) }}"
-               class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
-
-                <i class="bi bi-pencil-square mr-2"></i>
-
-                Editar Indicador
-
-            </a>
+        <div>
+
+            <p class="text-sm font-semibold text-gray-700">
+                Última actualización
+            </p>
+
+            <p class="mt-1 text-sm text-gray-600">
+                {{ $indicador->updated_at?->format('d/m/Y H:i') ?? 'No registra' }}
+            </p>
 
         </div>
 
     </div>
 
+</div>
 </x-objetivos-layout>

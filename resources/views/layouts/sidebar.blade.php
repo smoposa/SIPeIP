@@ -188,20 +188,12 @@
                         @endif
 
                     @if(puedeVer('indicadores'))
-                        <!-- <a href="#"
+                        <a href="{{ route('indicadores.listar') }}"
                         class="{{ request()->routeIs('indicadores.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                             Indicadores
-                        </a> -->
+                        </a>
                     @endif
 
-
-                    
-                    <a href="#"
-                    class="sidebar-submenu">
-                        <span class="text-red-500">
-                            Indicadores
-                        </span>
-                    </a>
 
                 </div>
 
@@ -291,77 +283,34 @@
         @endif  
 
         <!-- ================= REPORTES ================= -->
-        @if(puedeVer('reportes') || puedeVer('auditoria'))
-            <details class="mt-2">
-
-                <summary class="sidebar-group">
-
-                    <div class="flex items-center gap-3">
-
-                        <i class="bi bi-shield-check"></i>
-
-                        <span>Reportes</span>
-
-                    </div>
-
-                    <i class="bi bi-chevron-down text-sm"></i>
-
-                </summary>
-
-                <div class="ml-4 mt-1 space-y-0.5">
-
-                    @if(puedeVer('reportes'))    
-                        <a href="#"
-                        class="sidebar-submenu">
-                            <span class="text-red-500">
-                                Reportes
-                            </span>
-                        </a>
-                    @endif
-
-
-                </div>
-
-            </details>
-        @endif  
-
-
-<!-- ================= AUDITORÍA ================= -->
-<details class="mt-2">
-
-    <summary class="sidebar-group">
-
-        <div class="flex items-center gap-3">
-
-            <i class="bi bi-shield-check"></i>
-
-            <span>Auditoría</span>
-
-        </div>
-
-        <i class="bi bi-chevron-down text-sm"></i>
-
-    </summary>
-
-    <div class="ml-4 mt-1 space-y-0.5">
+        @if(puedeVer('reportes'))
 
         <a href="#"
-        class="sidebar-submenu">
-            <span class="text-red-500">
-                Bitácora
-            </span>
+        class="sidebar-link"
+        style="text-decoration:none;">
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            <span class="text-red-500">Reportes</span>
+
         </a>
 
-        <a href="#"
-        class="sidebar-submenu">
-            <span class="text-red-500">
-                Historial
-            </span>
-        </a>
+        @endif
 
-    </div>
+        <!-- ================= AUDITORÍA ================= -->
+        @if(puedeVer('auditoria'))
 
-</details>
+            <a href="#"
+            class="sidebar-link"
+            style="text-decoration:none;">
+
+                <i class="bi bi-shield-check"></i>
+
+                <span class="text-red-500">Auditoría</span>
+
+            </a>
+
+        @endif
 
 
     </nav>

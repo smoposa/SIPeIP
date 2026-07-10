@@ -87,5 +87,21 @@ public function metasResponsables()
     return $this->hasMany(Meta::class, 'responsable_id');
 }
 
+/**
+ * Indicadores bajo su responsabilidad.
+ */
+public function indicadoresResponsables()
+{
+    return $this->hasMany(Indicador::class, 'responsable_id');
+}
+
+/**
+ * Indicadores registrados por el usuario.
+ */
+public function indicadoresRegistrados()
+{
+    return $this->hasMany(Indicador::class, 'usuario_id');
+}
+
 
 }
