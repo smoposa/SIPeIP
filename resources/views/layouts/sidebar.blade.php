@@ -68,14 +68,14 @@
                 @endif
 
                 @if(puedeVer('usuarios'))
-                    <a href="{{ route('usuarios.index') }}"
+                    <a href="{{ route('usuarios.listar') }}"
                     class="{{ request()->routeIs('usuarios.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                         Usuarios
                     </a>
                 @endif
 
                 @if(puedeVer('entidades'))
-                    <a href="{{ route('entidades.index') }}"
+                    <a href="{{ route('entidades.listar') }}"
                     class="{{ request()->routeIs('entidades.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                         Entidades
                     </a>
@@ -93,6 +93,48 @@
 
             </details>
         @endif
+
+
+
+        <!-- ================= CATÁLOGOS ================= -->
+        <details class="mt-2"
+            {{ request()->routeIs('ods.*')
+            || request()->routeIs('pnd.*')
+            ? 'open' : '' }}>
+
+            <summary class="{{ request()->routeIs('ods.*')
+                || request()->routeIs('pnd.*')
+                ? 'sidebar-active'
+                : 'sidebar-group' }}">
+
+                <div class="flex items-center gap-3">
+
+                    <i class="bi bi-journal-bookmark"></i>
+
+                    <span>Catálogos</span>
+
+                </div>
+
+                <i class="bi bi-chevron-down text-sm"></i>
+
+            </summary>
+
+            <div class="ml-4 mt-1 space-y-0.5">
+
+                <a href="{{ route('ods.index') }}"
+                class="{{ request()->routeIs('ods.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                    ODS
+                </a>
+
+                <a href="{{ route('pnd.index') }}"
+                class="{{ request()->routeIs('pnd.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                    PND
+                </a>
+
+            </div>
+
+        </details>
+
 
         <!-- ================= PLANIFICACIÓN ================= -->
         @if(puedeVer('planes') || puedeVer('objetivos') || puedeVer('metas') || puedeVer('indicadores'))
@@ -114,7 +156,7 @@
 
                         <i class="bi bi-diagram-3"></i>
 
-                        <span>Planificación</span>
+                        <span>Planificación Nacional</span>
 
                     </div>
 
@@ -125,14 +167,14 @@
                 <div class="ml-4 mt-1 space-y-0.5">
 
                     @if(puedeVer('planes'))    
-                        <a href="{{ route('planes.index') }}"
+                        <a href="#"
                         class="{{ request()->routeIs('planes.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                             Planes
                         </a>
                         @endif
 
                     @if(puedeVer('objetivos'))
-                        <a href="{{ route('objetivos.index') }}"
+                        <a href="#"
                         class="{{ request()->routeIs('objetivos.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                             Objetivos
                         </a>
@@ -176,7 +218,7 @@
 
                         <i class="bi bi-cash-stack"></i>
 
-                        <span class="text-red-600">Inversión</span>
+                        <span>Inversión Pública</span>
 
                     </div>
 
@@ -186,26 +228,19 @@
 
                 <div class="ml-4 mt-1 space-y-0.5">
 
-                @if(puedeVer('proyectos'))
                     <a href="#"
                     class="sidebar-submenu">
-                        Proyectos
+                        <span class="text-red-500">
+                            Programas
+                        </span>
                     </a>
-                @endif
 
-                @if(puedeVer('proyectos'))
                     <a href="#"
                     class="sidebar-submenu">
-                        POA
+                        <span class="text-red-500">
+                            Proyectos
+                        </span>
                     </a>
-                @endif
-                
-                @if(puedeVer('presupuesto'))
-                    <a href="#"
-                    class="sidebar-submenu">
-                        Presupuesto
-                    </a>
-                @endif
 
                 </div>
 
@@ -235,14 +270,18 @@
                     @if(puedeVer('seguimiento'))    
                         <a href="#"
                         class="sidebar-submenu">
-                            Seguimiento
+                            <span class="text-red-500">
+                                Avances
+                            </span>
                         </a>
                     @endif  
 
                     @if(puedeVer('evaluacion'))
                         <a href="#"
                         class="sidebar-submenu">
-                            Evaluación
+                            <span class="text-red-500">
+                                Presupuesto
+                            </span>
                         </a>
                     @endif  
 
@@ -251,7 +290,7 @@
             </details>
         @endif  
 
-        <!-- ================= ADMINISTRACIÓN ================= -->
+        <!-- ================= REPORTES ================= -->
         @if(puedeVer('reportes') || puedeVer('auditoria'))
             <details class="mt-2">
 
@@ -261,7 +300,7 @@
 
                         <i class="bi bi-shield-check"></i>
 
-                        <span class="text-red-600">Administración</span>
+                        <span>Reportes</span>
 
                     </div>
 
@@ -274,21 +313,56 @@
                     @if(puedeVer('reportes'))    
                         <a href="#"
                         class="sidebar-submenu">
-                            Reportes
+                            <span class="text-red-500">
+                                Reportes
+                            </span>
                         </a>
                     @endif
 
-                    @if(puedeVer('auditoria'))
-                        <a href="#"
-                        class="sidebar-submenu">
-                            Auditoría
-                        </a>
-                    @endif
 
                 </div>
 
             </details>
         @endif  
+
+
+<!-- ================= AUDITORÍA ================= -->
+<details class="mt-2">
+
+    <summary class="sidebar-group">
+
+        <div class="flex items-center gap-3">
+
+            <i class="bi bi-shield-check"></i>
+
+            <span>Auditoría</span>
+
+        </div>
+
+        <i class="bi bi-chevron-down text-sm"></i>
+
+    </summary>
+
+    <div class="ml-4 mt-1 space-y-0.5">
+
+        <a href="#"
+        class="sidebar-submenu">
+            <span class="text-red-500">
+                Bitácora
+            </span>
+        </a>
+
+        <a href="#"
+        class="sidebar-submenu">
+            <span class="text-red-500">
+                Historial
+            </span>
+        </a>
+
+    </div>
+
+</details>
+
 
     </nav>
 

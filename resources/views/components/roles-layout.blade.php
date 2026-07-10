@@ -16,6 +16,7 @@
 
     <div class="flex">
 
+        {{--
         @if(
             request()->routeIs('roles.index') ||
             request()->routeIs('roles.listar') ||
@@ -30,6 +31,7 @@
         </div>
 
         @endif
+        --}}
 
         <!-- Contenido -->
          <div class="flex-1 px-4 pt-1 pb-4">

@@ -6,18 +6,6 @@ return [
     |--------------------------------------------------------------------------
     | Permisos por módulo
     |--------------------------------------------------------------------------
-    |
-    | Roles:
-    | - Administrador
-    | - Administrador Institucional
-    | - Director de Planificación
-    | - Coordinador de Planificación
-    | - Analista de Planificación
-    | - Analista de Inversión Pública
-    | - Analista de Seguimiento y Evaluación
-    | - Auditor del Sistema
-    | - Consulta Institucional
-    |
     */
 
     'modulos' => [
@@ -29,14 +17,13 @@ return [
         */
 
         'dashboard' => [
-            'Administrador',
+            'Administrador del Sistema',
             'Administrador Institucional',
             'Director de Planificación',
-            'Coordinador de Planificación',
             'Analista de Planificación',
+            'Director de Inversión Pública',
             'Analista de Inversión Pública',
-            'Analista de Seguimiento y Evaluación',
-            'Auditor del Sistema',
+            'Auditor Institucional',
             'Consulta Institucional',
         ],
 
@@ -46,18 +33,17 @@ return [
         |--------------------------------------------------------------------------
         */
 
-        'usuarios' => [
-            'Administrador',
-            'Administrador Institucional',
+        'roles' => [
+            'Administrador del Sistema',
         ],
 
-        'roles' => [
-            'Administrador',
+        'usuarios' => [
+            'Administrador del Sistema',
             'Administrador Institucional',
         ],
 
         'entidades' => [
-            'Administrador',
+            'Administrador del Sistema',
             'Administrador Institucional',
         ],
 
@@ -68,69 +54,62 @@ return [
         */
 
         'planes' => [
-            'Administrador',
-         //   'Administrador Institucional',
+            'Administrador del Sistema',
+            'Administrador Institucional',
             'Director de Planificación',
-            'Coordinador de Planificación',
             'Analista de Planificación',
-            'Auditor del Sistema',
+            'Auditor Institucional',
             'Consulta Institucional',
         ],
 
         'objetivos' => [
-            'Administrador',
-         //   'Administrador Institucional',
+            'Administrador del Sistema',
+            'Administrador Institucional',
             'Director de Planificación',
-            'Coordinador de Planificación',
             'Analista de Planificación',
-            'Auditor del Sistema',
+            'Auditor Institucional',
             'Consulta Institucional',
         ],
-                'metas' => [
-            'Administrador',
-            //'Administrador Institucional',
+
+        'metas' => [
+            'Administrador del Sistema',
+            'Administrador Institucional',
             'Director de Planificación',
-            'Coordinador de Planificación',
             'Analista de Planificación',
-            'Auditor del Sistema',
+            'Auditor Institucional',
             'Consulta Institucional',
         ],
 
         'indicadores' => [
-            'Administrador',
-         //   'Administrador Institucional',
+            'Administrador del Sistema',
+            'Administrador Institucional',
             'Director de Planificación',
-            'Coordinador de Planificación',
             'Analista de Planificación',
-            'Analista de Seguimiento y Evaluación',
-            'Auditor del Sistema',
+            'Auditor Institucional',
             'Consulta Institucional',
         ],
 
         /*
         |--------------------------------------------------------------------------
-        | Inversión
+        | Inversión Pública
         |--------------------------------------------------------------------------
         */
 
         'proyectos' => [
-            'Administrador',
-          //  'Administrador Institucional',
-            'Director de Planificación',
-            'Coordinador de Planificación',
-            'Analista de Planificación',
+            'Administrador del Sistema',
+            'Administrador Institucional',
+            'Director de Inversión Pública',
             'Analista de Inversión Pública',
-            'Analista de Seguimiento y Evaluación',
-            'Auditor del Sistema',
+            'Auditor Institucional',
             'Consulta Institucional',
         ],
 
         'presupuesto' => [
-            'Administrador',
-           // 'Administrador Institucional',
-            'Director de Planificación',
+            'Administrador del Sistema',
+            'Administrador Institucional',
+            'Director de Inversión Pública',
             'Analista de Inversión Pública',
-            'Auditor del Sistema',
+            'Auditor Institucional',
             'Consulta Institucional',
         ],
 
@@ -141,24 +120,24 @@ return [
         */
 
         'seguimiento' => [
-            'Administrador',
-            //'Administrador Institucional',
+            'Administrador del Sistema',
+            'Administrador Institucional',
             'Director de Planificación',
-            'Coordinador de Planificación',
+            'Director de Inversión Pública',
+            'Analista de Planificación',
             'Analista de Inversión Pública',
-            'Analista de Seguimiento y Evaluación',
-            'Auditor del Sistema',
+            'Auditor Institucional',
             'Consulta Institucional',
         ],
 
         'evaluacion' => [
-            'Administrador',
-            //'Administrador Institucional',
+            'Administrador del Sistema',
+            'Administrador Institucional',
             'Director de Planificación',
-            'Coordinador de Planificación',
+            'Director de Inversión Pública',
+            'Analista de Planificación',
             'Analista de Inversión Pública',
-            'Analista de Seguimiento y Evaluación',
-            'Auditor del Sistema',
+            'Auditor Institucional',
             'Consulta Institucional',
         ],
 
@@ -169,20 +148,16 @@ return [
         */
 
         'reportes' => [
-            'Administrador',
-       //     'Administrador Institucional',
+            'Administrador del Sistema',
+            'Administrador Institucional',
             'Director de Planificación',
-            'Coordinador de Planificación',
-            'Analista de Planificación',
-            'Analista de Inversión Pública',
-            'Analista de Seguimiento y Evaluación',
-            'Auditor del Sistema',
-            'Consulta Institucional',
+            'Director de Inversión Pública',
+            'Auditor Institucional',
         ],
 
         'auditoria' => [
-            'Administrador',
-            'Auditor del Sistema',
+            'Administrador del Sistema',
+            'Auditor Institucional',
         ],
 
     ],
@@ -198,33 +173,64 @@ return [
         'usuarios' => [
 
             'crear' => [
-                'Administrador',
+                'Administrador del Sistema',
                 'Administrador Institucional',
             ],
 
             'editar' => [
-                'Administrador',
+                'Administrador del Sistema',
                 'Administrador Institucional',
             ],
 
             'estado' => [
-                'Administrador',
+                'Administrador del Sistema',
                 'Administrador Institucional',
             ],
 
             'editarRol' => [
-                'Administrador',
-                'Administrador Institucional',
+                'Administrador del Sistema',
             ],
 
             'editarEntidad' => [
-                'Administrador',
-
+                'Administrador del Sistema',
             ],
 
             'editarPassword' => [
-                'Administrador',
+                'Administrador del Sistema',
                 'Administrador Institucional',
+            ],
+
+        ],
+
+        'roles' => [
+
+            'crear' => [
+                'Administrador del Sistema',
+            ],
+
+            'editar' => [
+                'Administrador del Sistema',
+            ],
+
+            'estado' => [
+                'Administrador del Sistema',
+            ],
+
+        ],
+
+        'entidades' => [
+
+            'crear' => [
+                'Administrador del Sistema',
+            ],
+
+            'editar' => [
+                'Administrador del Sistema',
+                'Administrador Institucional',
+            ],
+
+            'estado' => [
+                'Administrador del Sistema',
             ],
 
         ],
