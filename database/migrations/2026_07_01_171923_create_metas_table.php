@@ -15,28 +15,51 @@ return new class extends Migration
 
             $table->id();
 
+            // Objetivo Estratégico al que pertenece
             $table->foreignId('objetivo_id')
                 ->constrained('objetivos')
-                ->cascadeOnDelete();
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
 
-            $table->string('codigo', 30);
+            // Código de la meta
+            $table->string('codigo', 30)
+                ->unique();
 
+            // Información general
             $table->string('nombre', 255);
 
-            $table->text('descripcion')->nullable();
+            $table->text('descripcion')
+                ->nullable();
 
-            $table->decimal('valor_meta', 15, 2)->nullable();
+            // Valores
+            $table->decimal('linea_base', 10, 2);
 
-            $table->string('unidad_medida', 100)->nullable();
+            $table->decimal('valor_meta', 10, 2);
 
-            $table->date('fecha_inicio')->nullable();
+            $table->string('unidad_medida', 50);
 
-            $table->date('fecha_fin')->nullable();
+            // Período
+            $table->year('periodo_inicio');
 
+            $table->year('periodo_fin');
+
+            // Responsable de la meta
+            $table->foreignId('responsable_id')
+                ->constrained('users')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
+
+            // Estado
             $table->enum('estado', [
                 'Activo',
                 'Inactivo'
             ])->default('Activo');
+
+            // Usuario que registró la información
+            $table->foreignId('usuario_id')
+                ->constrained('users')
+                ->cascadeOnUpdate()
+                ->restrictOnDelete();
 
             $table->timestamps();
 
