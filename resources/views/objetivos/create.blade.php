@@ -106,7 +106,7 @@
                                     <option value="{{ $plan->id }}"
                                         {{ old('plan_id') == $plan->id ? 'selected' : '' }}>
 
-                                        {{ $plan->nombre }}
+                                        {{ $plan->codigo }} - {{ $plan->nombre }}
 
                                     </option>
 
@@ -122,19 +122,16 @@
                     <div class="flex items-center">
 
                         <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
-                            Código <span class="text-red-500">*</span>
+                            Código
                         </label>
 
                         <div class="flex-1">
 
                             <input
                                 type="text"
-                                name="codigo"
-                                maxlength="30"
-                                value="{{ old('codigo') }}"
-                                placeholder="Ej.: OEI-01"
-                                required
-                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+                                value="{{ $codigo }}"
+                                readonly
+                                class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-500 cursor-not-allowed">
 
                         </div>
 

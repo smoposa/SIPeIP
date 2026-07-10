@@ -85,7 +85,7 @@
                 <div>
 
                     <h2 class="text-xl font-semibold text-gray-800">
-                        {{ $objetivo->nombre }}
+                        {{ \Illuminate\Support\Str::limit($objetivo->nombre, 90) }}
                     </h2>
 
                     <p class="text-gray-500">
@@ -134,32 +134,46 @@
 
                     </div>
 
-                    <!-- Institución -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Institución
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $objetivo->entidad?->nombre ?? 'No registra' }}
-                        </span>
-
-                    </div>
-
                     <!-- Plan -->
                     <div class="flex">
 
                         <span class="w-40 text-sm font-semibold text-gray-700">
-                            Plan Institucional
+                            Plan
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ $objetivo->plan?->nombre ?? 'No registra' }}
+                            {{ $objetivo->plan?->codigo }} - {{ $objetivo->plan?->nombre }}
                         </span>
 
                     </div>
-                                        <!-- Nombre -->
+
+                    <!-- Objetivo PND -->
+                    <div class="flex">
+
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            Objetivo PND
+                        </span>
+
+                        <span class="text-sm text-gray-600">
+                            {{ $objetivo->pnd?->codigo }} - {{ $objetivo->pnd?->nombre }}
+                        </span>
+
+                    </div>
+
+                    <!-- ODS -->
+                    <div class="flex">
+
+                        <span class="w-40 text-sm font-semibold text-gray-700">
+                            ODS
+                        </span>
+
+                        <span class="text-sm text-gray-600">
+                            {{ $objetivo->ods?->codigo }} - {{ $objetivo->ods?->nombre }}
+                        </span>
+
+                    </div>
+
+                    <!-- Nombre -->
                     <div class="flex">
 
                         <span class="w-40 text-sm font-semibold text-gray-700">
@@ -181,32 +195,6 @@
 
                         <span class="text-sm text-gray-600 leading-relaxed">
                             {{ $objetivo->descripcion ?: 'No registra' }}
-                        </span>
-
-                    </div>
-
-                                        <!-- Fecha de inicio -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Fecha de inicio
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $objetivo->fecha_inicio?->format('d/m/Y') ?? 'No registra' }}
-                        </span>
-
-                    </div>
-
-                    <!-- Fecha de fin -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Fecha de fin
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $objetivo->fecha_fin?->format('d/m/Y') ?? 'No registra' }}
                         </span>
 
                     </div>

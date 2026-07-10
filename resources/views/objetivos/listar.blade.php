@@ -129,7 +129,7 @@
 
                                     <span class="font-medium text-gray-600">Plan: </span>
                                     <span class="text-gray-500">
-                                        {{ \Illuminate\Support\Str::limit($objetivo->plan?->nombre ?? 'No registra', 50) }}
+                                        {{ \Illuminate\Support\Str::limit($objetivo->plan?->nombre ?? 'No registra',) }}
                                     </span>
 
                                 </div>

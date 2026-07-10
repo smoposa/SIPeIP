@@ -47,71 +47,98 @@ class ObjetivoController extends Controller
     /**
      * Formulario para crear un objetivo.
      */
-    public function create()
-    {
-        return view('objetivos.create', [
+public function create()
+{
+    $ultimoObjetivo = Objetivo::orderByDesc('id')->first();
 
-            'planes' => Plan::where('estado', 'Activo')
-                ->orderBy('nombre')
-                ->get(),
+    if ($ultimoObjetivo) {
 
-            'pnd' => Pnd::where('estado', 'Activo')
-                ->orderBy('codigo')
-                ->get(),
+        $partes = explode('-', $ultimoObjetivo->codigo);
 
-            'ods' => Ods::where('estado', 'Activo')
-                ->orderBy('codigo')
-                ->get(),
+        $ultimoNumero = (int) end($partes);
 
-        ]);
+        $nuevoNumero = str_pad($ultimoNumero + 1, 2, '0', STR_PAD_LEFT);
+
+    } else {
+
+        $nuevoNumero = '01';
+
     }
+
+    $codigo = 'OEI-' . $nuevoNumero;
+
+    return view('objetivos.create', [
+
+        'codigo' => $codigo,
+
+        'planes' => Plan::where('estado', 'Activo')
+            ->orderBy('nombre')
+            ->get(),
+
+        'pnd' => Pnd::where('estado', 'Activo')
+            ->orderBy('codigo')
+            ->get(),
+
+        'ods' => Ods::where('estado', 'Activo')
+            ->orderBy('codigo')
+            ->get(),
+
+    ]);
+}
 
     /**
      * Guardar objetivo.
      */
-    public function store(Request $request)
-    {
-        $request->validate([
+public function store(Request $request)
+{
+    $request->validate([
 
-            'plan_id' => 'required|exists:planes,id',
+        'plan_id' => 'required|exists:planes,id',
 
-            'pnd_id' => 'required|exists:pnd,id',
+        'pnd_id' => 'required|exists:pnd,id',
 
-            'ods_id' => 'required|exists:ods,id',
+        'ods_id' => 'required|exists:ods,id',
 
-            'codigo' => 'required|max:30|unique:objetivos,codigo',
+        'nombre' => 'required|max:255',
 
-            'nombre' => 'required|max:255',
+        'descripcion' => 'nullable',
 
-            'descripcion' => 'nullable',
+    ]);
 
-        ]);
+  $ultimoObjetivo = Objetivo::orderByDesc('id')->first();
 
-        Objetivo::create([
+    $numero = 1;
 
-            'plan_id' => $request->plan_id,
-
-            'pnd_id' => $request->pnd_id,
-
-            'ods_id' => $request->ods_id,
-
-            'codigo' => $request->codigo,
-
-            'nombre' => $request->nombre,
-
-            'descripcion' => $request->descripcion,
-
-            'estado' => 'Activo',
-
-            'usuario_id' => auth()->id(),
-
-        ]);
-
-        return redirect()
-            ->route('objetivos.listar')
-            ->with('success', 'Objetivo registrado correctamente.');
+    if ($ultimoObjetivo) {
+        $numero = (int) substr($ultimoObjetivo->codigo, 4) + 1;
     }
 
+    $codigo = 'OEI-' . str_pad($numero, 2, '0', STR_PAD_LEFT);
+
+    Objetivo::create([
+
+        'plan_id' => $request->plan_id,
+
+        'pnd_id' => $request->pnd_id,
+
+        'ods_id' => $request->ods_id,
+
+        'codigo' => $codigo,
+
+        'nombre' => $request->nombre,
+
+        'descripcion' => $request->descripcion,
+
+        'estado' => 'Activo',
+
+        'usuario_id' => auth()->id(),
+
+    ]);
+
+    return redirect()
+        ->route('objetivos.listar')
+        ->with('success', 'Objetivo registrado correctamente.');
+}
     /**
      * Detalle del objetivo.
      */
@@ -169,8 +196,6 @@ class ObjetivoController extends Controller
 
             'ods_id' => 'required|exists:ods,id',
 
-            'codigo' => 'required|max:30|unique:objetivos,codigo,' . $objetivo->id,
-
             'nombre' => 'required|max:255',
 
             'descripcion' => 'nullable',
@@ -184,8 +209,6 @@ class ObjetivoController extends Controller
             'pnd_id' => $request->pnd_id,
 
             'ods_id' => $request->ods_id,
-
-            'codigo' => $request->codigo,
 
             'nombre' => $request->nombre,
 
