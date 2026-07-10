@@ -35,6 +35,7 @@ return [
 
         'roles' => [
             'Administrador del Sistema',
+            'Administrador Institucional',
         ],
 
         'usuarios' => [
@@ -55,7 +56,7 @@ return [
 
         'planes' => [
             'Administrador del Sistema',
-            'Administrador Institucional',
+            //'Administrador Institucional',
             'Director de Planificación',
             'Analista de Planificación',
             'Auditor Institucional',
@@ -64,7 +65,7 @@ return [
 
         'objetivos' => [
             'Administrador del Sistema',
-            'Administrador Institucional',
+            //'Administrador Institucional',
             'Director de Planificación',
             'Analista de Planificación',
             'Auditor Institucional',
@@ -73,7 +74,7 @@ return [
 
         'metas' => [
             'Administrador del Sistema',
-            'Administrador Institucional',
+            //'Administrador Institucional',
             'Director de Planificación',
             'Analista de Planificación',
             'Auditor Institucional',
@@ -82,12 +83,39 @@ return [
 
         'indicadores' => [
             'Administrador del Sistema',
-            'Administrador Institucional',
+            //'Administrador Institucional',
             'Director de Planificación',
             'Analista de Planificación',
             'Auditor Institucional',
             'Consulta Institucional',
         ],
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Catálogos
+        |--------------------------------------------------------------------------
+        */
+
+        'ods' => [
+            'Administrador del Sistema',
+            //'Administrador Institucional',
+            //'Director de Planificación',
+            'Analista de Planificación',
+            'Auditor Institucional',
+            'Consulta Institucional',
+        ],
+
+        'pnd' => [
+            'Administrador del Sistema',
+            //'Administrador Institucional',
+            //'Director de Planificación',
+            'Analista de Planificación',
+            'Auditor Institucional',
+            'Consulta Institucional',
+        ],
+
+
 
         /*
         |--------------------------------------------------------------------------
@@ -97,7 +125,7 @@ return [
 
         'proyectos' => [
             'Administrador del Sistema',
-            'Administrador Institucional',
+            //'Administrador Institucional',
             'Director de Inversión Pública',
             'Analista de Inversión Pública',
             'Auditor Institucional',
@@ -106,7 +134,7 @@ return [
 
         'presupuesto' => [
             'Administrador del Sistema',
-            'Administrador Institucional',
+            //'Administrador Institucional',
             'Director de Inversión Pública',
             'Analista de Inversión Pública',
             'Auditor Institucional',
@@ -121,7 +149,7 @@ return [
 
         'seguimiento' => [
             'Administrador del Sistema',
-            'Administrador Institucional',
+            //'Administrador Institucional',
             'Director de Planificación',
             'Director de Inversión Pública',
             'Analista de Planificación',
@@ -132,7 +160,7 @@ return [
 
         'evaluacion' => [
             'Administrador del Sistema',
-            'Administrador Institucional',
+            //'Administrador Institucional',
             'Director de Planificación',
             'Director de Inversión Pública',
             'Analista de Planificación',
@@ -149,15 +177,18 @@ return [
 
         'reportes' => [
             'Administrador del Sistema',
-            'Administrador Institucional',
+            //'Administrador Institucional',
             'Director de Planificación',
+            'Analista de Planificación',
             'Director de Inversión Pública',
+            'Analista de Inversión Pública',
             'Auditor Institucional',
         ],
 
         'auditoria' => [
             'Administrador del Sistema',
             'Auditor Institucional',
+
         ],
 
     ],
