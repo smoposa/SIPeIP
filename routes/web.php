@@ -297,11 +297,6 @@ Route::middleware('auth')->group(function () {
 
     });
 
-
-
-
-
-
     // Metas
     Route::prefix('metas')->name('metas.')->group(function () {
 
@@ -331,31 +326,29 @@ Route::middleware('auth')->group(function () {
 
     });
 
+    Route::prefix('indicadores')->group(function () {
 
+        Route::get('/listar', [IndicadorController::class, 'listar'])
+            ->name('indicadores.listar');
 
-Route::prefix('indicadores')->group(function () {
+        Route::get('/crear', [IndicadorController::class, 'create'])
+            ->name('indicadores.create');
 
-    Route::get('/listar', [IndicadorController::class, 'listar'])
-        ->name('indicadores.listar');
+        Route::post('/guardar', [IndicadorController::class, 'store'])
+            ->name('indicadores.store');
 
-    Route::get('/crear', [IndicadorController::class, 'create'])
-        ->name('indicadores.create');
+        Route::get('/detalle/{id}', [IndicadorController::class, 'detalle'])
+            ->name('indicadores.detalle');
 
-    Route::post('/guardar', [IndicadorController::class, 'store'])
-        ->name('indicadores.store');
+        Route::get('/editar/{id}', [IndicadorController::class, 'editar'])
+            ->name('indicadores.edit');
 
-    Route::get('/detalle/{id}', [IndicadorController::class, 'detalle'])
-        ->name('indicadores.detalle');
+        Route::put('/actualizar/{id}', [IndicadorController::class, 'update'])
+            ->name('indicadores.update');
 
-    Route::get('/editar/{id}', [IndicadorController::class, 'editar'])
-        ->name('indicadores.edit');
+        Route::patch('/estado/{id}', [IndicadorController::class, 'cambiarEstado'])
+            ->name('indicadores.estado');
 
-    Route::put('/actualizar/{id}', [IndicadorController::class, 'update'])
-        ->name('indicadores.update');
-
-    Route::patch('/estado/{id}', [IndicadorController::class, 'cambiarEstado'])
-        ->name('indicadores.estado');
-
-});
+    });
 
 require __DIR__.'/auth.php';

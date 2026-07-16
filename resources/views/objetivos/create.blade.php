@@ -101,15 +101,11 @@
 
                 @csrf
 
-
-                <!-- Barra de progreso -->
                 @include('objetivos.partials.barra-progreso')
 
-                <!-- Tarjeta de encabezado  -->
                 @if($planSeleccionado)
                     @include('objetivos.partials.encabezado-plan')
                 @endif
-
 
                 @include('objetivos.partials.informacion-general')
 
