@@ -1,10 +1,19 @@
 <div class="space-y-4">
 
+    <!-- Información General -->
+    <div class="mb-5">
+
+        <p class="mt-1 text-sm text-gray-500">
+            Información General
+        </p>
+
+    </div>
+
     <!-- Código -->
     <div class="flex items-center">
 
         <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-            Código del Plan
+            Código
         </label>
 
         <div class="w-2/3">
@@ -16,7 +25,7 @@
                     name="codigo"
                     value="{{ old('codigo', $plan->codigo) }}"
                     maxlength="30"
-                    class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+                   class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
 
             @else
 
@@ -32,27 +41,6 @@
 
     </div>
 
-    <!-- Nombre -->
-    <div class="flex items-center">
-
-        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-            Nombre del Plan <span class="text-red-500">*</span>
-        </label>
-
-        <div class="w-2/3">
-
-            <input
-                type="text"
-                name="nombre"
-                maxlength="255"
-                required
-                value="{{ old('nombre', $plan->nombre ?? '') }}"
-                placeholder="Ingrese el nombre del plan"
-                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-        </div>
-
-    </div>
 
     <!-- Entidad -->
     <div class="flex items-center">
@@ -119,11 +107,71 @@
 
     </div>
 
+
+    <!-- Estado -->
+    <div class="flex items-center">
+
+        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+            Estado
+        </label>
+
+        <div class="w-2/3">
+
+            <div class="inline-flex items-center px-3 py-1 rounded-full
+                        bg-green-100 text-green-700 text-sm font-medium">
+
+                <i class="bi bi-check-circle-fill mr-2"></i>
+
+                Activo
+
+            </div>
+
+            <input
+                type="hidden"
+                name="estado"
+                value="Activo">
+
+        </div>
+
+    </div><br>
+
+    <!-- Información del Plan -->
+    <div class="mt-8 mb-5">
+
+        <p class="mt-1 text-sm text-gray-500">
+            Información del Plan
+        </p>
+
+    </div>
+
+    <!-- Nombre -->
+    <div class="flex items-center">
+
+        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+            Nombre del Plan <span class="text-red-500">*</span>
+        </label>
+
+        <div class="w-2/3">
+
+            <input
+                type="text"
+                name="nombre"
+                maxlength="255"
+                required
+                value="{{ old('nombre', $plan->nombre ?? '') }}"
+                placeholder="Ingrese el nombre del plan"
+                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+
+        </div>
+
+    </div>
+
+
     <!-- Período -->
     <div class="flex items-center">
 
         <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-            Período <span class="text-red-500">*</span>
+            Período de vigencia <span class="text-red-500">*</span>
         </label>
 
         <div class="flex gap-3 items-center">
@@ -158,7 +206,7 @@
     <div class="flex items-start">
 
         <label class="w-44 flex-shrink-0 pt-2 text-sm font-medium text-gray-700">
-            Descripción
+            Descripción general
         </label>
 
         <div class="w-2/3">

@@ -84,31 +84,35 @@ class PlanController extends Controller
         // Código automático
         $codigo = 'PEI-' . $entidad->siglas . '-' . $nuevoNumero;
 
-        Plan::create([
+            $plan = Plan::create([
 
-            'codigo' => $codigo,
+                'codigo' => $codigo,
 
-            'nombre' => $request->nombre,
+                'nombre' => $request->nombre,
 
-            'entidad_id' => $entidad->id,
+                'entidad_id' => $entidad->id,
 
-            'tipo' => 'Plan Estratégico Institucional',
+                'tipo' => 'Plan Estratégico Institucional',
 
-            'periodo_inicio' => $request->periodo_inicio,
+                'periodo_inicio' => $request->periodo_inicio,
 
-            'periodo_fin' => $request->periodo_fin,
+                'periodo_fin' => $request->periodo_fin,
 
-            'descripcion' => $request->descripcion,
+                'descripcion' => $request->descripcion,
 
-            'estado' => 'Activo',
+                'estado' => 'Activo',
 
-            'usuario_id' => auth()->id(),
+                'usuario_id' => auth()->id(),
 
-        ]);
+            ]);
 
-        return redirect()
-            ->route('planes.listar')
-            ->with('success', 'Plan registrado correctamente.');
+            // Guardar el plan seleccionado para el asistente
+            session(['plan_id' => $plan->id]);
+
+            return redirect()
+                ->route('planes.create')
+                ->with('plan_registrado', true);
+
     }
 
     public function listar()

@@ -7,6 +7,8 @@ use App\Models\Objetivo;
 use App\Models\Plan;
 use App\Models\Pnd;
 use App\Models\Ods;
+use App\Models\PndPolitica;
+use App\Models\OdsMeta;
 
 class ObjetivoController extends Controller
 {
@@ -28,9 +30,7 @@ class ObjetivoController extends Controller
         ));
     }
 
-    /**
-     * Listado de objetivos.
-     */
+    // Listado de objetivos.
     public function listar()
     {
         $objetivos = Objetivo::with([
@@ -44,104 +44,150 @@ class ObjetivoController extends Controller
         return view('objetivos.listar', compact('objetivos'));
     }
 
-    /**
-     * Formulario para crear un objetivo.
-     */
-public function create()
-{
-    $ultimoObjetivo = Objetivo::orderByDesc('id')->first();
+    //Formulario para crear un objetivo.
+    public function create()
+    {
+        // Generar código automático
+        $ultimoObjetivo = Objetivo::orderByDesc('id')->first();
 
-    if ($ultimoObjetivo) {
+        if ($ultimoObjetivo) {
 
-        $partes = explode('-', $ultimoObjetivo->codigo);
+            $partes = explode('-', $ultimoObjetivo->codigo);
 
-        $ultimoNumero = (int) end($partes);
+            $ultimoNumero = (int) end($partes);
 
-        $nuevoNumero = str_pad($ultimoNumero + 1, 2, '0', STR_PAD_LEFT);
+            $nuevoNumero = str_pad($ultimoNumero + 1, 2, '0', STR_PAD_LEFT);
 
-    } else {
+        } else {
 
-        $nuevoNumero = '01';
+            $nuevoNumero = '01';
 
+        }
+
+        $codigo = 'OEI-' . $nuevoNumero;
+
+        // Plan seleccionado desde el asistente (si existe)
+        $planSeleccionado = null;
+
+        if (session()->has('plan_id')) {
+
+            $planSeleccionado = Plan::find(session('plan_id'));
+
+        }
+
+        return view('objetivos.create', [
+
+            'codigo' => $codigo,
+
+            'planSeleccionado' => $planSeleccionado,
+
+            'planes' => Plan::where('estado', 'Activo')
+                ->orderBy('nombre')
+                ->get(),
+
+            'pnd' => Pnd::where('estado', 'Activo')
+                ->orderBy('codigo')
+                ->get(),
+
+            'ods' => Ods::where('estado', 'Activo')
+                ->orderBy('codigo')
+                ->get(),
+
+        ]);
     }
 
-    $codigo = 'OEI-' . $nuevoNumero;
-
-    return view('objetivos.create', [
-
-        'codigo' => $codigo,
-
-        'planes' => Plan::where('estado', 'Activo')
-            ->orderBy('nombre')
-            ->get(),
-
-        'pnd' => Pnd::where('estado', 'Activo')
+    //obtener politicas ublicas 
+    public function obtenerPoliticas($pnd)
+    {
+        $politicas = PndPolitica::where('pnd_id', $pnd)
+            ->where('estado', 'Activo')
             ->orderBy('codigo')
-            ->get(),
+            ->get([
+                'id',
+                'codigo',
+                'nombre'
+            ]);
 
-        'ods' => Ods::where('estado', 'Activo')
-            ->orderBy('codigo')
-            ->get(),
-
-    ]);
-}
-
-    /**
-     * Guardar objetivo.
-     */
-public function store(Request $request)
-{
-    $request->validate([
-
-        'plan_id' => 'required|exists:planes,id',
-
-        'pnd_id' => 'required|exists:pnd,id',
-
-        'ods_id' => 'required|exists:ods,id',
-
-        'nombre' => 'required|max:255',
-
-        'descripcion' => 'nullable',
-
-    ]);
-
-  $ultimoObjetivo = Objetivo::orderByDesc('id')->first();
-
-    $numero = 1;
-
-    if ($ultimoObjetivo) {
-        $numero = (int) substr($ultimoObjetivo->codigo, 4) + 1;
+        return response()->json($politicas);
     }
 
-    $codigo = 'OEI-' . str_pad($numero, 2, '0', STR_PAD_LEFT);
+    //obtener metas
+    public function obtenerMetasOds($ods)
+    {
+        $metas = OdsMeta::where('ods_id', $ods)
+            ->where('estado', 'Activo')
+            ->orderBy('codigo')
+            ->get([
+                'id',
+                'codigo',
+                'nombre'
+            ]);
 
-    Objetivo::create([
+        return response()->json($metas);
+    }
 
-        'plan_id' => $request->plan_id,
+    // Guardar objetivo.
+    public function store(Request $request)
+    {
+        $request->validate([
 
-        'pnd_id' => $request->pnd_id,
+            'plan_id' => 'required|exists:planes,id',
 
-        'ods_id' => $request->ods_id,
+            'pnd_id' => 'required|exists:pnd,id',
 
-        'codigo' => $codigo,
+            'ods_id' => 'required|exists:ods,id',
 
-        'nombre' => $request->nombre,
+            'nombre' => 'required|max:255',
 
-        'descripcion' => $request->descripcion,
+            'descripcion' => 'nullable',
 
-        'estado' => 'Activo',
+        ]);
 
-        'usuario_id' => auth()->id(),
+        // Generar código automático
+        $ultimoObjetivo = Objetivo::orderByDesc('id')->first();
 
-    ]);
+        $numero = 1;
 
-    return redirect()
-        ->route('objetivos.listar')
-        ->with('success', 'Objetivo registrado correctamente.');
-}
-    /**
-     * Detalle del objetivo.
-     */
+        if ($ultimoObjetivo) {
+
+            $numero = (int) substr($ultimoObjetivo->codigo, 4) + 1;
+
+        }
+
+        $codigo = 'OEI-' . str_pad($numero, 2, '0', STR_PAD_LEFT);
+
+        // Registrar objetivo
+        $objetivo = Objetivo::create([
+
+            'plan_id' => $request->plan_id,
+
+            'pnd_id' => $request->pnd_id,
+
+            'ods_id' => $request->ods_id,
+
+            'codigo' => $codigo,
+
+            'nombre' => $request->nombre,
+
+            'descripcion' => $request->descripcion,
+
+            'estado' => 'Activo',
+
+            'usuario_id' => auth()->id(),
+
+        ]);
+
+        // Eliminar el plan almacenado por el asistente
+        session()->forget('plan_id');
+
+        // Mostrar el asistente para continuar con Metas
+        return redirect()
+            ->route('objetivos.create')
+            ->with('objetivo_registrado', true)
+            ->with('objetivo_id', $objetivo->id);
+    }
+
+    //Detalle del objetivo.
     public function detalle($id)
     {
         $objetivo = Objetivo::with([
@@ -155,9 +201,7 @@ public function store(Request $request)
         return view('objetivos.detalle', compact('objetivo'));
     }
 
-    /**
-     * Formulario para editar.
-     */
+    // Formulario para editar.
     public function edit($id)
     {
         $objetivo = Objetivo::findOrFail($id);
@@ -181,9 +225,7 @@ public function store(Request $request)
         ]);
     }
 
-    /**
-     * Actualizar objetivo.
-     */
+    //Actualizar objetivo.
     public function update(Request $request, $id)
     {
         $objetivo = Objetivo::findOrFail($id);
@@ -221,9 +263,7 @@ public function store(Request $request)
             ->with('success', 'Objetivo actualizado correctamente.');
     }
 
-    /**
-     * Formulario para editar estado.
-     */
+    //Formulario para editar estado.
     public function editarEstado($id)
     {
         $objetivo = Objetivo::findOrFail($id);
@@ -231,9 +271,7 @@ public function store(Request $request)
         return view('objetivos.editarestado', compact('objetivo'));
     }
 
-    /**
-     * Actualizar estado.
-     */
+    //Actualizar estado.
     public function actualizarEstado(Request $request, $id)
     {
         $objetivo = Objetivo::findOrFail($id);
@@ -248,4 +286,5 @@ public function store(Request $request)
             ->route('objetivos.detalle', $objetivo->id)
             ->with('success', 'Estado del objetivo actualizado correctamente.');
     }
+
 }

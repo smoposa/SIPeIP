@@ -12,12 +12,22 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+
+            // Configuración
             RolesSeeder::class,
             EntidadesSeeder::class,
             UsersSeeder::class,
+
+            // Catálogos
             OdsSeeder::class,
+            OdsMetaSeeder::class,
+
             PndSeeder::class,
+            PndPoliticaSeeder::class,
+
+            // Planificación
             PlanesSeeder::class,
+
         ]);
     }
 }

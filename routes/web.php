@@ -15,6 +15,7 @@ use App\Http\Controllers\ObjetivoController;
 use App\Http\Controllers\MetaController;
 use App\Http\Controllers\IndicadorController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Página principal
@@ -96,8 +97,9 @@ Route::middleware('auth')->group(function () {
             Route::put('/{id}/estado', [RoleController::class, 'actualizarEstado'])
                 ->name('roles.actualizarestado');
 
-        });
+    });
 
+ 
     // Usuarios
     Route::prefix('usuarios')
         ->middleware('role:usuarios')
@@ -148,10 +150,10 @@ Route::middleware('auth')->group(function () {
             Route::put('/{usuario}/password', [UserController::class, 'updatePassword'])
                 ->name('usuarios.actualizarpassword');
 
-        });
+    });
 
   
-        // Entidades
+    // Entidades
     Route::prefix('entidades')
         ->middleware('role:entidades')
         ->group(function () {
@@ -183,14 +185,14 @@ Route::middleware('auth')->group(function () {
             Route::put('/{id}/estado', [EntidadController::class, 'actualizarEstado'])
                 ->name('entidades.actualizarestado');
 
-        });
+    });
 
+ 
     /*
     |--------------------------------------------------------------------------
     | Catálogos
     |--------------------------------------------------------------------------
     */
-
     // Objetivos de Desarrollo Sostenible
     Route::prefix('ods')
         ->group(function () {
@@ -198,7 +200,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [OdsController::class, 'index'])
                 ->name('ods.index');
 
-        });
+    });
 
     // Plan Nacional de Desarrollo
     Route::prefix('pnd')
@@ -207,7 +209,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [PndController::class, 'index'])
                 ->name('pnd.index');
 
-        });
+    });
 
 // Objetivos
 Route::prefix('objetivos')
@@ -226,6 +228,11 @@ Route::prefix('objetivos')
         Route::post('/crear', [ObjetivoController::class, 'store'])
             ->name('objetivos.store');
 
+        // ================= AJAX =================
+        Route::get('/pnd/{pnd}/politicas',
+            [ObjetivoController::class, 'obtenerPoliticas'])
+            ->name('objetivos.pnd.politicas');
+
         Route::get('/{id}/detalle', [ObjetivoController::class, 'detalle'])
             ->name('objetivos.detalle');
 
@@ -241,7 +248,12 @@ Route::prefix('objetivos')
         Route::put('/{id}/estado', [ObjetivoController::class, 'actualizarEstado'])
             ->name('objetivos.actualizarestado');
 
-    });
+        Route::get(
+            '/ods/{ods}/metas',
+            [ObjetivoController::class, 'obtenerMetasOds']
+        )->name('objetivos.ods.metas');
+
+});
 
 
         /*
@@ -288,7 +300,9 @@ Route::prefix('objetivos')
 
 
 
-/*
+
+
+    /*
 |--------------------------------------------------------------------------
 | Metas
 |--------------------------------------------------------------------------

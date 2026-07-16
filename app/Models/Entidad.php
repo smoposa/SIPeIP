@@ -28,6 +28,8 @@ class Entidad extends Model
         'correoInstitucional',
         'estado'
     ];
+
+    
 /**
  * Una entidad puede tener varios usuarios.
  */
@@ -35,6 +37,7 @@ public function usuarios(): HasMany
 {
     return $this->hasMany(User::class, 'entidad_id');
 }
+
 
 /**
  * Una entidad puede tener varios planes.

@@ -1,6 +1,6 @@
 <x-app-layout>
     
-    <!-- Header -->
+   {{--  <!-- Header -->
     <x-slot name="header">
         <h2 class="text-xl text-gray-800 leading-tight">
             <span class="font-semibold">
@@ -10,7 +10,7 @@
                 {{ $title }}
             </span>
         </h2>
-    </x-slot>
+    </x-slot> --}}
 
     <div class="flex">
 

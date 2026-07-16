@@ -1,52 +1,91 @@
 <x-objetivos-layout title="Crear OEI">
 
+    {{-- ================= MENSAJE DE ÉXITO ================= --}}
     @if(session('success'))
+
         <div id="alertSuccess"
-            class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+
             {{ session('success') }}
+
         </div>
 
         <script>
             setTimeout(() => {
+
                 const alerta = document.getElementById('alertSuccess');
+
                 if (alerta) {
                     alerta.remove();
                 }
+
             }, 3000);
         </script>
+
     @endif
 
-    @if ($errors->any())
 
-        <div class="mb-4 rounded-md border border-red-300 bg-red-50 p-4">
+    {{-- ================= MODAL PASO 2 COMPLETADO ================= --}}
+    @if(session('objetivo_registrado'))
 
-            <h3 class="text-sm font-semibold text-red-800 mb-2">
-                Se encontraron los siguientes errores:
-            </h3>
+        <div id="modalObjetivo"
+             class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
-            <ul class="list-disc list-inside text-sm text-red-700">
+            <div class="bg-white rounded-xl shadow-xl w-[420px] p-6">
 
-                @foreach ($errors->all() as $error)
+                <div class="text-center">
 
-                    <li>{{ $error }}</li>
+                    <i class="bi bi-check-circle-fill text-5xl text-green-600"></i>
 
-                @endforeach
+                    <h2 class="mt-3 text-xl font-semibold text-gray-800">
+                        Objetivo registrado correctamente
+                    </h2>
 
-            </ul>
+                    <p class="mt-2 text-sm text-gray-500">
+                        El objetivo estratégico institucional se registró exitosamente.
+                    </p>
+
+                </div>
+
+                <div class="mt-6 flex justify-end gap-3">
+
+                    <a href="{{ route('objetivos.listar') }}"
+                       class="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700">
+
+                        Volver al listado
+
+                    </a>
+
+                    <a href="{{ route('metas.create') }}"
+                       class="px-4 py-2 rounded-md bg-[#18874E] hover:bg-green-700 text-white">
+
+                        Continuar con Metas
+
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
 
     @endif
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-0">
 
-        <div class="flex">
+    {{-- ================= CONTENIDO ================= --}}
+    <div class="bg-white p-6 shadow-sm">
+
+        {{-- Encabezado --}}
+        <div class="mb-1">
+
+            <h2 class="text-2xl font-semibold text-gray-800 leading-tight">
+                Registrar un nuevo objetivo estratégico institucional
+            </h2>
 
             <a href="{{ route('objetivos.listar') }}"
-               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+               class="inline-flex items-center mt-0.5 text-sm font-medium text-blue-600 hover:text-blue-800">
 
-                <i class="bi bi-chevron-left"></i>
+                <i class="bi bi-arrow-left-short text-lg mr-1"></i>
 
                 Regresar
 
@@ -54,26 +93,10 @@
 
         </div>
 
-    </div>
 
-    <!-- Información -->
-    <div class="bg-white pt-4 px-6 pb-6">
-
-        <!-- Encabezado -->
-        <div class="mb-6">
-
-            <h2 class="text-2xl font-semibold text-gray-800">
-                Crear Objetivo Estratégico Institucional
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-500">
-                Complete la información para registrar un nuevo objetivo estratégico institucional.
-            </p>
-
-        </div>
 
         <!-- Scroll -->
-        <div class="overflow-y-auto" style="height: calc(100vh - 270px);">
+        <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
             <!-- Formulario -->
             <form method="POST"
@@ -81,197 +104,32 @@
 
                 @csrf
 
-                <div class="space-y-4">
 
-                    <!-- Plan Institucional -->
-                    <div class="flex items-center">
+                <!-- Barra de progreso -->
+                @include('objetivos.partials.barra-progreso')
 
-                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
-                            Plan <span class="text-red-500">*</span>
-                        </label>
+                <!-- Tarjeta de encabezado  -->
+                @if($planSeleccionado)
+                    @include('objetivos.partials.encabezado-plan')
+                @endif
 
-                        <div class="flex-1">
 
-                            <select
-                                name="plan_id"
-                                required
-                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
+                @include('objetivos.partials.informacion-general')
 
-                                <option value="">
-                                    Seleccione
-                                </option>
+                @include('objetivos.partials.alineacion-pnd')
 
-                                @foreach($planes as $plan)
+                @include('objetivos.partials.alineacion-ods')
 
-                                    <option value="{{ $plan->id }}"
-                                        {{ old('plan_id') == $plan->id ? 'selected' : '' }}>
+                @include('objetivos.partials.unidad-responsable')
 
-                                        {{ $plan->codigo }} - {{ $plan->nombre }}
+                @include('objetivos.partials.estado')
 
-                                    </option>
-
-                                @endforeach
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Código -->
-                    <div class="flex items-center">
-
-                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
-                            Código
-                        </label>
-
-                        <div class="flex-1">
-
-                            <input
-                                type="text"
-                                value="{{ $codigo }}"
-                                readonly
-                                class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-500 cursor-not-allowed">
-
-                        </div>
-
-                    </div>
-
-                    <!-- Objetivo PND -->
-                    <div class="flex items-center">
-
-                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
-                            Objetivo PND <span class="text-red-500">*</span>
-                        </label>
-
-                        <div class="flex-1">
-
-                            <select
-                                name="pnd_id"
-                                required
-                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-                                <option value="">
-                                    Seleccione
-                                </option>
-
-                                @foreach($pnd as $item)
-
-                                    <option value="{{ $item->id }}"
-                                        {{ old('pnd_id') == $item->id ? 'selected' : '' }}>
-
-                                        {{ $item->codigo }} - {{ $item->nombre }}
-
-                                    </option>
-
-                                @endforeach
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-                    <!-- ODS -->
-                    <div class="flex items-center">
-
-                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
-                            ODS <span class="text-red-500">*</span>
-                        </label>
-
-                        <div class="flex-1">
-
-                            <select
-                                name="ods_id"
-                                required
-                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-                                <option value="">
-                                    Seleccione
-                                </option>
-
-                                @foreach($ods as $item)
-
-                                    <option value="{{ $item->id }}"
-                                        {{ old('ods_id') == $item->id ? 'selected' : '' }}>
-
-                                        {{ $item->codigo }} - {{ $item->nombre }}
-
-                                    </option>
-
-                                @endforeach
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Nombre -->
-                    <div class="flex items-center">
-
-                        <label class="w-40 flex-shrink-0 text-sm font-medium text-gray-700">
-                            Nombre <span class="text-red-500">*</span>
-                        </label>
-
-                        <div class="flex-1">
-
-                            <input
-                                type="text"
-                                name="nombre"
-                                maxlength="255"
-                                value="{{ old('nombre') }}"
-                                required
-                                class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-                        </div>
-
-                    </div>
-
-                    <!-- Descripción -->
-                    <div class="flex items-start">
-
-                        <label class="w-40 flex-shrink-0 pt-2 text-sm font-medium text-gray-700">
-                            Descripción
-                        </label>
-
-                        <div class="flex-1">
-
-                            <textarea
-                                name="descripcion"
-                                rows="4"
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500">{{ old('descripcion') }}</textarea>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Botones -->
-                    <div class="flex justify-end gap-3 mt-6">
-
-                        <button
-                            type="submit"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
-
-                            Guardar
-
-                        </button>
-
-                        <a href="{{ route('objetivos.listar') }}"
-                        class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
-
-                            Cancelar
-
-                        </a>
-
-                    </div>
-
-                </div>
+                @include('objetivos.partials.acciones')
 
             </form>
 
         </div>
-
+    
     </div>
 
 </x-objetivos-layout>

@@ -290,6 +290,7 @@
             </details>
         @endif  
 
+        
         <!-- ================= REPORTES ================= -->
         @if(puedeVer('reportes'))
 
@@ -331,7 +332,7 @@
         </div>
 
         <div class="text-xs text-gray-500">
-            Usuario del sistema
+            {{ Auth::user()->rol->nombre ?? 'Sin rol asignado' }}
         </div>
 
     </div>

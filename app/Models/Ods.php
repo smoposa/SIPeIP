@@ -18,11 +18,17 @@ class Ods extends Model
         'estado',
     ];
 
-    /**
-     * Objetivos Estratégicos Institucionales
-     */
+    // Objetivos Estratégicos Institucionales
     public function objetivos()
     {
         return $this->hasMany(Objetivo::class);
     }
+
+    // Metas ODS
+    public function metas()
+    {
+        return $this->hasMany(OdsMeta::class);
+    }
+
+
 }

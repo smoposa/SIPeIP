@@ -16,6 +16,7 @@
         </script>
     @endif
 
+    
     <!-- Barra de acciones -->
     <div class="bg-white border-b border-gray-300 mb-0">
 

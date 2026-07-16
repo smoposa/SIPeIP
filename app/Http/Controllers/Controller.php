@@ -13,4 +13,5 @@ abstract class Controller
             abort(403, 'No tiene permisos para realizar esta acción.');
         }
     }
+    
 }

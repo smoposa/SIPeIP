@@ -10,8 +10,8 @@
         </div>
 
         <!-- Centro -->
-        <div class="text-white text-sm">
-            Bienvenido
+        <div class="text-white text-sm font-medium">
+            {{ Auth::user()->rol->nombre }}
         </div>
 
         <!-- Derecha -->
