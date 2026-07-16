@@ -61,7 +61,7 @@
     </div>
 
     <!-- Tabla -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 210px);">
+    <div class="overflow-y-auto" style="height: calc(100vh - 160px);">
 
         <div class="bg-white border border-gray-200 rounded-lg">
 

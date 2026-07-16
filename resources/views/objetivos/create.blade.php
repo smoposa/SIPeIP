@@ -24,7 +24,6 @@
 
     @endif
 
-
     {{-- ================= MODAL PASO 2 COMPLETADO ================= --}}
     @if(session('objetivo_registrado'))
 
@@ -92,8 +91,6 @@
             </a>
 
         </div>
-
-
 
         <!-- Scroll -->
         <div class="overflow-y-auto" style="height: calc(100vh - 180px);">

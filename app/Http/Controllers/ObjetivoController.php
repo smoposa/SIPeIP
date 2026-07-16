@@ -177,15 +177,30 @@ class ObjetivoController extends Controller
 
         ]);
 
-        // Eliminar el plan almacenado por el asistente
-        session()->forget('plan_id');
+        // Mantener el objetivo para el siguiente paso del asistente
+        session([
+            'objetivo_id' => $objetivo->id,
+        ]);
 
-        // Mostrar el asistente para continuar con Metas
+        // Mostrar el modal para continuar con Metas
         return redirect()
             ->route('objetivos.create')
-            ->with('objetivo_registrado', true)
-            ->with('objetivo_id', $objetivo->id);
+            ->with('objetivo_registrado', true);
+
+            // Mantener el contexto del asistente
+            session([
+                'objetivo_id' => $objetivo->id,
+            ]);
+
+            // ===== PRUEBA =====
+            dd('LLEGO AL RETURN');
+
+            return redirect()
+                ->route('objetivos.create')
+                ->with('objetivo_registrado', true)
+                ->with('success', 'PRUEBA MODAL');
     }
+
 
     //Detalle del objetivo.
     public function detalle($id)

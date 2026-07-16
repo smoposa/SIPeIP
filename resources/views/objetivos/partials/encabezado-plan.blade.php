@@ -1,3 +1,11 @@
+@if($planSeleccionado)
+
+    <input type="hidden"
+           name="plan_id"
+           value="{{ $planSeleccionado->id }}">
+
+@endif
+
 <!-- Plan de Trabajo -->
 <div class="mb-8">
 

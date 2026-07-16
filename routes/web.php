@@ -211,50 +211,50 @@ Route::middleware('auth')->group(function () {
 
     });
 
-// Objetivos
-Route::prefix('objetivos')
-    ->middleware('role:objetivos')
-    ->group(function () {
 
-        Route::get('/', [ObjetivoController::class, 'index'])
-            ->name('objetivos.index');
+    // Objetivos
+    Route::prefix('objetivos')
+        ->middleware('role:objetivos')
+        ->group(function () {
 
-        Route::get('/listar', [ObjetivoController::class, 'listar'])
-            ->name('objetivos.listar');
+            Route::get('/', [ObjetivoController::class, 'index'])
+                ->name('objetivos.index');
 
-        Route::get('/crear', [ObjetivoController::class, 'create'])
-            ->name('objetivos.create');
+            Route::get('/listar', [ObjetivoController::class, 'listar'])
+                ->name('objetivos.listar');
 
-        Route::post('/crear', [ObjetivoController::class, 'store'])
-            ->name('objetivos.store');
+            Route::get('/crear', [ObjetivoController::class, 'create'])
+                ->name('objetivos.create');
 
-        // ================= AJAX =================
-        Route::get('/pnd/{pnd}/politicas',
-            [ObjetivoController::class, 'obtenerPoliticas'])
-            ->name('objetivos.pnd.politicas');
+            Route::post('/crear', [ObjetivoController::class, 'store'])
+                ->name('objetivos.store');
 
-        Route::get('/{id}/detalle', [ObjetivoController::class, 'detalle'])
-            ->name('objetivos.detalle');
+            // ================= AJAX =================
+            Route::get('/pnd/{pnd}/politicas',
+                [ObjetivoController::class, 'obtenerPoliticas'])
+                ->name('objetivos.pnd.politicas');
 
-        Route::get('/{id}/editar', [ObjetivoController::class, 'edit'])
-            ->name('objetivos.edit');
+            Route::get('/{id}/detalle', [ObjetivoController::class, 'detalle'])
+                ->name('objetivos.detalle');
 
-        Route::put('/{id}/editar', [ObjetivoController::class, 'update'])
-            ->name('objetivos.update');
+            Route::get('/{id}/editar', [ObjetivoController::class, 'edit'])
+                ->name('objetivos.edit');
 
-        Route::get('/{id}/estado', [ObjetivoController::class, 'editarEstado'])
-            ->name('objetivos.editarestado');
+            Route::put('/{id}/editar', [ObjetivoController::class, 'update'])
+                ->name('objetivos.update');
 
-        Route::put('/{id}/estado', [ObjetivoController::class, 'actualizarEstado'])
-            ->name('objetivos.actualizarestado');
+            Route::get('/{id}/estado', [ObjetivoController::class, 'editarEstado'])
+                ->name('objetivos.editarestado');
 
-        Route::get(
-            '/ods/{ods}/metas',
-            [ObjetivoController::class, 'obtenerMetasOds']
-        )->name('objetivos.ods.metas');
+            Route::put('/{id}/estado', [ObjetivoController::class, 'actualizarEstado'])
+                ->name('objetivos.actualizarestado');
 
-});
+            Route::get(
+                '/ods/{ods}/metas',
+                [ObjetivoController::class, 'obtenerMetasOds']
+            )->name('objetivos.ods.metas');
 
+    });
 
         /*
         |--------------------------------------------------------------------------
@@ -302,39 +302,36 @@ Route::prefix('objetivos')
 
 
 
-    /*
-|--------------------------------------------------------------------------
-| Metas
-|--------------------------------------------------------------------------
-*/
+    // Metas
+    Route::prefix('metas')->name('metas.')->group(function () {
 
-Route::prefix('metas')->name('metas.')->group(function () {
+        Route::get('/', [MetaController::class, 'index'])
+            ->name('index');
 
-    Route::get('/', [MetaController::class, 'index'])
-        ->name('index');
+        Route::get('/listar', [MetaController::class, 'listar'])
+            ->name('listar');
 
-    Route::get('/listar', [MetaController::class, 'listar'])
-        ->name('listar');
+        Route::get('/crear', [MetaController::class, 'create'])
+            ->name('create');
 
-    Route::get('/crear', [MetaController::class, 'create'])
-        ->name('create');
+        Route::post('/guardar', [MetaController::class, 'store'])
+            ->name('store');
 
-    Route::post('/guardar', [MetaController::class, 'store'])
-        ->name('store');
+        Route::get('/{id}/detalle', [MetaController::class, 'detalle'])
+            ->name('detalle');
 
-    Route::get('/{id}/detalle', [MetaController::class, 'detalle'])
-        ->name('detalle');
+        Route::get('/{id}/editar', [MetaController::class, 'edit'])
+            ->name('edit');
 
-    Route::get('/{id}/editar', [MetaController::class, 'edit'])
-        ->name('edit');
+        Route::put('/{id}', [MetaController::class, 'update'])
+            ->name('update');
 
-    Route::put('/{id}', [MetaController::class, 'update'])
-        ->name('update');
+        Route::patch('/{id}/estado', [MetaController::class, 'cambiarEstado'])
+            ->name('estado');
 
-    Route::patch('/{id}/estado', [MetaController::class, 'cambiarEstado'])
-        ->name('estado');
+    });
 
-});
+
 
 Route::prefix('indicadores')->group(function () {
 

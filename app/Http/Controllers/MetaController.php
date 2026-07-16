@@ -20,9 +20,7 @@ class MetaController extends Controller
         return view('metas.index');
     }
 
-    /**
-     * Listado de metas.
-     */
+    // Listado de metas.
     public function listar()
     {
         $metas = Meta::with([
