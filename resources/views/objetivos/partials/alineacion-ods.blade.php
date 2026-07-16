@@ -70,77 +70,74 @@
 
 </div>
 
-
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
 
-document.addEventListener('DOMContentLoaded', function () {
+        const ods = document.getElementById('ods_id');
+        const meta = document.getElementById('meta_ods_id');
 
-    const ods = document.getElementById('ods_id');
-    const meta = document.getElementById('meta_ods_id');
-
-    ods.addEventListener('change', function () {
-
-        meta.innerHTML =
-            '<option value="">Cargando...</option>';
-
-        if (!this.value) {
+        ods.addEventListener('change', function () {
 
             meta.innerHTML =
-                '<option value="">Seleccione un ODS primero</option>';
+                '<option value="">Cargando...</option>';
 
-            return;
-
-        }
-
-        fetch(`/objetivos/ods/${this.value}/metas`)
-
-            .then(response => {
-
-                if (!response.ok) {
-                    throw new Error('Error al obtener las metas.');
-                }
-
-                return response.json();
-
-            })
-
-            .then(data => {
+            if (!this.value) {
 
                 meta.innerHTML =
-                    '<option value="">Seleccione una meta ODS</option>';
+                    '<option value="">Seleccione un ODS primero</option>';
 
-                if (data.length === 0) {
+                return;
+
+            }
+
+            fetch(`/objetivos/ods/${this.value}/metas`)
+
+                .then(response => {
+
+                    if (!response.ok) {
+                        throw new Error('Error al obtener las metas.');
+                    }
+
+                    return response.json();
+
+                })
+
+                .then(data => {
 
                     meta.innerHTML =
-                        '<option value="">No existen metas registradas</option>';
+                        '<option value="">Seleccione una meta ODS</option>';
 
-                    return;
+                    if (data.length === 0) {
 
-                }
+                        meta.innerHTML =
+                            '<option value="">No existen metas registradas</option>';
 
-                data.forEach(item => {
+                        return;
 
-                    meta.innerHTML += `
-                        <option value="${item.id}">
-                            ${item.codigo} - ${item.nombre}
-                        </option>
-                    `;
+                    }
+
+                    data.forEach(item => {
+
+                        meta.innerHTML += `
+                            <option value="${item.id}">
+                                ${item.codigo} - ${item.nombre}
+                            </option>
+                        `;
+
+                    });
+
+                })
+
+                .catch(error => {
+
+                    console.error(error);
+
+                    meta.innerHTML =
+                        '<option value="">Error al cargar las metas</option>';
 
                 });
 
-            })
-
-            .catch(error => {
-
-                console.error(error);
-
-                meta.innerHTML =
-                    '<option value="">Error al cargar las metas</option>';
-
-            });
+        });
 
     });
-
-});
-
 </script>

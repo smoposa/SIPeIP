@@ -28,9 +28,7 @@
                class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
 
                 <i class="bi bi-chevron-left"></i>
-
                 Regresar
-
             </a>
 
             <a href="{{ route('objetivos.edit', $objetivo->id) }}"
