@@ -140,9 +140,9 @@ public function listar()
                 'indicador_id' => $indicador->id,
             ]);
 
+            // Finalizar asistente
             return redirect()
-                ->route('indicadores.create')
-                ->with('indicador_registrado', true);
+                ->route('planes.finalizado');
 
         } catch (\Exception $e) {
 

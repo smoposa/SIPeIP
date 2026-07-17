@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Plan;
+use App\Models\Objetivo;
+use App\Models\Meta;
+use App\Models\Indicador;
 
 class PlanController extends Controller
 {
@@ -210,5 +213,31 @@ class PlanController extends Controller
                 ->route('planes.detalle', $plan->id)
                 ->with('success', 'Estado del plan actualizado correctamente.');
     }
+
+    /**
+     * Pantalla final del asistente de planificación.
+     */
+    public function finalizado()
+    {
+        $indicador = Indicador::with([
+            'responsable',
+            'meta.responsable',
+            'meta.objetivo.plan.entidad',
+        ])->findOrFail(session('indicador_id'));
+
+        $meta = $indicador->meta;
+
+        $objetivo = $meta->objetivo;
+
+        $plan = $objetivo->plan;
+
+        return view('planes.finalizado', compact(
+            'plan',
+            'objetivo',
+            'meta',
+            'indicador'
+        ));
+    }
+
 
 }

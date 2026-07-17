@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ProfileController;
-
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EntidadController;
@@ -15,41 +14,20 @@ use App\Http\Controllers\ObjetivoController;
 use App\Http\Controllers\MetaController;
 use App\Http\Controllers\IndicadorController;
 
-
-/*
-|--------------------------------------------------------------------------
-| Página principal
-|--------------------------------------------------------------------------
-*/
-
+// Página principal
 Route::get('/', function () {
     return redirect('/login');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Dashboard
-|--------------------------------------------------------------------------
-*/
-
+// Dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-/*
-|--------------------------------------------------------------------------
-| Rutas protegidas
-|--------------------------------------------------------------------------
-*/
-
+// Rutas protegidas
 Route::middleware('auth')->group(function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | Perfil
-    |--------------------------------------------------------------------------
-    */
-
+    // Perfil
     Route::get('/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
 
@@ -59,13 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Configuración Institucional
-    |--------------------------------------------------------------------------
-    */
-
-    // Roles
+     // Roles
     Route::prefix('roles')
         ->middleware('role:roles')
         ->group(function () {
@@ -99,8 +71,7 @@ Route::middleware('auth')->group(function () {
 
     });
 
- 
-    // Usuarios
+     // Usuarios
     Route::prefix('usuarios')
         ->middleware('role:usuarios')
         ->group(function () {
@@ -152,8 +123,7 @@ Route::middleware('auth')->group(function () {
 
     });
 
-  
-    // Entidades
+      // Entidades
     Route::prefix('entidades')
         ->middleware('role:entidades')
         ->group(function () {
@@ -187,12 +157,6 @@ Route::middleware('auth')->group(function () {
 
     });
 
- 
-    /*
-    |--------------------------------------------------------------------------
-    | Catálogos
-    |--------------------------------------------------------------------------
-    */
     // Objetivos de Desarrollo Sostenible
     Route::prefix('ods')
         ->group(function () {
@@ -210,7 +174,6 @@ Route::middleware('auth')->group(function () {
                 ->name('pnd.index');
 
     });
-
 
     // Objetivos
     Route::prefix('objetivos')
@@ -256,12 +219,7 @@ Route::middleware('auth')->group(function () {
 
     });
 
-        /*
-        |--------------------------------------------------------------------------
-        | Planificación Nacional
-        |--------------------------------------------------------------------------
-        */
-
+    // Planificación Nacional
     Route::prefix('planes')
         ->middleware('role:planes')
         ->group(function () {
@@ -292,6 +250,10 @@ Route::middleware('auth')->group(function () {
 
             Route::put('/{id}/estado', [PlanController::class, 'actualizarEstado'])
                 ->name('planes.actualizarestado');
+
+            // Finalización del asistente
+            Route::get('/finalizado', [PlanController::class, 'finalizado'])
+                ->name('planes.finalizado');
 
         });
 
