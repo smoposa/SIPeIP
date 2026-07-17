@@ -1,7 +1,7 @@
-{{-- ================= MODAL PROGRAMA REGISTRADO ================= --}}
-@if(session('programa_registrado'))
+{{-- ================= MODAL REGISTRO COMPLETADO ================= --}}
+@if(session('proyecto_registrado'))
 
-    <div id="modalPrograma"
+    <div id="modalProyecto"
          class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
         <div class="bg-white rounded-xl shadow-xl w-[460px] p-6">
@@ -12,13 +12,15 @@
 
                 <h2 class="mt-3 text-xl font-semibold text-gray-800">
 
-                    Programa registrado correctamente
+                    Proyecto registrado correctamente
 
                 </h2>
 
                 <p class="mt-2 text-sm text-gray-500">
 
-                    El programa institucional fue registrado exitosamente.
+                    El proyecto de inversión fue registrado exitosamente.
+                    Con este paso se completa el proceso de planificación de
+                    programas y proyectos institucionales.
 
                 </p>
 
@@ -27,16 +29,16 @@
             <div class="mt-6 flex flex-col gap-3">
 
                 <a href="{{ route('proyectos.create') }}"
-                   class="w-full text-center px-4 py-2 rounded-md bg-[#18874E] hover:bg-green-700 text-white">
+                   class="w-full text-center px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white">
 
-                    Continuar a Proyectos
+                    Registrar otro Proyecto
 
                 </a>
 
-                <a href="{{ route('programas.create') }}"
-                   class="w-full text-center px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white">
+                <a href="{{ route('proyectos.listar') }}"
+                   class="w-full text-center px-4 py-2 rounded-md bg-[#18874E] hover:bg-green-700 text-white">
 
-                    Registrar otro Programa
+                    Ver Proyectos registrados
 
                 </a>
 

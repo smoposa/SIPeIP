@@ -14,6 +14,7 @@ use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ObjetivoController;
 use App\Http\Controllers\MetaController;
 use App\Http\Controllers\IndicadorController;
+use App\Http\Controllers\ProyectoController;
 
 // Página principal
 Route::get('/', function () {
@@ -343,6 +344,36 @@ Route::middleware('auth')->group(function () {
                 ->name('estado');
 
     });
+
+    // Proyectos
+    Route::prefix('proyectos')
+        ->name('proyectos.')
+        ->group(function () {
+
+            Route::get('/', [ProyectoController::class, 'listar'])
+                ->name('listar');
+
+            Route::get('/crear', [ProyectoController::class, 'create'])
+                ->name('create');
+
+            Route::post('/', [ProyectoController::class, 'store'])
+                ->name('store');
+
+            Route::get('/{proyecto}/detalle', [ProyectoController::class, 'detalle'])
+                ->name('detalle');
+
+            Route::get('/{proyecto}/editar', [ProyectoController::class, 'edit'])
+                ->name('edit');
+
+            Route::put('/{proyecto}', [ProyectoController::class, 'update'])
+                ->name('update');
+
+            Route::patch('/{proyecto}/estado', [ProyectoController::class, 'editarEstado'])
+                ->name('estado');
+
+    });
+
+
 
 
 require __DIR__.'/auth.php';

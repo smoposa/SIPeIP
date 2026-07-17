@@ -2,17 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Proyecto;
 
-class Programa extends Model
+class Proyecto extends Model
 {
-    use HasFactory;
-
-    protected $table = 'programas';
+    protected $table = 'proyectos';
 
     protected $fillable = [
+
+        'programa_id',
 
         'codigo',
 
@@ -20,9 +18,11 @@ class Programa extends Model
 
         'descripcion',
 
-        'periodo_inicio',
+        'fecha_inicio',
 
-        'periodo_fin',
+        'fecha_fin',
+
+        'presupuesto_aprobado',
 
         'responsable_id',
 
@@ -38,38 +38,22 @@ class Programa extends Model
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * Responsable del programa.
-     */
+    // Programa
+    public function programa()
+    {
+        return $this->belongsTo(Programa::class);
+    }
+
+    // Responsable
     public function responsable()
     {
         return $this->belongsTo(User::class, 'responsable_id');
     }
 
-    /**
-     * Usuario que registró el programa.
-     */
+    // Usuario que registra
     public function usuario()
     {
         return $this->belongsTo(User::class, 'usuario_id');
     }
-
-    /**
-     * Objetivos Estratégicos asociados.
-     */
-    public function objetivos()
-    {
-        return $this->belongsToMany(
-            Objetivo::class,
-            'programa_objetivo'
-        );
-    }
-
-    // Proyectos
-    public function proyectos()
-    {
-        return $this->hasMany(Proyecto::class);
-    }
-
 
 }

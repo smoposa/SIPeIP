@@ -123,6 +123,15 @@ return [
         |--------------------------------------------------------------------------
         */
 
+        'programas' => [
+            'Administrador del Sistema',
+            //'Administrador Institucional',
+            'Director de Inversión Pública',
+            'Analista de Inversión Pública',
+            'Auditor Institucional',
+            'Consulta Institucional',
+        ],
+
         'proyectos' => [
             'Administrador del Sistema',
             //'Administrador Institucional',

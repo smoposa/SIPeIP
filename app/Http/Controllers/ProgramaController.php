@@ -92,6 +92,7 @@ class ProgramaController extends Controller
     |--------------------------------------------------------------------------
     */
 
+
     // Registrar programa.
     public function store(ProgramaRequest $request)
     {
@@ -147,8 +148,8 @@ class ProgramaController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('programas.listar')
-                ->with('success', 'Programa registrado correctamente.');
+                ->route('programas.create')
+                ->with('programa_registrado', $programa->id);
 
         } catch (\Exception $e) {
 

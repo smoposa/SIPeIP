@@ -103,5 +103,17 @@ public function indicadoresRegistrados()
     return $this->hasMany(Indicador::class, 'usuario_id');
 }
 
+// Proyectos responsables
+public function proyectosResponsables()
+{
+    return $this->hasMany(Proyecto::class, 'responsable_id');
+}
+
+// Proyectos registrados
+public function proyectosRegistrados()
+{
+    return $this->hasMany(Proyecto::class, 'usuario_id');
+}
+
 
 }

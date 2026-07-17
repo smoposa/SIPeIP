@@ -208,11 +208,19 @@
             </details>
         @endif
 
+        
         <!-- ================= INVERSIÓN ================= -->
-        @if(puedeVer('proyectos') || puedeVer('presupuesto'))
-            <details class="mt-2">
+        @if(puedeVer('programas') || puedeVer('proyectos'))
 
-                <summary class="sidebar-group">
+            <details class="mt-2"
+                {{ request()->routeIs('programas.*')
+                || request()->routeIs('proyectos.*')
+                ? 'open' : '' }}>
+
+                <summary class="{{ request()->routeIs('programas.*')
+                    || request()->routeIs('proyectos.*')
+                    ? 'sidebar-active'
+                    : 'sidebar-group' }}">
 
                     <div class="flex items-center gap-3">
 
@@ -228,26 +236,38 @@
 
                 <div class="ml-4 mt-1 space-y-0.5">
 
-                    <a href="{{ route('programas.listar') }}"
-                    class="sidebar-submenu {{ request()->routeIs('programas.*') ? 'active' : '' }}">
+                    @if(puedeVer('programas'))
 
-                        <span class="text-red-500">
+                        <a href="{{ route('programas.listar') }}"
+                            class="{{ request()->routeIs('programas.*')
+                                ? 'sidebar-submenu-active'
+                                : 'sidebar-submenu' }}">
+
                             Programas
-                        </span>
 
-                    </a>
+                        </a>
 
-                    <a href="#"
-                    class="sidebar-submenu">
-                        <span class="text-red-500">
+                    @endif
+
+                    @if(puedeVer('proyectos'))
+
+                        <a href="{{ route('proyectos.listar') }}"
+                            class="{{ request()->routeIs('proyectos.*')
+                                ? 'sidebar-submenu-active'
+                                : 'sidebar-submenu' }}">
+
                             Proyectos
-                        </span>
-                    </a>
+
+                        </a>
+
+                    @endif
 
                 </div>
 
             </details>
-        @endif     
+
+        @endif
+        
 
         <!-- ================= SEGUIMIENTO ================= -->
         @if(puedeVer('seguimiento') || puedeVer('evaluacion'))
