@@ -21,12 +21,15 @@
     <!-- Menú -->
     <nav class="flex-1 overflow-y-auto py-3">
 
-        <!-- Inicio -->
+        <!-- ================= INICIO ================= -->
         <a href="{{ route('dashboard') }}"
-           class="{{ request()->routeIs('dashboard') ? 'sidebar-active' : 'sidebar-link' }}">
+        class="{{ request()->routeIs('dashboard')
+                ? 'sidebar-link-active'
+                : 'sidebar-link' }}">
 
             <i class="bi bi-house-door"></i>
-            <span class="text-red-600">Inicio</span>
+
+            <span>Inicio</span>
 
         </a>
 
@@ -95,7 +98,7 @@
         @endif
 
 
-
+{{--
         <!-- ================= CATÁLOGOS ================= -->
         @if(puedeVer('ods') || puedeVer('pnd'))
 
@@ -142,6 +145,7 @@
         </details>
 
         @endif
+--}}
 
 
         <!-- ================= PLANIFICACIÓN ================= -->
