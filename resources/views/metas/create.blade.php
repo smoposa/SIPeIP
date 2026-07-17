@@ -41,50 +41,50 @@
 
     @endif
 
-{{-- ================= CONTENIDO ================= --}}
-<div class="bg-white p-6 shadow-sm">
+    {{-- ================= CONTENIDO ================= --}}
+    <div class="bg-white p-6 shadow-sm">
 
-    {{-- Encabezado --}}
-    <div class="mb-1">
+        {{-- Encabezado --}}
+        <div class="mb-1">
 
-        <h2 class="text-2xl font-semibold text-gray-800 leading-tight">
-            Registrar una nueva meta institucional
-        </h2>
+            <h2 class="text-2xl font-semibold text-gray-800 leading-tight">
+                Registrar una nueva meta institucional
+            </h2>
 
-        <a href="{{ route('metas.listar') }}"
-           class="inline-flex items-center mt-0.5 text-sm font-medium text-blue-600 hover:text-blue-800">
+            <a href="{{ route('metas.listar') }}"
+            class="inline-flex items-center mt-0.5 text-sm font-medium text-blue-600 hover:text-blue-800">
 
-            <i class="bi bi-arrow-left-short text-lg mr-1"></i>
+                <i class="bi bi-arrow-left-short text-lg mr-1"></i>
 
-            Regresar
+                Regresar
 
-        </a>
+            </a>
 
-    </div>
+        </div>
 
-@include('metas.partials.modal-exito')
+        @include('metas.partials.modal-exito')
 
     <!-- Scroll -->
-<div class="overflow-y-auto" style="height: calc(100vh - 180px);">
+    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
-    <!-- Formulario -->
-    <form method="POST"
-          action="{{ route('metas.store') }}">
+        <!-- Formulario -->
+        <form method="POST"
+            action="{{ route('metas.store') }}">
 
-        @csrf
+            @csrf
 
-        @include('metas.partials.barra-progreso')
+            @include('metas.partials.barra-progreso')
 
-        @include('metas.partials.contexto-planificacion')
+            @include('metas.partials.contexto-planificacion')
 
-        @include('metas.partials.informacion-general')
+            @include('metas.partials.informacion-general')
 
-        @include('metas.partials.estado')
+            @include('metas.partials.estado')
 
-        @include('metas.partials.acciones')
+            @include('metas.partials.acciones')
 
-    </form>
+        </form>
 
-</div>
+    </div>
 
 </x-objetivos-layout>

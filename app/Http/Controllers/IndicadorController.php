@@ -8,6 +8,7 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class IndicadorController extends Controller
@@ -35,84 +36,126 @@ public function listar()
     return view('indicadores.listar', compact('indicadores'));
 }
 
-    /**
-     * Formulario de creación.
-     */
-public function create()
-{
-    $ultimo = Indicador::latest('id')->first();
+    // Formulario de creación.
+    public function create()
+    {
+        // Generar código automático
+        $ultimo = Indicador::latest('id')->first();
 
-    $numero = $ultimo
-        ? ((int) substr($ultimo->codigo, 4)) + 1
-        : 1;
+        $numero = $ultimo
+            ? ((int) substr($ultimo->codigo, 4)) + 1
+            : 1;
 
-    $codigo = 'IND-' . str_pad($numero, 2, '0', STR_PAD_LEFT);
+        $codigo = 'IND-' . str_pad($numero, 2, '0', STR_PAD_LEFT);
 
-    $metas = Meta::with([
-            'objetivo.plan.entidad'
-        ])
-        ->where('estado', 'Activo')
-        ->orderBy('codigo')
-        ->get();
+        // Contexto del asistente
+        $planSeleccionado = null;
+        $objetivoSeleccionado = null;
+        $metaSeleccionada = null;
 
-$responsables = User::where('estado', 'Activo')
-    ->where('entidad_id', auth()->user()->entidad_id)
-    ->orderBy('nombres')
-    ->get();
+        if (session()->has('meta_id')) {
 
-    return view('indicadores.create', compact(
-        'codigo',
-        'metas',
-        'responsables'
-    ));
-}
+            $metaSeleccionada = Meta::with([
+                    'objetivo.plan'
+                ])
+                ->find(session('meta_id'));
 
-    /**
-     * Guardar indicador.
-     */
-public function store(Request $request)
-{
-    $request->validate([
-        'meta_id' => 'required|exists:metas,id',
-        'codigo' => 'required|string|max:30|unique:indicadores,codigo',
-        'nombre' => 'required|string|max:255',
-        'tipo' => 'required|string|max:50',
-        'formula' => 'required|string',
-        'unidad_medida' => 'required|string|max:50',
-        'frecuencia' => 'required|string|max:50',
-        'responsable_id' => 'required|exists:users,id',
-        'estado' => 'required|in:Activo,Inactivo',
-    ]);
+            if ($metaSeleccionada) {
 
-    $indicador = Indicador::create([
+                $objetivoSeleccionado = $metaSeleccionada->objetivo;
 
-        'meta_id' => $request->meta_id,
+                $planSeleccionado = $objetivoSeleccionado?->plan;
 
-        'codigo' => strtoupper($request->codigo),
+            }
 
-        'nombre' => $request->nombre,
+        }
 
-        'tipo' => $request->tipo,
+        // Metas disponibles (cuando se ingresa desde el menú)
+        $metas = Meta::with([
+                'objetivo.plan.entidad'
+            ])
+            ->where('estado', 'Activo')
+            ->orderBy('codigo')
+            ->get();
 
-        'formula' => $request->formula,
+        // Responsables
+        $responsables = User::where('estado', 'Activo')
+            ->where('entidad_id', auth()->user()->entidad_id)
+            ->orderBy('nombres')
+            ->get();
 
-        'unidad_medida' => $request->unidad_medida,
+        return view('indicadores.create', compact(
+            'codigo',
+            'metas',
+            'responsables',
+            'planSeleccionado',
+            'objetivoSeleccionado',
+            'metaSeleccionada'
+        ));
+    }
 
-        'frecuencia' => $request->frecuencia,
+    // Guardar indicador.
+    public function store(Request $request)
+    {
+        $request->validate([
+            'meta_id'         => 'required|exists:metas,id',
+            'nombre'          => 'required|string|max:255',
+            'tipo'            => 'required|string|max:50',
+            'formula'         => 'required|string',
+            'unidad_medida'   => 'required|string|max:50',
+            'frecuencia'      => 'required|string|max:50',
+            'responsable_id'  => 'required|exists:users,id',
+            'estado'          => 'required|in:Activo,Inactivo',
+        ]);
 
-        'responsable_id' => $request->responsable_id,
+        DB::beginTransaction();
 
-        'estado' => $request->estado,
+        try {
 
-        'usuario_id' => Auth::id(),
+            // Generar código automático
+            $ultimo = (Indicador::max('id') ?? 0) + 1;
 
-    ]);
+            $codigo = 'IND-' . str_pad($ultimo, 2, '0', STR_PAD_LEFT);
 
+            // Registrar indicador
+            $indicador = Indicador::create([
 
-    return redirect()
-        ->route('indicadores.listar')
-        ->with('success', 'Indicador registrado correctamente.');
-}
+                'meta_id'        => $request->meta_id,
+                'codigo'         => $codigo,
+                'nombre'         => $request->nombre,
+                'tipo'           => $request->tipo,
+                'formula'        => $request->formula,
+                'unidad_medida'  => $request->unidad_medida,
+                'frecuencia'     => $request->frecuencia,
+                'responsable_id' => $request->responsable_id,
+                'estado'         => $request->estado,
+                'usuario_id'     => Auth::id(),
+
+            ]);
+
+            DB::commit();
+
+            // Guardar contexto del asistente
+            session([
+                'indicador_id' => $indicador->id,
+            ]);
+
+            return redirect()
+                ->route('indicadores.create')
+                ->with('indicador_registrado', true);
+
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'error' => $e->getMessage()
+                ]);
+
+        }
+    }
 
     /**
      * Ver detalle.
