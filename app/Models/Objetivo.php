@@ -56,12 +56,20 @@ class Objetivo extends Model
         return $this->belongsTo(User::class, 'usuario_id');
     }
 
-/**
- * Metas del objetivo.
- */
-public function metas()
-{
-    return $this->hasMany(Meta::class);
-}
+    // Metas del objetivo.
+    public function metas()
+    {
+        return $this->hasMany(Meta::class);
+    }
+
+    // Programas asociados al objetivo.
+    public function programas()
+    {
+        return $this->belongsToMany(
+            Programa::class,
+            'programa_objetivo'
+        );
+    }
+
 
 }

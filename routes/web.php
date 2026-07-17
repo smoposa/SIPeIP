@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EntidadController;
+use App\Http\Controllers\ProgramaController;
 
 use App\Http\Controllers\OdsController;
 use App\Http\Controllers\PndController;
@@ -288,6 +289,7 @@ Route::middleware('auth')->group(function () {
 
     });
 
+    // Indicadores
     Route::prefix('indicadores')->group(function () {
 
         Route::get('/listar', [IndicadorController::class, 'listar'])
@@ -312,5 +314,35 @@ Route::middleware('auth')->group(function () {
             ->name('indicadores.estado');
 
     });
+
+    // Programas
+    Route::prefix('programas')
+        ->name('programas.')
+        ->controller(ProgramaController::class)
+        ->group(function () {
+
+            Route::get('/', 'listar')
+                ->name('listar');
+
+            Route::get('/crear', 'create')
+                ->name('create');
+
+            Route::post('/crear', 'store')
+                ->name('store');
+
+            Route::get('/detalle/{id}', 'detalle')
+                ->name('detalle');
+
+            Route::get('/editar/{id}', 'edit')
+                ->name('edit');
+
+            Route::put('/editar/{id}', 'update')
+                ->name('update');
+
+            Route::patch('/estado/{id}', 'editarEstado')
+                ->name('estado');
+
+    });
+
 
 require __DIR__.'/auth.php';

@@ -56,7 +56,6 @@
             <span class="mt-2 text-xs font-semibold text-green-700">
                 Metas
             </span>
-
         </div>
 
         <div class="flex-1 h-1 bg-gray-300 mx-2"></div>

@@ -228,11 +228,13 @@
 
                 <div class="ml-4 mt-1 space-y-0.5">
 
-                    <a href="#"
-                    class="sidebar-submenu">
+                    <a href="{{ route('programas.listar') }}"
+                    class="sidebar-submenu {{ request()->routeIs('programas.*') ? 'active' : '' }}">
+
                         <span class="text-red-500">
                             Programas
                         </span>
+
                     </a>
 
                     <a href="#"
