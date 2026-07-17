@@ -12,11 +12,11 @@ use App\Models\Objetivo;
 use App\Models\Meta;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class CrearMetaTest extends TestCase
+class CrearIndicadorTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_un_usuario_puede_crear_una_meta(): void
+    public function test_un_usuario_puede_crear_un_indicador(): void
     {
         // Rol autorizado
         $rol = Rol::factory()->create([
@@ -72,11 +72,12 @@ class CrearMetaTest extends TestCase
             'usuario_id' => $usuario->id,
         ]);
 
-        // Registrar Meta
-        $response = $this->post(route('metas.store'), [
+        // Meta
+        $meta = Meta::create([
             'objetivo_id' => $objetivo->id,
+            'codigo' => 'META-01',
             'nombre' => 'Meta de prueba',
-            'descripcion' => 'Meta creada desde PHPUnit',
+            'descripcion' => 'Prueba',
             'linea_base' => 10,
             'valor_meta' => 100,
             'unidad_medida' => 'Porcentaje',
@@ -84,13 +85,26 @@ class CrearMetaTest extends TestCase
             'periodo_fin' => 2029,
             'responsable_id' => $usuario->id,
             'estado' => 'Activo',
+            'usuario_id' => $usuario->id,
         ]);
 
-        $response->assertRedirect(route('metas.create'));
+        // Registrar indicador
+        $response = $this->post(route('indicadores.store'), [
+            'meta_id' => $meta->id,
+            'nombre' => 'Indicador de prueba',
+            'tipo' => 'Resultado',
+            'formula' => 'A/B*100',
+            'unidad_medida' => 'Porcentaje',
+            'frecuencia' => 'Mensual',
+            'responsable_id' => $usuario->id,
+            'estado' => 'Activo',
+        ]);
 
-        $this->assertDatabaseHas('metas', [
-            'codigo' => 'META-01',
-            'nombre' => 'Meta de prueba',
+        $response->assertRedirect(route('planes.finalizado'));
+
+        $this->assertDatabaseHas('indicadores', [
+            'codigo' => 'IND-01',
+            'nombre' => 'Indicador de prueba',
         ]);
     }
 }
