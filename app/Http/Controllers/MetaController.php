@@ -33,35 +33,52 @@ class MetaController extends Controller
         return view('metas.listar', compact('metas'));
     }
 
-    /**
-     * Formulario de creación.
-     */
+    // Formulario de creación.
     public function create()
     {
+        // ================= CONTEXTO DEL ASISTENTE =================
+        $planSeleccionado = null;
+
+        $objetivoSeleccionado = null;
+
+        if (session()->has('objetivo_id')) {
+
+            $objetivoSeleccionado = Objetivo::with('plan')
+                ->find(session('objetivo_id'));
+
+            if ($objetivoSeleccionado) {
+
+                $planSeleccionado = $objetivoSeleccionado->plan;
+
+            }
+
+        }
+
+        // ================= OBJETIVOS =================
         $objetivos = Objetivo::with('plan')
             ->where('estado', 'Activo')
             ->orderBy('codigo')
             ->get();
 
-        // Solo usuarios activos de la misma entidad
+        // ================= RESPONSABLES =================
         $responsables = User::where('entidad_id', auth()->user()->entidad_id)
             ->where('estado', 'Activo')
             ->orderBy('nombres')
             ->get();
 
-        // Código automático
+        // ================= CÓDIGO AUTOMÁTICO =================
         $codigo = 'META-' . str_pad((Meta::max('id') ?? 0) + 1, 2, '0', STR_PAD_LEFT);
 
         return view('metas.create', compact(
             'objetivos',
             'responsables',
-            'codigo'
+            'codigo',
+            'planSeleccionado',
+            'objetivoSeleccionado'
         ));
     }
 
-    /**
-     * Guardar una nueva meta.
-     */
+    //Guardar una nueva meta.
     public function store(Request $request)
     {
         $request->validate([
@@ -82,11 +99,12 @@ class MetaController extends Controller
         try {
 
             // Generar código automático
-            $ultimo = Meta::max('id') + 1;
+            $ultimo = (Meta::max('id') ?? 0) + 1;
 
             $codigo = 'META-' . str_pad($ultimo, 2, '0', STR_PAD_LEFT);
 
-            Meta::create([
+            // Registrar meta
+            $meta = Meta::create([
 
                 'objetivo_id'    => $request->objetivo_id,
                 'codigo'         => $codigo,
@@ -105,9 +123,14 @@ class MetaController extends Controller
 
             DB::commit();
 
+            // Guardar contexto para continuar con Indicadores
+            session([
+                'meta_id' => $meta->id,
+            ]);
+
             return redirect()
-                ->route('metas.listar')
-                ->with('success', 'La meta fue registrada correctamente.');
+                ->route('metas.create')
+                ->with('meta_registrada', true);
 
         } catch (\Exception $e) {
 
@@ -118,8 +141,10 @@ class MetaController extends Controller
                 ->withErrors([
                     'error' => $e->getMessage()
                 ]);
+
         }
     }
+
 
     public function edit($id)
     {

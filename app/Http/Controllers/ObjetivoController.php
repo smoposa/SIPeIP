@@ -177,8 +177,9 @@ class ObjetivoController extends Controller
 
         ]);
 
-        // Mantener el objetivo para el siguiente paso del asistente
+        // Mantener el contexto del asistente
         session([
+            'plan_id'     => $objetivo->plan_id,
             'objetivo_id' => $objetivo->id,
         ]);
 
@@ -187,18 +188,6 @@ class ObjetivoController extends Controller
             ->route('objetivos.create')
             ->with('objetivo_registrado', true);
 
-            // Mantener el contexto del asistente
-            session([
-                'objetivo_id' => $objetivo->id,
-            ]);
-
-            // ===== PRUEBA =====
-            dd('LLEGO AL RETURN');
-
-            return redirect()
-                ->route('objetivos.create')
-                ->with('objetivo_registrado', true)
-                ->with('success', 'PRUEBA MODAL');
     }
 
 

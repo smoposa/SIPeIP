@@ -4,9 +4,11 @@
     <div class="flex justify-end gap-3">
 
         <!-- Cancelar -->
-        <a href="{{ route('objetivos.listar') }}"
+        <a href="{{ route('metas.listar') }}"
            class="px-5 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition">
+
             Cancelar
+
         </a>
 
         <!-- Guardar -->
@@ -15,7 +17,7 @@
 
             <i class="bi bi-check-circle mr-1"></i>
 
-            Guardar Objetivo
+            Guardar Meta
 
         </button>
 
