@@ -2,32 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Roles\StoreRoleRequest;
+use App\Http\Requests\Roles\UpdateRoleRequest;
+use App\Services\RoleService;
 use Illuminate\Http\Request;
-use App\Models\Rol;
 
 class RoleController extends Controller
 {
-    public function index()
-    {
-        $totalRoles = Rol::count();
-
-        $rolesActivos = Rol::where('estado', 'Activo')->count();
-
-        $rolesInactivos = Rol::where('estado', 'Inactivo')->count();
-
-        return view('roles.index', compact(
-            'totalRoles',
-            'rolesActivos',
-            'rolesInactivos'
-        ));
+    public function __construct(
+        private readonly RoleService $roleService
+    ) {
     }
 
+    /**
+     * Panel principal del módulo de roles.
+     */
+    public function index()
+    {
+        $this->autorizar('roles');
+
+        $resumen = $this->roleService->obtenerResumen();
+
+        return view('roles.index', $resumen);
+    }
+
+    /**
+     * Listar roles.
+     */
     public function listar()
     {
-        $roles = Rol::orderBy('nombre', 'asc')->get();
+        $this->autorizar('roles');
+
+        $roles = $this->roleService->listar();
+
         return view('roles.listar', compact('roles'));
     }
 
+    /**
+     * Mostrar formulario para crear un rol.
+     */
     public function create()
     {
         $this->autorizar('roles', 'crear');
@@ -35,92 +48,91 @@ class RoleController extends Controller
         return view('roles.create');
     }
 
-    public function desactivados()
-    {
-        return view('roles.desactivados');
-    }
-
-    public function store(Request $request)
+    /**
+     * Registrar un nuevo rol.
+     */
+    public function store(StoreRoleRequest $request)
     {
         $this->autorizar('roles', 'crear');
-        
-        $request->validate([
-            'nombre' => 'required|max:100',
-            'descripcion' => 'nullable|max:255',
-        ]);
 
-        Rol::create([
-            'nombre'      => $request->nombre,
-            'descripcion' => $request->descripcion,
-            'estado'      => 'Activo'
-        ]);
+        $this->roleService->crear($request->validated());
 
         return redirect()
-            ->route('roles.listar')
+            ->route('roles.index')
             ->with('success', 'Rol registrado correctamente.');
     }
 
-    public function edit($id)
+    /**
+     * Mostrar detalle de un rol.
+     */
+    public function detalle(int $id)
+    {
+        $this->autorizar('roles');
+
+        $rol = $this->roleService->obtenerPorId($id);
+
+        return view('roles.detalle', compact('rol'));
+    }
+
+    /**
+     * Mostrar formulario para editar un rol.
+     */
+    public function edit(int $id)
     {
         $this->autorizar('roles', 'editar');
 
-        $rol = Rol::findOrFail($id);
+        $rol = $this->roleService->obtenerPorId($id);
 
         return view('roles.editar', compact('rol'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Actualizar un rol.
+     */
+    public function update(UpdateRoleRequest $request, int $id)
     {
         $this->autorizar('roles', 'editar');
 
-        $request->validate([
-            'nombre' => 'required|max:100',
-            'descripcion' => 'nullable|max:255',
-        ]);
+        $rol = $this->roleService->obtenerPorId($id);
 
-        $rol = Rol::findOrFail($id);
-
-        $rol->update([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-        ]);
+        $this->roleService->actualizar(
+            $rol,
+            $request->validated()
+        );
 
         return redirect()
             ->route('roles.detalle', $rol->id)
-            ->with('success', 'Información del rol actualizada correctamente.');
+            ->with('success', 'Rol actualizado correctamente.');
     }
 
-    public function detalle($id)
-    {
-        $rol = Rol::findOrFail($id);
-
-        return view('roles.detalle', compact('rol'));
-    }
-    
-    public function editarEstado($id)
+    /**
+     * Mostrar formulario para modificar el estado.
+     */
+    public function editarEstado(int $id)
     {
         $this->autorizar('roles', 'estado');
 
-        $rol = Rol::findOrFail($id);
+        $rol = $this->roleService->obtenerPorId($id);
 
         return view('roles.editarestado', compact('rol'));
     }
 
-    public function actualizarEstado(Request $request, $id)
+    /**
+     * Actualizar estado del rol.
+     */
+    public function actualizarEstado(Request $request, int $id)
     {
         $this->autorizar('roles', 'estado');
-        
-        $rol = Rol::findOrFail($id);
 
-        $rol->estado = $request->has('estado')
-            ? 'Activo'
-            : 'Inactivo';
+        $rol = $this->roleService->obtenerPorId($id);
 
-        $rol->save();
+        $this->roleService->actualizarEstado(
+            $rol,
+            $request->boolean('estado')
+        );
 
         return redirect()
             ->route('roles.detalle', $rol->id)
             ->with('success', 'Estado del rol actualizado correctamente.');
     }
-
 }

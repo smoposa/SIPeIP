@@ -64,7 +64,7 @@
                 <div class="ml-4 mt-1 space-y-0.5">
 
                 @if(puedeVer('roles'))
-                    <a href="{{ route('roles.listar') }}"
+                    <a href="{{ route('roles.index') }}"
                     class="{{ request()->routeIs('roles.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                         Roles
                     </a>
