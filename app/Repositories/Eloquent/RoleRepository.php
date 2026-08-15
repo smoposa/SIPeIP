@@ -9,14 +9,6 @@ use Illuminate\Database\Eloquent\Collection;
 class RoleRepository implements RoleRepositoryInterface
 {
     /**
-     * Obtener todos los roles.
-     */
-    public function obtenerTodos(): Collection
-    {
-        return Rol::all();
-    }
-
-    /**
      * Obtener todos los roles ordenados por nombre.
      */
     public function obtenerTodosOrdenados(): Collection

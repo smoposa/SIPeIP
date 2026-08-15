@@ -8,11 +8,6 @@ use Illuminate\Database\Eloquent\Collection;
 interface RoleRepositoryInterface
 {
     /**
-     * Obtener todos los roles.
-     */
-    public function obtenerTodos(): Collection;
-
-    /**
      * Obtener todos los roles ordenados por nombre.
      */
     public function obtenerTodosOrdenados(): Collection;
