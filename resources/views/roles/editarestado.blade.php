@@ -50,7 +50,7 @@
                     <input
                         type="checkbox"
                         name="estado"
-                        value="Activo"
+                        value="1"
                         {{ $rol->estado == 'Activo' ? 'checked' : '' }}
                         class="w-5 h-5">
 

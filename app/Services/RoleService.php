@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Enums\EstadoRol;
 use App\Models\Rol;
 use App\Repositories\Contracts\RoleRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
 
 class RoleService
 {
@@ -25,14 +24,6 @@ class RoleService
             'rolesInactivos' => $this->roleRepository->contarPorEstado(EstadoRol::INACTIVO->value),
             'roles'          => $this->roleRepository->obtenerTodosOrdenados(),
         ];
-    }
-
-    /**
-     * Obtener todos los roles.
-     */
-    public function listar(): Collection
-    {
-        return $this->roleRepository->obtenerTodosOrdenados();
     }
 
     /**

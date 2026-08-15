@@ -47,9 +47,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [RoleController::class, 'index'])
                 ->name('roles.index');
 
-            Route::get('/listar', [RoleController::class, 'listar'])
-                ->name('roles.listar');
-
             Route::get('/crear', [RoleController::class, 'create'])
                 ->name('roles.create');
 

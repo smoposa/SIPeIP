@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Roles\StoreRoleRequest;
 use App\Http\Requests\Roles\UpdateRoleRequest;
+use App\Http\Requests\Roles\UpdateRoleStatusRequest;
 use App\Services\RoleService;
-use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
@@ -24,18 +24,6 @@ class RoleController extends Controller
         $resumen = $this->roleService->obtenerResumen();
 
         return view('roles.index', $resumen);
-    }
-
-    /**
-     * Listar roles.
-     */
-    public function listar()
-    {
-        $this->autorizar('roles');
-
-        $roles = $this->roleService->listar();
-
-        return view('roles.listar', compact('roles'));
     }
 
     /**
@@ -120,7 +108,7 @@ class RoleController extends Controller
     /**
      * Actualizar estado del rol.
      */
-    public function actualizarEstado(Request $request, int $id)
+    public function actualizarEstado(UpdateRoleStatusRequest $request, int $id)
     {
         $this->autorizar('roles', 'estado');
 

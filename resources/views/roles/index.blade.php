@@ -154,10 +154,11 @@
                             data-estado="{{ $rol->estado }}"
                         >
 
+                            {{-- Rol --}}
                             <td class="px-4 py-3">
 
                                 <a href="{{ route('roles.detalle', $rol->id) }}"
-                                class="font-xs text-blue-700 hover:underline">
+                                class="text-sm font-medium text-blue-700 hover:underline">
 
                                     {{ $rol->nombre }}
 
@@ -165,25 +166,30 @@
 
                             </td>
 
-                            <td class="px-4 py-3 text-gray-600">
+                            {{-- Descripción --}}
+                            <td class="px-4 py-3 text-sm text-gray-600">
+
                                 {{ $rol->descripcion }}
+
                             </td>
 
+                            {{-- Usuarios asignados --}}
                             <td class="px-4 py-3 text-center">
 
-                                <span class="font-xs text-gray-800">
+                                <span class="text-sm text-gray-800">
                                     {{ $rol->users_count }}
                                 </span>
 
                             </td>
 
+                            {{-- Estado --}}
                             <td class="px-4 py-3">
 
                                 @if($rol->estado === 'Activo')
 
                                     <span class="inline-flex items-center rounded
                                                 border border-green-600
-                                                px-2 py-0.5 text-xs font-xs
+                                                px-2 py-0.5 text-sm font-medium
                                                 text-green-700">
                                         Activo
                                     </span>
@@ -192,7 +198,7 @@
 
                                     <span class="inline-flex items-center rounded
                                                 border border-gray-400
-                                                px-2 py-0.5 text-xs font-xs
+                                                px-2 py-0.5 text-sm font-medium
                                                 text-gray-600">
                                         Inactivo
                                     </span>
