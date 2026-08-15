@@ -87,7 +87,7 @@
                     <div class="flex items-start">
 
                         <label class="w-40 flex-shrink-0 pt-2 text-sm font-medium text-gray-700">
-                            Descripción
+                            Descripción  <span class="text-red-500">*</span>
                         </label>
 
                         <div class="flex-1">
