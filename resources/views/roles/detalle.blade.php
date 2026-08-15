@@ -45,8 +45,8 @@
 
 @if(puedeHacer('roles', 'estado'))
     <a href="{{ route('roles.estado', $rol->id) }}"
-       class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-        <i class="bi bi-check2-circle text-blue-500 me-2"></i>
+        class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+        <i class="bi bi-toggle-on text-blue-500 me-2"></i>
         Editar estado
     </a>
 @endif

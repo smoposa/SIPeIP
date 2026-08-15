@@ -20,8 +20,8 @@
     <div class="bg-white border-b border-gray-300 mb-0">
 
         <div class="flex">
-                    <a href="{{ route('roles.listar') }}"
-            class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+            <a href="{{ route('roles.index') }}"
+                class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
                 <i class="bi bi-chevron-left"></i>
                 Regresar
             </a>
@@ -113,7 +113,7 @@
                                 Guardar
                             </button>
 
-                            <a href="{{ route('roles.listar') }}"
+                            <a href="{{ route('roles.index') }}"
                             class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
                                 Cancelar
                             </a>
