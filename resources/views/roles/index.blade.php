@@ -27,14 +27,37 @@
         @endif
 
 
-        <!-- Encabezado -->
-        <div class="mb-4">
+        <!-- Barra de navegación -->
+        <div class="bg-white border-b border-gray-300 mb-4">
 
-            <p class="mt-1 text-sm text-gray-500">
-                Consulte y administre los roles y niveles de acceso al sistema.
-            </p>
+            <div class="flex">
+
+                <!-- Roles - Activo -->
+                <a href="{{ route('roles.index') }}"
+                class="px-3 py-2 text-sm font-medium text-gray-800
+                        border-b-2 border-blue-500
+                        hover:bg-gray-100 transition">
+
+                    <i class="bi bi-person-check text-blue-500 me-2"></i>
+                    Roles
+
+                </a>
+
+                <!-- Asignación de Roles -->
+                <a href="{{ route('roles.asignacion') }}"
+                class="px-3 py-2 text-sm font-medium text-gray-800
+                        border-b-2 border-transparent
+                        hover:bg-gray-100 transition">
+
+                    <i class="bi bi-list-check text-blue-500 me-2"></i>
+                    Asignación de Roles
+
+                </a>
+
+            </div>
 
         </div>
+
 
         <!-- Buscador, filtro, resumen y acciones -->
         <div class="flex items-center gap-4 mb-4">

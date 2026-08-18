@@ -15,9 +15,23 @@ class Rol extends Model
         'nombre',
         'codigo',
         'descripcion',
-        'estado'
+        'estado',
+        'asignable_institucion',
     ];
 
+    /**
+     * Conversión de tipos de atributos.
+     */
+    protected function casts(): array
+    {
+        return [
+            'asignable_institucion' => 'boolean',
+        ];
+    }
+
+    /**
+     * Usuarios que tienen asignado este rol.
+     */
     public function users()
     {
         return $this->hasMany(User::class);

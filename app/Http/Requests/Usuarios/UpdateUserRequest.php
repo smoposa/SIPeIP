@@ -20,14 +20,19 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $usuarioId = $this->route('id');
+        $usuario = $this->route('usuario');
+
+        $usuarioId = is_object($usuario)
+            ? $usuario->id
+            : $usuario;
 
         return [
             'identificacion' => [
                 'required',
                 'string',
                 'max:20',
-                Rule::unique('users', 'identificacion')->ignore($usuarioId),
+                Rule::unique('users', 'identificacion')
+                    ->ignore($usuarioId),
             ],
 
             'nombres' => [
@@ -46,25 +51,14 @@ class UpdateUserRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('users', 'email')->ignore($usuarioId),
+                Rule::unique('users', 'email')
+                    ->ignore($usuarioId),
             ],
 
             'cargo' => [
                 'nullable',
                 'string',
                 'max:150',
-            ],
-
-            'rol_id' => [
-                'required',
-                'integer',
-                'exists:roles,id',
-            ],
-
-            'entidad_id' => [
-                'nullable',
-                'integer',
-                'exists:entidades,id',
             ],
         ];
     }

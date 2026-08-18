@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Enums\EstadoRol;
 use App\Models\Rol;
+use App\Models\User;
 use App\Repositories\Contracts\RoleRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class RoleService
 {
@@ -19,12 +21,43 @@ class RoleService
     public function obtenerResumen(): array
     {
         return [
-            'totalRoles'     => $this->roleRepository->contarTodos(),
-            'rolesActivos'   => $this->roleRepository->contarPorEstado(EstadoRol::ACTIVO->value),
-            'rolesInactivos' => $this->roleRepository->contarPorEstado(EstadoRol::INACTIVO->value),
-            'roles'          => $this->roleRepository->obtenerTodosOrdenados(),
+            'totalRoles' => $this->roleRepository->contarTodos(),
+
+            'rolesActivos' => $this->roleRepository->contarPorEstado(
+                EstadoRol::ACTIVO->value
+            ),
+
+            'rolesInactivos' => $this->roleRepository->contarPorEstado(
+                EstadoRol::INACTIVO->value
+            ),
+
+            'roles' => $this->roleRepository->obtenerTodosOrdenados(),
         ];
     }
+
+    
+    /**
+     * Obtener los roles disponibles para asignar
+     * según el ámbito del usuario autenticado.
+     */
+    public function obtenerRolesAsignables(
+        User $usuarioAutenticado
+    ): Collection {
+
+        // El Administrador Global puede asignar
+        // cualquier rol que se encuentre activo.
+        if ($usuarioAutenticado->rol?->codigo === 'ADMIN_GLOBAL') {
+            return $this->roleRepository
+                ->obtenerTodosOrdenados()
+                ->where('estado', EstadoRol::ACTIVO->value)
+                ->values();
+        }
+
+        // Los administradores institucionales solamente
+        // pueden asignar los roles habilitados para instituciones.
+        return $this->roleRepository->obtenerAsignablesInstitucion();
+    }
+
 
     /**
      * Obtener un rol por su ID.
@@ -39,10 +72,12 @@ class RoleService
      */
     public function crear(array $datos): Rol
     {
-        return $this->roleRepository->crear([
-            ...$datos,
-            'estado' => EstadoRol::ACTIVO->value,
-        ]);
+        $datos['estado'] = EstadoRol::ACTIVO->value;
+
+        $datos['asignable_institucion'] =
+            (bool) ($datos['asignable_institucion'] ?? false);
+
+        return $this->roleRepository->crear($datos);
     }
 
     /**
@@ -50,7 +85,25 @@ class RoleService
      */
     public function actualizar(Rol $rol, array $datos): Rol
     {
-        return $this->roleRepository->actualizar($rol, $datos);
+        $datos['asignable_institucion'] =
+            (bool) ($datos['asignable_institucion'] ?? false);
+
+        return $this->roleRepository->actualizar(
+            $rol,
+            $datos
+        );
+    }
+
+    /**
+     * Actualizar los roles permitidos
+     * para administradores institucionales.
+     */
+    public function actualizarAsignacionInstitucional(
+        array $rolesSeleccionados
+    ): void {
+        $this->roleRepository->actualizarAsignacionInstitucional(
+            $rolesSeleccionados
+        );
     }
 
     /**

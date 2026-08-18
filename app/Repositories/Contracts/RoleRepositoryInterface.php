@@ -13,6 +13,12 @@ interface RoleRepositoryInterface
     public function obtenerTodosOrdenados(): Collection;
 
     /**
+     * Obtener los roles activos permitidos
+     * para administradores institucionales.
+     */
+    public function obtenerAsignablesInstitucion(): Collection;
+
+    /**
      * Obtener un rol por su ID.
      */
     public function obtenerPorId(int $id): Rol;
@@ -36,4 +42,11 @@ interface RoleRepositoryInterface
      * Actualizar un rol existente.
      */
     public function actualizar(Rol $rol, array $datos): Rol;
+
+    /**
+     * Actualizar los roles permitidos para instituciones.
+     */
+    public function actualizarAsignacionInstitucional(
+        array $rolesSeleccionados
+    ): void;
 }

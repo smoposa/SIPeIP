@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Rol;
 use App\Models\Entidad;
 
 use App\Services\UserService;
+use App\Services\RoleService;
 
 use App\Http\Requests\Usuarios\StoreUserRequest;
 use App\Http\Requests\Usuarios\UpdateUserRequest;
@@ -18,10 +18,11 @@ use App\Http\Requests\Usuarios\UpdateUserPasswordRequest;
 class UserController extends Controller
 {
     /**
-     * Servicio de usuarios.
+     * Servicios de usuarios y roles.
      */
     public function __construct(
-        protected UserService $userService
+        protected UserService $userService,
+        protected RoleService $roleService
     ) {
     }
 
@@ -55,13 +56,36 @@ class UserController extends Controller
      */
     public function crear()
     {
-        $roles = Rol::where('estado', 'Activo')
-            ->orderBy('nombre')
-            ->get();
+        $usuarioAutenticado = auth()->user();
 
-        $entidades = Entidad::where('estado', 'Activo')
-            ->orderBy('nombre')
-            ->get();
+        /*
+         * Obtener roles disponibles según
+         * el ámbito del usuario autenticado.
+         */
+        $roles = $this->roleService->obtenerRolesAsignables(
+            $usuarioAutenticado
+        );
+
+        /*
+         * Administrador Global:
+         * puede seleccionar cualquier entidad activa.
+         *
+         * Administrador Institucional:
+         * solamente puede utilizar su propia entidad.
+         */
+        if ($usuarioAutenticado->rol?->codigo === 'ADMIN_GLOBAL') {
+
+            $entidades = Entidad::where('estado', 'Activo')
+                ->orderBy('nombre')
+                ->get();
+
+        } else {
+
+            $entidades = Entidad::where(
+                'id',
+                $usuarioAutenticado->entidad_id
+            )->get();
+        }
 
         return view('usuarios.crear', compact(
             'roles',
@@ -109,7 +133,8 @@ class UserController extends Controller
 
 
     /**
-     * Mostrar formulario de edición.
+     * Mostrar formulario de edición
+     * de los datos generales del usuario.
      */
     public function editar(User $usuario)
     {
@@ -118,18 +143,8 @@ class UserController extends Controller
             auth()->user()
         );
 
-        $roles = Rol::where('estado', 'Activo')
-            ->orderBy('nombre')
-            ->get();
-
-        $entidades = Entidad::where('estado', 'Activo')
-            ->orderBy('nombre')
-            ->get();
-
         return view('usuarios.editar', compact(
-            'usuario',
-            'roles',
-            'entidades'
+            'usuario'
         ));
     }
 
@@ -214,14 +229,20 @@ class UserController extends Controller
      */
     public function editRoles(int $id)
     {
+        $usuarioAutenticado = auth()->user();
+
         $usuario = $this->userService->buscarPorId(
             $id,
-            auth()->user()
+            $usuarioAutenticado
         );
 
-        $roles = Rol::where('estado', 'Activo')
-            ->orderBy('nombre')
-            ->get();
+        /*
+         * Obtener roles disponibles según
+         * el ámbito del usuario autenticado.
+         */
+        $roles = $this->roleService->obtenerRolesAsignables(
+            $usuarioAutenticado
+        );
 
         return view('usuarios.editroles', compact(
             'usuario',
@@ -237,14 +258,17 @@ class UserController extends Controller
         UpdateUserRoleRequest $request,
         int $id
     ) {
+        $usuarioAutenticado = auth()->user();
+
         $usuario = $this->userService->buscarPorId(
             $id,
-            auth()->user()
+            $usuarioAutenticado
         );
 
         $this->userService->cambiarRol(
             $usuario,
-            (int) $request->validated('rol_id')
+            (int) $request->validated('rol_id'),
+            $usuarioAutenticado
         );
 
         return redirect()

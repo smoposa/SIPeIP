@@ -20,10 +20,16 @@ class StoreRoleRequest extends FormRequest
                 'max:100',
                 'unique:roles,nombre',
             ],
+
             'descripcion' => [
                 'required',
                 'string',
                 'max:255',
+            ],
+
+            'asignable_institucion' => [
+                'nullable',
+                'boolean',
             ],
         ];
     }
@@ -37,6 +43,9 @@ class StoreRoleRequest extends FormRequest
 
             'descripcion.required' => 'La descripción del rol es obligatoria.',
             'descripcion.max' => 'La descripción no puede superar los 255 caracteres.',
+
+            'asignable_institucion.boolean' =>
+                'La disponibilidad institucional del rol no es válida.',
         ];
     }
 }

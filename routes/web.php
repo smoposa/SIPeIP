@@ -50,6 +50,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/crear', [RoleController::class, 'create'])
                 ->name('roles.create');
 
+            Route::get('/asignacion', [RoleController::class, 'asignacion'])
+                ->name('roles.asignacion');
+
+            Route::put('/asignacion', [RoleController::class, 'actualizarAsignacion'])
+                ->name('roles.actualizarasignacion');
+
             Route::post('/guardar', [RoleController::class, 'store'])
                 ->name('roles.store');
 

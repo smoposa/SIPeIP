@@ -20,6 +20,19 @@ class RoleRepository implements RoleRepositoryInterface
     }
 
     /**
+     * Obtener los roles activos permitidos
+     * para administradores institucionales.
+     */
+    public function obtenerAsignablesInstitucion(): Collection
+    {
+        return Rol::query()
+            ->where('estado', 'Activo')
+            ->where('asignable_institucion', true)
+            ->orderBy('nombre')
+            ->get();
+    }
+
+    /**
      * Obtener un rol por su ID.
      */
     public function obtenerPorId(int $id): Rol
@@ -59,5 +72,48 @@ class RoleRepository implements RoleRepositoryInterface
         $rol->update($datos);
 
         return $rol->refresh();
+    }
+
+    /**
+     * Actualizar los roles permitidos
+     * para administradores institucionales.
+     *
+     * Los roles inactivos nunca pueden quedar
+     * habilitados para instituciones.
+     */
+    public function actualizarAsignacionInstitucional(
+        array $rolesSeleccionados
+    ): void {
+
+        /*
+        * Obtener únicamente los IDs seleccionados
+        * que correspondan a roles activos.
+        */
+        $rolesActivosSeleccionados = Rol::query()
+            ->where('estado', 'Activo')
+            ->whereIn('id', $rolesSeleccionados)
+            ->pluck('id')
+            ->all();
+
+        /*
+        * Deshabilitar la asignación institucional
+        * para todos los roles.
+        */
+        Rol::query()->update([
+            'asignable_institucion' => false,
+        ]);
+
+        /*
+        * Habilitar únicamente los roles activos
+        * seleccionados por el Administrador Global.
+        */
+        if (!empty($rolesActivosSeleccionados)) {
+
+            Rol::query()
+                ->whereIn('id', $rolesActivosSeleccionados)
+                ->update([
+                    'asignable_institucion' => true,
+                ]);
+        }
     }
 }

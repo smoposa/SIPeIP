@@ -39,10 +39,6 @@
         <!-- Encabezado -->
         <div class="mb-6">
 
-            <h2 class="text-2xl font-semibold text-gray-800">
-                Registro de usuario
-            </h2>
-
             <p class="mt-1 text-sm text-gray-500">
                 Ingrese la información requerida para registrar un nuevo usuario en el sistema.
             </p>
@@ -50,7 +46,7 @@
         </div>
 
         <!-- Scroll -->
-        <div class="overflow-y-auto" style="height: calc(100vh - 300px);">
+        <div class="overflow-y-auto" style="height: calc(100vh - 250px);">
 
             <form method="POST"
                 action="{{ route('usuarios.store') }}">
@@ -180,27 +176,49 @@
                             Entidad <span class="text-red-500">*</span>
                         </label>
 
-                        <select
-                            name="entidad_id"
-                            required
-                            class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
+                        @if(auth()->user()->rol?->codigo === 'ADMIN_GLOBAL')
 
-                            <option value="">
-                                Seleccione
-                            </option>
+                            <!-- Administrador Global: selecciona la entidad -->
+                            <select
+                                name="entidad_id"
+                                required
+                                class="w-2/3 text-sm border border-gray-300 rounded-md px-3 py-2">
 
-                            @foreach($entidades as $entidad)
-
-                                <option value="{{ $entidad->id }}"
-                                    {{ old('entidad_id') == $entidad->id ? 'selected' : '' }}>
-
-                                    {{ $entidad->nombre }}
-
+                                <option value="">
+                                    Seleccione
                                 </option>
 
-                            @endforeach
+                                @foreach($entidades as $entidad)
 
-                        </select>
+                                    <option
+                                        value="{{ $entidad->id }}"
+                                        {{ old('entidad_id') == $entidad->id ? 'selected' : '' }}>
+
+                                        {{ $entidad->nombre }}
+
+                                    </option>
+
+                                @endforeach
+
+                            </select>
+
+                        @else
+
+                            <!-- Administrador Institucional: entidad asignada automáticamente -->
+                            <div class="w-2/3">
+
+                                <div class="w-full text-sm border border-gray-300 rounded-md px-3 py-2 bg-gray-50 text-gray-700">
+                                    {{ auth()->user()->entidad?->nombre }}
+                                </div>
+
+                                <input
+                                    type="hidden"
+                                    name="entidad_id"
+                                    value="{{ auth()->user()->entidad_id }}">
+
+                            </div>
+
+                        @endif
 
                     </div>
 
