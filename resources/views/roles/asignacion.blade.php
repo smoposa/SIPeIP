@@ -27,6 +27,17 @@
 
             </a>
 
+            <!-- Actualizar -->
+            <a href="{{ url()->current() }}"
+                class="px-3 py-2 text-sm font-medium text-gray-700
+                        border-b-2 border-transparent
+                        hover:bg-gray-100 transition">
+
+                <i class="bi bi-arrow-clockwise text-blue-500 me-2"></i>
+                Actualizar
+
+            </a>
+
         </div>
 
     </div>
@@ -100,9 +111,18 @@
 
                             @if(!$rolActivo)
 
+                            @if(!$rolActivo)
+
                                 <span class="text-sm text-gray-400">
-                                    Rol desactivado
+                                    <class="font-semibold"> Rol desactivado. 
+
+                                    <a href="{{ route('roles.estado', ['id' => $rol->id, 'origen' => 'asignacion']) }}"
+                                    class="text-blue-500 hover:text-blue-700 hover:underline">
+                                        Clic para activarlo.
+                                    </a>
                                 </span>
+
+                            @endif
 
                             @endif
 
@@ -127,11 +147,19 @@
                     <button
                         type="submit"
                         class="bg-blue-600 hover:bg-blue-700
-                               text-white px-5 py-2 rounded-md">
+                            text-white px-5 py-2 rounded-md">
 
                         Guardar
 
                     </button>
+
+                    <a href="{{ route('roles.index') }}"
+                    class="bg-gray-200 hover:bg-gray-300
+                            text-gray-700 px-5 py-2 rounded-md">
+
+                        Cancelar
+
+                    </a>
 
                 </div>
 

@@ -54,6 +54,17 @@
 
                 </a>
 
+                <!-- Actualizar -->
+                <a href="{{ url()->current() }}"
+                class="px-3 py-2 text-sm font-medium text-gray-700
+                        border-b-2 border-transparent
+                        hover:bg-gray-100 transition">
+
+                    <i class="bi bi-arrow-clockwise text-blue-500 me-2"></i>
+                    Actualizar
+
+                </a>
+
             </div>
 
         </div>

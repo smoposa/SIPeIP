@@ -158,6 +158,23 @@ class RoleController extends Controller
             $request->boolean('estado')
         );
 
+        /*
+        * Si el usuario llegó desde Asignación de Roles,
+        * regresar a esa pantalla después de guardar.
+        */
+        if ($request->input('origen') === 'asignacion') {
+            return redirect()
+                ->route('roles.asignacion')
+                ->with(
+                    'success',
+                    'Estado del rol actualizado correctamente.'
+                );
+        }
+
+        /*
+        * Flujo normal:
+        * regresar al detalle del rol.
+        */
         return redirect()
             ->route('roles.detalle', $rol->id)
             ->with(
