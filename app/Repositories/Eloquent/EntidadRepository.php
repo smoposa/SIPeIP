@@ -18,6 +18,7 @@ class EntidadRepository implements EntidadRepositoryInterface
             ->get();
     }
 
+
     /**
      * Obtener una entidad por su ID.
      */
@@ -27,6 +28,19 @@ class EntidadRepository implements EntidadRepositoryInterface
             ->findOrFail($id);
     }
 
+
+    /**
+     * Obtener una entidad como colección.
+     */
+    public function obtenerColeccionPorId(int $id): Collection
+    {
+        return Entidad::query()
+            ->where('id', $id)
+            ->orderBy('nombre')
+            ->get();
+    }
+
+
     /**
      * Contar todas las entidades.
      */
@@ -34,6 +48,7 @@ class EntidadRepository implements EntidadRepositoryInterface
     {
         return Entidad::query()->count();
     }
+
 
     /**
      * Contar entidades por estado.
@@ -45,6 +60,21 @@ class EntidadRepository implements EntidadRepositoryInterface
             ->count();
     }
 
+
+    /**
+     * Contar una entidad por estado.
+     */
+    public function contarPorEstadoYEntidad(
+        string $estado,
+        int $entidadId
+    ): int {
+        return Entidad::query()
+            ->where('id', $entidadId)
+            ->where('estado', $estado)
+            ->count();
+    }
+
+
     /**
      * Crear una entidad.
      */
@@ -53,11 +83,14 @@ class EntidadRepository implements EntidadRepositoryInterface
         return Entidad::create($datos);
     }
 
+
     /**
      * Actualizar una entidad.
      */
-    public function actualizar(Entidad $entidad, array $datos): Entidad
-    {
+    public function actualizar(
+        Entidad $entidad,
+        array $datos
+    ): Entidad {
         $entidad->update($datos);
 
         return $entidad->refresh();

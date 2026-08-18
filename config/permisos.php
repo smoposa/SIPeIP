@@ -37,7 +37,6 @@ return [
         'roles' => [
             'ADMIN_GLOBAL',
             'ADMIN_SISTEMA',
-            'ADMIN_INSTITUCIONAL',
         ],
 
         'usuarios' => [

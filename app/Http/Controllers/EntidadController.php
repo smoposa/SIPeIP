@@ -14,6 +14,7 @@ class EntidadController extends Controller
     ) {
     }
 
+
     /**
      * Panel principal del módulo de entidades.
      */
@@ -21,10 +22,13 @@ class EntidadController extends Controller
     {
         $this->autorizar('entidades');
 
-        $resumen = $this->entidadService->obtenerResumen();
+        $resumen = $this->entidadService->obtenerResumen(
+            auth()->user()
+        );
 
         return view('entidades.index', $resumen);
     }
+
 
     /**
      * Mostrar formulario para crear una entidad.
@@ -36,6 +40,7 @@ class EntidadController extends Controller
         return view('entidades.create');
     }
 
+
     /**
      * Registrar una nueva entidad.
      */
@@ -43,12 +48,18 @@ class EntidadController extends Controller
     {
         $this->autorizar('entidades', 'crear');
 
-        $this->entidadService->crear($request->validated());
+        $this->entidadService->crear(
+            $request->validated()
+        );
 
         return redirect()
             ->route('entidades.index')
-            ->with('success', 'Entidad registrada correctamente.');
+            ->with(
+                'success',
+                'Entidad registrada correctamente.'
+            );
     }
+
 
     /**
      * Mostrar detalle de una entidad.
@@ -57,10 +68,17 @@ class EntidadController extends Controller
     {
         $this->autorizar('entidades');
 
-        $entidad = $this->entidadService->obtenerPorId($id);
+        $entidad = $this->entidadService->obtenerPorId(
+            $id,
+            auth()->user()
+        );
 
-        return view('entidades.detalle', compact('entidad'));
+        return view(
+            'entidades.detalle',
+            compact('entidad')
+        );
     }
+
 
     /**
      * Mostrar formulario para editar una entidad.
@@ -69,19 +87,31 @@ class EntidadController extends Controller
     {
         $this->autorizar('entidades', 'editar');
 
-        $entidad = $this->entidadService->obtenerPorId($id);
+        $entidad = $this->entidadService->obtenerPorId(
+            $id,
+            auth()->user()
+        );
 
-        return view('entidades.editar', compact('entidad'));
+        return view(
+            'entidades.editar',
+            compact('entidad')
+        );
     }
+
 
     /**
      * Actualizar una entidad.
      */
-    public function update(UpdateEntidadRequest $request, int $id)
-    {
+    public function update(
+        UpdateEntidadRequest $request,
+        int $id
+    ) {
         $this->autorizar('entidades', 'editar');
 
-        $entidad = $this->entidadService->obtenerPorId($id);
+        $entidad = $this->entidadService->obtenerPorId(
+            $id,
+            auth()->user()
+        );
 
         $this->entidadService->actualizar(
             $entidad,
@@ -90,8 +120,12 @@ class EntidadController extends Controller
 
         return redirect()
             ->route('entidades.detalle', $entidad->id)
-            ->with('success', 'Entidad actualizada correctamente.');
+            ->with(
+                'success',
+                'Entidad actualizada correctamente.'
+            );
     }
+
 
     /**
      * Mostrar formulario para modificar el estado.
@@ -100,10 +134,17 @@ class EntidadController extends Controller
     {
         $this->autorizar('entidades', 'estado');
 
-        $entidad = $this->entidadService->obtenerPorId($id);
+        $entidad = $this->entidadService->obtenerPorId(
+            $id,
+            auth()->user()
+        );
 
-        return view('entidades.editarestado', compact('entidad'));
+        return view(
+            'entidades.editarestado',
+            compact('entidad')
+        );
     }
+
 
     /**
      * Actualizar estado de la entidad.
@@ -114,7 +155,10 @@ class EntidadController extends Controller
     ) {
         $this->autorizar('entidades', 'estado');
 
-        $entidad = $this->entidadService->obtenerPorId($id);
+        $entidad = $this->entidadService->obtenerPorId(
+            $id,
+            auth()->user()
+        );
 
         $this->entidadService->actualizarEstado(
             $entidad,
@@ -123,6 +167,9 @@ class EntidadController extends Controller
 
         return redirect()
             ->route('entidades.detalle', $entidad->id)
-            ->with('success', 'Estado de la entidad actualizado correctamente.');
+            ->with(
+                'success',
+                'Estado de la entidad actualizado correctamente.'
+            );
     }
 }
