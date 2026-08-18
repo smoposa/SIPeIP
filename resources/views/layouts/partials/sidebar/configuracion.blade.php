@@ -61,7 +61,7 @@
             <!-- Usuarios -->
             @if(puedeVer('usuarios'))
 
-                <a href="{{ route('usuarios.listar') }}"
+                <a href="{{ route('usuarios.index') }}"
                    class="{{ request()->routeIs('usuarios.*')
                         ? 'sidebar-submenu-active'
                         : 'sidebar-submenu' }}">

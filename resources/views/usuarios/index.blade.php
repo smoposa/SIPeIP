@@ -1,222 +1,196 @@
-<x-usuarios-layout title="Página de inicio">
+<x-usuarios-layout title="Todos los Usuarios">
 
-    <div class="space-y-6">
+    <div class="space-y-4">
+
+        <!-- Notificación de Éxito -->
+        @if(session('success'))
+
+            <div id="alertSuccess"
+                 class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+
+                {{ session('success') }}
+
+            </div>
+
+            <script>
+                setTimeout(() => {
+
+                    const alerta = document.getElementById('alertSuccess');
+
+                    if (alerta) {
+                        alerta.remove();
+                    }
+
+                }, 3000);
+            </script>
+
+        @endif
+
 
         <!-- Encabezado -->
-        <div>
+        <div class="mb-4">
 
-            <!-- h2 class="text-2xl font-semibold text-gray-900">
-                Información general
-            </h2 -->
-    <h3 class="text-lg font-semibold text-gray-800 mb-5">
-        Resumen General
-    </h3>
-            
+            <p class="mt-1 text-sm text-gray-500">
+                Consulte y administre los usuarios registrados en el sistema.
+            </p>
 
         </div>
 
-        <!-- Scroll vertical -->
-        <div class="overflow-y-auto" style="height: calc(100vh - 220px);">
 
-            <div class="space-y-6">
-
-                <!-- Resumen General -->
-                <div class="bg-white border border-gray-300 rounded-lg p-4 mb-6">
-
-                
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                        <!-- Registrados -->
-                        <div class="flex items-center justify-between">
-
-                            <div>
-
-                                <p class="text-sm font-medium text-gray-800">
-                                    Usuarios registrados
-                                </p>
-
-                                <p class="text-xs text-gray-500">
-                                    Total de usuarios del sistema
-                                </p>
-
-                            </div>
-
-                            <span class="text-2xl font-semibold text-gray-700">
-                                {{ $totalUsuarios }}
-                            </span>
-
-                        </div>
-
-                        <!-- Activos -->
-                        <div class="flex items-center justify-between border-l border-gray-200 pl-6">
-
-                            <div>
-
-                                <p class="text-sm font-medium text-gray-800">
-                                    Usuarios activos
-                                </p>
-
-                                <p class="text-xs text-gray-500">
-                                    Habilitados para ingresar
-                                </p>
-
-                            </div>
-
-                            <span class="text-2xl font-semibold text-green-600">
-                                {{ $usuariosActivos }}
-                            </span>
-
-                        </div>
-
-                        <!-- Inactivos -->
-                        <div class="flex items-center justify-between border-l border-gray-200 pl-6">
-
-                            <div>
-
-                                <p class="text-sm font-medium text-gray-800">
-                                    Usuarios inactivos
-                                </p>
-
-                                <p class="text-xs text-gray-500">
-                                    Acceso deshabilitado
-                                </p>
-
-                            </div>
-
-                            <span class="text-2xl font-semibold text-red-500">
-                                {{ $usuariosInactivos }}
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <!-- Distribución de usuarios -->
-                <div class="mb-4">
-
-                    <h3 class="text-lg font-semibold text-gray-800">
-                        Distribución de usuarios por tipo de entidad
-                    </h3>
-
-                    <p class="text-sm text-gray-500 mt-1">
-                        Consulte los usuarios asignados a cada entidad.
-                    </p>
-
-                </div>
-
-                <div class="space-y-3">
-
-                    @foreach($usuariosPorTipo as $tipo => $entidades)
-
-                        <details class="bg-gray-100 border border-gray-200 rounded-md">
-
-                            <summary
-                                class="flex justify-between items-center px-4 py-3 cursor-pointer list-none">
-
-                                <span class="text-sm font-semibold text-gray-700">
-
-                                    {{ $tipo }}
-
-                                </span>
-
-                                <span class="bg-gray-300 text-gray-700 px-2 py-0.5 rounded-full text-xs">
-
-                                    {{ $entidades->sum(fn($entidad) => $entidad->usuarios->count()) }}
-
-                                </span>
-
-                            </summary>
-
-                            <div class="space-y-2 p-2">
-
-                                @foreach($entidades as $entidad)
-
-                                    <details class="bg-white border border-gray-200 rounded-md">
-
-                                        <summary
-                                            class="flex justify-between items-center px-4 py-3 cursor-pointer list-none hover:bg-gray-50">
-
-                                            <span class="text-sm text-gray-700">
-
-                                                {{ $entidad->nombre }}
-
-                                            </span>
-
-                                            <span
-                                                class="min-w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 text-xs font-semibold">
-
-                                                {{ $entidad->usuarios->count() }}
-
-                                            </span>
-
-                                        </summary>
-
-                                        <div class="border-t bg-gray-50">
-
-                                            @forelse($entidad->usuarios as $usuario)
-
-                                                <div class="flex justify-between items-center px-4 py-2 border-b last:border-b-0">
-
-                                                    <div>
-
-                                                        <p class="text-sm font-medium text-gray-700">
-
-                                                            {{ $usuario->nombres }}
-                                                            {{ $usuario->apellidos }}
-
-                                                        </p>
-
-                                                        <p class="text-xs text-gray-500 mt-0.5">
-
-                                                            {{ $usuario->rol->nombre }}
-
-                                                        </p>
-
-                                                    </div>
-
-                                                    <span
-                                                        class="px-2 py-1 rounded-full text-xs
-                                                        {{ $usuario->estado == 'Activo'
-                                                            ? 'bg-green-100 text-green-700'
-                                                            : 'bg-red-100 text-red-700' }}">
-
-                                                        {{ $usuario->estado }}
-
-                                                    </span>
-
-                                                </div>
-
-                                            @empty
-
-                                                <div class="px-4 py-3 text-xs text-gray-500">
-
-                                                    No existen usuarios registrados.
-
-                                                </div>
-
-                                            @endforelse
-
-                                        </div>
-
-                                    </details>
-
-                                @endforeach
-
-                            </div>
-
-                        </details>
-
-                    @endforeach
-
-                </div>
+        <!-- Buscador, filtro, resumen y acciones -->
+        <div class="flex items-center gap-4 mb-4">
+
+            <!-- Buscador -->
+            <div class="relative flex-1 max-w-md">
+
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                    <i class="bi bi-search"></i>
+                </span>
+
+                <input
+                    type="text"
+                    id="buscarUsuario"
+                    placeholder="Buscar usuario..."
+                    class="w-full border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm
+                           focus:ring-blue-500 focus:border-blue-500">
 
             </div>
+
+
+            <!-- Filtro Estado -->
+            <select
+                id="filtroEstado"
+                class="w-48 rounded-md border border-gray-300 px-3 py-2 text-sm
+                       text-gray-700 focus:border-blue-500 focus:ring-blue-500">
+
+                <option value="">Todos los estados</option>
+                <option value="Activo">Activos</option>
+                <option value="Inactivo">Inactivos</option>
+
+            </select>
+
+
+            <!-- Resumen de estados -->
+            <div class="flex-1">
+
+                <p class="text-sm text-gray-500">
+
+                    <span class="text-blue-600 font-medium">
+                        {{ $totalUsuarios }}
+                    </span>
+                    registros ·
+
+                    <span class="text-green-600 font-medium">
+                        {{ $usuariosActivos }}
+                    </span>
+                    activos ·
+
+                    <span class="text-red-600 font-medium">
+                        {{ $usuariosInactivos }}
+                    </span>
+                    inactivos
+
+                </p>
+
+            </div>
+
+
+            <!-- Crear usuario -->
+            @if(puedeHacer('usuarios', 'crear'))
+
+                <a href="{{ route('usuarios.create') }}"
+                   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
+                          text-white text-sm font-medium px-4 py-2 rounded-md
+                          transition whitespace-nowrap">
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Crear usuario
+
+                </a>
+
+            @endif
+
+        </div>
+
+
+        <!-- Listado de usuarios -->
+        @include('usuarios.partials.listado-usuarios')
+
+
+        <!-- Mensaje sin resultados -->
+        <div id="sinResultados"
+             class="hidden py-8 text-center text-sm text-gray-500">
+
+            No se encontraron usuarios que coincidan con la búsqueda.
 
         </div>
 
     </div>
+
+
+    <!-- Buscador y filtro -->
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const buscador = document.getElementById('buscarUsuario');
+            const filtroEstado = document.getElementById('filtroEstado');
+            const filas = document.querySelectorAll('.fila-usuario');
+            const sinResultados = document.getElementById('sinResultados');
+
+            function filtrarUsuarios() {
+
+                const texto = buscador.value.toLowerCase().trim();
+                const estado = filtroEstado.value;
+
+                let visibles = 0;
+
+                filas.forEach(function (fila) {
+
+                    const nombre = fila.dataset.nombre || '';
+                    const email = fila.dataset.email || '';
+                    const identificacion = fila.dataset.identificacion || '';
+                    const cargo = fila.dataset.cargo || '';
+                    const rol = fila.dataset.rol || '';
+                    const entidad = fila.dataset.entidad || '';
+                    const estadoUsuario = fila.dataset.estado || '';
+
+                    const coincideTexto =
+                        nombre.includes(texto) ||
+                        email.includes(texto) ||
+                        identificacion.includes(texto) ||
+                        cargo.includes(texto) ||
+                        rol.includes(texto) ||
+                        entidad.includes(texto);
+
+                    const coincideEstado =
+                        estado === '' ||
+                        estadoUsuario === estado;
+
+                    const mostrar =
+                        coincideTexto && coincideEstado;
+
+                    fila.style.display = mostrar ? '' : 'none';
+
+                    if (mostrar) {
+                        visibles++;
+                    }
+
+                });
+
+                sinResultados.classList.toggle(
+                    'hidden',
+                    visibles !== 0
+                );
+
+            }
+
+            buscador.addEventListener('input', filtrarUsuarios);
+            filtroEstado.addEventListener('change', filtrarUsuarios);
+
+        });
+
+    </script>
 
 </x-usuarios-layout>

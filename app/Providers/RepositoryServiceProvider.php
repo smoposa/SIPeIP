@@ -10,6 +10,9 @@ use App\Repositories\Eloquent\RoleRepository;
 use App\Repositories\Contracts\EntidadRepositoryInterface;
 use App\Repositories\Eloquent\EntidadRepository;
 
+use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Repositories\Eloquent\UserRepository;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -27,6 +30,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             EntidadRepositoryInterface::class,
             EntidadRepository::class
+        );
+
+        // Usuarios
+        $this->app->bind(
+            UserRepositoryInterface::class,
+            UserRepository::class
         );
     }
 

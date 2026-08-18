@@ -70,56 +70,60 @@ Route::middleware('auth')->group(function () {
 
     });
 
-     // Usuarios
+    // Usuarios
     Route::prefix('usuarios')
         ->middleware('role:usuarios')
         ->group(function () {
 
+            // Información general
             Route::get('/', [UserController::class, 'index'])
                 ->name('usuarios.index');
 
-            Route::get('/listar', [UserController::class, 'listar'])
-                ->name('usuarios.listar');
-
+            // Crear
             Route::get('/crear', [UserController::class, 'crear'])
                 ->name('usuarios.create');
 
             Route::post('/guardar', [UserController::class, 'store'])
                 ->name('usuarios.store');
 
+            // Detalle
             Route::get('/{usuario}', [UserController::class, 'detalle'])
                 ->name('usuarios.show');
 
+            // Editar información
             Route::get('/{usuario}/editar', [UserController::class, 'editar'])
                 ->name('usuarios.edit');
 
             Route::put('/{usuario}', [UserController::class, 'update'])
                 ->name('usuarios.update');
 
+            // Estado
             Route::get('/{usuario}/estado', [UserController::class, 'editarEstado'])
                 ->name('usuarios.estado');
 
             Route::put('/{usuario}/estado', [UserController::class, 'actualizarEstado'])
                 ->name('usuarios.actualizarestado');
 
+            // Rol
             Route::get('/{usuario}/editar-rol', [UserController::class, 'editRoles'])
                 ->name('usuarios.editroles');
 
             Route::put('/{usuario}/editar-rol', [UserController::class, 'updateRoles'])
                 ->name('usuarios.actualizarroles');
 
+            // Entidad
             Route::get('/{usuario}/editar-entidad', [UserController::class, 'editEntidad'])
                 ->name('usuarios.editentidad');
 
             Route::put('/{usuario}/editar-entidad', [UserController::class, 'updateEntidad'])
                 ->name('usuarios.actualizarentidad');
 
+            // Contraseña
             Route::get('/{usuario}/password', [UserController::class, 'editPassword'])
                 ->name('usuarios.editpassword');
 
             Route::put('/{usuario}/password', [UserController::class, 'updatePassword'])
                 ->name('usuarios.actualizarpassword');
-
     });
 
       // Entidades

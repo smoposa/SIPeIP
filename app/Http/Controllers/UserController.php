@@ -5,51 +5,63 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Rol;
 use App\Models\Entidad;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+
+use App\Services\UserService;
+
+use App\Http\Requests\Usuarios\StoreUserRequest;
+use App\Http\Requests\Usuarios\UpdateUserRequest;
+use App\Http\Requests\Usuarios\UpdateUserStatusRequest;
+use App\Http\Requests\Usuarios\UpdateUserRoleRequest;
+use App\Http\Requests\Usuarios\UpdateUserEntidadRequest;
+use App\Http\Requests\Usuarios\UpdateUserPasswordRequest;
 
 class UserController extends Controller
 {
+    /**
+     * Servicio de usuarios.
+     */
+    public function __construct(
+        protected UserService $userService
+    ) {
+    }
 
+
+    /**
+     * Mostrar listado general de usuarios.
+     */
     public function index()
     {
-        $totalUsuarios = User::count();
+        $usuarioAutenticado = auth()->user();
 
-        $usuariosActivos = User::where('estado', 'Activo')->count();
+        $usuarios = $this->userService->obtenerUsuarios(
+            $usuarioAutenticado
+        );
 
-        $usuariosInactivos = User::where('estado', 'Inactivo')->count();
+        $resumen = $this->userService->obtenerResumen(
+            $usuarioAutenticado
+        );
 
-        $usuariosPorTipo = Entidad::with('usuarios.rol')
-            ->orderBy('nombre')
-            ->get()
-            ->groupBy('tipoEntidad')
-            ->sortByDesc(function ($entidades) {
-                return $entidades->sum(function ($entidad) {
-                    return $entidad->usuarios->count();
-                });
-            });
-
-        return view('usuarios.index', compact(
-            'totalUsuarios',
-            'usuariosActivos',
-            'usuariosInactivos',
-            'usuariosPorTipo'
-        ));
-    }
-    
-    public function listar()
-    {
-        $usuarios = User::with(['rol', 'entidad'])->get();
-
-        return view('usuarios.listar', compact('usuarios'));
+        return view('usuarios.index', [
+            'usuarios' => $usuarios,
+            'totalUsuarios' => $resumen['totalUsuarios'],
+            'usuariosActivos' => $resumen['usuariosActivos'],
+            'usuariosInactivos' => $resumen['usuariosInactivos'],
+        ]);
     }
 
+
+    /**
+     * Mostrar formulario para crear usuario.
+     */
     public function crear()
     {
-        $roles = Rol::where('estado', 'Activo')->get();
+        $roles = Rol::where('estado', 'Activo')
+            ->orderBy('nombre')
+            ->get();
 
-        $entidades = Entidad::where('estado', 'Activo')->get();
+        $entidades = Entidad::where('estado', 'Activo')
+            ->orderBy('nombre')
+            ->get();
 
         return view('usuarios.crear', compact(
             'roles',
@@ -57,48 +69,57 @@ class UserController extends Controller
         ));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'identificacion' => 'required|max:20',
-            'nombres'        => 'required|max:150',
-            'apellidos'      => 'required|max:150',
-            'email'          => 'required|email|unique:users,email',
-            'cargo'          => 'nullable|max:255',
-            'rol_id'         => 'required|exists:roles,id',
-            'entidad_id'     => 'required|exists:entidades,id',
-        ]);
 
-        User::create([
-            'identificacion' => $request->identificacion,
-            'nombres'        => $request->nombres,
-            'apellidos'      => $request->apellidos,
-            'name'           => $request->nombres . ' ' . $request->apellidos,
-            'email'          => $request->email,
-            'cargo'          => $request->cargo,
-            'rol_id'         => $request->rol_id,
-            'entidad_id'     => $request->entidad_id,
-            'estado'         => 'Activo',
-            'password'       => bcrypt('12345678'),
-        ]);
+    /**
+     * Registrar usuario.
+     */
+    public function store(StoreUserRequest $request)
+    {
+        $datos = $request->validated();
+
+        // Contraseña temporal inicial.
+        $datos['password'] = '12345678';
+
+        $this->userService->crear($datos);
 
         return redirect()
             ->route('usuarios.index')
-            ->with('success', 'Usuario registrado correctamente.');
+            ->with(
+                'success',
+                'Usuario registrado correctamente.'
+            );
     }
 
+
+    /**
+     * Mostrar detalle del usuario.
+     */
     public function detalle(User $usuario)
     {
-        $usuario->load(['rol', 'entidad']);
+        $usuario = $this->userService->buscarPorId(
+            $usuario->id
+        );
 
         return view('usuarios.detalle', compact('usuario'));
     }
 
+
+    /**
+     * Mostrar formulario de edición.
+     */
     public function editar(User $usuario)
     {
-        $roles = Rol::where('estado', 'Activo')->get();
+        $usuario = $this->userService->buscarPorId(
+            $usuario->id
+        );
 
-        $entidades = Entidad::where('estado', 'Activo')->get();
+        $roles = Rol::where('estado', 'Activo')
+            ->orderBy('nombre')
+            ->get();
+
+        $entidades = Entidad::where('estado', 'Activo')
+            ->orderBy('nombre')
+            ->get();
 
         return view('usuarios.editar', compact(
             'usuario',
@@ -107,63 +128,77 @@ class UserController extends Controller
         ));
     }
 
-    public function actualizarEstado(Request $request, User $usuario)
-    {
-        $usuario->estado = $request->has('estado')
-            ? 'Activo'
-            : 'Inactivo';
 
-        $usuario->save();
-
-        return redirect()
-            ->route('usuarios.show', $usuario->id)
-            ->with('success', 'Estado del usuario actualizado correctamente.');
-    }
-
-    public function update(Request $request, User $usuario)
-    {
-        $request->validate([
-            'identificacion' => 'required|max:20',
-            'nombres'        => 'required|max:150',
-            'apellidos'      => 'required|max:150',
-            'email'          => 'required|email|max:255',
-            'cargo'          => 'nullable|max:255',
-            'rol_id'         => 'required|exists:roles,id',
-            'entidad_id'     => 'required|exists:entidades,id',
-        ]);
-
-        $usuario->update([
-            'identificacion' => $request->identificacion,
-            'nombres'        => $request->nombres,
-            'apellidos'      => $request->apellidos,
-            'email'          => $request->email,
-            'cargo'          => $request->cargo,
-            'rol_id'         => $request->rol_id,
-            'entidad_id'     => $request->entidad_id,
-        ]);
+    /**
+     * Actualizar usuario.
+     */
+    public function update(
+        UpdateUserRequest $request,
+        User $usuario
+    ) {
+        $this->userService->actualizar(
+            $usuario,
+            $request->validated()
+        );
 
         return redirect()
             ->route('usuarios.show', $usuario->id)
-            ->with('success', 'Usuario actualizado correctamente.');
+            ->with(
+                'success',
+                'Usuario actualizado correctamente.'
+            );
     }
 
+
+    /**
+     * Mostrar formulario para modificar estado.
+     */
     public function editarEstado(User $usuario)
     {
         return view('usuarios.estado', compact('usuario'));
     }
 
+
+    /**
+     * Actualizar estado del usuario.
+     */
+    public function actualizarEstado(
+        UpdateUserStatusRequest $request,
+        User $usuario
+    ) {
+        $this->userService->cambiarEstado(
+            $usuario,
+            $request->validated('estado')
+        );
+
+        return redirect()
+            ->route('usuarios.show', $usuario->id)
+            ->with(
+                'success',
+                'Estado del usuario actualizado correctamente.'
+            );
+    }
+
+
+    /**
+     * Mostrar usuarios desactivados.
+     */
     public function desactivados()
     {
         return view('usuarios.desactivados');
     }
 
-    public function editRoles($id)
+
+    /**
+     * Mostrar formulario para modificar rol.
+     */
+    public function editRoles(int $id)
     {
-        $usuario = User::findOrFail($id);
+        $usuario = $this->userService->buscarPorId($id);
 
         $roles = Rol::where('estado', 'Activo')
-                    ->orderBy('nombre')
-                    ->get();
+            ->orderBy('nombre')
+            ->get();
 
         return view('usuarios.editroles', compact(
             'usuario',
@@ -171,30 +206,40 @@ class UserController extends Controller
         ));
     }
 
-    public function updateRoles(Request $request, $id)
-    {
-        $request->validate([
-            'rol_id' => 'required|exists:roles,id'
-        ]);
 
-        $usuario = User::findOrFail($id);
+    /**
+     * Actualizar rol.
+     */
+    public function updateRoles(
+        UpdateUserRoleRequest $request,
+        int $id
+    ) {
+        $usuario = $this->userService->buscarPorId($id);
 
-        $usuario->rol_id = $request->rol_id;
-
-        $usuario->save();
+        $this->userService->cambiarRol(
+            $usuario,
+            (int) $request->validated('rol_id')
+        );
 
         return redirect()
             ->route('usuarios.show', $usuario->id)
-            ->with('success', 'Rol asignado correctamente.');
+            ->with(
+                'success',
+                'Rol asignado correctamente.'
+            );
     }
 
-    public function editEntidad($id)
+
+    /**
+     * Mostrar formulario para modificar entidad.
+     */
+    public function editEntidad(int $id)
     {
-        $usuario = User::findOrFail($id);
+        $usuario = $this->userService->buscarPorId($id);
 
         $entidades = Entidad::where('estado', 'Activo')
-                            ->orderBy('nombre')
-                            ->get();
+            ->orderBy('nombre')
+            ->get();
 
         return view('usuarios.editentidad', compact(
             'usuario',
@@ -202,50 +247,62 @@ class UserController extends Controller
         ));
     }
 
-    public function updateEntidad(Request $request, $id)
-    {
-        $request->validate([
-            'entidad_id' => 'required|exists:entidades,id'
-        ]);
 
-        $usuario = User::findOrFail($id);
+    /**
+     * Actualizar entidad.
+     */
+    public function updateEntidad(
+        UpdateUserEntidadRequest $request,
+        int $id
+    ) {
+        $usuario = $this->userService->buscarPorId($id);
 
-        $usuario->entidad_id = $request->entidad_id;
-
-        $usuario->save();
+        $this->userService->cambiarEntidad(
+            $usuario,
+            (int) $request->validated('entidad_id')
+        );
 
         return redirect()
             ->route('usuarios.show', $usuario->id)
-            ->with('success', 'Entidad asignada correctamente.');
+            ->with(
+                'success',
+                'Entidad asignada correctamente.'
+            );
     }
 
-    public function editPassword($id)
+
+    /**
+     * Mostrar formulario para restablecer contraseña.
+     */
+    public function editPassword(int $id)
     {
-        $usuario = User::findOrFail($id);
+        $usuario = $this->userService->buscarPorId($id);
 
         return view('usuarios.editpassword', compact(
             'usuario'
         ));
     }
 
-    public function updatePassword(Request $request, $id)
-    {
-        $request->validate([
-            'password' => 'required|min:8|confirmed'
-        ]);
 
-        $usuario = User::findOrFail($id);
+    /**
+     * Restablecer contraseña.
+     */
+    public function updatePassword(
+        UpdateUserPasswordRequest $request,
+        int $id
+    ) {
+        $usuario = $this->userService->buscarPorId($id);
 
-        $usuario->password = Hash::make(
-            $request->password
+        $this->userService->cambiarPassword(
+            $usuario,
+            $request->validated('password')
         );
-
-        $usuario->save();
 
         return redirect()
             ->route('usuarios.show', $usuario->id)
-            ->with('success',
-                'Contraseña restablecida correctamente.');
+            ->with(
+                'success',
+                'Contraseña restablecida correctamente.'
+            );
     }
-
 }
