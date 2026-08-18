@@ -5,10 +5,8 @@ namespace Tests\Feature;
 use App\Models\User;
 use App\Models\Plan;
 use App\Models\Rol;
-
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-
 
 class CrearPlanTest extends TestCase
 {
@@ -18,6 +16,7 @@ class CrearPlanTest extends TestCase
     {
         $rol = Rol::factory()->create([
             'nombre' => 'Administrador del Sistema',
+            'codigo' => 'ADMIN_SISTEMA',
         ]);
 
         $usuario = User::factory()->create([

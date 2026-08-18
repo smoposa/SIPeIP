@@ -19,6 +19,7 @@ class CrearObjetivoTest extends TestCase
         // Rol autorizado
         $rol = Rol::factory()->create([
             'nombre' => 'Administrador del Sistema',
+            'codigo' => 'ADMIN_SISTEMA',
         ]);
 
         // Usuario
