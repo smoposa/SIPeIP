@@ -80,7 +80,10 @@ class UserController extends Controller
         // Contraseña temporal inicial.
         $datos['password'] = '12345678';
 
-        $this->userService->crear($datos);
+        $this->userService->crear(
+            $datos,
+            auth()->user()
+        );
 
         return redirect()
             ->route('usuarios.index')
@@ -97,7 +100,8 @@ class UserController extends Controller
     public function detalle(User $usuario)
     {
         $usuario = $this->userService->buscarPorId(
-            $usuario->id
+            $usuario->id,
+            auth()->user()
         );
 
         return view('usuarios.detalle', compact('usuario'));
@@ -110,7 +114,8 @@ class UserController extends Controller
     public function editar(User $usuario)
     {
         $usuario = $this->userService->buscarPorId(
-            $usuario->id
+            $usuario->id,
+            auth()->user()
         );
 
         $roles = Rol::where('estado', 'Activo')
@@ -136,6 +141,11 @@ class UserController extends Controller
         UpdateUserRequest $request,
         User $usuario
     ) {
+        $usuario = $this->userService->buscarPorId(
+            $usuario->id,
+            auth()->user()
+        );
+
         $this->userService->actualizar(
             $usuario,
             $request->validated()
@@ -155,6 +165,11 @@ class UserController extends Controller
      */
     public function editarEstado(User $usuario)
     {
+        $usuario = $this->userService->buscarPorId(
+            $usuario->id,
+            auth()->user()
+        );
+
         return view('usuarios.estado', compact('usuario'));
     }
 
@@ -166,6 +181,11 @@ class UserController extends Controller
         UpdateUserStatusRequest $request,
         User $usuario
     ) {
+        $usuario = $this->userService->buscarPorId(
+            $usuario->id,
+            auth()->user()
+        );
+
         $this->userService->cambiarEstado(
             $usuario,
             $request->validated('estado')
@@ -194,7 +214,10 @@ class UserController extends Controller
      */
     public function editRoles(int $id)
     {
-        $usuario = $this->userService->buscarPorId($id);
+        $usuario = $this->userService->buscarPorId(
+            $id,
+            auth()->user()
+        );
 
         $roles = Rol::where('estado', 'Activo')
             ->orderBy('nombre')
@@ -214,7 +237,10 @@ class UserController extends Controller
         UpdateUserRoleRequest $request,
         int $id
     ) {
-        $usuario = $this->userService->buscarPorId($id);
+        $usuario = $this->userService->buscarPorId(
+            $id,
+            auth()->user()
+        );
 
         $this->userService->cambiarRol(
             $usuario,
@@ -235,7 +261,10 @@ class UserController extends Controller
      */
     public function editEntidad(int $id)
     {
-        $usuario = $this->userService->buscarPorId($id);
+        $usuario = $this->userService->buscarPorId(
+            $id,
+            auth()->user()
+        );
 
         $entidades = Entidad::where('estado', 'Activo')
             ->orderBy('nombre')
@@ -255,7 +284,10 @@ class UserController extends Controller
         UpdateUserEntidadRequest $request,
         int $id
     ) {
-        $usuario = $this->userService->buscarPorId($id);
+        $usuario = $this->userService->buscarPorId(
+            $id,
+            auth()->user()
+        );
 
         $this->userService->cambiarEntidad(
             $usuario,
@@ -276,7 +308,10 @@ class UserController extends Controller
      */
     public function editPassword(int $id)
     {
-        $usuario = $this->userService->buscarPorId($id);
+        $usuario = $this->userService->buscarPorId(
+            $id,
+            auth()->user()
+        );
 
         return view('usuarios.editpassword', compact(
             'usuario'
@@ -291,7 +326,10 @@ class UserController extends Controller
         UpdateUserPasswordRequest $request,
         int $id
     ) {
-        $usuario = $this->userService->buscarPorId($id);
+        $usuario = $this->userService->buscarPorId(
+            $id,
+            auth()->user()
+        );
 
         $this->userService->cambiarPassword(
             $usuario,

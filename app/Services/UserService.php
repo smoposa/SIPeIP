@@ -61,25 +61,56 @@ class UserService
 
 
     /**
-     * Buscar usuario.
+     * Buscar usuario según el ámbito institucional.
      */
-    public function buscarPorId(int $id): User
-    {
-        return $this->userRepository->buscarPorId($id);
+    public function buscarPorId(
+        int $id,
+        User $usuarioAutenticado
+    ): User {
+
+        $usuario = $this->userRepository->buscarPorId($id);
+
+        // El Administrador Global puede acceder a cualquier usuario.
+        if ($this->esAdministradorGlobal($usuarioAutenticado)) {
+            return $usuario;
+        }
+
+        // Los demás usuarios solo pueden acceder a usuarios
+        // pertenecientes a su misma entidad.
+        if ($usuario->entidad_id !== $usuarioAutenticado->entidad_id) {
+            abort(403, 'No tiene autorización para acceder a este usuario.');
+        }
+
+        return $usuario;
     }
 
 
     /**
-     * Crear usuario.
+     * Crear usuario según el ámbito institucional.
      */
-    public function crear(array $datos): User
-    {
+    public function crear(
+        array $datos,
+        User $usuarioAutenticado
+    ): User {
+
+        /*
+        * Si no es Administrador Global,
+        * la entidad se asigna automáticamente
+        * desde el usuario autenticado.
+        */
+        if (!$this->esAdministradorGlobal($usuarioAutenticado)) {
+            $datos['entidad_id'] = $usuarioAutenticado->entidad_id;
+        }
+
+        // Construir nombre completo.
         $datos['name'] = trim(
             ($datos['nombres'] ?? '') . ' ' . ($datos['apellidos'] ?? '')
         );
 
+        // Todo usuario nuevo inicia activo.
         $datos['estado'] = EstadoUsuario::ACTIVO->value;
 
+        // Encriptar contraseña.
         if (isset($datos['password'])) {
             $datos['password'] = Hash::make($datos['password']);
         }
