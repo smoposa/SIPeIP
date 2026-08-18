@@ -70,17 +70,17 @@
                     </a>
                 @endif
 
+                @if(puedeVer('entidades'))
+                    <a href="{{ route('entidades.index') }}"
+                    class="{{ request()->routeIs('entidades.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                        Entidades
+                    </a>
+                @endif
+
                 @if(puedeVer('usuarios'))
                     <a href="{{ route('usuarios.listar') }}"
                     class="{{ request()->routeIs('usuarios.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
                         Usuarios
-                    </a>
-                @endif
-
-                @if(puedeVer('entidades'))
-                    <a href="{{ route('entidades.listar') }}"
-                    class="{{ request()->routeIs('entidades.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
-                        Entidades
                     </a>
                 @endif
 

@@ -3,8 +3,12 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+
 use App\Repositories\Contracts\RoleRepositoryInterface;
 use App\Repositories\Eloquent\RoleRepository;
+
+use App\Repositories\Contracts\EntidadRepositoryInterface;
+use App\Repositories\Eloquent\EntidadRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -13,9 +17,16 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // Roles
         $this->app->bind(
             RoleRepositoryInterface::class,
             RoleRepository::class
+        );
+
+        // Entidades
+        $this->app->bind(
+            EntidadRepositoryInterface::class,
+            EntidadRepository::class
         );
     }
 

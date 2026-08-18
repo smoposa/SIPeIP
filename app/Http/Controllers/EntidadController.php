@@ -2,170 +2,139 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Entidad;
+use App\Http\Requests\Entidades\StoreEntidadRequest;
+use App\Http\Requests\Entidades\UpdateEntidadRequest;
+use App\Http\Requests\Entidades\UpdateEntidadStatusRequest;
+use App\Services\EntidadService;
 
 class EntidadController extends Controller
 {
-    
-public function index()
-{
-    $totalEntidades = Entidad::count();
+    public function __construct(
+        private readonly EntidadService $entidadService
+    ) {
+    }
 
-    $entidadesActivas = Entidad::where('estado', 'Activo')->count();
+    /**
+     * Panel principal del módulo de entidades.
+     */
+    public function index()
+    {
+        $this->autorizar('entidades');
 
-    $entidadesInactivas = Entidad::where('estado', 'Inactivo')->count();
+        $resumen = $this->entidadService->obtenerResumen();
 
-    $totalSecretarias = Entidad::where('tipoEntidad', 'Secretaría')->count();
+        return view('entidades.index', $resumen);
+    }
 
-    $totalMinisterios = Entidad::where('tipoEntidad', 'Ministerio')->count();
-
-    $totalGadProvinciales = Entidad::where('tipoEntidad', 'GAD Provincial')->count();
-
-    $totalGadMunicipales = Entidad::where('tipoEntidad', 'GAD Municipal')->count();
-
-    $totalGadParroquiales = Entidad::where('tipoEntidad', 'GAD Parroquial')->count();
-
-    return view('entidades.index', compact(
-        'totalEntidades',
-        'entidadesActivas',
-        'entidadesInactivas',
-        'totalSecretarias',
-        'totalMinisterios',
-        'totalGadProvinciales',
-        'totalGadMunicipales',
-        'totalGadParroquiales'
-    ));
-}
-
+    /**
+     * Mostrar listado de entidades.
+     */
     public function listar()
     {
-        $entidades = Entidad::orderBy('nombre', 'asc')->get();
+        $this->autorizar('entidades');
+
+        $entidades = $this->entidadService->obtenerResumen()['entidades'];
 
         return view('entidades.listar', compact('entidades'));
     }
 
-    public function detalle($id)
+    /**
+     * Mostrar formulario para crear una entidad.
+     */
+    public function create()
     {
-        $entidad = Entidad::findOrFail($id);
+        $this->autorizar('entidades', 'crear');
+
+        return view('entidades.create');
+    }
+
+    /**
+     * Registrar una nueva entidad.
+     */
+    public function store(StoreEntidadRequest $request)
+    {
+        $this->autorizar('entidades', 'crear');
+
+        $this->entidadService->crear($request->validated());
+
+        return redirect()
+            ->route('entidades.index')
+            ->with('success', 'Entidad registrada correctamente.');
+    }
+
+    /**
+     * Mostrar detalle de una entidad.
+     */
+    public function detalle(int $id)
+    {
+        $this->autorizar('entidades');
+
+        $entidad = $this->entidadService->obtenerPorId($id);
 
         return view('entidades.detalle', compact('entidad'));
     }
 
-    public function create()
+    /**
+     * Mostrar formulario para editar una entidad.
+     */
+    public function edit(int $id)
     {
-        return view('entidades.create');
-    }
+        $this->autorizar('entidades', 'editar');
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'codigoInstitucional' => 'required|max:50',
-            'ruc'                 => 'required|max:13',
-            'nombre'              => 'required|max:255',
-            'siglas'              => 'nullable|max:50',
-            'tipoEntidad'         => 'required',
-            'nivelGobierno'       => 'required',
-            'provincia'           => 'nullable|max:100',
-            'canton'              => 'nullable|max:100',
-            'parroquia'           => 'nullable|max:100',
-            'telefono'            => 'nullable|max:20',
-            'correoInstitucional' => 'nullable|email|max:150',
-            'direccion'           => 'nullable|max:255',
-        ]);
-
-        Entidad::create([
-            'codigoInstitucional' => $request->codigoInstitucional,
-            'ruc'                 => $request->ruc,
-            'nombre'              => $request->nombre,
-            'siglas'              => $request->siglas,
-            'tipoEntidad'         => $request->tipoEntidad,
-            'nivelGobierno'       => $request->nivelGobierno,
-            'provincia'           => $request->provincia,
-            'canton'              => $request->canton,
-            'parroquia'           => $request->parroquia,
-            'telefono'            => $request->telefono,
-            'correoInstitucional' => $request->correoInstitucional,
-            'direccion'           => $request->direccion,
-            'estado'              => 'Activo'
-        ]);
-
-        return redirect()
-            ->route('entidades.create')
-            ->with('success', 'Entidad registrada correctamente.');
-    }
-
-    public function edit($id)
-    {
-        $entidad = Entidad::findOrFail($id);
+        $entidad = $this->entidadService->obtenerPorId($id);
 
         return view('entidades.editar', compact('entidad'));
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Actualizar una entidad.
+     */
+    public function update(UpdateEntidadRequest $request, int $id)
     {
-        $request->validate([
-            'codigoInstitucional' => 'required|max:50',
-            'ruc'                 => 'required|max:13',
-            'nombre'              => 'required|max:255',
-            'siglas'              => 'nullable|max:50',
-            'tipoEntidad'         => 'required',
-            'nivelGobierno'       => 'required',
-            'provincia'           => 'nullable|max:100',
-            'canton'              => 'nullable|max:100',
-            'parroquia'           => 'nullable|max:100',
-            'telefono'            => 'nullable|max:20',
-            'correoInstitucional' => 'nullable|email|max:150',
-            'direccion'           => 'nullable|max:255',
-            
-        ]);
+        $this->autorizar('entidades', 'editar');
 
-        $entidad = Entidad::findOrFail($id);
+        $entidad = $this->entidadService->obtenerPorId($id);
 
-        $entidad->update([
-            'codigoInstitucional' => $request->codigoInstitucional,
-            'ruc'                 => $request->ruc,
-            'nombre'              => $request->nombre,
-            'siglas'              => $request->siglas,
-            'tipoEntidad'         => $request->tipoEntidad,
-            'nivelGobierno'       => $request->nivelGobierno,
-            'provincia'           => $request->provincia,
-            'canton'              => $request->canton,
-            'parroquia'           => $request->parroquia,
-            'telefono'            => $request->telefono,
-            'correoInstitucional' => $request->correoInstitucional,
-            'direccion'           => $request->direccion,
-        ]);
+        $this->entidadService->actualizar(
+            $entidad,
+            $request->validated()
+        );
 
         return redirect()
             ->route('entidades.detalle', $entidad->id)
             ->with('success', 'Entidad actualizada correctamente.');
     }
 
-    public function editarEstado($id)
+    /**
+     * Mostrar formulario para modificar el estado.
+     */
+    public function editarEstado(int $id)
     {
-        $entidad = Entidad::findOrFail($id);
+        $this->autorizar('entidades', 'estado');
+
+        $entidad = $this->entidadService->obtenerPorId($id);
 
         return view('entidades.editarestado', compact('entidad'));
     }
 
-    public function actualizarEstado(Request $request, $id)
-    {
-        $entidad = Entidad::findOrFail($id);
+    /**
+     * Actualizar estado de la entidad.
+     */
+    public function actualizarEstado(
+        UpdateEntidadStatusRequest $request,
+        int $id
+    ) {
+        $this->autorizar('entidades', 'estado');
 
-        $entidad->estado = $request->has('estado')
-            ? 'Activo'
-            : 'Inactivo';
+        $entidad = $this->entidadService->obtenerPorId($id);
 
-        $entidad->save();
+        $this->entidadService->actualizarEstado(
+            $entidad,
+            $request->boolean('estado')
+        );
 
         return redirect()
             ->route('entidades.detalle', $entidad->id)
-            ->with('success', 'Estado actualizado correctamente.');
-    }
-    
-    public function desactivadas()
-    {
-        return view('entidades.desactivadas');
+            ->with('success', 'Estado de la entidad actualizado correctamente.');
     }
 }

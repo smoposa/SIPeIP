@@ -35,21 +35,21 @@
                 Regresar
             </a>
 
-@if(puedeHacer('roles', 'editar'))
-    <a href="{{ route('roles.edit', $rol->id) }}"
-       class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-        <i class="bi bi-pencil text-blue-500 me-2"></i>
-        Editar información
-    </a>
-@endif
+                @if(puedeHacer('roles', 'editar'))
+                    <a href="{{ route('roles.edit', $rol->id) }}"
+                    class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                        <i class="bi bi-pencil text-blue-500 me-2"></i>
+                        Editar información
+                    </a>
+                @endif
 
-@if(puedeHacer('roles', 'estado'))
-    <a href="{{ route('roles.estado', $rol->id) }}"
-        class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-        <i class="bi bi-toggle-on text-blue-500 me-2"></i>
-        Editar estado
-    </a>
-@endif
+                @if(puedeHacer('roles', 'estado'))
+                    <a href="{{ route('roles.estado', $rol->id) }}"
+                        class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                        <i class="bi bi-toggle-on text-blue-500 me-2"></i>
+                        Editar estado
+                    </a>
+                @endif
             
             <a href="{{ url()->current() }}"
                class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
@@ -159,12 +159,12 @@
                             Deshabilitado
                         </span>
                     @endif
-@if(puedeHacer('roles', 'estado'))
-    <a href="{{ route('roles.estado', $rol->id) }}"
-       class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
-        Editar
-    </a>
-@endif
+                    @if(puedeHacer('roles', 'estado'))
+                        <a href="{{ route('roles.estado', $rol->id) }}"
+                        class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
+                            Editar
+                        </a>
+                    @endif
                 </div>
 
             </div>

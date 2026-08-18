@@ -1,158 +1,165 @@
-<x-entidades-layout title="Página de inicio">
+<x-entidades-layout title="Todas las Entidades">
 
-    <!-- Barra de acciones
-    <div class="bg-white border-b border-gray-300 mb-6">
+    @if(session('success'))
 
-        <div class="flex">
-            <a href="{{ route('entidades.index') }}"
-               class="px-5 py-3 text-sm font-medium text-black border-b-2 border-blue-600">
-                Inicio
-            </a>
+        <div id="alertSuccess"
+             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+
+            {{ session('success') }}
+
         </div>
-    </div> -->
 
-     <!-- Marco general del contenido -->
-    <div class="space-y-6">
+        <script>
+            setTimeout(() => {
 
-        <!-- Encabezado -->
-        <div>
-            <h2 class="text-2xl font-semibold text-gray-900">
-                Información general
-            </h2>
+                const alerta = document.getElementById('alertSuccess');
 
-            <p class="mt-2 text-gray-600">
-                Administre las entidades públicas registradas en el Sistema Integral de Planificación e Inversión Pública (SIPeIP).
+                if (alerta) {
+                    alerta.remove();
+                }
+
+            }, 3000);
+        </script>
+
+    @endif
+
+
+    <!-- Encabezado -->
+    <div class="mb-4">
+
+        <p class="mt-1 text-sm text-gray-500">
+            Consulte y administre las entidades registradas en el sistema.
+        </p>
+
+    </div>
+
+
+    <!-- Buscador, filtro, resumen y acciones -->
+    <div class="flex items-center gap-4 mb-4">
+
+        <!-- Buscador -->
+        <div class="relative flex-1 max-w-md">
+
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <i class="bi bi-search"></i>
+            </span>
+
+            <input
+                type="text"
+                id="buscarEntidad"
+                placeholder="Buscar entidad..."
+                class="w-full border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm
+                       focus:ring-blue-500 focus:border-blue-500">
+
+        </div>
+
+
+        <!-- Filtro Estado -->
+        <select
+            id="filtroEstado"
+            class="w-48 rounded-md border border-gray-300 px-3 py-2 text-sm
+                   text-gray-700 focus:border-blue-500 focus:ring-blue-500">
+
+            <option value="">Todos los estados</option>
+            <option value="Activo">Activos</option>
+            <option value="Inactivo">Inactivos</option>
+
+        </select>
+
+
+        <!-- Resumen de estados -->
+        <div class="flex-1">
+
+            <p class="text-sm text-gray-500">
+
+                {{ $totalEntidades }} registros ·
+
+                <span class="text-green-600 font-medium">
+                    {{ $entidadesActivas }}
+                </span>
+                activas ·
+
+                <span class="text-red-600 font-medium">
+                    {{ $entidadesInactivas }}
+                </span>
+                inactivas
+
             </p>
 
         </div>
 
-        <!-- Scroll vertical -->
-        <div class="overflow-y-auto" style="height: calc(100vh - 220px);">
 
-            <div class="space-y-6">
+        <!-- Crear entidad -->
+        @if(puedeHacer('entidades', 'crear'))
 
-            <!-- Tarjetas Indicadores -->
-            <div class="bg-white border border-gray-200 rounded-lg">
+            <a href="{{ route('entidades.create') }}"
+               class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
+                      text-white text-sm font-medium px-4 py-2 rounded-md
+                      transition whitespace-nowrap">
 
-                <div class="grid grid-cols-1 lg:grid-cols-2">
+                <i class="bi bi-plus-lg"></i>
 
-                    <!-- Indicadores -->
-                    <div class="p-8 border-r border-gray-200">
+                Crear entidad
 
-                        <h3 class="text-lg font-semibold text-gray-800 mb-6">
-                            Resumen General
-                        </h3>
+            </a>
 
-                        <div class="space-y-6">
-
-                            <div class="flex justify-between items-center">
-
-                                <span class="text-gray-600">
-                                    Entidades registradas
-                                </span>
-
-                                <span class="text-2xl font-semibold text-gray-800">
-                                    {{ $totalEntidades }}
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between items-center">
-
-                                <span class="text-gray-600">
-                                    Entidades activas
-                                </span>
-
-                                <span class="text-2xl font-semibold text-green-600">
-                                    {{ $entidadesActivas }}
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between items-center">
-
-                                <span class="text-gray-600">
-                                    Entidades inactivas
-                                </span>
-
-                                <span class="text-2xl font-semibold text-red-500">
-                                    {{ $entidadesInactivas }}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!-- Distribución -->
-                    <div class="p-8">
-
-                        <h3 class="text-lg font-semibold text-gray-800 mb-6">
-                            Distribución por tipo
-                        </h3>
-
-                        <div class="space-y-5">
-
-                            <div class="flex justify-between border-b pb-2">
-
-                                <span>Secretarías</span>
-
-                                <span class="font-semibold">
-                                    {{ $totalSecretarias }}
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between border-b pb-2">
-
-                                <span>Ministerios</span>
-
-                                <span class="font-semibold">
-                                    {{ $totalMinisterios }}
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between border-b pb-2">
-
-                                <span>GAD Provinciales</span>
-
-                                <span class="font-semibold">
-                                    {{ $totalGadProvinciales }}
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between border-b pb-2">
-
-                                <span>GAD Municipales</span>
-
-                                <span class="font-semibold">
-                                    {{ $totalGadMunicipales }}
-                                </span>
-
-                            </div>
-
-                            <div class="flex justify-between">
-
-                                <span>GAD Parroquiales</span>
-
-                                <span class="font-semibold">
-                                    {{ $totalGadParroquiales }}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
+        @endif
 
     </div>
+
+
+    <!-- Listado de entidades -->
+    @include('entidades.partials.listado-entidades')
+
+
+    <!-- Buscador y filtro -->
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const buscador = document.getElementById('buscarEntidad');
+            const filtroEstado = document.getElementById('filtroEstado');
+            const filas = document.querySelectorAll('.fila-entidad');
+
+            function filtrarEntidades() {
+
+                const texto = buscador.value.toLowerCase().trim();
+                const estado = filtroEstado.value;
+
+                filas.forEach(function (fila) {
+
+                    const nombre = fila.dataset.nombre || '';
+                    const codigo = fila.dataset.codigo || '';
+                    const siglas = fila.dataset.siglas || '';
+                    const tipo = fila.dataset.tipo || '';
+                    const provincia = fila.dataset.provincia || '';
+                    const estadoEntidad = fila.dataset.estado || '';
+
+                    const coincideTexto =
+                        nombre.includes(texto) ||
+                        codigo.includes(texto) ||
+                        siglas.includes(texto) ||
+                        tipo.includes(texto) ||
+                        provincia.includes(texto);
+
+                    const coincideEstado =
+                        estado === '' ||
+                        estadoEntidad === estado;
+
+                    fila.style.display =
+                        coincideTexto && coincideEstado
+                            ? ''
+                            : 'none';
+
+                });
+
+            }
+
+            buscador.addEventListener('input', filtrarEntidades);
+            filtroEstado.addEventListener('change', filtrarEntidades);
+
+        });
+
+    </script>
+
 </x-entidades-layout>

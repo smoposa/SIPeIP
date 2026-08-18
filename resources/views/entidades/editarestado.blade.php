@@ -20,62 +20,63 @@
     <!-- Scroll vertical -->
     <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
-    <div class="p-6">
+        <div class="p-6">
 
-        <h2 class="text-2xl font-semibold text-gray-800">
-            Editar estado de entidad
-        </h2>
+            <h2 class="text-2xl font-semibold text-gray-800">
+                Editar estado de entidad
+            </h2>
 
-        <p class="mt-1 text-sm text-gray-500">
-            Habilite o deshabilite la entidad dentro del sistema.
-        </p>
+            <p class="mt-1 text-sm text-gray-500">
+                Habilite o deshabilite la entidad dentro del sistema.
+            </p>
 
-    </div>
+        </div>
 
+        <div class="bg-white p-4">
 
-    <div class="bg-white p-4">
+            <form method="POST"
+                  action="{{ route('entidades.actualizarestado', $entidad->id) }}">
 
-        <form method="POST"
-            action="{{ route('entidades.actualizarestado', $entidad->id) }}">
+                @csrf
+                @method('PUT')
 
-            @csrf
-            @method('PUT')
+                <div class="flex items-center gap-20">
 
-            <div class="flex items-center gap-20">
+                    <label class="text-sm font-medium text-gray-700">
+                        Entidad habilitada
+                    </label>
 
-                <label class="text-sm font-medium text-gray-700">
-                    Entidad habilitada
-                </label>
+                    <input
+                        type="checkbox"
+                        name="estado"
+                        value="1"
+                        {{ $entidad->estado === 'Activo' ? 'checked' : '' }}
+                        class="w-5 h-5">
 
-                <input
-                    type="checkbox"
-                    name="estado"
-                    value="Activo"
-                    {{ $entidad->estado == 'Activo' ? 'checked' : '' }}
-                    class="w-5 h-5">
+                </div>
 
-            </div>
+                <div class="flex gap-3 mt-20">
 
-            <div class="flex gap-3 mt-20">
+                    <button
+                        type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
 
-                <button
-                    type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+                        Guardar
 
-                    Guardar
+                    </button>
 
-                </button>
+                    <a href="{{ route('entidades.detalle', $entidad->id) }}"
+                       class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
 
-                <a href="{{ route('entidades.detalle', $entidad->id) }}"
-                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+                        Cancelar
 
-                    Cancelar
+                    </a>
 
-                </a>
+                </div>
 
-            </div>
+            </form>
 
-        </form>
+        </div>
 
     </div>
 
