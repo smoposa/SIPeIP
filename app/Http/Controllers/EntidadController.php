@@ -27,18 +27,6 @@ class EntidadController extends Controller
     }
 
     /**
-     * Mostrar listado de entidades.
-     */
-    public function listar()
-    {
-        $this->autorizar('entidades');
-
-        $entidades = $this->entidadService->obtenerResumen()['entidades'];
-
-        return view('entidades.listar', compact('entidades'));
-    }
-
-    /**
      * Mostrar formulario para crear una entidad.
      */
     public function create()

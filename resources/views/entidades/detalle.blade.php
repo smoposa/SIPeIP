@@ -294,15 +294,18 @@
                         <span class="w-40 text-sm font-semibold text-gray-700">
                             Estado
                         </span>
+                        
                         @if($entidad->estado === 'Activo')
 
-                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                            <span class="inline-flex items-center gap-1.5 text-sm text-green-600">
+                                <i class="bi bi-check-lg font-bold"></i>
                                 Activo
                             </span>
 
                         @else
 
-                            <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                            <span class="inline-flex items-center gap-1.5 text-sm text-red-600">
+                                <i class="bi bi-x-lg font-bold"></i>
                                 Inactivo
                             </span>
 

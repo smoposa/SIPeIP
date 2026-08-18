@@ -130,9 +130,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [EntidadController::class, 'index'])
                 ->name('entidades.index');
 
-            Route::get('/listar', [EntidadController::class, 'listar'])
-                ->name('entidades.listar');
-
             Route::get('/crear', [EntidadController::class, 'create'])
                 ->name('entidades.create');
 
