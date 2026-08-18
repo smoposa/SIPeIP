@@ -1,15 +1,40 @@
 <x-roles-layout title="Todos los roles">
 
-    <div class="space-y-5">
-        
-        <!-- Encabezado -->
-        <div>
-            <p class="mt-1 text-sm text-gray-600">
-                Administre los roles y niveles de acceso del Sistema Integral
-                de Planificación e Inversión Pública (SIPeIP).
-            </p>
-        </div>
+    <div class="space-y-4">
 
+        <!-- Notificacion de Éxito -->
+        @if(session('success'))
+
+            <div id="alertSuccess"
+                class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+
+                {{ session('success') }}
+
+            </div>
+
+            <script>
+                setTimeout(() => {
+
+                    const alerta = document.getElementById('alertSuccess');
+
+                    if (alerta) {
+                        alerta.remove();
+                    }
+
+                }, 3000);
+            </script>
+
+        @endif
+
+
+        <!-- Encabezado -->
+        <div class="mb-4">
+
+            <p class="mt-1 text-sm text-gray-500">
+                Consulte y administre los roles y niveles de acceso al sistema.
+            </p>
+
+        </div>
 
         <!-- Buscador, filtro, resumen y acciones -->
         <div class="flex items-center gap-4 mb-4">
@@ -49,7 +74,10 @@
 
                 <p class="text-sm text-gray-500">
 
-                    {{ $totalRoles }} registros ·
+                    <span class="text-blue-600 font-medium">
+                        {{ $totalRoles }}
+                    </span>
+                    registros ·
 
                     <span class="text-green-600 font-medium">
                         {{ $rolesActivos }}
@@ -84,74 +112,54 @@
 
         </div>
 
-
-        <!-- Listado de entidades -->
+        <!-- Listado de roles -->
         @include('roles.partials.listado-roles')
 
 
+        <!-- Buscador y filtro -->
+        <script>
 
-        {{-- Mensaje cuando el buscador no encuentra resultados --}}
-        <div id="sinResultados"
-             class="hidden py-8 text-center text-sm text-gray-500">
+            document.addEventListener('DOMContentLoaded', function () {
 
-            No se encontraron roles que coincidan con la búsqueda.
+                const buscador = document.getElementById('buscarRol');
+                const filtroEstado = document.getElementById('filtroEstado');
+                const filas = document.querySelectorAll('.fila-rol');
 
-        </div>
+                function filtrarRoles() {
+
+                    const texto = buscador.value.toLowerCase().trim();
+                    const estado = filtroEstado.value;
+
+                    filas.forEach(function (fila) {
+
+                        const nombre = fila.dataset.nombre || '';
+                        const descripcion = fila.dataset.descripcion || '';
+                        const estadoRol = fila.dataset.estado || '';
+
+                        const coincideTexto =
+                            nombre.includes(texto) ||
+                            descripcion.includes(texto);
+
+                        const coincideEstado =
+                            estado === '' ||
+                            estadoRol === estado;
+
+                        fila.style.display =
+                            coincideTexto && coincideEstado
+                                ? ''
+                                : 'none';
+
+                    });
+
+                }
+
+                buscador.addEventListener('input', filtrarRoles);
+                filtroEstado.addEventListener('change', filtrarRoles);
+
+            });
+
+        </script>
 
     </div>
-
-    <!-- Buscador y filtro -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-
-            const buscador = document.getElementById('buscarRol');
-            const filtroEstado = document.getElementById('filtroEstado');
-            const filas = document.querySelectorAll('.fila-rol');
-            const sinResultados = document.getElementById('sinResultados');
-
-            function filtrarRoles() {
-
-                const texto = buscador.value.toLowerCase().trim();
-                const estado = filtroEstado.value;
-
-                let visibles = 0;
-
-                filas.forEach(function (fila) {
-
-                    const nombre = fila.dataset.nombre;
-                    const descripcion = fila.dataset.descripcion;
-                    const estadoRol = fila.dataset.estado;
-
-                    const coincideTexto =
-                        nombre.includes(texto) ||
-                        descripcion.includes(texto);
-
-                    const coincideEstado =
-                        estado === '' ||
-                        estadoRol === estado;
-
-                    const mostrar =
-                        coincideTexto && coincideEstado;
-
-                    fila.style.display = mostrar ? '' : 'none';
-
-                    if (mostrar) {
-                        visibles++;
-                    }
-
-                });
-
-                sinResultados.classList.toggle(
-                    'hidden',
-                    visibles !== 0
-                );
-
-            }
-
-            buscador.addEventListener('input', filtrarRoles);
-            filtroEstado.addEventListener('change', filtrarRoles);
-
-        });
-    </script>
 
 </x-roles-layout>
