@@ -17,14 +17,15 @@ return [
         */
 
         'dashboard' => [
-            'Administrador del Sistema',
-            'Administrador Institucional',
-            'Director de Planificación',
-            'Analista de Planificación',
-            'Director de Inversión Pública',
-            'Analista de Inversión Pública',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_GLOBAL',
+            'ADMIN_SISTEMA',
+            'ADMIN_INSTITUCIONAL',
+            'DIRECTOR_PLANIFICACION',
+            'ANALISTA_PLANIFICACION',
+            'DIRECTOR_INVERSION',
+            'ANALISTA_INVERSION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
 
         /*
@@ -34,18 +35,21 @@ return [
         */
 
         'roles' => [
-            'Administrador del Sistema',
-            'Administrador Institucional',
+            'ADMIN_GLOBAL',
+            'ADMIN_SISTEMA',
+            'ADMIN_INSTITUCIONAL',
         ],
 
         'usuarios' => [
-            'Administrador del Sistema',
-            'Administrador Institucional',
+            'ADMIN_GLOBAL',
+            'ADMIN_SISTEMA',
+            'ADMIN_INSTITUCIONAL',
         ],
 
         'entidades' => [
-            'Administrador del Sistema',
-            'Administrador Institucional',
+            'ADMIN_GLOBAL',
+            'ADMIN_SISTEMA',
+            'ADMIN_INSTITUCIONAL',
         ],
 
         /*
@@ -55,67 +59,58 @@ return [
         */
 
         'planes' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            'Director de Planificación',
-            'Analista de Planificación',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_SISTEMA',
+            'DIRECTOR_PLANIFICACION',
+            'ANALISTA_PLANIFICACION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
 
         'objetivos' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            'Director de Planificación',
-            'Analista de Planificación',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_SISTEMA',
+            'DIRECTOR_PLANIFICACION',
+            'ANALISTA_PLANIFICACION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
 
         'metas' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            'Director de Planificación',
-            'Analista de Planificación',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_SISTEMA',
+            'DIRECTOR_PLANIFICACION',
+            'ANALISTA_PLANIFICACION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
 
         'indicadores' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            'Director de Planificación',
-            'Analista de Planificación',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_SISTEMA',
+            'DIRECTOR_PLANIFICACION',
+            'ANALISTA_PLANIFICACION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
-
 
         /*
         |--------------------------------------------------------------------------
-        | Catálogos
+        | Catálogos globales
         |--------------------------------------------------------------------------
         */
 
         'ods' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            //'Director de Planificación',
-            'Analista de Planificación',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_GLOBAL',
+            'ADMIN_SISTEMA',
+            'ANALISTA_PLANIFICACION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
 
         'pnd' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            //'Director de Planificación',
-            'Analista de Planificación',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_GLOBAL',
+            'ADMIN_SISTEMA',
+            'ANALISTA_PLANIFICACION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
-
-
 
         /*
         |--------------------------------------------------------------------------
@@ -124,30 +119,27 @@ return [
         */
 
         'programas' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            'Director de Inversión Pública',
-            'Analista de Inversión Pública',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_SISTEMA',
+            'DIRECTOR_INVERSION',
+            'ANALISTA_INVERSION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
 
         'proyectos' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            'Director de Inversión Pública',
-            'Analista de Inversión Pública',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_SISTEMA',
+            'DIRECTOR_INVERSION',
+            'ANALISTA_INVERSION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
 
         'presupuesto' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            'Director de Inversión Pública',
-            'Analista de Inversión Pública',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_SISTEMA',
+            'DIRECTOR_INVERSION',
+            'ANALISTA_INVERSION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
 
         /*
@@ -157,25 +149,21 @@ return [
         */
 
         'seguimiento' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            'Director de Planificación',
-            'Director de Inversión Pública',
-            //'Analista de Planificación',
-            'Analista de Inversión Pública',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_SISTEMA',
+            'DIRECTOR_PLANIFICACION',
+            'DIRECTOR_INVERSION',
+            'ANALISTA_INVERSION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
 
         'evaluacion' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            'Director de Planificación',
-            'Director de Inversión Pública',
-            //'Analista de Planificación',
-            'Analista de Inversión Pública',
-            'Auditor Institucional',
-            'Consulta Institucional',
+            'ADMIN_SISTEMA',
+            'DIRECTOR_PLANIFICACION',
+            'DIRECTOR_INVERSION',
+            'ANALISTA_INVERSION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
         ],
 
         /*
@@ -185,19 +173,16 @@ return [
         */
 
         'reportes' => [
-            'Administrador del Sistema',
-            //'Administrador Institucional',
-            'Director de Planificación',
-            //'Analista de Planificación',
-            'Director de Inversión Pública',
-            'Analista de Inversión Pública',
-            'Auditor Institucional',
+            'ADMIN_SISTEMA',
+            'DIRECTOR_PLANIFICACION',
+            'DIRECTOR_INVERSION',
+            'ANALISTA_INVERSION',
+            'AUDITOR_INSTITUCIONAL',
         ],
 
         'auditoria' => [
-            'Administrador del Sistema',
-            'Auditor Institucional',
-
+            'ADMIN_SISTEMA',
+            'AUDITOR_INSTITUCIONAL',
         ],
 
     ],
@@ -210,67 +195,97 @@ return [
 
     'acciones' => [
 
+        /*
+        |--------------------------------------------------------------------------
+        | Usuarios
+        |--------------------------------------------------------------------------
+        */
+
         'usuarios' => [
 
             'crear' => [
-                'Administrador del Sistema',
-                'Administrador Institucional',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+                'ADMIN_INSTITUCIONAL',
             ],
 
             'editar' => [
-                'Administrador del Sistema',
-                'Administrador Institucional',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+                'ADMIN_INSTITUCIONAL',
             ],
 
             'estado' => [
-                'Administrador del Sistema',
-                'Administrador Institucional',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+                'ADMIN_INSTITUCIONAL',
             ],
 
             'editarRol' => [
-                'Administrador del Sistema',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
             ],
 
             'editarEntidad' => [
-                'Administrador del Sistema',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
             ],
 
             'editarPassword' => [
-                'Administrador del Sistema',
-                'Administrador Institucional',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+                'ADMIN_INSTITUCIONAL',
             ],
 
         ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Roles
+        |--------------------------------------------------------------------------
+        */
 
         'roles' => [
 
             'crear' => [
-                'Administrador del Sistema',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
             ],
 
             'editar' => [
-                'Administrador del Sistema',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
             ],
 
             'estado' => [
-                'Administrador del Sistema',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
             ],
 
         ],
 
+        /*
+        |--------------------------------------------------------------------------
+        | Entidades
+        |--------------------------------------------------------------------------
+        */
+
         'entidades' => [
 
             'crear' => [
-                'Administrador del Sistema',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
             ],
 
             'editar' => [
-                'Administrador del Sistema',
-                'Administrador Institucional',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+                'ADMIN_INSTITUCIONAL',
             ],
 
             'estado' => [
-                'Administrador del Sistema',
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
             ],
 
         ],
