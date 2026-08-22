@@ -29,9 +29,9 @@
 
             <!-- Actualizar -->
             <a href="{{ url()->current() }}"
-                class="px-3 py-2 text-sm font-medium text-gray-700
-                        border-b-2 border-transparent
-                        hover:bg-gray-100 transition">
+               class="px-3 py-2 text-sm font-medium text-gray-700
+                      border-b-2 border-transparent
+                      hover:bg-gray-100 transition">
 
                 <i class="bi bi-arrow-clockwise text-blue-500 me-2"></i>
                 Actualizar
@@ -69,12 +69,16 @@
                 <!-- Títulos -->
                 <div class="flex items-center py-3 border-b border-gray-200">
 
+                    <div class="w-16 text-sm font-semibold text-gray-700">
+                        Asignar
+                    </div>
+
                     <div class="w-80 text-sm font-semibold text-gray-700">
                         Rol
                     </div>
 
                     <div class="text-sm font-semibold text-gray-700">
-                        Permitido para instituciones
+                        Información
                     </div>
 
                 </div>
@@ -87,18 +91,10 @@
                         $rolActivo = $rol->estado === 'Activo';
                     @endphp
 
-                    <div class="flex items-center py-2 border-b border-gray-100">
+                    <div class="flex items-center py-3 border-b border-gray-100">
 
-                        <!-- Rol -->
-                        <div class="w-80 text-sm
-                                    {{ $rolActivo ? 'text-gray-700' : 'text-gray-400' }}">
-
-                            {{ $rol->nombre }}
-
-                        </div>
-
-                        <!-- Permitido para instituciones -->
-                        <div class="flex items-center gap-3">
+                        <!-- Checkbox -->
+                        <div class="w-16 flex items-center">
 
                             <input
                                 type="checkbox"
@@ -109,20 +105,45 @@
                                 class="w-5 h-5
                                     {{ !$rolActivo ? 'cursor-not-allowed opacity-50' : '' }}">
 
-                            @if(!$rolActivo)
+                        </div>
+
+
+                        <!-- Nombre del Rol -->
+                        <div class="w-80 text-sm
+                                    {{ $rolActivo ? 'text-gray-700' : 'text-gray-400' }}">
+
+                            {{ $rol->nombre }}
+
+                        </div>
+
+
+                        <!-- Información -->
+                        <div class="flex-1">
 
                             @if(!$rolActivo)
 
-                                <span class="text-sm text-gray-400">
-                                    <class="font-semibold"> Rol desactivado. 
+                                <div class="flex flex-col text-sm">
 
+                                    <!-- Estado -->
+                                    <span class="font-semibold text-gray-500">
+                                        Rol desactivado.
+                                    </span>
+
+                                    <!-- Información -->
+                                    <span class="text-gray-400">
+                                        Actívelo para asignarlo a un administrador.
+                                    </span>
+
+                                    <!-- Acción -->
                                     <a href="{{ route('roles.estado', ['id' => $rol->id, 'origen' => 'asignacion']) }}"
-                                    class="text-blue-500 hover:text-blue-700 hover:underline">
-                                        Clic para activarlo.
-                                    </a>
-                                </span>
+                                       class="mt-1 text-blue-500 hover:text-blue-700
+                                              hover:underline font-medium w-fit">
 
-                            @endif
+                                        Clic para activarlo.
+
+                                    </a>
+
+                                </div>
 
                             @endif
 
@@ -147,15 +168,15 @@
                     <button
                         type="submit"
                         class="bg-blue-600 hover:bg-blue-700
-                            text-white px-5 py-2 rounded-md">
+                               text-white px-5 py-2 rounded-md">
 
                         Guardar
 
                     </button>
 
                     <a href="{{ route('roles.index') }}"
-                    class="bg-gray-200 hover:bg-gray-300
-                            text-gray-700 px-5 py-2 rounded-md">
+                       class="bg-gray-200 hover:bg-gray-300
+                              text-gray-700 px-5 py-2 rounded-md">
 
                         Cancelar
 

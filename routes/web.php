@@ -170,6 +170,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [OdsController::class, 'index'])
                 ->name('ods.index');
 
+            Route::get('/{ods}', [OdsController::class, 'detalle'])
+                ->name('ods.detalle');
+
     });
 
     // Plan Nacional de Desarrollo

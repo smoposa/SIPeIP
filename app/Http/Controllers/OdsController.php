@@ -15,4 +15,19 @@ class OdsController extends Controller
 
         return view('ods.index', compact('ods'));
     }
+
+    /**
+     * Mostrar detalle de un ODS
+     * con sus metas asociadas.
+     */
+    public function detalle(Ods $ods)
+    {
+        $ods->load([
+            'metas' => function ($query) {
+                $query->orderBy('codigo');
+            }
+        ]);
+
+        return view('ods.detalle', compact('ods'));
+    }
 }
