@@ -16,7 +16,6 @@ class PndMeta extends Model
         'pnd_objetivo_id',
         'numero',
         'descripcion',
-        'estado',
     ];
 
     /**

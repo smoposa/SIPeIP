@@ -17,7 +17,6 @@ class PndPolitica extends Model
         'pnd_objetivo_id',
         'codigo',
         'nombre',
-        'estado',
     ];
 
     /**

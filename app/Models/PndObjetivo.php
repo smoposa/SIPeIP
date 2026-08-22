@@ -18,7 +18,6 @@ class PndObjetivo extends Model
         'numero',
         'nombre',
         'descripcion',
-        'estado',
     ];
 
     /**

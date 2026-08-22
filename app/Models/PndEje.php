@@ -18,7 +18,6 @@ class PndEje extends Model
         'numero',
         'nombre',
         'descripcion',
-        'estado',
     ];
 
     /**

@@ -16,7 +16,6 @@ class PndEstrategia extends Model
         'pnd_politica_id',
         'codigo',
         'descripcion',
-        'estado',
     ];
 
     /**
