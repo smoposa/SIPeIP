@@ -5,34 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class PndPolitica extends Model
+class PndMeta extends Model
 {
     use HasFactory;
 
-    protected $table = 'pnd_politicas';
+    protected $table = 'pnd_metas';
 
     protected $fillable = [
         'pnd_objetivo_id',
-        'codigo',
-        'nombre',
+        'numero',
+        'descripcion',
         'estado',
     ];
 
     /**
-     * Objetivo nacional al que pertenece la política.
+     * Objetivo nacional al que pertenece la meta.
      */
     public function objetivo(): BelongsTo
     {
         return $this->belongsTo(PndObjetivo::class, 'pnd_objetivo_id');
-    }
-
-    /**
-     * Estrategias que pertenecen a la política.
-     */
-    public function estrategias(): HasMany
-    {
-        return $this->hasMany(PndEstrategia::class, 'pnd_politica_id');
     }
 }

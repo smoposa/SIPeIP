@@ -11,27 +11,32 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pnd_politicas', function (Blueprint $table) {
-
+        Schema::create('pnd_ejes', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('pnd_id')
                 ->constrained('pnd')
-                ->cascadeOnDelete();
+                ->restrictOnDelete();
 
-            $table->string('codigo', 20);
+            $table->unsignedTinyInteger('numero');
 
             $table->string('nombre', 255);
 
             $table->text('descripcion')->nullable();
 
-            $table->enum('estado', [
-                'Activo',
-                'Inactivo'
-            ])->default('Activo');
+            $table->string('estado', 20)
+                ->default('Activo');
 
             $table->timestamps();
 
+            /*
+             * Evita registrar dos veces el mismo
+             * número de eje dentro de un PND.
+             */
+            $table->unique(
+                ['pnd_id', 'numero'],
+                'pnd_ejes_pnd_numero_unique'
+            );
         });
     }
 
@@ -40,6 +45,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pnd_politicas');
+        Schema::dropIfExists('pnd_ejes');
     }
 };

@@ -12,24 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pnd', function (Blueprint $table) {
-
             $table->id();
-
-            $table->string('eje', 100);
-
-            $table->string('codigo', 20)->unique();
 
             $table->string('nombre', 255);
 
-            $table->text('descripcion');
+            $table->year('periodo_inicio');
+            $table->year('periodo_fin');
 
-            $table->enum('estado', [
-                'Activo',
-                'Inactivo'
-            ])->default('Activo');
+            $table->text('descripcion')->nullable();
+
+            $table->string('estado', 20)
+                ->default('Activo');
 
             $table->timestamps();
-
         });
     }
 

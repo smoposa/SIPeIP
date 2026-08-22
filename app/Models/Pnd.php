@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pnd extends Model
 {
@@ -12,18 +13,18 @@ class Pnd extends Model
     protected $table = 'pnd';
 
     protected $fillable = [
-        'eje',
-        'codigo',
         'nombre',
+        'periodo_inicio',
+        'periodo_fin',
         'descripcion',
         'estado',
     ];
 
     /**
-     * Objetivos Estratégicos Institucionales
+     * Ejes que pertenecen al PND.
      */
-    public function objetivos()
+    public function ejes(): HasMany
     {
-        return $this->hasMany(Objetivo::class);
+        return $this->hasMany(PndEje::class, 'pnd_id');
     }
 }
