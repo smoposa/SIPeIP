@@ -177,11 +177,17 @@ Route::middleware('auth')->group(function () {
 
     // Plan Nacional de Desarrollo
     Route::prefix('pnd')
+        ->name('pnd.')
         ->group(function () {
 
+            // Listado de Planes Nacionales de Desarrollo
             Route::get('/', [PndController::class, 'index'])
-                ->name('pnd.index');
+                ->name('index');
 
+            // Detalle y estructura completa del PND
+            Route::get('/{id}', [PndController::class, 'detalle'])
+                ->whereNumber('id')
+                ->name('detalle');
     });
 
     // Objetivos

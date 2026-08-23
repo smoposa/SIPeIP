@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Pnd;
+use App\Models\PndEje;
+use App\Models\PndObjetivo;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class PndSeeder extends Seeder
 {
@@ -12,111 +14,137 @@ class PndSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('pnd')->delete();
-        DB::statement('ALTER TABLE pnd AUTO_INCREMENT = 1;');
+        /*
+        |--------------------------------------------------------------------------
+        | PLAN NACIONAL DE DESARROLLO
+        |--------------------------------------------------------------------------
+        */
 
-        DB::table('pnd')->insert([
-
-            [
-                'eje' => 'Eje Social',
-                'codigo' => 'PND-01',
-                'nombre' => 'Mejorar las condiciones de vida de la población de forma integral.',
-                'descripcion' => 'Promover políticas públicas orientadas al bienestar integral de la población.',
-                'estado' => 'Activo',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'eje' => 'Eje Social',
-                'codigo' => 'PND-02',
-                'nombre' => 'Garantizar el acceso oportuno, equitativo y de calidad a los servicios de salud.',
-                'descripcion' => 'Promover políticas públicas que aseguren el acceso universal a los servicios de salud.',
-                'estado' => 'Activo',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'eje' => 'Eje Social',
-                'codigo' => 'PND-03',
-                'nombre' => 'Fortalecer la educación y el desarrollo del talento humano.',
-                'descripcion' => 'Impulsar una educación inclusiva y de calidad para el desarrollo del talento humano.',
-                'estado' => 'Activo',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'eje' => 'Desarrollo Económico',
-                'codigo' => 'PND-04',
-                'nombre' => 'Impulsar el crecimiento económico sostenible y la productividad.',
-                'descripcion' => 'Fomentar políticas que impulsen la productividad y el crecimiento económico sostenible.',
-                'estado' => 'Activo',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'eje' => 'Desarrollo Económico',
-                'codigo' => 'PND-05',
-                'nombre' => 'Promover el empleo digno y el fortalecimiento del sector productivo.',
-                'descripcion' => 'Fortalecer el empleo digno mediante el desarrollo del sector productivo nacional.',
-                'estado' => 'Activo',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'eje' => 'Infraestructura, Energía y Medio Ambiente',
-                'codigo' => 'PND-06',
-                'nombre' => 'Fortalecer la infraestructura estratégica y la sostenibilidad ambiental.',
-                'descripcion' => 'Impulsar infraestructura resiliente y proteger el medio ambiente.',
-                'estado' => 'Activo',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'eje' => 'Infraestructura, Energía y Medio Ambiente',
-                'codigo' => 'PND-07',
-                'nombre' => 'Garantizar la gestión sostenible de los recursos naturales y energéticos.',
-                'descripcion' => 'Promover el uso eficiente y sostenible de los recursos naturales y energéticos.',
-                'estado' => 'Activo',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'eje' => 'Eje Institucional',
-                'codigo' => 'PND-08',
-                'nombre' => 'Fortalecer la transparencia y la eficiencia del Estado.',
-                'descripcion' => 'Promover una gestión pública transparente, eficiente y orientada a resultados.',
-                'estado' => 'Activo',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'eje' => 'Eje Institucional',
-                'codigo' => 'PND-09',
-                'nombre' => 'Mejorar la seguridad, la gobernabilidad y la participación ciudadana.',
-                'descripcion' => 'Fortalecer la seguridad ciudadana y la participación democrática.',
-                'estado' => 'Activo',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'eje' => 'Eje Institucional',
-                'codigo' => 'PND-10',
-                'nombre' => 'Impulsar la transformación digital y la modernización de la gestión pública.',
-                'descripcion' => 'Modernizar el Estado mediante la transformación digital y la innovación pública.',
-                'estado' => 'Activo',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
+        $pnd = Pnd::create([
+            'nombre' => 'Plan de Desarrollo para el Nuevo Ecuador',
+            'periodo_inicio' => 2024,
+            'periodo_fin' => 2025,
+            'descripcion' => 'Plan Nacional de Desarrollo del Ecuador para el período 2024-2025.',
+            'estado' => 'Activo',
         ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | EJES DEL PND
+        |--------------------------------------------------------------------------
+        */
+
+        $ejes = [
+            [
+                'numero' => 1,
+                'nombre' => 'Social',
+                'descripcion' => 'Eje orientado a mejorar la calidad de vida de la población y garantizar derechos y servicios públicos.',
+            ],
+            [
+                'numero' => 2,
+                'nombre' => 'Desarrollo Económico',
+                'descripcion' => 'Eje orientado al impulso productivo, la innovación, la inversión y el fortalecimiento económico.',
+            ],
+            [
+                'numero' => 3,
+                'nombre' => 'Infraestructura, Energía y Medio Ambiente',
+                'descripcion' => 'Eje orientado a infraestructura, energía y uso responsable de los recursos naturales.',
+            ],
+            [
+                'numero' => 4,
+                'nombre' => 'Institucional',
+                'descripcion' => 'Eje orientado a fortalecer la transparencia, eficiencia y calidad de las instituciones públicas.',
+            ],
+            [
+                'numero' => 5,
+                'nombre' => 'Gestión de Riesgos',
+                'descripcion' => 'Eje orientado a promover la resiliencia de ciudades y comunidades frente a riesgos naturales y antrópicos.',
+            ],
+        ];
+
+        $ejesCreados = [];
+
+        foreach ($ejes as $eje) {
+            $ejeCreado = PndEje::create([
+                'pnd_id' => $pnd->id,
+                'numero' => $eje['numero'],
+                'nombre' => $eje['nombre'],
+                'descripcion' => $eje['descripcion'],
+            ]);
+
+            $ejesCreados[$eje['numero']] = $ejeCreado;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | OBJETIVOS NACIONALES
+        |--------------------------------------------------------------------------
+        */
+
+        $objetivos = [
+            [
+                'eje' => 1,
+                'numero' => 1,
+                'nombre' => 'Mejorar las condiciones de vida de la población de forma integral, promoviendo el acceso equitativo a salud, vivienda y bienestar social',
+            ],
+            [
+                'eje' => 1,
+                'numero' => 2,
+                'nombre' => 'Impulsar las capacidades de la ciudadanía con educación equitativa e inclusiva de calidad y promoviendo espacios de intercambio cultural',
+            ],
+            [
+                'eje' => 1,
+                'numero' => 3,
+                'nombre' => 'Garantizar la seguridad integral, la paz ciudadana y transformar el sistema de justicia respetando los derechos humanos',
+            ],
+
+            [
+                'eje' => 2,
+                'numero' => 4,
+                'nombre' => 'Estimular el sistema económico y de finanzas públicas para dinamizar la inversión y las relaciones comerciales',
+            ],
+            [
+                'eje' => 2,
+                'numero' => 5,
+                'nombre' => 'Fomentar de manera sustentable la producción mejorando los niveles de productividad',
+            ],
+            [
+                'eje' => 2,
+                'numero' => 6,
+                'nombre' => 'Incentivar la generación de empleo digno',
+            ],
+
+            [
+                'eje' => 3,
+                'numero' => 7,
+                'nombre' => 'Precautelar el uso responsable de los recursos naturales con un entorno ambientalmente sostenible',
+            ],
+            [
+                'eje' => 3,
+                'numero' => 8,
+                'nombre' => 'Impulsar la conectividad como fuente de desarrollo y crecimiento económico y sostenible',
+            ],
+
+            [
+                'eje' => 4,
+                'numero' => 9,
+                'nombre' => 'Propender la construcción de un Estado eficiente, transparente y orientado al bienestar social',
+            ],
+
+            [
+                'eje' => 5,
+                'numero' => 10,
+                'nombre' => 'Promover la resiliencia de ciudades y comunidades para enfrentar los riesgos de origen natural y antrópico',
+            ],
+        ];
+
+        foreach ($objetivos as $objetivo) {
+            PndObjetivo::create([
+                'pnd_eje_id' => $ejesCreados[$objetivo['eje']]->id,
+                'numero' => $objetivo['numero'],
+                'nombre' => $objetivo['nombre'],
+                'descripcion' => null,
+            ]);
+        }
     }
 }
