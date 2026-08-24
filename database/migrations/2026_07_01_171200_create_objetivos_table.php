@@ -22,10 +22,9 @@ return new class extends Migration
                 ->restrictOnDelete();
 
             // Objetivo del Plan Nacional de Desarrollo
-            $table->foreignId('pnd_id')
-                ->constrained('pnd')
-                ->cascadeOnUpdate()
-                ->restrictOnDelete();
+            // La relación FK se agrega posteriormente,
+            // cuando la tabla pnd ya existe.
+            $table->unsignedBigInteger('pnd_id');
 
             // Objetivo de Desarrollo Sostenible
             $table->foreignId('ods_id')
