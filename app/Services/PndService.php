@@ -3,37 +3,52 @@
 namespace App\Services;
 
 use App\Models\Pnd;
+use App\Models\PndObjetivo;
 use App\Repositories\Contracts\PndRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
 
 class PndService
 {
     public function __construct(
-        protected PndRepositoryInterface $pndRepository
+        private readonly PndRepositoryInterface $pndRepository
     ) {
     }
 
     /**
-     * Obtener todos los PND.
+     * Obtener la estructura completa del
+     * Plan Nacional de Desarrollo.
      */
-    public function obtenerTodos(): Collection
+    public function obtenerEstructura(): ?Pnd
     {
-        return $this->pndRepository->obtenerTodos();
+        return $this->pndRepository->obtenerConEstructura();
     }
 
     /**
-     * Obtener un PND por su ID.
+     * Obtener los totales generales del
+     * Plan Nacional de Desarrollo.
      */
-    public function obtenerPorId(int $id): ?Pnd
+    public function obtenerResumen(): array
     {
-        return $this->pndRepository->obtenerPorId($id);
+        return $this->pndRepository->obtenerResumen();
     }
 
     /**
-     * Obtener un PND con toda su estructura.
+     * Obtener toda la información necesaria
+     * para la pantalla principal del PND.
      */
-    public function obtenerConEstructura(int $id): ?Pnd
+    public function obtenerDatosIndex(): array
     {
-        return $this->pndRepository->obtenerConEstructura($id);
+        return [
+            'pnd' => $this->obtenerEstructura(),
+            'resumen' => $this->obtenerResumen(),
+        ];
+    }
+
+    /**
+     * Obtener un Objetivo Nacional con su
+     * eje, políticas, estrategias y metas.
+     */
+    public function obtenerObjetivoConDetalle(int $id): ?PndObjetivo
+    {
+        return $this->pndRepository->obtenerObjetivoConDetalle($id);
     }
 }

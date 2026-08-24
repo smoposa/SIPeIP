@@ -3,22 +3,46 @@
 namespace App\Repositories\Contracts;
 
 use App\Models\Pnd;
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\PndObjetivo;
 
 interface PndRepositoryInterface
 {
     /**
-     * Obtener todos los PND.
+     * Obtiene el Plan Nacional de Desarrollo con toda
+     * la estructura necesaria para su visualización.
+     *
+     * PND
+     * └── Ejes
+     *     └── Objetivos
+     *         ├── Políticas
+     *         │   └── Estrategias
+     *         └── Metas
      */
-    public function obtenerTodos(): Collection;
+    public function obtenerConEstructura(): ?Pnd;
 
     /**
-     * Obtener un PND por su ID.
+     * Obtiene los totales generales de la estructura
+     * del Plan Nacional de Desarrollo.
+     *
+     * @return array{
+     *     ejes: int,
+     *     objetivos: int,
+     *     politicas: int,
+     *     estrategias: int,
+     *     metas: int
+     * }
      */
-    public function obtenerPorId(int $id): ?Pnd;
+    public function obtenerResumen(): array;
 
     /**
-     * Obtener un PND con toda su estructura jerárquica.
+     * Obtiene un Objetivo Nacional con la información
+     * necesaria para mostrar su detalle.
+     *
+     * Objetivo
+     * ├── Eje
+     * ├── Políticas
+     * │   └── Estrategias
+     * └── Metas
      */
-    public function obtenerConEstructura(int $id): ?Pnd;
+    public function obtenerObjetivoConDetalle(int $id): ?PndObjetivo;
 }

@@ -8,29 +8,37 @@ use Illuminate\View\View;
 class PndController extends Controller
 {
     public function __construct(
-        protected PndService $pndService
+        private readonly PndService $pndService
     ) {
     }
 
     /**
-     * Mostrar listado de los Planes Nacionales de Desarrollo.
+     * Mostrar la pantalla principal del
+     * Plan Nacional de Desarrollo.
      */
     public function index(): View
     {
-        $pnd = $this->pndService->obtenerTodos();
+        $datos = $this->pndService->obtenerDatosIndex();
 
-        return view('pnd.index', compact('pnd'));
+        return view('pnd.index', $datos);
     }
 
     /**
-     * Mostrar el PND con toda su estructura.
+     * Mostrar el detalle de un Objetivo Nacional
+     * con sus políticas, estrategias y metas.
      */
-    public function detalle(int $id): View
+    public function objetivo(int $id): View
     {
-        $pnd = $this->pndService->obtenerConEstructura($id);
+        $objetivo = $this->pndService->obtenerObjetivoConDetalle($id);
 
-        abort_if(!$pnd, 404);
+        abort_if(
+            !$objetivo,
+            404,
+            'El Objetivo Nacional solicitado no existe.'
+        );
 
-        return view('pnd.detalle', compact('pnd'));
+        return view('pnd.objetivo', [
+            'objetivo' => $objetivo,
+        ]);
     }
 }

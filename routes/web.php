@@ -180,14 +180,26 @@ Route::middleware('auth')->group(function () {
         ->name('pnd.')
         ->group(function () {
 
-            // Listado de Planes Nacionales de Desarrollo
+            // Listado del Plan Nacional de Desarrollo
             Route::get('/', [PndController::class, 'index'])
                 ->name('index');
 
-            // Detalle y estructura completa del PND
+            // Detalle de un Objetivo Nacional
+            Route::get('/objetivos/{id}', [PndController::class, 'objetivo'])
+                ->whereNumber('id')
+                ->name('objetivo');
+
+            /*
+            |--------------------------------------------------------------------------
+            | Detalle general del PND
+            |--------------------------------------------------------------------------
+            | Temporalmente deshabilitado mientras se reestructura
+            | esta funcionalidad con la nueva arquitectura por capas.
+            |
             Route::get('/{id}', [PndController::class, 'detalle'])
                 ->whereNumber('id')
                 ->name('detalle');
+            */
     });
 
     // Objetivos

@@ -3,48 +3,75 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Pnd;
+use App\Models\PndEje;
+use App\Models\PndObjetivo;
+use App\Models\PndPolitica;
+use App\Models\PndEstrategia;
+use App\Models\PndMeta;
 use App\Repositories\Contracts\PndRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
 
 class PndRepository implements PndRepositoryInterface
 {
     /**
-     * Obtener todos los PND.
+     * Obtiene el Plan Nacional de Desarrollo con toda
+     * la estructura necesaria para su visualización.
      */
-    public function obtenerTodos(): Collection
-    {
-        return Pnd::query()
-            ->orderByDesc('periodo_inicio')
-            ->get();
-    }
-
-    /**
-     * Obtener un PND por su ID.
-     */
-    public function obtenerPorId(int $id): ?Pnd
-    {
-        return Pnd::find($id);
-    }
-
-    /**
-     * Obtener un PND con toda su estructura jerárquica.
-     */
-    public function obtenerConEstructura(int $id): ?Pnd
+    public function obtenerConEstructura(): ?Pnd
     {
         return Pnd::query()
             ->with([
-                'ejes' => fn ($query) => $query->orderBy('numero'),
+                'ejes' => function ($query) {
+                    $query->orderBy('numero');
+                },
+                'ejes.objetivos' => function ($query) {
+                    $query->orderBy('numero');
+                },
+                'ejes.objetivos.politicas' => function ($query) {
+                    $query->orderBy('codigo');
+                },
+                'ejes.objetivos.politicas.estrategias' => function ($query) {
+                    $query->orderBy('codigo');
+                },
+                'ejes.objetivos.metas' => function ($query) {
+                    $query->orderBy('numero');
+                },
+            ])
+            ->first();
+    }
 
-                'ejes.objetivos' => fn ($query) => $query->orderBy('numero'),
+    /**
+     * Obtiene los totales generales de la estructura
+     * del Plan Nacional de Desarrollo.
+     */
+    public function obtenerResumen(): array
+    {
+        return [
+            'ejes' => PndEje::count(),
+            'objetivos' => PndObjetivo::count(),
+            'politicas' => PndPolitica::count(),
+            'estrategias' => PndEstrategia::count(),
+            'metas' => PndMeta::count(),
+        ];
+    }
 
-                'ejes.objetivos.politicas' => fn ($query) =>
-                    $query->orderBy('codigo'),
-
-                'ejes.objetivos.politicas.estrategias' => fn ($query) =>
-                    $query->orderBy('codigo'),
-
-                'ejes.objetivos.metas' => fn ($query) =>
-                    $query->orderBy('numero'),
+    /**
+     * Obtiene un Objetivo Nacional con sus políticas,
+     * estrategias, metas y el eje al que pertenece.
+     */
+    public function obtenerObjetivoConDetalle(int $id): ?PndObjetivo
+    {
+        return PndObjetivo::query()
+            ->with([
+                'eje',
+                'politicas' => function ($query) {
+                    $query->orderBy('codigo');
+                },
+                'politicas.estrategias' => function ($query) {
+                    $query->orderBy('codigo');
+                },
+                'metas' => function ($query) {
+                    $query->orderBy('numero');
+                },
             ])
             ->find($id);
     }

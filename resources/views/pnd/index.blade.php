@@ -1,80 +1,84 @@
 <x-catalogos-layout title="PND">
 
     <!-- =========================================================
-         ENCABEZADO
-    ========================================================== -->
-    <div class="mb-5">
-
-        <h2 class="text-2xl font-semibold text-gray-800">
-            Plan Nacional de Desarrollo (PND)
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-500">
-            Estructura del Plan Nacional de Desarrollo
-        </p>
-
-    </div>
-
-
-    <!-- =========================================================
          INFORMACIÓN GENERAL DEL PND
     ========================================================== -->
-    <div class="bg-white border border-gray-200 rounded-lg mb-5">
+    @if($pnd)
 
-        <div class="px-5 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div class="bg-white border border-gray-200 rounded-lg mb-5">
 
-            <!-- Información -->
-            <div class="min-w-0">
+            <div class="px-5 py-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
-                <div class="flex items-center gap-3">
+                <!-- Información -->
+                <div class="min-w-0">
 
-                    <!-- Identificador -->
-                    <div class="w-11 h-11 rounded-lg bg-gray-100 border border-gray-200
-                                flex items-center justify-center flex-shrink-0">
+                    <div class="flex items-center gap-3">
 
-                        <i class="bi bi-journal-text text-xl text-gray-600"></i>
+                        <!-- Identificador -->
+                        <div class="w-11 h-11 rounded-lg bg-gray-100 border border-gray-200
+                                    flex items-center justify-center flex-shrink-0">
 
-                    </div>
+                            <i class="bi bi-journal-text text-xl text-gray-600"></i>
 
-                    <div class="min-w-0">
+                        </div>
 
-                        <p class="text-xs font-medium uppercase tracking-wide text-gray-400">
-                            Plan Nacional de Desarrollo
-                        </p>
+                        <div class="min-w-0">
 
-                        <h3 class="text-lg font-semibold text-gray-800">
-                            Ecuador No Se Detiene
-                        </h3>
+                            <p class="text-xs font-medium uppercase tracking-wide text-gray-400">
+                                Plan Nacional de Desarrollo
+                            </p>
 
-                        <p class="text-sm text-gray-500">
-                            Período 2025 - 2029
-                        </p>
+                            <h3 class="text-lg font-semibold text-gray-800">
+                                {{ $pnd->nombre }}
+                            </h3>
+
+                            <p class="text-sm text-gray-500">
+                                Período {{ $pnd->periodo_inicio }} - {{ $pnd->periodo_fin }}
+                            </p>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
 
+                <!-- Estado -->
+                <div class="flex items-center">
 
-            <!-- Estado -->
-            <div class="flex items-center">
+                    @if($pnd->estado === 'Activo')
 
-                <span class="inline-flex items-center gap-2 px-3 py-1.5
-                             rounded-full bg-green-50 text-green-700
-                             border border-green-200 text-xs font-medium">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5
+                                     rounded-full bg-green-50 text-green-700
+                                     border border-green-200 text-xs font-medium">
 
-                    <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
 
-                    Activo
+                            Activo
 
-                </span>
+                        </span>
+
+                    @else
+
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5
+                                     rounded-full bg-red-50 text-red-700
+                                     border border-red-200 text-xs font-medium">
+
+                            <span class="w-2 h-2 rounded-full bg-red-500"></span>
+
+                            Inactivo
+
+                        </span>
+
+                    @endif
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+    @endif
 
 
     <!-- =========================================================
@@ -95,13 +99,15 @@
                 </div>
 
                 <div>
+
                     <p class="text-xl font-semibold text-gray-800">
-                        4
+                        {{ $resumen['ejes'] }}
                     </p>
 
                     <p class="text-xs text-gray-500">
                         Ejes
                     </p>
+
                 </div>
 
             </div>
@@ -122,13 +128,15 @@
                 </div>
 
                 <div>
+
                     <p class="text-xl font-semibold text-gray-800">
-                        10
+                        {{ $resumen['objetivos'] }}
                     </p>
 
                     <p class="text-xs text-gray-500">
                         Objetivos
                     </p>
+
                 </div>
 
             </div>
@@ -149,13 +157,15 @@
                 </div>
 
                 <div>
+
                     <p class="text-xl font-semibold text-gray-800">
-                        72
+                        {{ $resumen['politicas'] }}
                     </p>
 
                     <p class="text-xs text-gray-500">
                         Políticas
                     </p>
+
                 </div>
 
             </div>
@@ -176,13 +186,15 @@
                 </div>
 
                 <div>
+
                     <p class="text-xl font-semibold text-gray-800">
-                        186
+                        {{ $resumen['estrategias'] }}
                     </p>
 
                     <p class="text-xs text-gray-500">
                         Estrategias
                     </p>
+
                 </div>
 
             </div>
@@ -203,13 +215,15 @@
                 </div>
 
                 <div>
+
                     <p class="text-xl font-semibold text-gray-800">
-                        105
+                        {{ $resumen['metas'] }}
                     </p>
 
                     <p class="text-xs text-gray-500">
                         Metas
                     </p>
+
                 </div>
 
             </div>
@@ -238,310 +252,175 @@
 
     </div>
 
-
     <!-- =========================================================
          CONTENIDO CON SCROLL
     ========================================================== -->
     <div class="overflow-y-auto pr-1"
-         style="height: calc(100vh - 430px); min-height: 300px;">
+         style="height: calc(100vh - 430px); min-height: 260px;">
 
-        <div class="space-y-3">
+        @if($pnd && $pnd->ejes->isNotEmpty())
+
+            <!-- Accordion de Ejes -->
+            <div class="border border-gray-200 rounded-md overflow-hidden">
+
+                @foreach($pnd->ejes as $eje)
+
+                    <!-- Eje -->
+                    <div
+                        x-data="{ abierto: false }"
+                        class="border-b border-gray-200 last:border-b-0">
 
 
-            <!-- =================================================
-                 EJE 1
-            ================================================== -->
-            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                        <!-- Encabezado -->
+                        <button
+                            type="button"
+                            @click="abierto = !abierto"
+                            class="w-full flex items-center justify-between
+                                   px-4 py-3
+                                   text-left
+                                   transition"
+                            :class="abierto
+                                ? 'bg-blue-50'
+                                : 'bg-gray-50 hover:bg-gray-100'">
 
-                <!-- Cabecera Eje -->
-                <div class="px-5 py-3 bg-gray-50 border-b border-gray-200">
 
-                    <div class="flex items-center gap-3">
+                            <!-- Número + nombre del Eje -->
+                            <div class="flex items-center gap-4 min-w-0">
 
-                        <div class="w-8 h-8 rounded-md bg-gray-200
-                                    flex items-center justify-center
-                                    text-sm font-semibold text-gray-700">
-                            1
+                                <span
+                                    class="w-14 flex-shrink-0
+                                           text-sm font-semibold"
+                                    :class="abierto
+                                        ? 'text-blue-600'
+                                        : 'text-gray-700'">
+
+                                    Eje {{ $eje->numero }}
+
+                                </span>
+
+                                <span
+                                    class="text-sm font-medium"
+                                    :class="abierto
+                                        ? 'text-blue-700'
+                                        : 'text-gray-800'">
+
+                                    {{ $eje->nombre }}
+
+                                </span>
+
+                            </div>
+
+
+                            <!-- Flecha -->
+                            <div class="ml-4 flex-shrink-0">
+
+                                <i
+                                    class="bi bi-chevron-down
+                                           transition-transform
+                                           duration-200"
+                                    :class="abierto
+                                        ? 'rotate-180 text-blue-600'
+                                        : 'text-gray-500'">
+                                </i>
+
+                            </div>
+
+                        </button>
+
+
+                        <!-- =================================================
+                             OBJETIVOS DEL EJE
+                        ================================================== -->
+                        <div
+                            x-show="abierto"
+                            x-transition
+                            x-cloak
+                            class="bg-white">
+
+                            @forelse($eje->objetivos as $objetivo)
+
+                                <a href="{{ route('pnd.objetivo', $objetivo->id) }}"
+                                class="flex items-start gap-4
+                                        px-4 py-3
+                                        border-t border-gray-100
+                                        hover:bg-gray-50
+                                        transition
+                                        group">
+
+                                    <!-- Número -->
+                                    <span class="w-20 flex-shrink-0
+                                                text-sm font-semibold
+                                                text-gray-400">
+
+                                        Objetivo {{ $objetivo->numero }}
+
+                                    </span>
+
+
+                                    <!-- Nombre -->
+                                    <span class="flex-1
+                                                text-sm text-gray-700
+                                                leading-relaxed
+                                                group-hover:text-blue-600
+                                                group-hover:underline
+                                                underline-offset-2">
+
+                                        {{ $objetivo->nombre }}
+
+                                    </span>
+
+
+                                    <!-- Flecha -->
+                                    <i class="bi bi-chevron-right
+                                            text-gray-400
+                                            group-hover:text-gray-600
+                                            flex-shrink-0
+                                            mt-0.5">
+                                    </i>
+
+                                </a>
+
+                            @empty
+
+                                <div class="px-4 py-6
+                                            border-t border-gray-100
+                                            text-center">
+
+                                    <p class="text-sm text-gray-500">
+                                        No existen objetivos registrados para este eje.
+                                    </p>
+
+                                </div>
+
+                            @endforelse
+
                         </div>
 
-                        <div>
-
-                            <p class="text-xs uppercase tracking-wide text-gray-400">
-                                Eje 1
-                            </p>
-
-                            <h4 class="text-sm font-semibold text-gray-800">
-                                Social
-                            </h4>
-
-                        </div>
-
                     </div>
 
-                </div>
-
-
-                <!-- Objetivos -->
-                <div class="divide-y divide-gray-100">
-
-                    <div class="px-5 py-3 flex items-start gap-4">
-
-                        <span class="text-sm font-semibold text-gray-400 w-6">
-                            1.
-                        </span>
-
-                        <p class="text-sm text-gray-700 leading-5">
-                            Mejorar las condiciones de vida de la población de forma integral,
-                            promoviendo el acceso equitativo a salud, vivienda y bienestar social.
-                        </p>
-
-                    </div>
-
-
-                    <div class="px-5 py-3 flex items-start gap-4">
-
-                        <span class="text-sm font-semibold text-gray-400 w-6">
-                            2.
-                        </span>
-
-                        <p class="text-sm text-gray-700 leading-5">
-                            Impulsar las capacidades de la ciudadanía con educación equitativa
-                            e inclusiva de calidad y promoviendo espacios de intercambio cultural.
-                        </p>
-
-                    </div>
-
-
-                    <div class="px-5 py-3 flex items-start gap-4">
-
-                        <span class="text-sm font-semibold text-gray-400 w-6">
-                            3.
-                        </span>
-
-                        <p class="text-sm text-gray-700 leading-5">
-                            Garantizar la seguridad integral, la paz ciudadana y transformar
-                            el sistema de justicia respetando los derechos humanos.
-                        </p>
-
-                    </div>
-
-                </div>
+                @endforeach
 
             </div>
 
+        @else
 
-            <!-- =================================================
-                 EJE 2
-            ================================================== -->
-            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <div class="bg-white
+                        border border-gray-200
+                        rounded-md
+                        py-8
+                        text-center">
 
-                <div class="px-5 py-3 bg-gray-50 border-b border-gray-200">
+                <i class="bi bi-inbox text-2xl text-gray-300"></i>
 
-                    <div class="flex items-center gap-3">
-
-                        <div class="w-8 h-8 rounded-md bg-gray-200
-                                    flex items-center justify-center
-                                    text-sm font-semibold text-gray-700">
-                            2
-                        </div>
-
-                        <div>
-
-                            <p class="text-xs uppercase tracking-wide text-gray-400">
-                                Eje 2
-                            </p>
-
-                            <h4 class="text-sm font-semibold text-gray-800">
-                                Desarrollo Económico
-                            </h4>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="divide-y divide-gray-100">
-
-                    <div class="px-5 py-3 flex items-start gap-4">
-
-                        <span class="text-sm font-semibold text-gray-400 w-6">
-                            4.
-                        </span>
-
-                        <p class="text-sm text-gray-700 leading-5">
-                            Estimular el sistema económico y de finanzas públicas para
-                            dinamizar la inversión y las relaciones comerciales.
-                        </p>
-
-                    </div>
-
-
-                    <div class="px-5 py-3 flex items-start gap-4">
-
-                        <span class="text-sm font-semibold text-gray-400 w-6">
-                            5.
-                        </span>
-
-                        <p class="text-sm text-gray-700 leading-5">
-                            Fomentar de manera sustentable la producción mejorando
-                            los niveles de productividad.
-                        </p>
-
-                    </div>
-
-
-                    <div class="px-5 py-3 flex items-start gap-4">
-
-                        <span class="text-sm font-semibold text-gray-400 w-6">
-                            6.
-                        </span>
-
-                        <p class="text-sm text-gray-700 leading-5">
-                            Incentivar la generación de empleo digno.
-                        </p>
-
-                    </div>
-
-                </div>
+                <p class="mt-2 text-sm text-gray-500">
+                    No existe información registrada para el Plan Nacional de Desarrollo.
+                </p>
 
             </div>
 
-
-            <!-- =================================================
-                 EJE 3
-            ================================================== -->
-            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
-
-                <div class="px-5 py-3 bg-gray-50 border-b border-gray-200">
-
-                    <div class="flex items-center gap-3">
-
-                        <div class="w-8 h-8 rounded-md bg-gray-200
-                                    flex items-center justify-center
-                                    text-sm font-semibold text-gray-700">
-                            3
-                        </div>
-
-                        <div>
-
-                            <p class="text-xs uppercase tracking-wide text-gray-400">
-                                Eje 3
-                            </p>
-
-                            <h4 class="text-sm font-semibold text-gray-800">
-                                Infraestructura, Energía y Medio Ambiente
-                            </h4>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="divide-y divide-gray-100">
-
-                    <div class="px-5 py-3 flex items-start gap-4">
-
-                        <span class="text-sm font-semibold text-gray-400 w-6">
-                            7.
-                        </span>
-
-                        <p class="text-sm text-gray-700 leading-5">
-                            Precautelar el uso responsable de los recursos naturales
-                            con un entorno ambientalmente sostenible.
-                        </p>
-
-                    </div>
-
-
-                    <div class="px-5 py-3 flex items-start gap-4">
-
-                        <span class="text-sm font-semibold text-gray-400 w-6">
-                            8.
-                        </span>
-
-                        <p class="text-sm text-gray-700 leading-5">
-                            Impulsar la conectividad como fuente de desarrollo y
-                            crecimiento económico y sostenible.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- =================================================
-                 EJE 4
-            ================================================== -->
-            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
-
-                <div class="px-5 py-3 bg-gray-50 border-b border-gray-200">
-
-                    <div class="flex items-center gap-3">
-
-                        <div class="w-8 h-8 rounded-md bg-gray-200
-                                    flex items-center justify-center
-                                    text-sm font-semibold text-gray-700">
-                            4
-                        </div>
-
-                        <div>
-
-                            <p class="text-xs uppercase tracking-wide text-gray-400">
-                                Eje 4
-                            </p>
-
-                            <h4 class="text-sm font-semibold text-gray-800">
-                                Institucional
-                            </h4>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="divide-y divide-gray-100">
-
-                    <div class="px-5 py-3 flex items-start gap-4">
-
-                        <span class="text-sm font-semibold text-gray-400 w-6">
-                            9.
-                        </span>
-
-                        <p class="text-sm text-gray-700 leading-5">
-                            Propender la construcción de un Estado eficiente,
-                            transparente y orientado al bienestar social.
-                        </p>
-
-                    </div>
-
-
-                    <div class="px-5 py-3 flex items-start gap-4">
-
-                        <span class="text-sm font-semibold text-gray-400 w-6">
-                            10.
-                        </span>
-
-                        <p class="text-sm text-gray-700 leading-5">
-                            Promover la resiliencia de ciudades y comunidades para
-                            enfrentar los riesgos de origen natural y antrópico.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
+        @endif
 
     </div>
+
 
 </x-catalogos-layout>
