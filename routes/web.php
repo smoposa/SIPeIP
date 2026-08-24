@@ -284,7 +284,7 @@ Route::middleware('auth')->group(function () {
 
         });
 
-    });
+    
 
     // Metas
     Route::prefix('metas')->name('metas.')->group(function () {
@@ -398,4 +398,5 @@ Route::middleware('auth')->group(function () {
 
     });
 
+}); // Cierre del middleware auth
 require __DIR__.'/auth.php';

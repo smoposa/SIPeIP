@@ -3,15 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ods;
+use App\Services\OdsService;
+use Illuminate\View\View;
 
 class OdsController extends Controller
 {
+    public function __construct(
+        private readonly OdsService $odsService
+    ) {
+    }
+
     /**
      * Mostrar catálogo ODS.
      */
-    public function index()
+    public function index(): View
     {
-        $ods = Ods::orderBy('codigo')->get();
+        $ods = $this->odsService->obtenerTodos();
 
         return view('ods.index', compact('ods'));
     }
@@ -20,13 +27,9 @@ class OdsController extends Controller
      * Mostrar detalle de un ODS
      * con sus metas asociadas.
      */
-    public function detalle(Ods $ods)
+    public function detalle(Ods $ods): View
     {
-        $ods->load([
-            'metas' => function ($query) {
-                $query->orderBy('codigo');
-            }
-        ]);
+        $ods = $this->odsService->obtenerConMetas($ods);
 
         return view('ods.detalle', compact('ods'));
     }
