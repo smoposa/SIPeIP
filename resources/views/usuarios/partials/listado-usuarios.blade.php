@@ -127,7 +127,7 @@
 
                                     <i class="bi bi-x-lg font-bold"></i>
 
-                                    Desabilitado
+                                    Deshabilitado 
 
                                 </span>
 
