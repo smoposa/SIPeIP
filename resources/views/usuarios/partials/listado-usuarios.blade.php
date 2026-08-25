@@ -3,7 +3,7 @@
 
     <!-- Scroll independiente -->
     <div class="overflow-y-auto"
-         style="height: calc(100vh - 260px);">
+         style="height: calc(100vh - 210px);">
 
         <table class="min-w-full">
 
