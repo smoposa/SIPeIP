@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Planes;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdatePlanRequest extends FormRequest
 {
@@ -14,16 +13,7 @@ class UpdatePlanRequest extends FormRequest
 
     public function rules(): array
     {
-        $planId = $this->route('id');
-
         return [
-            'codigo' => [
-                'required',
-                'string',
-                'max:30',
-                Rule::unique('planes', 'codigo')->ignore($planId),
-            ],
-
             'nombre' => [
                 'required',
                 'string',

@@ -13,19 +13,51 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
 
-            // Configuración
+            /*
+            |--------------------------------------------------------------------------
+            | CONFIGURACIÓN
+            |--------------------------------------------------------------------------
+            */
+
             RolesSeeder::class,
             EntidadesSeeder::class,
             UsersSeeder::class,
 
-            // Catálogos
+
+            /*
+            |--------------------------------------------------------------------------
+            | CATÁLOGOS - ODS
+            |--------------------------------------------------------------------------
+            */
+
             OdsSeeder::class,
             OdsMetaSeeder::class,
 
+
+            /*
+            |--------------------------------------------------------------------------
+            | CATÁLOGOS - PND
+            |--------------------------------------------------------------------------
+            |
+            | PndSeeder crea:
+            | - Plan Nacional de Desarrollo
+            | - Ejes
+            | - Objetivos Nacionales
+            |
+            */
+
             PndSeeder::class,
             PndPoliticaSeeder::class,
+            PndEstrategiaSeeder::class,
+            PndMetaSeeder::class,
 
-            // Planificación
+
+            /*
+            |--------------------------------------------------------------------------
+            | PLANIFICACIÓN INSTITUCIONAL
+            |--------------------------------------------------------------------------
+            */
+
             PlanesSeeder::class,
 
         ]);

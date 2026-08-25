@@ -18,29 +18,15 @@
 
         <div class="w-2/3">
 
-            @if(isset($plan))
-
-                <input
-                    type="text"
-                    name="codigo"
-                    value="{{ old('codigo', $plan->codigo) }}"
-                    maxlength="30"
-                   class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-            @else
-
-                <input
-                    type="text"
-                    value="{{ $codigo }}"
-                    readonly
-                    class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-600 cursor-not-allowed">
-
-            @endif
+            <input
+                type="text"
+                value="{{ old('codigo', $plan->codigo ?? $codigo ?? '') }}"
+                readonly
+                class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-600 cursor-not-allowed">
 
         </div>
 
     </div>
-
 
     <!-- Entidad -->
     <div class="flex items-center">
@@ -57,11 +43,6 @@
                 readonly
                 class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-600 cursor-not-allowed">
 
-            <input
-                type="hidden"
-                name="entidad_id"
-                value="{{ auth()->user()->entidad_id }}">
-
         </div>
 
     </div>
@@ -75,40 +56,62 @@
 
         <div class="w-2/3">
 
-            @if(isset($plan))
-
-                <select
-                    name="tipo"
-                    class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
-
-                    <option value="Plan Estratégico Institucional"
-                        {{ old('tipo', $plan->tipo) == 'Plan Estratégico Institucional' ? 'selected' : '' }}>
-                        Plan Estratégico Institucional
-                    </option>
-
-                </select>
-
-            @else
-
-                <input
-                    type="text"
-                    value="Plan Estratégico Institucional"
-                    readonly
-                    class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-600 cursor-not-allowed">
-
-                <input
-                    type="hidden"
-                    name="tipo"
-                    value="Plan Estratégico Institucional">
-
-            @endif
+            <input
+                type="text"
+                value="Plan Estratégico Institucional"
+                readonly
+                class="w-full h-9 bg-gray-100 border border-gray-300 rounded-md px-3 text-sm text-gray-600 cursor-not-allowed">
 
         </div>
 
     </div>
 
+    <!-- Estado del proceso -->
+    <div class="flex items-center">
 
-    <!-- Estado -->
+        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+            Estado del proceso
+        </label>
+
+        <div class="w-2/3">
+
+            @php
+                $estadoProceso = $plan->estado_proceso ?? 'Borrador';
+            @endphp
+
+            @switch($estadoProceso)
+
+                @case('Borrador')
+                    <span class="inline-flex px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-700">
+                        Borrador
+                    </span>
+                    @break
+
+                @case('En revisión')
+                    <span class="inline-flex px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-700">
+                        En revisión
+                    </span>
+                    @break
+
+                @case('Observado')
+                    <span class="inline-flex px-3 py-1 text-xs rounded-full bg-orange-100 text-orange-700">
+                        Observado
+                    </span>
+                    @break
+
+                @case('Aprobado')
+                    <span class="inline-flex px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700">
+                        Aprobado
+                    </span>
+                    @break
+
+            @endswitch
+
+        </div>
+
+    </div>
+
+    <!-- Estado administrativo -->
     <div class="flex items-center">
 
         <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
@@ -117,23 +120,52 @@
 
         <div class="w-2/3">
 
-            <div class="inline-flex items-center px-3 py-1 rounded-full
-                        bg-green-100 text-green-700 text-sm font-medium">
+            @if(($plan->estado ?? 'Activo') === 'Activo')
 
-                <i class="bi bi-check-circle-fill mr-2"></i>
+                <span class="inline-flex items-center px-3 py-1 rounded-full
+                             bg-green-100 text-green-700 text-sm font-medium">
 
-                Activo
+                    <i class="bi bi-check-circle-fill mr-2"></i>
+                    Activo
 
-            </div>
+                </span>
 
-            <input
-                type="hidden"
-                name="estado"
-                value="Activo">
+            @else
+
+                <span class="inline-flex items-center px-3 py-1 rounded-full
+                             bg-red-100 text-red-700 text-sm font-medium">
+
+                    <i class="bi bi-x-circle-fill mr-2"></i>
+                    Inactivo
+
+                </span>
+
+            @endif
 
         </div>
 
-    </div><br>
+    </div>
+
+    <!-- Versión -->
+    @if(isset($plan))
+        <div class="flex items-center">
+
+            <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+                Versión
+            </label>
+
+            <div class="w-2/3">
+
+                <span class="inline-flex px-3 py-1 text-sm rounded-md bg-gray-100 text-gray-700">
+                    v{{ $plan->version }}
+                </span>
+
+            </div>
+
+        </div>
+    @endif
+
+    <br>
 
     <!-- Información del Plan -->
     <div class="mt-8 mb-5">
@@ -165,7 +197,6 @@
         </div>
 
     </div>
-
 
     <!-- Período -->
     <div class="flex items-center">

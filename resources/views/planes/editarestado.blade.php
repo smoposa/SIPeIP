@@ -24,7 +24,7 @@
         <div class="p-6">
 
             <h2 class="text-2xl font-semibold text-gray-800">
-                Editar estado del plan
+                Editar estado administrativo
             </h2>
 
             <p class="mt-1 text-sm text-gray-500">
@@ -34,7 +34,48 @@
         </div>
 
         <!-- Formulario -->
-        <div class="bg-white p-4">
+        <div class="bg-white p-6">
+
+            <!-- Información actual -->
+            <div class="mb-8">
+
+                <div class="flex items-center mb-4">
+
+                    <span class="w-44 text-sm font-semibold text-gray-700">
+                        Plan
+                    </span>
+
+                    <span class="text-sm text-gray-600">
+                        {{ $plan->nombre }}
+                    </span>
+
+                </div>
+
+                <div class="flex items-center mb-4">
+
+                    <span class="w-44 text-sm font-semibold text-gray-700">
+                        Estado del proceso
+                    </span>
+
+                    <span class="text-sm text-gray-600">
+                        {{ $plan->estado_proceso }}
+                    </span>
+
+                </div>
+
+                <div class="flex items-center">
+
+                    <span class="w-44 text-sm font-semibold text-gray-700">
+                        Versión
+                    </span>
+
+                    <span class="text-sm text-gray-600">
+                        v{{ $plan->version }}
+                    </span>
+
+                </div>
+
+            </div>
 
             <form method="POST"
                   action="{{ route('planes.actualizarestado', $plan->id) }}">
@@ -42,9 +83,9 @@
                 @csrf
                 @method('PUT')
 
-                <div class="flex items-center gap-20">
+                <div class="flex items-center gap-12">
 
-                    <label class="text-sm font-medium text-gray-700">
+                    <label class="w-32 text-sm font-medium text-gray-700">
                         Plan habilitado
                     </label>
 
@@ -52,13 +93,17 @@
                         type="checkbox"
                         name="estado"
                         value="Activo"
-                        {{ $plan->estado == 'Activo' ? 'checked' : '' }}
+                        {{ $plan->estado === 'Activo' ? 'checked' : '' }}
                         class="w-5 h-5">
 
                 </div>
 
+                <p class="mt-3 ml-44 text-xs text-gray-500">
+                    Este cambio afecta únicamente la disponibilidad administrativa del plan.
+                </p>
+
                 <!-- Botones -->
-                <div class="flex gap-3 mt-20">
+                <div class="flex gap-3 mt-10">
 
                     <button
                         type="submit"
