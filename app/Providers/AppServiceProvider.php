@@ -24,6 +24,10 @@ use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Contracts\EntidadRepositoryInterface;
 use App\Repositories\Eloquent\EntidadRepository;
 
+// Planes
+use App\Repositories\Contracts\PlanRepositoryInterface;
+use App\Repositories\Eloquent\PlanRepository;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -59,6 +63,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             EntidadRepositoryInterface::class,
             EntidadRepository::class
+        );
+
+        // Planes
+        $this->app->bind(
+            PlanRepositoryInterface::class,
+            PlanRepository::class
         );
     }
 
