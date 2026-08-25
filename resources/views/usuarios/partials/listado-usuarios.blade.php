@@ -117,7 +117,7 @@
 
                                     <i class="bi bi-check-lg font-bold"></i>
 
-                                    Activo
+                                    Habilitado
 
                                 </span>
 
@@ -127,7 +127,7 @@
 
                                     <i class="bi bi-x-lg font-bold"></i>
 
-                                    Inactivo
+                                    Desabilitado
 
                                 </span>
 

@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -42,7 +44,24 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $usuario = User::with([
+            'rol',
+            'entidad',
+        ])->where(
+            'email',
+            $this->input('email')
+        )->first();
+
+        /*
+         * Usuario no existe o contraseña incorrecta.
+         */
+        if (
+            !$usuario ||
+            !Hash::check(
+                $this->input('password'),
+                $usuario->password
+            )
+        ) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -50,7 +69,60 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        /*
+         * Usuario deshabilitado.
+         */
+        if ($usuario->estado !== 'Activo') {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => 'Su usuario se encuentra deshabilitado. Comuníquese con el administrador del sistema.',
+            ]);
+        }
+
+        /*
+         * Administradores globales y del sistema
+         * pueden ingresar independientemente del
+         * estado de su entidad.
+         */
+        $esAdministradorGlobal = in_array(
+            $usuario->rol?->codigo,
+            [
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+            ],
+            true
+        );
+
+        /*
+         * Usuarios institucionales requieren
+         * una entidad activa.
+         */
+        if (
+            !$esAdministradorGlobal &&
+            (
+                !$usuario->entidad ||
+                $usuario->entidad->estado !== 'Activo'
+            )
+        ) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'email' => 'La institución asociada a su usuario se encuentra deshabilitada. Comuníquese con el administrador del sistema.',
+            ]);
+        }
+
+        /*
+         * Autenticación final.
+         */
+        Auth::login(
+            $usuario,
+            $this->boolean('remember')
+        );
+
+        RateLimiter::clear(
+            $this->throttleKey()
+        );
     }
 
     /**
@@ -60,13 +132,18 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (! RateLimiter::tooManyAttempts(
+            $this->throttleKey(),
+            5
+        )) {
             return;
         }
 
         event(new Lockout($this));
 
-        $seconds = RateLimiter::availableIn($this->throttleKey());
+        $seconds = RateLimiter::availableIn(
+            $this->throttleKey()
+        );
 
         throw ValidationException::withMessages([
             'email' => trans('auth.throttle', [
@@ -81,6 +158,10 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(
+            Str::lower(
+                $this->string('email')
+            ) . '|' . $this->ip()
+        );
     }
 }

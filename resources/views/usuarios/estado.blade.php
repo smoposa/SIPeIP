@@ -6,7 +6,8 @@
         <div class="flex">
 
             <a href="{{ route('usuarios.show', $usuario->id) }}"
-                class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+
                 <i class="bi bi-chevron-left"></i>
                 Regresar
 
@@ -21,6 +22,10 @@
 
         <div class="p-6">
 
+            <h2 class="text-2xl font-semibold text-gray-800">
+                Editar estado del usuario
+            </h2>
+
             <p class="mt-1 text-sm text-gray-500">
                 Habilite o deshabilite el usuario dentro del sistema.
             </p>
@@ -30,7 +35,7 @@
         <div class="bg-white p-4">
 
             <form method="POST"
-                action="{{ route('usuarios.actualizarestado', $usuario->id) }}">
+                  action="{{ route('usuarios.actualizarestado', $usuario->id) }}">
 
                 @csrf
                 @method('PUT')
@@ -41,11 +46,18 @@
                         Usuario habilitado
                     </label>
 
+                    <!-- Si el checkbox está desmarcado -->
+                    <input
+                        type="hidden"
+                        name="estado"
+                        value="Inactivo">
+
+                    <!-- Si está marcado -->
                     <input
                         type="checkbox"
                         name="estado"
                         value="Activo"
-                        {{ $usuario->estado == 'Activo' ? 'checked' : '' }}
+                        {{ $usuario->estado === 'Activo' ? 'checked' : '' }}
                         class="w-5 h-5">
 
                 </div>
