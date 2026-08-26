@@ -158,12 +158,29 @@ class UserService
      */
     public function cambiarEstado(
         User $usuario,
-        string $estado
+        string $estado,
+        User $usuarioAutenticado
     ): bool {
 
-        return $this->userRepository->actualizar($usuario, [
-            'estado' => $estado,
-        ]);
+        /*
+        * Impedir que un usuario
+        * se desactive a sí mismo.
+        */
+        if (
+            $usuario->id === $usuarioAutenticado->id &&
+            $estado === EstadoUsuario::INACTIVO->value
+        ) {
+            throw new \DomainException(
+                'No puede desactivar su propio usuario.'
+            );
+        }
+
+        return $this->userRepository->actualizar(
+            $usuario,
+            [
+                'estado' => $estado,
+            ]
+        );
     }
 
 

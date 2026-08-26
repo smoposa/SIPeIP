@@ -1,5 +1,38 @@
 <x-usuarios-layout title="Editar Estado de Usuario">
 
+    @if(session('error'))
+
+    <div id="alertError"
+         class="fixed top-5 right-5 z-50
+                bg-red-600 text-white
+                px-6 py-3 rounded-lg shadow-lg">
+
+        <div class="flex items-center gap-2">
+
+            <i class="bi bi-exclamation-circle-fill"></i>
+
+            <span>
+                {{ session('error') }}
+            </span>
+
+        </div>
+
+    </div>
+
+    <script>
+        setTimeout(() => {
+
+            const alerta = document.getElementById('alertError');
+
+            if (alerta) {
+                alerta.remove();
+            }
+
+        }, 4000);
+    </script>
+
+@endif
+
     <!-- Barra de acciones -->
     <div class="bg-white border-b border-gray-300">
 

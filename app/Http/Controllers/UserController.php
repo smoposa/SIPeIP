@@ -201,10 +201,23 @@ class UserController extends Controller
             auth()->user()
         );
 
-        $this->userService->cambiarEstado(
-            $usuario,
-            $request->validated('estado')
-        );
+        try {
+
+            $this->userService->cambiarEstado(
+                $usuario,
+                $request->validated('estado'),
+                auth()->user()
+            );
+
+        } catch (\DomainException $e) {
+
+            return redirect()
+                ->route('usuarios.estado', $usuario->id)
+                ->with(
+                    'error',
+                    $e->getMessage()
+                );
+        }
 
         return redirect()
             ->route('usuarios.show', $usuario->id)
