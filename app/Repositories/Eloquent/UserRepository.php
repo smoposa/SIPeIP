@@ -78,6 +78,17 @@ class UserRepository implements UserRepositoryInterface
         return $query->count();
     }
 
+    /**
+     * Contar administradores globales activos.
+     */
+    public function contarAdministradoresGlobalesActivos(): int
+    {
+        return User::where('estado', 'Activo')
+            ->whereHas('rol', function ($query) {
+                $query->where('codigo', 'ADMIN_GLOBAL');
+            })
+            ->count();
+    }
 
     /**
      * Crear un usuario.

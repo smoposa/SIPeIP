@@ -47,7 +47,7 @@ class StoreUserRequest extends FormRequest
             ],
 
             'cargo' => [
-                'nullable',
+                'required',
                 'string',
                 'max:150',
             ],

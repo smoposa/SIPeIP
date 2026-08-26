@@ -42,6 +42,10 @@ interface UserRepositoryInterface
      */
     public function contarPorEstado(string $estado, ?int $entidadId = null): int;
 
+    /**
+     * Contar administradores globales activos.
+     */
+    public function contarAdministradoresGlobalesActivos(): int;
 
     /**
      * Crear un usuario.

@@ -175,6 +175,25 @@ class UserService
             );
         }
 
+        /*
+        * Proteger al último Administrador Global activo.
+        */
+        if (
+            $usuario->rol?->codigo === 'ADMIN_GLOBAL' &&
+            $usuario->estado === EstadoUsuario::ACTIVO->value &&
+            $estado === EstadoUsuario::INACTIVO->value
+        ) {
+            $totalAdministradoresGlobalesActivos =
+                $this->userRepository
+                    ->contarAdministradoresGlobalesActivos();
+
+            if ($totalAdministradoresGlobalesActivos <= 1) {
+                throw new \DomainException(
+                    'No puede desactivar al último Administrador Global activo del sistema.'
+                );
+            }
+        }
+
         return $this->userRepository->actualizar(
             $usuario,
             [
