@@ -24,10 +24,17 @@ Route::get('/', function () {
 // Dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware([
+    'auth',
+    'verified',
+    'sesion.activa',
+])->name('dashboard');
 
 // Rutas protegidas
-Route::middleware('auth')->group(function () {
+Route::middleware([
+    'auth',
+    'sesion.activa',
+])->group(function () {
 
     // Perfil
     Route::get('/profile', [ProfileController::class, 'edit'])
