@@ -285,10 +285,6 @@ Route::middleware([
             Route::put('/{id}/estado', [PlanController::class, 'actualizarEstado'])
                 ->name('planes.actualizarestado');
 
-            // Finalización del asistente
-            Route::get('/finalizado', [PlanController::class, 'finalizado'])
-                ->name('planes.finalizado');
-
         });
 
     

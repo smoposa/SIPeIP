@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Plan extends Model
 {
@@ -12,25 +14,23 @@ class Plan extends Model
     protected $table = 'planes';
 
     protected $fillable = [
-
         'codigo',
-
         'nombre',
-
         'entidad_id',
-
         'tipo',
-
         'periodo_inicio',
-
         'periodo_fin',
-
         'descripcion',
-
         'estado',
-
+        'estado_proceso',
+        'version',
         'usuario_id',
+    ];
 
+    protected $casts = [
+        'periodo_inicio' => 'integer',
+        'periodo_fin' => 'integer',
+        'version' => 'integer',
     ];
 
     /*
@@ -40,26 +40,36 @@ class Plan extends Model
     */
 
     /**
-     * Un plan pertenece a una entidad.
+     * Entidad propietaria del plan institucional.
      */
-    public function entidad()
+    public function entidad(): BelongsTo
     {
-        return $this->belongsTo(Entidad::class);
+        return $this->belongsTo(
+            Entidad::class,
+            'entidad_id'
+        );
     }
 
     /**
-     * Un plan fue registrado por un usuario.
+     * Usuario que registró el plan.
      */
-    public function usuario()
+    public function usuario(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'usuario_id');
+        return $this->belongsTo(
+            User::class,
+            'usuario_id'
+        );
     }
 
     /**
-     * Un plan tiene muchos objetivos estratégicos.
+     * Objetivos Estratégicos Institucionales
+     * pertenecientes al plan.
      */
-    public function objetivos()
+    public function objetivos(): HasMany
     {
-        return $this->hasMany(Objetivo::class);
+        return $this->hasMany(
+            Objetivo::class,
+            'plan_id'
+        );
     }
 }

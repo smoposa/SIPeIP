@@ -3,8 +3,11 @@
 namespace App\Services;
 
 use App\Enums\EstadoPlan;
+use App\Enums\EstadoProcesoPlan;
 use App\Models\Plan;
+use App\Models\User;
 use App\Repositories\Contracts\PlanRepositoryInterface;
+use DomainException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PlanService
@@ -15,24 +18,35 @@ class PlanService
     }
 
     /**
-     * Obtener resumen de planes por entidad.
+     * Obtener resumen de planes accesibles
+     * para el usuario autenticado.
      */
-    public function obtenerResumenPorEntidad(int $entidadId): array
+    public function obtenerResumen(User $usuario): array
     {
+        $entidadId = $this->obtenerEntidadId($usuario);
+
         return [
-            'totalPlanes' => $this->planRepository->contarPorEntidad($entidadId),
-            'planesActivos' => $this->planRepository->contarActivosPorEntidad($entidadId),
-            'planesInactivos' => $this->planRepository->contarInactivosPorEntidad($entidadId),
+            'totalPlanes' =>
+                $this->planRepository->contarPorEntidad($entidadId),
+
+            'planesActivos' =>
+                $this->planRepository->contarActivosPorEntidad($entidadId),
+
+            'planesInactivos' =>
+                $this->planRepository->contarInactivosPorEntidad($entidadId),
         ];
     }
 
     /**
-     * Listar planes pertenecientes a una entidad.
+     * Listar planes accesibles para
+     * el usuario autenticado.
      */
-    public function listarPorEntidad(
-        int $entidadId,
+    public function listar(
+        User $usuario,
         int $porPagina = 10
     ): LengthAwarePaginator {
+        $entidadId = $this->obtenerEntidadId($usuario);
+
         return $this->planRepository->listarPorEntidad(
             $entidadId,
             $porPagina
@@ -40,12 +54,15 @@ class PlanService
     }
 
     /**
-     * Obtener un plan asegurando que pertenezca a la entidad.
+     * Obtener un plan asegurando que
+     * pertenezca a la entidad del usuario.
      */
-    public function obtenerPorEntidad(
+    public function obtenerAccesible(
         int $id,
-        int $entidadId
+        User $usuario
     ): Plan {
+        $entidadId = $this->obtenerEntidadId($usuario);
+
         return $this->planRepository->buscarPorIdYEntidad(
             $id,
             $entidadId
@@ -53,12 +70,15 @@ class PlanService
     }
 
     /**
-     * Generar código automático del plan institucional.
+     * Generar el siguiente código automático
+     * para el Plan Estratégico Institucional.
      */
-    public function generarCodigo(
-        int $entidadId,
-        string $siglas
-    ): string {
+    public function generarCodigo(User $usuario): string
+    {
+        $entidadId = $this->obtenerEntidadId($usuario);
+
+        $siglas = $this->obtenerSiglasEntidad($usuario);
+
         $ultimoPlan = $this->planRepository
             ->obtenerUltimoPorEntidad($entidadId);
 
@@ -84,28 +104,31 @@ class PlanService
     }
 
     /**
-     * Crear un nuevo plan institucional.
+     * Crear un nuevo Plan Estratégico Institucional.
      */
     public function crear(
         array $datos,
-        int $entidadId,
-        int $usuarioId,
-        string $siglas
+        User $usuario
     ): Plan {
-        $datos['codigo'] = $this->generarCodigo(
-            $entidadId,
-            $siglas
-        );
+        $entidadId = $this->obtenerEntidadId($usuario);
 
-        $datos['entidad_id'] = $entidadId;
-        $datos['usuario_id'] = $usuarioId;
+        $datos['codigo'] =
+            $this->generarCodigo($usuario);
 
-        $datos['tipo'] = 'Plan Estratégico Institucional';
+        $datos['entidad_id'] =
+            $entidadId;
 
-        $datos['estado'] = 'Activo';
+        $datos['usuario_id'] =
+            $usuario->id;
+
+        $datos['tipo'] =
+            'Plan Estratégico Institucional';
+
+        $datos['estado'] =
+            EstadoPlan::ACTIVO->value;
 
         $datos['estado_proceso'] =
-            EstadoPlan::BORRADOR->value;
+            EstadoProcesoPlan::BORRADOR->value;
 
         $datos['version'] = 1;
 
@@ -113,12 +136,19 @@ class PlanService
     }
 
     /**
-     * Actualizar información del plan.
+     * Actualizar un plan asegurando primero
+     * que pertenezca a la entidad del usuario.
      */
     public function actualizar(
-        Plan $plan,
-        array $datos
+        int $id,
+        array $datos,
+        User $usuario
     ): Plan {
+        $plan = $this->obtenerAccesible(
+            $id,
+            $usuario
+        );
+
         return $this->planRepository->actualizar(
             $plan,
             $datos
@@ -126,28 +156,74 @@ class PlanService
     }
 
     /**
-     * Cambiar estado administrativo:
+     * Cambiar el estado administrativo
      * Activo / Inactivo.
      */
     public function cambiarEstadoAdministrativo(
-        Plan $plan,
-        bool $activo
+        int $id,
+        bool $activo,
+        User $usuario
     ): Plan {
+        $plan = $this->obtenerAccesible(
+            $id,
+            $usuario
+        );
+
         return $this->planRepository->actualizar(
             $plan,
             [
                 'estado' => $activo
-                    ? 'Activo'
-                    : 'Inactivo',
+                    ? EstadoPlan::ACTIVO->value
+                    : EstadoPlan::INACTIVO->value,
             ]
         );
     }
 
     /**
-     * Eliminar un plan.
+     * Eliminar un plan asegurando primero
+     * que pertenezca a la entidad del usuario.
      */
-    public function eliminar(Plan $plan): void
-    {
+    public function eliminar(
+        int $id,
+        User $usuario
+    ): void {
+        $plan = $this->obtenerAccesible(
+            $id,
+            $usuario
+        );
+
         $this->planRepository->eliminar($plan);
+    }
+
+    /**
+     * Obtener el identificador de la entidad
+     * asociada al usuario.
+     */
+    private function obtenerEntidadId(User $usuario): int
+    {
+        if (!$usuario->entidad_id) {
+            throw new DomainException(
+                'El usuario no tiene una entidad institucional asignada.'
+            );
+        }
+
+        return (int) $usuario->entidad_id;
+    }
+
+    /**
+     * Obtener las siglas institucionales
+     * necesarias para generar el código del plan.
+     */
+    private function obtenerSiglasEntidad(User $usuario): string
+    {
+        $siglas = $usuario->entidad?->siglas;
+
+        if (!$siglas) {
+            throw new DomainException(
+                'La entidad del usuario no tiene siglas institucionales registradas.'
+            );
+        }
+
+        return trim($siglas);
     }
 }

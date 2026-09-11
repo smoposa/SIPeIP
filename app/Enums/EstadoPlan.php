@@ -4,10 +4,8 @@ namespace App\Enums;
 
 enum EstadoPlan: string
 {
-    case BORRADOR = 'Borrador';
-    case EN_REVISION = 'En revisión';
-    case OBSERVADO = 'Observado';
-    case APROBADO = 'Aprobado';
+    case ACTIVO = 'Activo';
+    case INACTIVO = 'Inactivo';
 
     public static function values(): array
     {

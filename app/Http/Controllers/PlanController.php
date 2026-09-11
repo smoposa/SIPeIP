@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Planes\StorePlanRequest;
 use App\Http\Requests\Planes\UpdatePlanRequest;
-use App\Models\Indicador;
+use App\Http\Requests\Planes\UpdatePlanStatusRequest;
 use App\Services\PlanService;
+use DomainException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PlanController extends Controller
@@ -22,12 +22,14 @@ class PlanController extends Controller
      */
     public function index(): View
     {
-        $entidadId = auth()->user()->entidad_id;
+        $resumen = $this->planService->obtenerResumen(
+            auth()->user()
+        );
 
-        $resumen = $this->planService
-            ->obtenerResumenPorEntidad($entidadId);
-
-        return view('planes.index', $resumen);
+        return view(
+            'planes.index',
+            $resumen
+        );
     }
 
     /**
@@ -35,14 +37,14 @@ class PlanController extends Controller
      */
     public function create(): View
     {
-        $entidad = auth()->user()->entidad;
-
         $codigo = $this->planService->generarCodigo(
-            $entidad->id,
-            $entidad->siglas
+            auth()->user()
         );
 
-        return view('planes.create', compact('codigo'));
+        return view(
+            'planes.create',
+            compact('codigo')
+        );
     }
 
     /**
@@ -51,34 +53,43 @@ class PlanController extends Controller
     public function store(
         StorePlanRequest $request
     ): RedirectResponse {
-        $usuario = auth()->user();
-        $entidad = $usuario->entidad;
+        try {
+            $plan = $this->planService->crear(
+                $request->validated(),
+                auth()->user()
+            );
 
-        $plan = $this->planService->crear(
-            $request->validated(),
-            $entidad->id,
-            $usuario->id,
-            $entidad->siglas
-        );
+            session([
+                'plan_id' => $plan->id,
+            ]);
 
-        session([
-            'plan_id' => $plan->id,
-        ]);
+            return redirect()
+                ->route('planes.create')
+                ->with(
+                    'plan_registrado',
+                    true
+                );
 
-        return redirect()
-            ->route('planes.create')
-            ->with('plan_registrado', true);
+        } catch (DomainException $e) {
+
+            return back()
+                ->withInput()
+                ->with(
+                    'error',
+                    $e->getMessage()
+                );
+        }
     }
 
     /**
-     * Listar planes de la entidad del usuario autenticado.
+     * Listar planes pertenecientes
+     * a la entidad del usuario autenticado.
      */
     public function listar(): View
     {
-        $entidadId = auth()->user()->entidad_id;
-
-        $planes = $this->planService
-            ->listarPorEntidad($entidadId);
+        $planes = $this->planService->listar(
+            auth()->user()
+        );
 
         return view(
             'planes.listar',
@@ -87,15 +98,13 @@ class PlanController extends Controller
     }
 
     /**
-     * Mostrar detalle del plan.
+     * Mostrar detalle de un plan.
      */
     public function detalle(int $id): View
     {
-        $entidadId = auth()->user()->entidad_id;
-
-        $plan = $this->planService->obtenerPorEntidad(
+        $plan = $this->planService->obtenerAccesible(
             $id,
-            $entidadId
+            auth()->user()
         );
 
         return view(
@@ -109,11 +118,9 @@ class PlanController extends Controller
      */
     public function edit(int $id): View
     {
-        $entidadId = auth()->user()->entidad_id;
-
-        $plan = $this->planService->obtenerPorEntidad(
+        $plan = $this->planService->obtenerAccesible(
             $id,
-            $entidadId
+            auth()->user()
         );
 
         return view(
@@ -129,58 +136,73 @@ class PlanController extends Controller
         UpdatePlanRequest $request,
         int $id
     ): RedirectResponse {
-        $entidadId = auth()->user()->entidad_id;
-
-        $plan = $this->planService->obtenerPorEntidad(
-            $id,
-            $entidadId
-        );
-
-        $plan = $this->planService->actualizar(
-            $plan,
-            $request->validated()
-        );
-
-        return redirect()
-            ->route('planes.detalle', $plan->id)
-            ->with(
-                'success',
-                'Plan actualizado correctamente.'
+        try {
+            $plan = $this->planService->actualizar(
+                $id,
+                $request->validated(),
+                auth()->user()
             );
+
+            return redirect()
+                ->route(
+                    'planes.detalle',
+                    $plan->id
+                )
+                ->with(
+                    'success',
+                    'Plan actualizado correctamente.'
+                );
+
+        } catch (DomainException $e) {
+
+            return back()
+                ->withInput()
+                ->with(
+                    'error',
+                    $e->getMessage()
+                );
+        }
     }
 
     /**
-     * Eliminar plan.
+     * Eliminar un plan.
      */
-    public function destroy(int $id): RedirectResponse
-    {
-        $entidadId = auth()->user()->entidad_id;
-
-        $plan = $this->planService->obtenerPorEntidad(
-            $id,
-            $entidadId
-        );
-
-        $this->planService->eliminar($plan);
-
-        return redirect()
-            ->route('planes.listar')
-            ->with(
-                'success',
-                'Plan eliminado correctamente.'
+    public function destroy(
+        int $id
+    ): RedirectResponse {
+        try {
+            $this->planService->eliminar(
+                $id,
+                auth()->user()
             );
+
+            return redirect()
+                ->route('planes.listar')
+                ->with(
+                    'success',
+                    'Plan eliminado correctamente.'
+                );
+
+        } catch (DomainException $e) {
+
+            return back()
+                ->with(
+                    'error',
+                    $e->getMessage()
+                );
+        }
     }
 
     /**
-     * Formulario para cambiar estado administrativo.
+     * Formulario para cambiar
+     * el estado administrativo.
      */
-    public function editarEstado(int $id): View
-    {
-        $entidadId = auth()->user()->entidad_id;
-
-        $plan = $this->planService->obtenerPorEntidad(
+    public function editarEstado(
+        int $id
+    ): View {
+        $plan = $this->planService->obtenerAccesible(
             $id,
-            $entidadId
+            auth()->user()
         );
 
         return view(
@@ -190,67 +212,38 @@ class PlanController extends Controller
     }
 
     /**
-     * Actualizar estado Activo / Inactivo.
+     * Actualizar estado administrativo:
+     * Activo / Inactivo.
      */
     public function actualizarEstado(
-        Request $request,
+        UpdatePlanStatusRequest $request,
         int $id
     ): RedirectResponse {
-        $entidadId = auth()->user()->entidad_id;
+        try {
+            $plan = $this->planService
+                ->cambiarEstadoAdministrativo(
+                    $id,
+                    $request->boolean('estado'),
+                    auth()->user()
+                );
 
-        $plan = $this->planService->obtenerPorEntidad(
-            $id,
-            $entidadId
-        );
+            return redirect()
+                ->route(
+                    'planes.detalle',
+                    $plan->id
+                )
+                ->with(
+                    'success',
+                    'Estado del plan actualizado correctamente.'
+                );
 
-        $this->planService->cambiarEstadoAdministrativo(
-            $plan,
-            $request->has('estado')
-        );
+        } catch (DomainException $e) {
 
-        return redirect()
-            ->route('planes.detalle', $plan->id)
-            ->with(
-                'success',
-                'Estado del plan actualizado correctamente.'
-            );
-    }
-
-    /**
-     * Pantalla final del asistente actual.
-     *
-     * Se mantiene temporalmente hasta reestructurar
-     * Objetivos, Metas e Indicadores.
-     */
-    public function finalizado(): View
-    {
-        $indicadorId = session('indicador_id');
-
-        abort_if(!$indicadorId, 404);
-
-        $indicador = Indicador::with([
-            'responsable',
-            'meta.responsable',
-            'meta.objetivo.plan.entidad',
-        ])->findOrFail($indicadorId);
-
-        $meta = $indicador->meta;
-        $objetivo = $meta->objetivo;
-        $plan = $objetivo->plan;
-
-        abort_if(
-            $plan->entidad_id !== auth()->user()->entidad_id,
-            403
-        );
-
-        return view(
-            'planes.finalizado',
-            compact(
-                'plan',
-                'objetivo',
-                'meta',
-                'indicador'
-            )
-        );
+            return back()
+                ->with(
+                    'error',
+                    $e->getMessage()
+                );
+        }
     }
 }
