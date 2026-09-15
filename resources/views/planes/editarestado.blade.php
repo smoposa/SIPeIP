@@ -90,9 +90,14 @@
                     </label>
 
                     <input
+                        type="hidden"
+                        name="estado"
+                        value="0">
+
+                    <input
                         type="checkbox"
                         name="estado"
-                        value="Activo"
+                        value="1"
                         {{ $plan->estado === 'Activo' ? 'checked' : '' }}
                         class="w-5 h-5">
 

@@ -3,7 +3,7 @@
     <!-- Información General -->
     <div class="mb-5">
 
-        <p class="mt-1 text-sm text-gray-500">
+        <p class="mt-1 text-sm font-medium text-gray-700">
             Información General
         </p>
 
@@ -12,7 +12,7 @@
     <!-- Código -->
     <div class="flex items-center">
 
-        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+        <label class="w-44 flex-shrink-0 text-sm text-gray-500">
             Código
         </label>
 
@@ -31,7 +31,7 @@
     <!-- Entidad -->
     <div class="flex items-center">
 
-        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+        <label class="w-44 flex-shrink-0 text-sm text-gray-500">
             Entidad
         </label>
 
@@ -50,7 +50,7 @@
     <!-- Tipo -->
     <div class="flex items-center">
 
-        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+        <label class="w-44 flex-shrink-0 text-sm text-gray-500">
             Tipo
         </label>
 
@@ -69,7 +69,7 @@
     <!-- Estado del proceso -->
     <div class="flex items-center">
 
-        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+        <label class="w-44 flex-shrink-0 text-sm text-gray-500">
             Estado del proceso
         </label>
 
@@ -114,8 +114,8 @@
     <!-- Estado administrativo -->
     <div class="flex items-center">
 
-        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-            Estado
+        <label class="w-44 flex-shrink-0 text-sm text-gray-500">
+            Estado administrativo
         </label>
 
         <div class="w-2/3">
@@ -170,7 +170,7 @@
     <!-- Información del Plan -->
     <div class="mt-8 mb-5">
 
-        <p class="mt-1 text-sm text-gray-500">
+        <p class="mt-1 text-sm font-medium text-gray-700">
             Información del Plan
         </p>
 
@@ -179,7 +179,7 @@
     <!-- Nombre -->
     <div class="flex items-center">
 
-        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+        <label class="w-44 flex-shrink-0 text-sm text-gray-500">
             Nombre del Plan <span class="text-red-500">*</span>
         </label>
 
@@ -201,7 +201,7 @@
     <!-- Período -->
     <div class="flex items-center">
 
-        <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+        <label class="w-44 flex-shrink-0 text-sm text-gray-500">
             Período de vigencia <span class="text-red-500">*</span>
         </label>
 
@@ -236,8 +236,8 @@
     <!-- Descripción -->
     <div class="flex items-start">
 
-        <label class="w-44 flex-shrink-0 pt-2 text-sm font-medium text-gray-700">
-            Descripción general
+        <label class="w-44 flex-shrink-0 pt-2 text-sm text-gray-500">
+            Descripción general <span class="text-red-500">*</span>
         </label>
 
         <div class="w-2/3">
@@ -246,6 +246,7 @@
                 name="descripcion"
                 rows="4"
                 maxlength="1000"
+                required
                 class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Ingrese una descripción del plan...">{{ old('descripcion', $plan->descripcion ?? '') }}</textarea>
 

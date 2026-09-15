@@ -55,7 +55,8 @@ class PlanRepository implements PlanRepositoryInterface
         int $entidadId,
         int $porPagina = 10
     ): LengthAwarePaginator {
-        return Plan::where('entidad_id', $entidadId)
+        return Plan::with('entidad')
+            ->where('entidad_id', $entidadId)
             ->orderByDesc('id')
             ->paginate($porPagina);
     }
@@ -68,7 +69,11 @@ class PlanRepository implements PlanRepositoryInterface
         int $id,
         int $entidadId
     ): Plan {
-        return Plan::where('entidad_id', $entidadId)
+        return Plan::with([
+                'entidad',
+                'usuario',
+            ])
+            ->where('entidad_id', $entidadId)
             ->where('id', $id)
             ->firstOrFail();
     }
@@ -91,13 +96,5 @@ class PlanRepository implements PlanRepositoryInterface
         $plan->update($datos);
 
         return $plan->refresh();
-    }
-
-    /**
-     * Eliminar un plan institucional.
-     */
-    public function eliminar(Plan $plan): void
-    {
-        $plan->delete();
     }
 }

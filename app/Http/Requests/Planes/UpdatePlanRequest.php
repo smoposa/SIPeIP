@@ -41,7 +41,7 @@ class UpdatePlanRequest extends FormRequest
             ],
 
             'descripcion' => [
-                'nullable',
+                'required',
                 'string',
                 'max:1000',
             ],
@@ -92,6 +92,9 @@ class UpdatePlanRequest extends FormRequest
 
             'descripcion.max' =>
                 'La descripción no puede superar los 1000 caracteres.',
+
+            'descripcion.required' =>
+                'La descripción general del plan es obligatoria.',
         ];
     }
 }

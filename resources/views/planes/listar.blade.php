@@ -32,15 +32,15 @@
         <div>
             <p class="text-sm text-gray-500">
 
-                {{ $planes->total() }} registros ·
+                {{ $totalPlanes }} registros ·
 
                 <span class="text-green-600 font-medium">
-                    {{ $planes->getCollection()->where('estado', 'Activo')->count() }}
+                    {{ $planesActivos }}
                 </span>
                 activos ·
 
                 <span class="text-red-600 font-medium">
-                    {{ $planes->getCollection()->where('estado', 'Inactivo')->count() }}
+                    {{ $planesInactivos }}
                 </span>
                 inactivos
 

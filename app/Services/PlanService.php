@@ -180,22 +180,6 @@ class PlanService
     }
 
     /**
-     * Eliminar un plan asegurando primero
-     * que pertenezca a la entidad del usuario.
-     */
-    public function eliminar(
-        int $id,
-        User $usuario
-    ): void {
-        $plan = $this->obtenerAccesible(
-            $id,
-            $usuario
-        );
-
-        $this->planRepository->eliminar($plan);
-    }
-
-    /**
      * Obtener el identificador de la entidad
      * asociada al usuario.
      */

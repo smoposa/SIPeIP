@@ -34,8 +34,19 @@
                     </h2>
 
                     <p class="mt-2 text-sm text-gray-500">
-                        El plan institucional fue creado en estado Borrador.
-                        Ahora puede continuar con el registro de los Objetivos Estratégicos Institucionales.
+                        El plan
+                        <strong class="font-semibold text-gray-700">
+                            {{ session('plan_codigo') }}
+                        </strong>
+                        fue creado correctamente en estado
+                        <strong class="font-semibold text-gray-700">
+                            {{ session('plan_estado_proceso') }}
+                        </strong>, versión
+                        <strong class="font-semibold text-gray-700">
+                            {{ session('plan_version') }}
+                        </strong>.
+                        Puede continuar con el registro de sus Objetivos Estratégicos Institucionales
+                        o regresar al listado.
                     </p>
 
                 </div>
@@ -94,7 +105,7 @@
                 <div class="col-span-2 text-center">
 
                     <div class="text-sm font-semibold text-gray-500">
-                        Proceso de planificación
+                        Formulación estratégica
                     </div>
 
                     <div class="text-xs text-gray-500 mt-0.5">

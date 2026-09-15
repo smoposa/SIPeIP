@@ -56,9 +56,4 @@ interface PlanRepositoryInterface
         Plan $plan,
         array $datos
     ): Plan;
-
-    /**
-     * Eliminar un plan institucional.
-     */
-    public function eliminar(Plan $plan): void;
 }

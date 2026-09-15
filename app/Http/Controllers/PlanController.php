@@ -65,10 +65,12 @@ class PlanController extends Controller
 
             return redirect()
                 ->route('planes.create')
-                ->with(
-                    'plan_registrado',
-                    true
-                );
+                ->with([
+                    'plan_registrado' => true,
+                    'plan_codigo' => $plan->codigo,
+                    'plan_estado_proceso' => $plan->estado_proceso,
+                    'plan_version' => $plan->version,
+                ]);
 
         } catch (DomainException $e) {
 
@@ -87,14 +89,22 @@ class PlanController extends Controller
      */
     public function listar(): View
     {
+        $usuario = auth()->user();
+
         $planes = $this->planService->listar(
-            auth()->user()
+            $usuario
         );
 
-        return view(
-            'planes.listar',
-            compact('planes')
+        $resumen = $this->planService->obtenerResumen(
+            $usuario
         );
+
+        return view('planes.listar', [
+            'planes' => $planes,
+            'totalPlanes' => $resumen['totalPlanes'],
+            'planesActivos' => $resumen['planesActivos'],
+            'planesInactivos' => $resumen['planesInactivos'],
+        ]);
     }
 
     /**
@@ -157,35 +167,6 @@ class PlanController extends Controller
 
             return back()
                 ->withInput()
-                ->with(
-                    'error',
-                    $e->getMessage()
-                );
-        }
-    }
-
-    /**
-     * Eliminar un plan.
-     */
-    public function destroy(
-        int $id
-    ): RedirectResponse {
-        try {
-            $this->planService->eliminar(
-                $id,
-                auth()->user()
-            );
-
-            return redirect()
-                ->route('planes.listar')
-                ->with(
-                    'success',
-                    'Plan eliminado correctamente.'
-                );
-
-        } catch (DomainException $e) {
-
-            return back()
                 ->with(
                     'error',
                     $e->getMessage()
