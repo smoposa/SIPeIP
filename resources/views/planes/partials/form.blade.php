@@ -269,7 +269,9 @@
 
             </button>
 
-            <a href="{{ route('planes.listar') }}"
+            <a href="{{ isset($plan)
+                    ? route('planes.detalle', $plan->id)
+                    : route('planes.listar') }}"
                class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
 
                 Cancelar

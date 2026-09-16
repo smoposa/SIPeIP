@@ -22,6 +22,8 @@ class PlanController extends Controller
      */
     public function index(): View
     {
+        $this->autorizar('planes');
+
         $resumen = $this->planService->obtenerResumen(
             auth()->user()
         );
@@ -37,6 +39,8 @@ class PlanController extends Controller
      */
     public function create(): View
     {
+        $this->autorizar('planes', 'crear');
+
         $codigo = $this->planService->generarCodigo(
             auth()->user()
         );
@@ -53,6 +57,8 @@ class PlanController extends Controller
     public function store(
         StorePlanRequest $request
     ): RedirectResponse {
+        $this->autorizar('planes', 'crear');
+
         try {
             $plan = $this->planService->crear(
                 $request->validated(),
@@ -89,6 +95,8 @@ class PlanController extends Controller
      */
     public function listar(): View
     {
+        $this->autorizar('planes');
+
         $usuario = auth()->user();
 
         $planes = $this->planService->listar(
@@ -112,6 +120,8 @@ class PlanController extends Controller
      */
     public function detalle(int $id): View
     {
+        $this->autorizar('planes');
+
         $plan = $this->planService->obtenerAccesible(
             $id,
             auth()->user()
@@ -128,6 +138,8 @@ class PlanController extends Controller
      */
     public function edit(int $id): View
     {
+        $this->autorizar('planes', 'editar');
+
         $plan = $this->planService->obtenerAccesible(
             $id,
             auth()->user()
@@ -146,6 +158,8 @@ class PlanController extends Controller
         UpdatePlanRequest $request,
         int $id
     ): RedirectResponse {
+        $this->autorizar('planes', 'editar');
+
         try {
             $plan = $this->planService->actualizar(
                 $id,
@@ -181,6 +195,8 @@ class PlanController extends Controller
     public function editarEstado(
         int $id
     ): View {
+        $this->autorizar('planes', 'estado');
+
         $plan = $this->planService->obtenerAccesible(
             $id,
             auth()->user()
@@ -200,6 +216,8 @@ class PlanController extends Controller
         UpdatePlanStatusRequest $request,
         int $id
     ): RedirectResponse {
+        $this->autorizar('planes', 'estado');
+
         try {
             $plan = $this->planService
                 ->cambiarEstadoAdministrativo(

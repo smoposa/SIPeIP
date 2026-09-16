@@ -32,21 +32,29 @@
 
             </a>
 
-            <a href="{{ route('planes.edit', $plan->id) }}"
-               class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+            @if(puedeHacer('planes', 'editar'))
 
-                <i class="bi bi-pencil text-blue-500 me-2"></i>
-                Editar información
+                <a href="{{ route('planes.edit', $plan->id) }}"
+                   class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
 
-            </a>
+                    <i class="bi bi-pencil text-blue-500 me-2"></i>
+                    Editar información
 
-            <a href="{{ route('planes.editarestado', $plan->id) }}"
-               class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                </a>
 
-                <i class="bi bi-check2-circle text-blue-500 me-2"></i>
-                Editar estado
+            @endif
 
-            </a>
+            @if(puedeHacer('planes', 'estado'))
+
+                <a href="{{ route('planes.editarestado', $plan->id) }}"
+                   class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+
+                    <i class="bi bi-check2-circle text-blue-500 me-2"></i>
+                    Editar estado
+
+                </a>
+
+            @endif
 
             <a href="{{ url()->current() }}"
                class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
@@ -122,12 +130,16 @@
                         Información general
                     </h4>
 
-                    <a href="{{ route('planes.edit', $plan->id) }}"
-                       class="text-sm text-blue-600 hover:text-blue-800">
+                    @if(puedeHacer('planes', 'editar'))
 
-                        Editar
+                        <a href="{{ route('planes.edit', $plan->id) }}"
+                           class="text-sm text-blue-600 hover:text-blue-800">
 
-                    </a>
+                            Editar
+
+                        </a>
+
+                    @endif
 
                 </div>
 
@@ -355,13 +367,17 @@
 
                     @endif
 
-                    <a href="{{ route('planes.editarestado', $plan->id) }}"
-                       class="ml-10 text-sm text-blue-600
-                              hover:text-blue-800 hover:underline">
+                    @if(puedeHacer('planes', 'estado'))
 
-                        Editar
+                        <a href="{{ route('planes.editarestado', $plan->id) }}"
+                           class="ml-10 text-sm text-blue-600
+                                  hover:text-blue-800 hover:underline">
 
-                    </a>
+                            Editar
+
+                        </a>
+
+                    @endif
 
                 </div>
 

@@ -47,14 +47,18 @@
             </p>
         </div>
 
-        <a href="{{ route('planes.create') }}"
-           class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+        @if(puedeHacer('planes', 'crear'))
 
-            <i class="bi bi-plus-lg"></i>
+            <a href="{{ route('planes.create') }}"
+               class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
 
-            Crear plan
+                <i class="bi bi-plus-lg"></i>
 
-        </a>
+                Crear plan
+
+            </a>
+
+        @endif
 
     </div>
 
