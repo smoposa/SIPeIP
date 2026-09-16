@@ -22,7 +22,7 @@ class UpdatePlanStatusRequest extends FormRequest
     {
         return [
             'estado' => [
-                'nullable',
+                'required',
                 'boolean',
             ],
         ];
