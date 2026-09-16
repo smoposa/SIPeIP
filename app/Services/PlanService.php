@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Enums\EstadoEntidad;
 use App\Enums\EstadoPlan;
 use App\Enums\EstadoProcesoPlan;
+use App\Models\Entidad;
 use App\Models\Plan;
 use App\Models\User;
 use App\Repositories\Contracts\PlanRepositoryInterface;
@@ -75,32 +77,13 @@ class PlanService
      */
     public function generarCodigo(User $usuario): string
     {
-        $entidadId = $this->obtenerEntidadId($usuario);
+        $entidad = $this->obtenerEntidadActiva(
+            $usuario
+        );
 
-        $siglas = $this->obtenerSiglasEntidad($usuario);
-
-        $ultimoPlan = $this->planRepository
-            ->obtenerUltimoPorEntidad($entidadId);
-
-        $nuevoNumero = 1;
-
-        if ($ultimoPlan) {
-            $partes = explode('-', $ultimoPlan->codigo);
-
-            $ultimoNumero = (int) end($partes);
-
-            $nuevoNumero = $ultimoNumero + 1;
-        }
-
-        return 'PEI-' .
-            strtoupper($siglas) .
-            '-' .
-            str_pad(
-                (string) $nuevoNumero,
-                3,
-                '0',
-                STR_PAD_LEFT
-            );
+        return $this->generarCodigoParaEntidad(
+            $entidad
+        );
     }
 
     /**
@@ -110,13 +93,15 @@ class PlanService
         array $datos,
         User $usuario
     ): Plan {
-        $entidadId = $this->obtenerEntidadId($usuario);
+        $entidad = $this->obtenerEntidadActiva(
+            $usuario
+        );
 
         $datos['codigo'] =
-            $this->generarCodigo($usuario);
+            $this->generarCodigoParaEntidad($entidad);
 
         $datos['entidad_id'] =
-            $entidadId;
+            $entidad->id;
 
         $datos['usuario_id'] =
             $usuario->id;
@@ -180,34 +165,89 @@ class PlanService
     }
 
     /**
-     * Obtener el identificador de la entidad
+     * Obtener una entidad institucional activa
      * asociada al usuario.
      */
-    private function obtenerEntidadId(User $usuario): int
-    {
+    private function obtenerEntidadActiva(
+        User $usuario
+    ): Entidad {
         if (!$usuario->entidad_id) {
             throw new DomainException(
                 'El usuario no tiene una entidad institucional asignada.'
             );
         }
 
-        return (int) $usuario->entidad_id;
+        $entidad = $usuario->entidad;
+
+        if (!$entidad) {
+            throw new DomainException(
+                'La entidad institucional asignada al usuario no existe.'
+            );
+        }
+
+        if ($entidad->estado !== EstadoEntidad::ACTIVO->value) {
+            throw new DomainException(
+                'La entidad institucional asignada al usuario se encuentra inactiva.'
+            );
+        }
+
+        return $entidad;
     }
 
     /**
-     * Obtener las siglas institucionales
-     * necesarias para generar el código del plan.
+     * Obtener el identificador de la entidad
+     * asociada al usuario.
      */
-    private function obtenerSiglasEntidad(User $usuario): string
+    private function obtenerEntidadId(User $usuario): int
     {
-        $siglas = $usuario->entidad?->siglas;
+        return (int) $this->obtenerEntidadActiva(
+            $usuario
+        )->id;
+    }
 
-        if (!$siglas) {
+    /**
+     * Generar el código institucional
+     * utilizando la entidad validada.
+     */
+    private function generarCodigoParaEntidad(
+        Entidad $entidad
+    ): string {
+        $siglas = trim(
+            (string) $entidad->siglas
+        );
+
+        if ($siglas === '') {
             throw new DomainException(
                 'La entidad del usuario no tiene siglas institucionales registradas.'
             );
         }
 
-        return trim($siglas);
+        $ultimoPlan = $this->planRepository
+            ->obtenerUltimoPorEntidad(
+                (int) $entidad->id
+            );
+
+        $nuevoNumero = 1;
+
+        if ($ultimoPlan) {
+            $partes = explode(
+                '-',
+                $ultimoPlan->codigo
+            );
+
+            $ultimoNumero = (int) end($partes);
+
+            $nuevoNumero = $ultimoNumero + 1;
+        }
+
+        return 'PEI-' .
+            strtoupper($siglas) .
+            '-' .
+            str_pad(
+                (string) $nuevoNumero,
+                3,
+                '0',
+                STR_PAD_LEFT
+            );
     }
 }

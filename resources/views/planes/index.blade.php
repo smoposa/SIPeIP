@@ -17,6 +17,39 @@
     <!-- Marco general del contenido -->
     <div class="space-y-6">
 
+        <!-- Mensajes  -->
+        @if(isset($errorContexto) || session('errorContexto'))
+
+            <div class="rounded-lg border border-amber-300 bg-amber-50 p-4">
+
+                <div class="flex items-start">
+
+                    <i class="bi bi-exclamation-triangle-fill
+                              text-amber-600 text-xl mr-3"></i>
+
+                    <div>
+
+                        <h3 class="text-sm font-semibold text-amber-800">
+                            Configuración institucional requerida
+                        </h3>
+
+                        <p class="mt-1 text-sm text-amber-700">
+                            {{ $errorContexto ?? session('errorContexto') }}
+                        </p>
+
+                        <p class="mt-1 text-xs text-amber-600">
+                            Comuníquese con el administrador del sistema
+                            para corregir esta configuración.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        @endif
+
         <!-- Encabezado -->
           <div>
 
