@@ -94,66 +94,68 @@ public function listar()
         ));
     }
 
-    // Guardar indicador.
+    /**
+     * Guardar un indicador.
+     *
+    */
     public function store(Request $request)
     {
         $request->validate([
-            'meta_id'         => 'required|exists:metas,id',
-            'nombre'          => 'required|string|max:255',
-            'tipo'            => 'required|string|max:50',
-            'formula'         => 'required|string',
-            'unidad_medida'   => 'required|string|max:50',
-            'frecuencia'      => 'required|string|max:50',
-            'responsable_id'  => 'required|exists:users,id',
-            'estado'          => 'required|in:Activo,Inactivo',
+            'meta_id' => 'required|exists:metas,id',
+            'nombre' => 'required|string|max:255',
+            'tipo' => 'required|string|max:50',
+            'formula' => 'required|string',
+            'unidad_medida' => 'required|string|max:50',
+            'frecuencia' => 'required|string|max:50',
+            'responsable_id' => 'required|exists:users,id',
+            'estado' => 'required|in:Activo,Inactivo',
         ]);
 
         DB::beginTransaction();
 
         try {
-
-            // Generar código automático
             $ultimo = (Indicador::max('id') ?? 0) + 1;
 
-            $codigo = 'IND-' . str_pad($ultimo, 2, '0', STR_PAD_LEFT);
+            $codigo = 'IND-' . str_pad(
+                $ultimo,
+                2,
+                '0',
+                STR_PAD_LEFT
+            );
 
-            // Registrar indicador
             $indicador = Indicador::create([
-
-                'meta_id'        => $request->meta_id,
-                'codigo'         => $codigo,
-                'nombre'         => $request->nombre,
-                'tipo'           => $request->tipo,
-                'formula'        => $request->formula,
-                'unidad_medida'  => $request->unidad_medida,
-                'frecuencia'     => $request->frecuencia,
+                'meta_id' => $request->meta_id,
+                'codigo' => $codigo,
+                'nombre' => $request->nombre,
+                'tipo' => $request->tipo,
+                'formula' => $request->formula,
+                'unidad_medida' => $request->unidad_medida,
+                'frecuencia' => $request->frecuencia,
                 'responsable_id' => $request->responsable_id,
-                'estado'         => $request->estado,
-                'usuario_id'     => Auth::id(),
-
+                'estado' => $request->estado,
+                'usuario_id' => Auth::id(),
             ]);
 
             DB::commit();
 
-            // Guardar contexto del asistente
-            session([
-                'indicador_id' => $indicador->id,
-            ]);
-
-            // Finalizar asistente
             return redirect()
-                ->route('planes.finalizado');
+                ->route(
+                    'indicadores.detalle',
+                    $indicador->id
+                )
+                ->with(
+                    'success',
+                    'Indicador registrado correctamente.'
+                );
 
         } catch (\Exception $e) {
-
             DB::rollBack();
 
             return back()
                 ->withInput()
                 ->withErrors([
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
                 ]);
-
         }
     }
 
