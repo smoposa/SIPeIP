@@ -37,7 +37,10 @@
 
                 </a>
 
-                <a href="{{ route('indicadores.create') }}"
+                <a href="{{ route(
+                    'indicadores.create',
+                    ['meta_id' => session('meta_id')]
+                ) }}"
                    class="inline-flex h-10 items-center justify-center rounded-md
                           bg-[#18874E] px-4 text-sm font-medium text-white
                           transition hover:bg-green-700">

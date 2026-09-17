@@ -7,7 +7,9 @@ use App\Http\Requests\Indicadores\UpdateIndicadorRequest;
 use App\Http\Requests\Indicadores\UpdateIndicadorStatusRequest;
 use App\Services\IndicadorService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
+
 
 class IndicadorController extends Controller
 {
@@ -53,19 +55,24 @@ class IndicadorController extends Controller
     /**
      * Mostrar el formulario de creación.
      */
-    public function create(): View
-    {
+    public function create(
+        Request $request
+    ): View {
         $this->autorizar(
             'indicadores',
             'crear'
         );
+
+        $metaId = $request->filled('meta_id')
+            ? $request->integer('meta_id')
+            : null;
 
         return view(
             'indicadores.create',
             $this->indicadorService
                 ->obtenerDatosCreacion(
                     auth()->user(),
-                    session('meta_id')
+                    $metaId
                 )
         );
     }

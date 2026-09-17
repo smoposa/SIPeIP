@@ -77,6 +77,20 @@ class IndicadorService
             $usuario
         );
 
+        $metas = $this->indicadorRepository
+            ->obtenerMetasActivasPorEntidad(
+                $entidadId
+            );
+
+        $planes = $metas
+            ->map(
+                fn (Meta $meta) =>
+                    $meta->objetivo?->plan
+            )
+            ->filter()
+            ->unique('id')
+            ->values();
+
         $metaSeleccionada = null;
 
         if ($metaId) {
@@ -90,10 +104,9 @@ class IndicadorService
         return [
             'codigo' => $this->generarCodigo(),
 
-            'metas' => $this->indicadorRepository
-                ->obtenerMetasActivasPorEntidad(
-                    $entidadId
-                ),
+            'planes' => $planes,
+
+            'metas' => $metas,
 
             'responsables' => $this->indicadorRepository
                 ->obtenerResponsablesActivosPorEntidad(
