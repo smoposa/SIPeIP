@@ -28,6 +28,10 @@ use App\Repositories\Eloquent\UserRepository;
 use App\Repositories\Contracts\PlanRepositoryInterface;
 use App\Repositories\Eloquent\PlanRepository;
 
+// Objetivos
+use App\Repositories\Contracts\ObjetivoRepositoryInterface;
+use App\Repositories\Eloquent\ObjetivoRepository;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -69,6 +73,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             PlanRepositoryInterface::class,
             PlanRepository::class
+        );
+
+        // Objetivos
+        $this->app->bind(
+            ObjetivoRepositoryInterface::class,
+            ObjetivoRepository::class
         );
     }
 

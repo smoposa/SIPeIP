@@ -25,6 +25,7 @@
             <select
                 id="pnd_id"
                 name="pnd_id"
+                required
                 class="flex-1 rounded-lg border-gray-300">
 
                 <option value="">Seleccione</option>
@@ -34,7 +35,7 @@
                     <option value="{{ $objetivo->id }}"
                         {{ old('pnd_id') == $objetivo->id ? 'selected' : '' }}>
 
-                        {{ $objetivo->codigo }} - {{ $objetivo->nombre }}
+                        Objetivo {{ $objetivo->numero }} - {{ $objetivo->nombre }}
 
                     </option>
 
@@ -47,15 +48,16 @@
         <!-- Política Pública -->
         <div class="flex items-center">
 
-            <label for="politica_id"
+            <label for="pnd_politica_id"
                    class="w-52 text-sm font-semibold text-gray-700">
                 Política Pública
                 <span class="text-red-500">*</span>
             </label>
 
             <select
-                id="politica_id"
-                name="politica_id"
+                id="pnd_politica_id"
+                name="pnd_politica_id"
+                required
                 class="flex-1 rounded-lg border-gray-300">
 
                 <option value="">
@@ -76,7 +78,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const objetivo = document.getElementById('pnd_id');
-    const politica = document.getElementById('politica_id');
+    const politica = document.getElementById('pnd_politica_id');
 
     objetivo.addEventListener('change', function () {
 

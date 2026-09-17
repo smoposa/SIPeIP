@@ -1,10 +1,9 @@
 <x-objetivos-layout title="Crear OEI">
 
-    {{-- ================= MENSAJE DE ÉXITO ================= --}}
     @if(session('success'))
 
         <div id="alertSuccess"
-             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+             class="fixed top-5 right-5 z-50 rounded-lg bg-green-600 px-6 py-3 text-white shadow-lg">
 
             {{ session('success') }}
 
@@ -12,25 +11,22 @@
 
         <script>
             setTimeout(() => {
-
                 const alerta = document.getElementById('alertSuccess');
 
                 if (alerta) {
                     alerta.remove();
                 }
-
             }, 3000);
         </script>
 
     @endif
 
-    {{-- ================= MODAL PASO 2 COMPLETADO ================= --}}
     @if(session('objetivo_registrado'))
 
         <div id="modalObjetivo"
-             class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+             class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
 
-            <div class="bg-white rounded-xl shadow-xl w-[420px] p-6">
+            <div class="w-[420px] rounded-xl bg-white p-6 shadow-xl">
 
                 <div class="text-center">
 
@@ -49,14 +45,14 @@
                 <div class="mt-6 flex justify-end gap-3">
 
                     <a href="{{ route('objetivos.listar') }}"
-                       class="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700">
+                       class="rounded-md bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300">
 
                         Volver al listado
 
                     </a>
 
                     <a href="{{ route('metas.create') }}"
-                       class="px-4 py-2 rounded-md bg-[#18874E] hover:bg-green-700 text-white">
+                       class="rounded-md bg-[#18874E] px-4 py-2 text-white hover:bg-green-700">
 
                         Continuar con Metas
 
@@ -70,21 +66,18 @@
 
     @endif
 
-
-    {{-- ================= CONTENIDO ================= --}}
     <div class="bg-white p-6 shadow-sm">
 
-        {{-- Encabezado --}}
-        <div class="mb-1">
+        <div class="mb-4">
 
-            <h2 class="text-2xl font-semibold text-gray-800 leading-tight">
+            <h2 class="text-2xl font-semibold leading-tight text-gray-800">
                 Registrar un nuevo objetivo estratégico institucional
             </h2>
 
             <a href="{{ route('objetivos.listar') }}"
-               class="inline-flex items-center mt-0.5 text-sm font-medium text-blue-600 hover:text-blue-800">
+               class="mt-0.5 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800">
 
-                <i class="bi bi-arrow-left-short text-lg mr-1"></i>
+                <i class="bi bi-arrow-left-short mr-1 text-lg"></i>
 
                 Regresar
 
@@ -92,12 +85,39 @@
 
         </div>
 
-        <!-- Scroll -->
-        <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
+        @if ($errors->any())
 
-            <!-- Formulario -->
+            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4">
+
+                <p class="mb-2 text-sm font-semibold text-red-700">
+                    Revise los siguientes campos:
+                </p>
+
+                <ul class="list-inside list-disc text-sm text-red-700">
+
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+
+                </ul>
+
+            </div>
+
+        @endif
+
+        @if(session('error'))
+
+            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-700">
+                {{ session('error') }}
+            </div>
+
+        @endif
+
+        <div class="overflow-y-auto"
+             style="height: calc(100vh - 230px);">
+
             <form method="POST"
-                action="{{ route('objetivos.store') }}">
+                  action="{{ route('objetivos.store') }}">
 
                 @csrf
 
@@ -122,7 +142,7 @@
             </form>
 
         </div>
-    
+
     </div>
 
 </x-objetivos-layout>

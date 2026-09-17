@@ -25,6 +25,7 @@
             <select
                 id="ods_id"
                 name="ods_id"
+                required
                 class="flex-1 rounded-lg border-gray-300">
 
                 <option value="">Seleccione</option>
@@ -47,15 +48,16 @@
         <!-- Meta ODS -->
         <div class="flex items-center">
 
-            <label for="meta_ods_id"
+            <label for="ods_meta_id"
                    class="w-52 text-sm font-semibold text-gray-700">
                 Meta ODS
                 <span class="text-red-500">*</span>
             </label>
 
             <select
-                id="meta_ods_id"
-                name="meta_ods_id"
+                id="ods_meta_id"
+                name="ods_meta_id"
+                required
                 class="flex-1 rounded-lg border-gray-300">
 
                 <option value="">
@@ -74,7 +76,7 @@
     document.addEventListener('DOMContentLoaded', function () {
 
         const ods = document.getElementById('ods_id');
-        const meta = document.getElementById('meta_ods_id');
+        const meta = document.getElementById('ods_meta_id');
 
         ods.addEventListener('change', function () {
 

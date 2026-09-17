@@ -155,7 +155,7 @@
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ $objetivo->pnd?->codigo }} - {{ $objetivo->pnd?->nombre }}
+                            Objetivo {{ $objetivo->pnd?->numero }} - {{ $objetivo->pnd?->nombre }}
                         </span>
 
                     </div>
@@ -254,7 +254,7 @@
             </div>
 
             <!-- Auditoría -->
-            <div class="bg-gray-100 border-b border-gray-200">
+            <div class="border-b border-gray-200 bg-gray-100">
 
                 <div class="px-4 py-2">
 
@@ -266,10 +266,24 @@
 
             </div>
 
-            <div class="px-4 py-2">
+            <div class="px-4 py-4">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                        <!-- Fecha de creación -->
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+
+                    <!-- Usuario creador -->
+                    <div>
+
+                        <p class="text-sm font-semibold text-gray-700">
+                            Registrado por
+                        </p>
+
+                        <p class="mt-1 text-sm text-gray-600">
+                            {{ $objetivo->usuario?->name ?? 'No registra' }}
+                        </p>
+
+                    </div>
+
+                    <!-- Creación -->
                     <div>
 
                         <p class="text-sm font-semibold text-gray-700">
@@ -282,7 +296,7 @@
 
                     </div>
 
-                    <!-- Última actualización -->
+                    <!-- Actualización -->
                     <div>
 
                         <p class="text-sm font-semibold text-gray-700">
@@ -298,6 +312,7 @@
                 </div>
 
             </div>
+
 
         </div>
 
