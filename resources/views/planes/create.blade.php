@@ -1,9 +1,12 @@
 <x-planes-layout title="Crear Plan Institucional">
 
     @if(session('success'))
+
         <div id="alertSuccess"
-             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+             class="fixed right-5 top-5 z-50 rounded-lg bg-green-600 px-6 py-3 text-white shadow-lg">
+
             {{ session('success') }}
+
         </div>
 
         <script>
@@ -15,225 +18,81 @@
                 }
             }, 3000);
         </script>
-    @endif
-
-
-    @if(session('plan_registrado'))
-
-        <div id="modalPlan"
-             class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-
-            <div class="bg-white rounded-xl shadow-xl w-[440px] p-6">
-
-                <div class="text-center">
-
-                    <i class="bi bi-check-circle-fill text-5xl text-green-600"></i>
-
-                    <h2 class="mt-3 text-xl font-semibold text-gray-800">
-                        Plan registrado correctamente
-                    </h2>
-
-                    <p class="mt-2 text-sm text-gray-500">
-                        El plan
-                        <strong class="font-semibold text-gray-700">
-                            {{ session('plan_codigo') }}
-                        </strong>
-                        fue creado correctamente en estado
-                        <strong class="font-semibold text-gray-700">
-                            {{ session('plan_estado_proceso') }}
-                        </strong>, versión
-                        <strong class="font-semibold text-gray-700">
-                            {{ session('plan_version') }}
-                        </strong>.
-                        Puede continuar con el registro de sus Objetivos Estratégicos Institucionales
-                        o regresar al listado.
-                    </p>
-
-                </div>
-
-                <div class="mt-6 flex justify-end gap-3">
-
-                    <a href="{{ route('planes.listar') }}"
-                       class="px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700">
-
-                        Volver al listado
-
-                    </a>
-
-                    <a href="{{ route('objetivos.create') }}"
-                       class="px-4 py-2 rounded-md bg-[#18874E] hover:bg-green-700 text-white">
-
-                        Continuar con OEI
-
-                    </a>
-
-                </div>
-
-            </div>
-
-        </div>
 
     @endif
 
+    @include('planes.partials.modal-exito')
 
-    <!-- Marco general -->
-    <div class="bg-white p-6 shadow-sm">
+    <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
 
         <!-- Encabezado -->
-        <div class="mb-1">
+        <div class="mb-4">
 
-            <h2 class="text-2xl font-semibold text-gray-800 leading-tight">
+            <h2 class="text-2xl font-semibold leading-tight text-gray-800">
                 Registrar un nuevo plan institucional
             </h2>
 
             <a href="{{ route('planes.listar') }}"
-               class="inline-flex items-center mt-0.5 text-sm font-medium text-blue-600 hover:text-blue-800">
+               class="mt-0.5 inline-flex items-center text-sm font-medium
+                      text-blue-600 hover:text-blue-800">
 
-                <i class="bi bi-arrow-left-short text-lg mr-1"></i>
+                <i class="bi bi-arrow-left-short mr-1 text-lg"></i>
+
                 Regresar
 
             </a>
 
         </div>
 
-        <!-- Barra de progreso -->
-        <div class="border-t border-b border-gray-200 py-3 mb-2">
+        <!-- Validaciones -->
+        @if($errors->any())
 
-            <div class="grid grid-cols-12 items-center gap-6">
+            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4">
 
-                <!-- Información -->
-                <div class="col-span-2 text-center">
+                <p class="mb-2 text-sm font-semibold text-red-700">
+                    Revise los siguientes campos:
+                </p>
 
-                    <div class="text-sm font-semibold text-gray-500">
-                        Formulación estratégica
-                    </div>
+                <ul class="list-inside list-disc text-sm text-red-700">
 
-                    <div class="text-xs text-gray-500 mt-0.5">
-                        Paso <strong>1</strong> de <strong>5</strong>
-                    </div>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
 
-                </div>
-
-                <!-- Barra -->
-                <div class="col-span-10">
-
-                    <div class="flex items-center">
-
-                        <!-- Paso 1 -->
-                        <div class="flex flex-col items-center">
-
-                            <div class="w-6 h-6 rounded-full bg-[#18874E] text-white text-xs font-semibold flex items-center justify-center">
-                                1
-                            </div>
-
-                            <span class="mt-0.5 text-xs font-medium text-[#18874E]">
-                                Plan
-                            </span>
-
-                        </div>
-
-                        <div class="flex-1 h-px bg-gray-300 mx-2"></div>
-
-                        <!-- Paso 2 -->
-                        <div class="flex flex-col items-center">
-
-                            <div class="w-6 h-6 rounded-full bg-gray-300 text-white text-xs font-semibold flex items-center justify-center">
-                                2
-                            </div>
-
-                            <span class="mt-0.5 text-xs text-gray-500">
-                                OEI
-                            </span>
-
-                        </div>
-
-                        <div class="flex-1 h-px bg-gray-300 mx-2"></div>
-
-                        <!-- Paso 3 -->
-                        <div class="flex flex-col items-center">
-
-                            <div class="w-6 h-6 rounded-full bg-gray-300 text-white text-xs font-semibold flex items-center justify-center">
-                                3
-                            </div>
-
-                            <span class="mt-0.5 text-xs text-gray-500">
-                                Alineación
-                            </span>
-
-                        </div>
-
-                        <div class="flex-1 h-px bg-gray-300 mx-2"></div>
-
-                        <!-- Paso 4 -->
-                        <div class="flex flex-col items-center">
-
-                            <div class="w-6 h-6 rounded-full bg-gray-300 text-white text-xs font-semibold flex items-center justify-center">
-                                4
-                            </div>
-
-                            <span class="mt-0.5 text-xs text-gray-500">
-                                Indicadores
-                            </span>
-
-                        </div>
-
-                        <div class="flex-1 h-px bg-gray-300 mx-2"></div>
-
-                        <!-- Paso 5 -->
-                        <div class="flex flex-col items-center">
-
-                            <div class="w-6 h-6 rounded-full bg-gray-300 text-white text-xs font-semibold flex items-center justify-center">
-                                5
-                            </div>
-
-                            <span class="mt-0.5 text-xs text-gray-500">
-                                Metas
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
+                </ul>
 
             </div>
 
-        </div>
+        @endif
 
-        <!-- Contenido -->
-        <div class="bg-white p-6 shadow-sm">
+        @if(session('error'))
 
-            <!-- Validaciones -->
-            @if ($errors->any())
+            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4
+                        text-sm text-red-700">
 
-                <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
-
-                    <ul class="list-disc list-inside text-sm text-red-700">
-
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-
-                    </ul>
-
-                </div>
-
-            @endif
-
-            <!-- Scroll -->
-            <div class="overflow-y-auto"
-                 style="height: calc(100vh - 280px);">
-
-                <form action="{{ route('planes.store') }}"
-                      method="POST">
-
-                    @csrf
-
-                    @include('planes.partials.form')
-
-                </form>
+                {{ session('error') }}
 
             </div>
+
+        @endif
+
+        <!-- Contenido con desplazamiento vertical -->
+        <div class="w-full min-w-0 max-w-full overflow-y-auto overflow-x-hidden"
+             style="height: calc(100vh - 190px);">
+
+            <form method="POST"
+                  action="{{ route('planes.store') }}"
+                  class="w-full min-w-0 max-w-full">
+
+                @csrf
+
+                @include('planes.partials.barra-progreso')
+
+                @include('planes.partials.informacion-general')
+
+                @include('planes.partials.acciones')
+
+            </form>
 
         </div>
 

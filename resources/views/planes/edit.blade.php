@@ -1,9 +1,12 @@
 <x-planes-layout title="Editar Plan Institucional">
 
     @if(session('success'))
+
         <div id="alertSuccess"
-             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+             class="fixed right-5 top-5 z-50 rounded-lg bg-green-600 px-6 py-3 text-white shadow-lg">
+
             {{ session('success') }}
+
         </div>
 
         <script>
@@ -15,69 +18,76 @@
                 }
             }, 3000);
         </script>
+
     @endif
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-0">
+    <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
 
-        <div class="flex">
+        <!-- Encabezado -->
+        <div class="mb-4">
+
+            <h2 class="text-2xl font-semibold leading-tight text-gray-800">
+                Editar plan institucional
+            </h2>
 
             <a href="{{ route('planes.detalle', $plan->id) }}"
-               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+               class="mt-0.5 inline-flex items-center text-sm font-medium
+                      text-blue-600 hover:text-blue-800">
 
-                <i class="bi bi-chevron-left"></i>
+                <i class="bi bi-arrow-left-short mr-1 text-lg"></i>
+
                 Regresar
 
             </a>
 
         </div>
 
-    </div>
+        <!-- Validaciones -->
+        @if($errors->any())
 
-    <!-- Scroll vertical -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 140px);">
+            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4">
 
-        <!-- Contenido -->
-        <div class="bg-white p-6 shadow-sm">
-
-            <!-- Encabezado -->
-            <div class="mb-6">
-
-                <h2 class="text-2xl font-semibold text-gray-800">
-                    Editar Plan Institucional
-                </h2>
-
-                <p class="mt-1 text-sm text-gray-500">
-                    Modifique la información del plan institucional y guarde los cambios.
+                <p class="mb-2 text-sm font-semibold text-red-700">
+                    Revise los siguientes campos:
                 </p>
+
+                <ul class="list-inside list-disc text-sm text-red-700">
+
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+
+                </ul>
 
             </div>
 
-            <!-- Validaciones -->
-            @if ($errors->any())
+        @endif
 
-                <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
+        @if(session('error'))
 
-                    <ul class="list-disc list-inside text-sm text-red-700">
+            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4
+                        text-sm text-red-700">
 
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
+                {{ session('error') }}
 
-                    </ul>
+            </div>
 
-                </div>
+        @endif
 
-            @endif
+        <!-- Contenido con desplazamiento vertical -->
+        <div class="w-full min-w-0 max-w-full overflow-y-auto overflow-x-hidden"
+             style="height: calc(100vh - 190px);">
 
-            <!-- Formulario -->
-            <form action="{{ route('planes.update', $plan->id) }}"
-                  method="POST">
+            <form method="POST"
+                  action="{{ route('planes.update', $plan->id) }}"
+                  class="w-full min-w-0 max-w-full">
 
                 @csrf
                 @method('PUT')
 
-                @include('planes.partials.form')
+                @include('planes.partials.informacion-general')
+
+                @include('planes.partials.acciones')
 
             </form>
 

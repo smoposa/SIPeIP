@@ -37,6 +37,7 @@
 
                 </a>
 
+                
                 <a href="{{ route(
                     'indicadores.create',
                     ['meta_id' => session('meta_id')]

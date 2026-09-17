@@ -146,308 +146,311 @@
             </div>
 
             <!-- Datos -->
-            <div class="px-4 py-4">
+<div class="px-4 py-5">
 
-                <div class="space-y-4 mb-6">
+    <div class="grid min-w-0 grid-cols-1 gap-x-12 gap-y-6 lg:grid-cols-2">
 
-                    <!-- Código -->
-                    <div class="flex">
+        <!-- Columna izquierda -->
+        <div class="min-w-0 space-y-4">
 
-                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                            Código del plan
-                        </span>
+            <!-- Entidad -->
+            <div class="flex min-w-0 items-start gap-4">
 
-                        <span class="text-sm text-gray-600">
-                            {{ $plan->codigo }}
-                        </span>
+                <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
+                    Nombre de la entidad
+                </span>
 
-                    </div>
-
-                    <!-- Nombre -->
-                    <div class="flex">
-
-                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                            Nombre
-                        </span>
-
-                        <span class="text-sm font-medium text-[#0F766E]">
-                            {{ $plan->nombre }}
-                        </span>
-
-                    </div>
-
-                    <!-- Entidad -->
-                    <div class="flex">
-
-                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                            Entidad
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $plan->entidad->nombre }}
-                        </span>
-
-                    </div>
-
-                    <!-- Tipo -->
-                    <div class="flex">
-
-                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                            Tipo
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $plan->tipo }}
-                        </span>
-
-                    </div>
-
-                    <!-- Período -->
-                    <div class="flex">
-
-                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                            Período de vigencia
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $plan->periodo_inicio }} - {{ $plan->periodo_fin }}
-                        </span>
-
-                    </div>
-
-                    <!-- Descripción -->
-                    <div class="flex items-start">
-
-                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                            Descripción
-                        </span>
-
-                        <span class="text-sm text-gray-600 leading-relaxed">
-                            {{ $plan->descripcion ?: 'No registra' }}
-                        </span>
-
-                    </div>
-
-                </div>
+                <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                    {{ $plan->entidad?->nombre ?? 'No registra' }}
+                </span>
 
             </div>
 
-            <!-- Estado del proceso -->
-            <div class="bg-gray-100 border-b border-gray-200">
+            <!-- Código -->
+            <div class="flex min-w-0 items-start gap-4">
 
-                <div class="px-4 py-2">
+                <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
+                    Código del plan
+                </span>
 
-                    <h4 class="text-sm font-semibold text-gray-800">
-                        Estado de planificación
-                    </h4>
-
-                </div>
+                <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                    {{ $plan->codigo }}
+                </span>
 
             </div>
 
-            <div class="px-4 py-4">
+            <!-- Nombre -->
+            <div class="flex min-w-0 items-start gap-4">
 
-                <div class="flex items-center">
+                <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
+                    Nombre del plan
+                </span>
 
-                    <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                        Estado del proceso
+                <span class="min-w-0 flex-1 break-words text-sm font-medium text-[#0F766E]">
+                    {{ $plan->nombre }}
+                </span>
+
+            </div>
+
+            <!-- Descripción -->
+            <div class="flex min-w-0 items-start gap-4">
+
+                <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
+                    Descripción
+                </span>
+
+                <span class="min-w-0 flex-1 break-words text-sm leading-relaxed text-gray-600">
+                    {{ $plan->descripcion ?: 'No registra' }}
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="min-w-0 space-y-4">
+
+            <!-- Tipo -->
+            <div class="flex min-w-0 items-start gap-4">
+
+                <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
+                    Tipo de plan
+                </span>
+
+                <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                    {{ $plan->tipo ?: 'No registra' }}
+                </span>
+
+            </div>
+
+            <!-- Período -->
+            <div class="flex min-w-0 items-start gap-4">
+
+                <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
+                    Período de vigencia
+                </span>
+
+                <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                    {{ $plan->periodo_inicio }} - {{ $plan->periodo_fin }}
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Estado y versión del plan -->
+<div class="border-b border-gray-200 bg-gray-100">
+
+    <div class="px-4 py-2">
+
+        <h4 class="text-sm font-semibold text-gray-800">
+            Estado y versión del plan
+        </h4>
+
+    </div>
+
+</div>
+
+<div class="mb-4 px-4 py-5">
+
+    <div class="space-y-4">
+
+        <!-- Estado administrativo -->
+        <div class="flex min-w-0 items-center gap-4">
+
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Estado administrativo
+            </span>
+
+            <div class="flex min-w-0 flex-1 flex-wrap items-center gap-4">
+
+                @if($plan->estado === 'Activo')
+
+                    <span class="inline-flex rounded-full bg-green-100 px-3 py-1
+                                 text-xs font-medium text-green-700">
+                        Activo
                     </span>
 
-                    @switch($plan->estado_proceso)
+                @else
 
-                        @case('Borrador')
-
-                            <span class="inline-flex px-3 py-1 text-xs rounded-full
-                                         bg-gray-100 text-gray-700">
-
-                                Borrador
-
-                            </span>
-
-                            @break
-
-                        @case('En revisión')
-
-                            <span class="inline-flex px-3 py-1 text-xs rounded-full
-                                         bg-yellow-100 text-yellow-700">
-
-                                En revisión
-
-                            </span>
-
-                            @break
-
-                        @case('Observado')
-
-                            <span class="inline-flex px-3 py-1 text-xs rounded-full
-                                         bg-orange-100 text-orange-700">
-
-                                Observado
-
-                            </span>
-
-                            @break
-
-                        @case('Aprobado')
-
-                            <span class="inline-flex px-3 py-1 text-xs rounded-full
-                                         bg-blue-100 text-blue-700">
-
-                                Aprobado
-
-                            </span>
-
-                            @break
-
-                        @default
-
-                            <span class="inline-flex px-3 py-1 text-xs rounded-full
-                                         bg-gray-100 text-gray-600">
-
-                                Sin estado
-
-                            </span>
-
-                    @endswitch
-
-                </div>
-
-                <div class="flex items-center mt-4">
-
-                    <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                        Versión
+                    <span class="inline-flex rounded-full bg-red-100 px-3 py-1
+                                 text-xs font-medium text-red-700">
+                        Inactivo
                     </span>
 
-                    <span class="text-sm text-gray-600">
-                        v{{ $plan->version }}
-                    </span>
+                @endif
 
-                </div>
+                @if(puedeHacer('planes', 'estado'))
+
+                    <a href="{{ route('planes.editarestado', $plan->id) }}"
+                       class="text-sm font-medium text-blue-600
+                              hover:text-blue-800 hover:underline">
+
+                        Editar
+
+                    </a>
+
+                @endif
 
             </div>
 
-            <!-- Estado administrativo -->
-            <div class="bg-gray-100 border-b border-gray-200">
+        </div>
 
-                <div class="px-4 py-2">
+        <!-- Estado del proceso -->
+        <div class="flex min-w-0 items-center gap-4">
 
-                    <h4 class="text-sm font-semibold text-gray-800">
-                        Estado administrativo
-                    </h4>
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Estado del proceso
+            </span>
 
-                </div>
+            <div class="min-w-0 flex-1">
 
-            </div>
+                @switch($plan->estado_proceso)
 
-            <div class="px-4 py-4 mb-4">
+                    @case('Borrador')
 
-                <div class="flex items-center">
-
-                    <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                        Estado
-                    </span>
-
-                    @if($plan->estado === 'Activo')
-
-                        <span class="px-3 py-1 text-xs rounded-full
-                                     bg-green-100 text-green-700">
-
-                            Activo
-
+                        <span class="inline-flex rounded-full bg-gray-100 px-3 py-1
+                                     text-xs font-medium text-gray-700">
+                            Borrador
                         </span>
 
-                    @else
+                        @break
 
-                        <span class="px-3 py-1 text-xs rounded-full
-                                     bg-red-100 text-red-700">
+                    @case('En revisión')
 
-                            Inactivo
-
+                        <span class="inline-flex rounded-full bg-yellow-100 px-3 py-1
+                                     text-xs font-medium text-yellow-700">
+                            En revisión
                         </span>
 
-                    @endif
+                        @break
 
-                    @if(puedeHacer('planes', 'estado'))
+                    @case('Observado')
 
-                        <a href="{{ route('planes.editarestado', $plan->id) }}"
-                           class="ml-10 text-sm text-blue-600
-                                  hover:text-blue-800 hover:underline">
+                        <span class="inline-flex rounded-full bg-orange-100 px-3 py-1
+                                     text-xs font-medium text-orange-700">
+                            Observado
+                        </span>
 
-                            Editar
+                        @break
 
-                        </a>
+                    @case('Aprobado')
 
-                    @endif
+                        <span class="inline-flex rounded-full bg-blue-100 px-3 py-1
+                                     text-xs font-medium text-blue-700">
+                            Aprobado
+                        </span>
 
-                </div>
+                        @break
+
+                    @default
+
+                        <span class="inline-flex rounded-full bg-gray-100 px-3 py-1
+                                     text-xs font-medium text-gray-600">
+                            Sin estado
+                        </span>
+
+                @endswitch
+
+            </div>
+
+        </div>
+
+        <!-- Versión -->
+        <div class="flex min-w-0 items-center gap-4">
+
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Versión
+            </span>
+
+            <div class="min-w-0 flex-1">
+
+                <span class="inline-flex rounded-md bg-gray-100 px-3 py-1
+                             text-sm font-medium text-gray-700">
+
+                    v{{ $plan->version }}
+
+                </span>
 
             </div>
 
-            <!-- Auditoría -->
-            <div class="bg-gray-100 border-b border-gray-200">
+        </div>
 
-                <div class="px-4 py-2">
+    </div>
 
-                    <h4 class="text-sm font-semibold text-gray-800">
-                        Auditoría
-                    </h4>
+</div>
 
-                </div>
+<!-- Auditoría -->
+<div class="border-b border-gray-200 bg-gray-100">
 
-            </div>
+    <div class="px-4 py-2">
 
-            <div class="px-4 py-4">
+        <h4 class="text-sm font-semibold text-gray-800">
+            Auditoría
+        </h4>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    </div>
 
-                    <!-- Usuario creador -->
-                    <div>
+</div>
 
-                        <p class="text-sm font-semibold text-gray-700">
-                            Registrado por
-                        </p>
+<div class="px-4 py-5">
 
-                        <p class="mt-1 text-sm text-gray-600">
+    <div class="space-y-4">
 
-                            @if($plan->usuario)
-                                {{ $plan->usuario->name }}
-                            @else
-                                No registra
-                            @endif
+        <!-- Usuario creador -->
+        <div class="flex min-w-0 items-start gap-4">
 
-                        </p>
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Registrado por
+            </span>
 
-                    </div>
+            <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                {{ $plan->usuario?->name ?? 'No registra' }}
+            </span>
 
-                    <!-- Creación -->
-                    <div>
+        </div>
 
-                        <p class="text-sm font-semibold text-gray-700">
-                            Fecha de creación
-                        </p>
+        <!-- Fecha de creación -->
+        <div class="flex min-w-0 items-start gap-4">
 
-                        <p class="mt-1 text-sm text-gray-600">
-                            {{ $plan->created_at->format('d/m/Y H:i') }}
-                        </p>
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Fecha de creación
+            </span>
 
-                    </div>
+            <span class="min-w-0 flex-1 text-sm text-gray-600">
 
-                    <!-- Actualización -->
-                    <div>
+                {{ $plan->created_at
+                    ? $plan->created_at->format('d/m/Y H:i')
+                    : 'No registra' }}
 
-                        <p class="text-sm font-semibold text-gray-700">
-                            Última actualización
-                        </p>
+            </span>
 
-                        <p class="mt-1 text-sm text-gray-600">
-                            {{ $plan->updated_at->format('d/m/Y H:i') }}
-                        </p>
+        </div>
 
-                    </div>
+        <!-- Última actualización -->
+        <div class="flex min-w-0 items-start gap-4">
 
-                </div>
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Última actualización
+            </span>
 
-            </div>
+            <span class="min-w-0 flex-1 text-sm text-gray-600">
+
+                {{ $plan->updated_at
+                    ? $plan->updated_at->format('d/m/Y H:i')
+                    : 'No registra' }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
 
         </div>
 
