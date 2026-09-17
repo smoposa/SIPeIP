@@ -285,35 +285,37 @@ Route::middleware([
         });
 
     
-
     // Metas
-    Route::prefix('metas')->name('metas.')->group(function () {
+    Route::prefix('metas')
+        ->middleware('role:metas')
+        ->group(function () {
 
-        Route::get('/', [MetaController::class, 'index'])
-            ->name('index');
+            Route::get('/listar', [MetaController::class, 'listar'])
+                ->name('metas.listar');
 
-        Route::get('/listar', [MetaController::class, 'listar'])
-            ->name('listar');
+            Route::get('/crear', [MetaController::class, 'create'])
+                ->name('metas.create');
 
-        Route::get('/crear', [MetaController::class, 'create'])
-            ->name('create');
+            Route::post('/crear', [MetaController::class, 'store'])
+                ->name('metas.store');
 
-        Route::post('/guardar', [MetaController::class, 'store'])
-            ->name('store');
+            Route::get('/{id}/detalle', [MetaController::class, 'detalle'])
+                ->name('metas.detalle');
 
-        Route::get('/{id}/detalle', [MetaController::class, 'detalle'])
-            ->name('detalle');
+            Route::get('/{id}/editar', [MetaController::class, 'edit'])
+                ->name('metas.edit');
 
-        Route::get('/{id}/editar', [MetaController::class, 'edit'])
-            ->name('edit');
+            Route::put('/{id}/editar', [MetaController::class, 'update'])
+                ->name('metas.update');
 
-        Route::put('/{id}', [MetaController::class, 'update'])
-            ->name('update');
+            Route::get('/{id}/estado', [MetaController::class, 'editarEstado'])
+                ->name('metas.editarestado');
 
-        Route::patch('/{id}/estado', [MetaController::class, 'cambiarEstado'])
-            ->name('estado');
+            Route::put('/{id}/estado', [MetaController::class, 'actualizarEstado'])
+                ->name('metas.actualizarestado');
 
-    });
+        });
+
 
     // Indicadores
     Route::prefix('indicadores')->group(function () {

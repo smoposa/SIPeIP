@@ -1,8 +1,10 @@
 <x-objetivos-layout title="Crear Meta">
 
+    <!-- Mensaje de éxito -->
     @if(session('success'))
+
         <div id="alertSuccess"
-             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+             class="fixed top-5 right-5 z-50 rounded-lg bg-green-600 px-6 py-3 text-white shadow-lg">
 
             {{ session('success') }}
 
@@ -17,44 +19,23 @@
                 }
             }, 3000);
         </script>
-    @endif
-
-    @if ($errors->any())
-
-        <div class="mb-4 rounded-md border border-red-300 bg-red-50 p-4">
-
-            <h3 class="text-sm font-semibold text-red-800 mb-2">
-                Se encontraron los siguientes errores:
-            </h3>
-
-            <ul class="list-disc list-inside text-sm text-red-700">
-
-                @foreach ($errors->all() as $error)
-
-                    <li>{{ $error }}</li>
-
-                @endforeach
-
-            </ul>
-
-        </div>
 
     @endif
 
-    {{-- ================= CONTENIDO ================= --}}
-    <div class="bg-white p-6 shadow-sm">
+    <!-- Contenido -->
+    <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
 
-        {{-- Encabezado --}}
-        <div class="mb-1">
+        <!-- Encabezado -->
+        <div class="mb-4">
 
-            <h2 class="text-2xl font-semibold text-gray-800 leading-tight">
+            <h2 class="text-2xl font-semibold leading-tight text-gray-800">
                 Registrar una nueva meta institucional
             </h2>
 
             <a href="{{ route('metas.listar') }}"
-            class="inline-flex items-center mt-0.5 text-sm font-medium text-blue-600 hover:text-blue-800">
+               class="mt-0.5 inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-800">
 
-                <i class="bi bi-arrow-left-short text-lg mr-1"></i>
+                <i class="bi bi-arrow-left-short mr-1 text-lg"></i>
 
                 Regresar
 
@@ -62,28 +43,63 @@
 
         </div>
 
+        <!-- Validaciones -->
+        @if($errors->any())
+
+            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4">
+
+                <p class="mb-2 text-sm font-semibold text-red-700">
+                    Revise los siguientes campos:
+                </p>
+
+                <ul class="list-inside list-disc text-sm text-red-700">
+
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+
+                </ul>
+
+            </div>
+
+        @endif
+
+        @if(session('error'))
+
+            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-700">
+                {{ session('error') }}
+            </div>
+
+        @endif
+
         @include('metas.partials.modal-exito')
 
-    <!-- Scroll -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
+        <!-- Scroll -->
+        <div class="min-w-0 w-full max-w-full overflow-y-auto"
+             style="
+                height: calc(100vh - 190px);
+                max-width: 100%;
+                overflow-x: hidden;
+             ">
 
-        <!-- Formulario -->
-        <form method="POST"
-            action="{{ route('metas.store') }}">
+            <form method="POST"
+                  action="{{ route('metas.store') }}"
+                  class="min-w-0 w-full max-w-full"
+                  style="overflow-x: hidden;">
 
-            @csrf
+                @csrf
 
-            @include('metas.partials.barra-progreso')
+                @include('metas.partials.barra-progreso')
 
-            @include('metas.partials.contexto-planificacion')
+                @include('metas.partials.contexto-planificacion')
 
-            @include('metas.partials.informacion-general')
+                @include('metas.partials.informacion-general')
 
-            @include('metas.partials.estado')
+                @include('metas.partials.acciones')
 
-            @include('metas.partials.acciones')
+            </form>
 
-        </form>
+        </div>
 
     </div>
 

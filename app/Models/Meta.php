@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Indicador;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Meta extends Model
 {
+    use HasFactory;
+
     protected $table = 'metas';
 
     protected $fillable = [
-
         'objetivo_id',
         'codigo',
         'nombre',
@@ -23,36 +26,45 @@ class Meta extends Model
         'responsable_id',
         'estado',
         'usuario_id',
-
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Relaciones
-    |--------------------------------------------------------------------------
-    */
-
-    // Objetivo al que pertenece
-    public function objetivo()
+    protected function casts(): array
     {
-        return $this->belongsTo(Objetivo::class);
+        return [
+            'linea_base' => 'decimal:2',
+            'valor_meta' => 'decimal:2',
+            'periodo_inicio' => 'integer',
+            'periodo_fin' => 'integer',
+        ];
     }
 
-    // Responsable de la meta
-    public function responsable()
+    public function objetivo(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'responsable_id');
+        return $this->belongsTo(
+            Objetivo::class
+        );
     }
 
-    // Usuario que registró la meta
-    public function usuario()
+    public function responsable(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'usuario_id');
+        return $this->belongsTo(
+            User::class,
+            'responsable_id'
+        );
     }
 
-    // Indicadores de la meta
-    public function indicadores()
+    public function usuario(): BelongsTo
     {
-        return $this->hasMany(Indicador::class);
+        return $this->belongsTo(
+            User::class,
+            'usuario_id'
+        );
+    }
+
+    public function indicadores(): HasMany
+    {
+        return $this->hasMany(
+            Indicador::class
+        );
     }
 }
