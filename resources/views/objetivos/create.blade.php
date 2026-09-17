@@ -133,10 +133,6 @@
 
                 @include('objetivos.partials.alineacion-ods')
 
-                @include('objetivos.partials.unidad-responsable')
-
-                @include('objetivos.partials.estado')
-
                 @include('objetivos.partials.acciones')
 
             </form>
