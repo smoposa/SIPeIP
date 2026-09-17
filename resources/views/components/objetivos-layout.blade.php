@@ -12,11 +12,10 @@
         </h2>
     </x-slot>--}}
 
-    <div class="flex">
+    <div class="flex min-w-0 w-full">
 
         <!-- Submenú -->
         @if(
-            request()->routeIs('objetivos.index') ||
             request()->routeIs('objetivos.ods') ||
             request()->routeIs('objetivos.pnd') ||
             request()->routeIs('objetivos.oei')
@@ -32,7 +31,7 @@
         @endif
 
         <!-- Contenido -->
-        <div class="flex-1 px-4 pt-1 pb-4">
+        <div class="min-w-0 max-w-full flex-1 overflow-x-hidden px-4 pb-4 pt-1">
 
             {{ $slot }}
 

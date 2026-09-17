@@ -18,21 +18,6 @@ class ObjetivoController extends Controller
     }
 
     /**
-     * Panel principal del módulo.
-     */
-    public function index(): View
-    {
-        $this->autorizar('objetivos');
-
-        return view(
-            'objetivos.index',
-            $this->objetivoService->obtenerResumen(
-                auth()->user()
-            )
-        );
-    }
-
-    /**
      * Listar objetivos de la entidad.
      */
     public function listar(): View

@@ -14,35 +14,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ObjetivoRepository implements ObjetivoRepositoryInterface
 {
-    public function contarPorEntidad(int $entidadId): int
-    {
-        return Objetivo::query()
-            ->whereHas(
-                'plan',
-                fn ($query) => $query->where(
-                    'entidad_id',
-                    $entidadId
-                )
-            )
-            ->count();
-    }
-
-    public function contarPorEstadoYEntidad(
-        string $estado,
-        int $entidadId
-    ): int {
-        return Objetivo::query()
-            ->where('estado', $estado)
-            ->whereHas(
-                'plan',
-                fn ($query) => $query->where(
-                    'entidad_id',
-                    $entidadId
-                )
-            )
-            ->count();
-    }
-
     public function listarPorEntidad(
         int $entidadId,
         int $porPagina = 10

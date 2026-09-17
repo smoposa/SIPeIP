@@ -1,11 +1,12 @@
 <x-objetivos-layout title="Editar Estado del Objetivo">
 
-    <div class="bg-white border-b border-gray-300 mb-0">
+    <!-- Barra de acciones -->
+    <div class="bg-white border-b border-gray-300">
 
         <div class="flex">
 
             <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
-               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800">
+               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
 
                 <i class="bi bi-chevron-left"></i>
                 Regresar
@@ -16,90 +17,140 @@
 
     </div>
 
-    <div class="bg-white p-6 shadow-sm">
+    <!-- Scroll vertical -->
+    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
-        <div class="mb-6">
+        <!-- Encabezado -->
+        <div class="p-6">
 
             <h2 class="text-2xl font-semibold text-gray-800">
-                Editar estado del objetivo
+                Editar estado administrativo
             </h2>
 
             <p class="mt-1 text-sm text-gray-500">
-                {{ $objetivo->codigo }} - {{ $objetivo->nombre }}
+                Habilite o deshabilite el objetivo estratégico institucional dentro del sistema.
             </p>
 
         </div>
 
-        @if($errors->any())
+        <!-- Formulario -->
+        <div class="bg-white p-6">
 
-            <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
+            <!-- Validaciones -->
+            @if($errors->any())
 
-                <ul class="list-disc list-inside text-sm text-red-700">
+                <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
 
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+                    <ul class="list-disc list-inside text-sm text-red-700">
 
-                </ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
 
-            </div>
+                    </ul>
 
-        @endif
+                </div>
 
-        <form method="POST"
-              action="{{ route('objetivos.actualizarestado', $objetivo->id) }}">
+            @endif
 
-            @csrf
-            @method('PUT')
+            <!-- Información actual -->
+            <div class="mb-8">
 
-            <input
-                type="hidden"
-                name="estado"
-                value="0">
+                <div class="flex items-center mb-4">
 
-            <div class="flex items-center">
-
-                <span class="w-48 text-sm font-semibold text-gray-700">
-                    Estado
-                </span>
-
-                <label class="inline-flex items-center">
-
-                    <input
-                        type="checkbox"
-                        name="estado"
-                        value="1"
-                        {{ $objetivo->estado === 'Activo' ? 'checked' : '' }}
-                        class="w-5 h-5 text-blue-600 border-gray-300 rounded">
-
-                    <span class="ml-3 text-sm text-gray-700">
-                        Objetivo activo
+                    <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                        Objetivo
                     </span>
 
-                </label>
+                    <span class="min-w-0 break-words text-sm text-gray-600">
+                        {{ $objetivo->nombre }}
+                    </span>
+
+                </div>
+
+                <div class="flex items-center mb-4">
+
+                    <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                        Código
+                    </span>
+
+                    <span class="text-sm text-gray-600">
+                        {{ $objetivo->codigo }}
+                    </span>
+
+                </div>
+
+                <div class="flex items-center">
+
+                    <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                        Plan institucional
+                    </span>
+
+                    <span class="min-w-0 break-words text-sm text-gray-600">
+                        {{ $objetivo->plan?->codigo }}
+                        -
+                        {{ $objetivo->plan?->nombre }}
+                    </span>
+
+                </div>
 
             </div>
 
-            <div class="flex justify-end gap-3 mt-8">
+            <form method="POST"
+                  action="{{ route('objetivos.actualizarestado', $objetivo->id) }}">
 
-                <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
-                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+                @csrf
+                @method('PUT')
 
-                    Cancelar
+                <div class="flex items-center gap-12">
 
-                </a>
+                    <label for="estado"
+                           class="w-32 text-sm font-medium text-gray-700">
+                        Objetivo habilitado
+                    </label>
 
-                <button
-                    type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+                    <input type="hidden"
+                           name="estado"
+                           value="0">
 
-                    Guardar estado
+                    <input type="checkbox"
+                           id="estado"
+                           name="estado"
+                           value="1"
+                           {{ old(
+                                'estado',
+                                $objetivo->estado === 'Activo' ? '1' : '0'
+                           ) == '1' ? 'checked' : '' }}
+                           class="w-5 h-5">
 
-                </button>
+                </div>
 
-            </div>
+                <p class="mt-3 ml-44 text-xs text-gray-500">
+                    Este cambio afecta únicamente la disponibilidad administrativa del objetivo.
+                </p>
 
-        </form>
+                <!-- Botones -->
+                <div class="flex gap-3 mt-10">
+
+                    <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+
+                        Guardar
+
+                    </button>
+
+                    <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
+                       class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+
+                        Cancelar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 

@@ -69,7 +69,7 @@
     </div>
 
     <!-- Scroll vertical -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
+    <div class="overflow-y-auto" style="height: calc(100vh - 100px);">
 
         <div class="bg-white p-6 shadow-sm">
 

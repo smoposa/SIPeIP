@@ -214,9 +214,6 @@ Route::middleware([
         ->middleware('role:objetivos')
         ->group(function () {
 
-            Route::get('/', [ObjetivoController::class, 'index'])
-                ->name('objetivos.index');
-
             Route::get('/listar', [ObjetivoController::class, 'listar'])
                 ->name('objetivos.listar');
 

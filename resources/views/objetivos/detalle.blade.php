@@ -1,8 +1,9 @@
 <x-objetivos-layout title="Detalle OEI">
 
     @if(session('success'))
+
         <div id="alertSuccess"
-             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+             class="fixed right-5 top-5 z-50 rounded-lg bg-green-600 px-6 py-3 text-white shadow-lg">
 
             {{ session('success') }}
 
@@ -17,78 +18,65 @@
                 }
             }, 3000);
         </script>
+
     @endif
 
-<!-- Barra de acciones -->
-<div class="bg-white border-b border-gray-300 mb-0">
+    <!-- Barra de acciones -->
+    <div class="mb-0 border-b border-gray-300 bg-white">
 
-    <div class="flex items-center">
+        <div class="flex flex-wrap items-center gap-1">
 
-        <a href="{{ route('objetivos.listar') }}"
-           class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+            <a href="{{ route('objetivos.listar') }}"
+               class="mr-6 py-2 text-sm font-medium text-blue-600 hover:text-blue-800">
 
-            <i class="bi bi-chevron-left"></i>
+                <i class="bi bi-chevron-left"></i>
+                Regresar
 
-            Regresar
+            </a>
 
-        </a>
+            <a href="{{ route('objetivos.edit', $objetivo->id) }}"
+               class="px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100">
 
-        <a href="{{ route('objetivos.edit', $objetivo->id) }}"
-           class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                <i class="bi bi-pencil mr-2 text-blue-500"></i>
+                Editar información
 
-            <i class="bi bi-pencil text-blue-500 me-2"></i>
+            </a>
 
-            Editar información
+            <a href="{{ url()->current() }}"
+               class="px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100">
 
-        </a>
+                <i class="bi bi-arrow-clockwise mr-2 text-blue-500"></i>
+                Actualizar
 
-        <a href="{{ url()->current() }}"
-           class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+            </a>
 
-            <i class="bi bi-arrow-clockwise text-blue-500 me-2"></i>
+        </div>
 
-            Actualizar
-
-        </a>
-
-        <span class="px-2 text-gray-300">|</span>
-
-
-        <a href="#"
-        class="px-3 py-2 text-sm text-green-700 hover:bg-green-50 transition">
-
-            <i class="bi bi-list-ul text-green-600 me-2"></i>
-
-            Gestionar metas
-
-        </a>
     </div>
 
-</div>
+    <!-- Contenido -->
+    <div class="min-w-0 w-full overflow-x-hidden overflow-y-auto"
+         style="height: calc(100vh - 100px);">
 
-    <!-- Scroll -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
-
-        <div class="bg-white p-6 shadow-sm">
+        <div class="min-w-0 bg-white p-6 shadow-sm">
 
             <!-- Cabecera -->
-            <div class="flex items-center gap-4 mb-0 pb-6">
+            <div class="flex min-w-0 items-center gap-4 pb-6">
 
-                <div class="w-16 h-16 rounded-full bg-[#C227F5]
-                            flex items-center justify-center
-                            text-white text-3xl">
+                <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center
+                            rounded-full bg-[#024687] text-3xl text-white">
 
                     <i class="bi bi-bullseye"></i>
 
                 </div>
 
-                <div>
+                <div class="min-w-0">
 
-                    <h2 class="text-xl font-semibold text-gray-800">
-                        {{ \Illuminate\Support\Str::limit($objetivo->nombre, 90) }}
+                    <h2 class="break-words text-xl font-semibold text-gray-800">
+                        {{ $objetivo->nombre }}
                     </h2>
 
-                    <p class="text-gray-500">
+                    <p class="text-sm text-gray-500">
                         {{ $objetivo->codigo }}
                     </p>
 
@@ -96,10 +84,10 @@
 
             </div>
 
-            <!-- Información General -->
-            <div class="bg-gray-100 border-b border-gray-200">
+            <!-- Información general -->
+            <div class="border-b border-gray-200 bg-gray-100">
 
-                <div class="flex justify-between items-center px-4 py-2">
+                <div class="flex items-center justify-between px-4 py-2">
 
                     <h4 class="text-sm font-semibold text-gray-800">
                         Información general
@@ -116,84 +104,119 @@
 
             </div>
 
-            <!-- Datos -->
-            <div class="px-4 py-3">
+            <div class="px-4 py-4">
 
-                <div class="space-y-4 mb-6">
+                <div class="space-y-4">
 
                     <!-- Código -->
-                    <div class="flex">
+                    <div class="flex min-w-0 items-start gap-4">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Código
                         </span>
 
-                        <span class="text-sm text-gray-600">
+                        <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
                             {{ $objetivo->codigo }}
                         </span>
 
                     </div>
 
                     <!-- Plan -->
-                    <div class="flex">
+                    <div class="flex min-w-0 items-start gap-4">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Plan
                         </span>
 
-                        <span class="text-sm text-gray-600">
-                            {{ $objetivo->plan?->codigo }} - {{ $objetivo->plan?->nombre }}
+                        <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                            {{ $objetivo->plan?->codigo ?? 'No registra' }}
+                            -
+                            {{ $objetivo->plan?->nombre ?? 'No registra' }}
                         </span>
 
                     </div>
 
                     <!-- Objetivo PND -->
-                    <div class="flex">
+                    <div class="flex min-w-0 items-start gap-4">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Objetivo PND
                         </span>
 
-                        <span class="text-sm text-gray-600">
-                            Objetivo {{ $objetivo->pnd?->numero }} - {{ $objetivo->pnd?->nombre }}
+                        <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                            Objetivo {{ $objetivo->pnd?->numero ?? 'No registra' }}
+                            -
+                            {{ $objetivo->pnd?->nombre ?? 'No registra' }}
+                        </span>
+
+                    </div>
+
+                    <!-- Política PND -->
+                    <div class="flex min-w-0 items-start gap-4">
+
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                            Política PND
+                        </span>
+
+                        <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                            {{ $objetivo->politicaPnd?->codigo ?? 'No registra' }}
+                            -
+                            {{ $objetivo->politicaPnd?->nombre ?? 'No registra' }}
                         </span>
 
                     </div>
 
                     <!-- ODS -->
-                    <div class="flex">
+                    <div class="flex min-w-0 items-start gap-4">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             ODS
                         </span>
 
-                        <span class="text-sm text-gray-600">
-                            {{ $objetivo->ods?->codigo }} - {{ $objetivo->ods?->nombre }}
+                        <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                            {{ $objetivo->ods?->codigo ?? 'No registra' }}
+                            -
+                            {{ $objetivo->ods?->nombre ?? 'No registra' }}
+                        </span>
+
+                    </div>
+
+                    <!-- Meta ODS -->
+                    <div class="flex min-w-0 items-start gap-4">
+
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                            Meta ODS
+                        </span>
+
+                        <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                            {{ $objetivo->metaOds?->codigo ?? 'No registra' }}
+                            -
+                            {{ $objetivo->metaOds?->nombre ?? 'No registra' }}
                         </span>
 
                     </div>
 
                     <!-- Nombre -->
-                    <div class="flex">
+                    <div class="flex min-w-0 items-start gap-4">
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Nombre
                         </span>
 
-                        <span class="text-sm font-medium text-[#024687]">
+                        <span class="min-w-0 flex-1 break-words text-sm font-medium text-[#024687]">
                             {{ $objetivo->nombre }}
                         </span>
 
                     </div>
 
                     <!-- Descripción -->
-                    <div class="flex items-start">
+                    <div class="flex min-w-0 items-start gap-4">
 
-                        <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Descripción
                         </span>
 
-                        <span class="text-sm text-gray-600 leading-relaxed">
+                        <span class="min-w-0 flex-1 break-words text-sm leading-relaxed text-gray-600">
                             {{ $objetivo->descripcion ?: 'No registra' }}
                         </span>
 
@@ -204,7 +227,7 @@
             </div>
 
             <!-- Estado -->
-            <div class="bg-gray-100 border-b border-gray-200">
+            <div class="border-b border-gray-200 bg-gray-100">
 
                 <div class="px-4 py-2">
 
@@ -216,38 +239,34 @@
 
             </div>
 
-            <div class="px-4 py-2">
+            <div class="px-4 py-4">
 
-                <div class="flex items-center mb-4">
+                <div class="flex flex-wrap items-center gap-4">
 
-                    <div class="flex items-center">
+                    <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                        Estado
+                    </span>
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Estado
+                    @if($objetivo->estado === 'Activo')
+
+                        <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
+                            Activo
                         </span>
 
-                        @if($objetivo->estado == 'Activo')
+                    @else
 
-                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                                Habilitado
-                            </span>
+                        <span class="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
+                            Inactivo
+                        </span>
 
-                        @else
+                    @endif
 
-                            <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                                Deshabilitado
-                            </span>
+                    <a href="{{ route('objetivos.editarestado', $objetivo->id) }}"
+                       class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
 
-                        @endif
+                        Editar
 
-                        <a href="{{ route('objetivos.editarestado', $objetivo->id) }}"
-                           class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
-
-                            Editar
-
-                        </a>
-
-                    </div>
+                    </a>
 
                 </div>
 
@@ -270,20 +289,18 @@
 
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 
-                    <!-- Usuario creador -->
                     <div>
 
                         <p class="text-sm font-semibold text-gray-700">
                             Registrado por
                         </p>
 
-                        <p class="mt-1 text-sm text-gray-600">
+                        <p class="mt-1 break-words text-sm text-gray-600">
                             {{ $objetivo->usuario?->name ?? 'No registra' }}
                         </p>
 
                     </div>
 
-                    <!-- Creación -->
                     <div>
 
                         <p class="text-sm font-semibold text-gray-700">
@@ -296,7 +313,6 @@
 
                     </div>
 
-                    <!-- Actualización -->
                     <div>
 
                         <p class="text-sm font-semibold text-gray-700">
@@ -312,7 +328,6 @@
                 </div>
 
             </div>
-
 
         </div>
 

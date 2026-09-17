@@ -12,8 +12,8 @@
     <!-- Opciones -->
 <nav id="menuObjetivos">
 
-    <a href="{{ route('objetivos.index') }}"
-       class="{{ request()->routeIs('objetivos.index') ? 'sidebar-link-active' : 'sidebar-link' }}">
+    <a href="{{ route('objetivos.listar') }}"
+        class="{{ request()->routeIs('objetivos.*') ? 'sidebar-link-active' : 'sidebar-link' }}">
         Página de inicio
     </a>
 

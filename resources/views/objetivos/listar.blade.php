@@ -1,9 +1,13 @@
 <x-objetivos-layout title="OEI">
 
+    <!-- Mensaje de éxito -->
     @if(session('success'))
+
         <div id="alertSuccess"
-            class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+             class="fixed top-5 right-5 z-50 rounded-lg bg-green-600 px-6 py-3 text-white shadow-lg">
+
             {{ session('success') }}
+
         </div>
 
         <script>
@@ -15,174 +19,228 @@
                 }
             }, 3000);
         </script>
+
     @endif
 
-    <!-- Encabezado -->
-    <div class="mb-2">
+    <div class="min-w-0 w-full max-w-full">
 
-        <h2 class="text-2xl font-semibold text-gray-800">
-            Objetivos Estratégicos Institucionales
-        </h2>
+        <!-- Encabezado -->
+        <div class="mb-2">
 
-        <!--<p class="mt-1 text-gray-500">
-            Consulte y administre los Objetivos Estratégicos Institucionales.
-        </p>-->
-
-    </div>
-
-    <!-- Resumen -->
-    <div class="flex items-center justify-between mb-4">
-
-        <div>
-
-            <p class="text-sm text-gray-500">
-                {{ $objetivos->count() }} registros ·
-                <span class="text-green-600 font-medium">
-                    {{ $objetivos->where('estado', 'Activo')->count() }}
-                </span>
-                activos ·
-                <span class="text-red-600 font-medium">
-                    {{ $objetivos->where('estado', 'Inactivo')->count() }}
-                </span>
-                inactivos
-            </p>
+            <h2 class="text-2xl font-semibold text-gray-800">
+                Objetivos Estratégicos Institucionales
+            </h2>
 
         </div>
 
-        <a href="{{ route('objetivos.create') }}"
-        class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+        <!-- Resumen y acción -->
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
 
-            <i class="bi bi-plus-lg"></i>
+            <p class="text-sm text-gray-500">
 
-            Crear objetivo
+                <span class="font-medium text-gray-700">
+                    {{ $objetivos->total() }}
+                </span>
 
-        </a>
+                registros encontrados
 
-    </div>
+            </p>
 
-    <!-- Tabla -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 160px);">
+            <a href="{{ route('objetivos.create') }}"
+               class="inline-flex h-10 items-center gap-2 rounded-md bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700">
 
-        <div class="bg-white border border-gray-200 rounded-lg">
+                <i class="bi bi-plus-lg"></i>
 
-            <table class="min-w-full">
+                Crear objetivo
 
-                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+            </a>
 
-                    <tr>
+        </div>
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Nro
-                        </th>
+        <!-- Scroll vertical -->
+        <div class="min-w-0 w-full max-w-full overflow-y-auto"
+             style="
+                height: calc(100vh - 175px);
+                overflow-x: hidden;
+             ">
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Código
-                        </th>
+            <!-- Tabla -->
+            <div class="min-w-0 overflow-hidden rounded-lg border border-gray-200 bg-white">
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Nombre
-                        </th>
+                <table class="w-full table-fixed">
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Estado
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-                <tbody>
-                                        @forelse($objetivos as $objetivo)
-
-                        <tr class="border-b border-gray-100 hover:bg-gray-50">
-
-                            <!-- Nro -->
-                            <td class="px-2 py-2 text-sm text-gray-600">
-                                {{ $loop->iteration }}
-                            </td>
-
-                            <!-- Código -->
-                            <td class="px-2 py-2 text-sm text-gray-600">
-                                {{ $objetivo->codigo }}
-                            </td>
-
-                            <!-- Nombre -->
-                            <td class="px-2 py-2">
-
-                                <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
-                                class="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
-
-                                    {{ \Illuminate\Support\Str::limit($objetivo->nombre, ) }}
-
-                                </a>
-
-                                <div class="mt-1 text-xs">
-
-                                    <span class="font-medium text-gray-600">Entidad: </span>
-                                    <span class="text-gray-500">
-                                        {{ $objetivo->plan?->entidad?->nombre ?? 'No registra' }}
-                                    </span>
-
-                                </div>
-
-                                <div class="text-xs">
-
-                                    <span class="font-medium text-gray-600">Plan: </span>
-                                    <span class="text-gray-500">
-                                        {{ \Illuminate\Support\Str::limit($objetivo->plan?->nombre ?? 'No registra',) }}
-                                    </span>
-
-                                </div>
-
-                            </td>
-
-                            <!-- Estado -->
-                            <td class="px-2 py-2">
-
-                                @if($objetivo->estado == 'Activo')
-
-                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                                        Activo
-                                    </span>
-
-                                @else
-
-                                    <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                                        Inactivo
-                                    </span>
-
-                                @endif
-
-                            </td>
-
-                        </tr>
-
-                    @empty
+                    <thead class="sticky top-0 z-10 border-b border-gray-200 bg-gray-50">
 
                         <tr>
 
-                            <td colspan="6"
-                                class="px-4 py-6 text-center text-gray-500">
+                            <th class="w-16 px-3 py-2 text-left text-sm font-semibold text-gray-700">
+                                Nro.
+                            </th>
 
-                                No existen Objetivos Estratégicos Institucionales registrados.
+                            <th class="w-32 px-3 py-2 text-left text-sm font-semibold text-gray-700">
+                                Código
+                            </th>
 
-                            </td>
+                            <th class="px-3 py-2 text-left text-sm font-semibold text-gray-700">
+                                Nombre
+                            </th>
+
+                            <th class="w-28 px-3 py-2 text-left text-sm font-semibold text-gray-700">
+                                Estado
+                            </th>
 
                         </tr>
 
-                    @endforelse
+                    </thead>
 
-                </tbody>
+                    <tbody>
 
-            </table>
+                        @forelse($objetivos as $objetivo)
+
+                            <tr class="border-b border-gray-100 hover:bg-gray-50">
+
+                                <!-- Número -->
+                                <td class="px-3 py-3 text-sm text-gray-600">
+
+                                    {{ $objetivos->firstItem() + $loop->index }}
+
+                                </td>
+
+                                <!-- Código -->
+                                <td class="px-3 py-3 text-sm text-gray-600">
+
+                                    {{ $objetivo->codigo }}
+
+                                </td>
+
+                                <!-- Nombre -->
+                                <td class="min-w-0 px-3 py-3">
+
+                                    <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
+                                       class="break-words text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+
+                                        {{ \Illuminate\Support\Str::limit(
+                                            $objetivo->nombre,
+                                            90
+                                        ) }}
+
+                                    </a>
+
+                                    <div class="mt-1 min-w-0 text-xs">
+
+                                        <span class="font-medium text-gray-600">
+                                            Entidad:
+                                        </span>
+
+                                        <span class="break-words text-gray-500">
+                                            {{ $objetivo->plan?->entidad?->nombre ?? 'No registra' }}
+                                        </span>
+
+                                    </div>
+
+                                    <div class="min-w-0 text-xs">
+
+                                        <span class="font-medium text-gray-600">
+                                            Plan:
+                                        </span>
+
+                                        <span class="break-words text-gray-500">
+
+                                            {{ \Illuminate\Support\Str::limit(
+                                                $objetivo->plan?->nombre ?? 'No registra',
+                                                80
+                                            ) }}
+
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+                                <!-- Estado -->
+                                <td class="px-3 py-3">
+
+                                    @if($objetivo->estado === 'Activo')
+
+                                        <span class="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                                            Activo
+                                        </span>
+
+                                    @else
+
+                                        <span class="inline-flex rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700">
+                                            Inactivo
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td colspan="4"
+                                    class="px-4 py-8 text-center text-sm text-gray-500">
+
+                                    No existen Objetivos Estratégicos Institucionales registrados.
+
+                                </td>
+
+                            </tr>
+
+                        @endforelse
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <!-- Pie de tabla -->
+            <div class="mt-5">
+
+                <div class="flex flex-wrap items-center justify-between gap-4">
+
+                    <p class="text-sm text-gray-600">
+
+                        Mostrando
+
+                        <span class="font-medium">
+                            {{ $objetivos->firstItem() ?? 0 }}
+                        </span>
+
+                        a
+
+                        <span class="font-medium">
+                            {{ $objetivos->lastItem() ?? 0 }}
+                        </span>
+
+                        de
+
+                        <span class="font-medium">
+                            {{ $objetivos->total() }}
+                        </span>
+
+                        registros.
+
+                    </p>
+
+                </div>
+
+                @if($objetivos->hasPages())
+
+                    <div class="mt-4">
+                        {{ $objetivos->links() }}
+                    </div>
+
+                @endif
+
+            </div>
 
         </div>
-            <!-- Pie de tabla -->
-    <div class="flex items-center justify-between mt-6">
-
-        <p class="text-sm text-gray-600">
-            Mostrando <span class="font-medium">{{ $objetivos->count() }}</span> registros.
-        </p>
 
     </div>
 

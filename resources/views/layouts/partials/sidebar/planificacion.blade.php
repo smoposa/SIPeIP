@@ -59,20 +59,6 @@
 
             @endif
 
-            <!-- Indicadores -->
-            @if(puedeVer('indicadores'))
-
-                <a href="{{ route('indicadores.listar') }}"
-                   class="{{ request()->routeIs('indicadores.*')
-                        ? 'sidebar-submenu-active'
-                        : 'sidebar-submenu' }}">
-
-                    Indicadores
-
-                </a>
-
-            @endif
-
             <!-- Metas -->
             @if(puedeVer('metas'))
 
@@ -87,6 +73,19 @@
 
             @endif
 
+            <!-- Indicadores -->
+            @if(puedeVer('indicadores'))
+
+                <a href="{{ route('indicadores.listar') }}"
+                   class="{{ request()->routeIs('indicadores.*')
+                        ? 'sidebar-submenu-active'
+                        : 'sidebar-submenu' }}">
+
+                    Indicadores
+
+                </a>
+
+            @endif
 
         </div>
 

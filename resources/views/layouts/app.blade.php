@@ -20,19 +20,19 @@
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         </head>
 
-        <body class="font-sans antialiased">
+        <body class="overflow-x-hidden font-sans antialiased">
 
-            <div class="flex h-screen bg-white">
+            <div class="flex min-h-screen w-full bg-white">
 
                 <!-- Sidebar -->
-                <aside class="w-64 bg-white border-r border-gray-200 shadow-sm">
+                <aside class="w-64 flex-shrink-0 bg-white border-r border-gray-200 shadow-sm">
 
                     @include('layouts.sidebar')
 
                 </aside>
 
                 <!-- Contenido -->
-                <div class="flex-1">
+                <div class="min-w-0 flex-1">
 
                     @include('layouts.navigation')
                     {{-- @include('layouts.navigation') --}}
@@ -47,7 +47,7 @@
                     @endisset
 
                     <!-- Page Content -->
-                    <main>
+                    <main class="min-w-0 max-w-full overflow-x-hidden">
                         {{ $slot }}
                     </main>
 

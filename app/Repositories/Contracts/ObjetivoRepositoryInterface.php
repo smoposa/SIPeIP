@@ -9,13 +9,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface ObjetivoRepositoryInterface
 {
-    public function contarPorEntidad(int $entidadId): int;
-
-    public function contarPorEstadoYEntidad(
-        string $estado,
-        int $entidadId
-    ): int;
-
     public function listarPorEntidad(
         int $entidadId,
         int $porPagina = 10

@@ -1,8 +1,7 @@
 <!-- Información General -->
 <div class="mb-8">
 
-    <!-- Encabezado -->
-    <div class="bg-[#F3F2F1] border-b border-gray-200 px-4 py-2 mb-5">
+    <div class="mb-5 border-b border-gray-200 bg-[#F3F2F1] px-4 py-2">
 
         <h2 class="text-sm font-semibold text-gray-700">
             Información General
@@ -10,90 +9,115 @@
 
     </div>
 
-    <!-- Contenido -->
     <div class="pl-8">
 
-        {{-- Plan (solo cuando NO viene desde el asistente) --}}
+        {{-- Plan cuando no viene seleccionado desde el asistente --}}
         @if(!$planSeleccionado)
 
-            <div class="flex items-center mb-5">
+            <div class="mb-5 flex items-center gap-4">
 
                 <label for="plan_id"
-                       class="w-52 text-sm font-semibold text-gray-700">
+                       class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
                     Plan
                     <span class="text-red-500">*</span>
+
                 </label>
 
-                <select
-                    id="plan_id"
-                    name="plan_id"
-                    class="flex-1 rounded-lg border-gray-300">
+                <div class="min-w-0 flex-1">
 
-                    <option value="">Seleccione un plan</option>
+                    <select id="plan_id"
+                            name="plan_id"
+                            required
+                            class="h-10 w-full min-w-0 rounded-md border-gray-300 px-3 text-sm">
 
-                    @foreach($planes as $plan)
+                        <option value="">Seleccione un plan</option>
 
-                        <option value="{{ $plan->id }}"
-                            {{ old('plan_id') == $plan->id ? 'selected' : '' }}>
+                        @foreach($planes as $plan)
 
-                            {{ $plan->codigo }} - {{ $plan->nombre }}
+                            <option value="{{ $plan->id }}"
+                                {{ old('plan_id') == $plan->id ? 'selected' : '' }}>
 
-                        </option>
+                                {{ $plan->codigo }} - {{ $plan->nombre }}
 
-                    @endforeach
+                            </option>
 
-                </select>
+                        @endforeach
+
+                    </select>
+
+                </div>
 
             </div>
 
         @endif
 
         <!-- Código -->
-        <div class="flex items-center mb-5">
+        <div class="mb-5 flex items-center gap-4">
 
             <label for="codigo"
-                   class="w-52 text-sm font-semibold text-gray-700">
+                   class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
                 Código
+
             </label>
 
-            <input type="text"
-                   id="codigo"
-                   value="{{ $codigo }}"
-                   readonly
-                   class="flex-1 rounded-lg border-gray-300 bg-gray-100">
+            <div class="min-w-0 flex-1">
+
+                <input type="text"
+                       id="codigo"
+                       value="{{ $codigo }}"
+                       readonly
+                       class="h-10 w-full min-w-0 cursor-not-allowed rounded-md border-gray-300 bg-gray-100 px-3 text-sm text-gray-600">
+
+            </div>
 
         </div>
 
         <!-- Nombre -->
-        <div class="flex items-center mb-5">
+        <div class="mb-5 flex items-center gap-4">
 
             <label for="nombre"
-                   class="w-52 text-sm font-semibold text-gray-700">
+                   class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
                 Nombre del Objetivo
                 <span class="text-red-500">*</span>
+
             </label>
 
-            <input type="text"
-                   id="nombre"
-                   name="nombre"
-                   value="{{ old('nombre') }}"
-                   class="flex-1 rounded-lg border-gray-300">
+            <div class="min-w-0 flex-1">
+
+                <input type="text"
+                       id="nombre"
+                       name="nombre"
+                       maxlength="255"
+                       value="{{ old('nombre') }}"
+                       required
+                       class="h-10 w-full min-w-0 rounded-md border-gray-300 px-3 text-sm">
+
+            </div>
 
         </div>
 
         <!-- Descripción -->
-        <div class="flex items-start">
+        <div class="flex items-start gap-4">
 
             <label for="descripcion"
-                   class="w-52 text-sm font-semibold text-gray-700 pt-3">
+                   class="w-52 flex-shrink-0 pt-2 text-sm font-semibold text-gray-700">
+
                 Descripción
+
             </label>
 
-            <textarea
-                id="descripcion"
-                name="descripcion"
-                rows="4"
-                class="flex-1 rounded-lg border-gray-300">{{ old('descripcion') }}</textarea>
+            <div class="min-w-0 flex-1">
+
+                <textarea id="descripcion"
+                          name="descripcion"
+                          rows="4"
+                          maxlength="1000"
+                          class="w-full min-w-0 rounded-md border-gray-300 px-3 py-2 text-sm">{{ old('descripcion') }}</textarea>
+
+            </div>
 
         </div>
 

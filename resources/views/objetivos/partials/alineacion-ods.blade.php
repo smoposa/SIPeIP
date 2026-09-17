@@ -1,8 +1,7 @@
 <!-- Alineación con los Objetivos de Desarrollo Sostenible -->
 <div class="mb-8">
 
-    <!-- Encabezado -->
-    <div class="bg-[#F3F2F1] border-b border-gray-200 px-4 py-2 mb-5">
+    <div class="mb-5 border-b border-gray-200 bg-[#F3F2F1] px-4 py-2">
 
         <h2 class="text-sm font-semibold text-gray-700">
             Alineación con los Objetivos de Desarrollo Sostenible
@@ -10,61 +9,70 @@
 
     </div>
 
-    <!-- Contenido -->
     <div class="pl-8">
 
         <!-- ODS -->
-        <div class="flex items-center mb-5">
+        <div class="mb-5 flex items-center gap-4">
 
             <label for="ods_id"
-                   class="w-52 text-sm font-semibold text-gray-700">
+                   class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
                 ODS
                 <span class="text-red-500">*</span>
+
             </label>
 
-            <select
-                id="ods_id"
-                name="ods_id"
-                required
-                class="flex-1 rounded-lg border-gray-300">
+            <div class="min-w-0 flex-1">
 
-                <option value="">Seleccione</option>
+                <select id="ods_id"
+                        name="ods_id"
+                        required
+                        class="h-10 w-full min-w-0 rounded-md border-gray-300 px-3 text-sm">
 
-                @foreach($ods as $objetivo)
+                    <option value="">Seleccione</option>
 
-                    <option value="{{ $objetivo->id }}"
-                        {{ old('ods_id') == $objetivo->id ? 'selected' : '' }}>
+                    @foreach($ods as $objetivo)
 
-                        {{ $objetivo->codigo }} - {{ $objetivo->nombre }}
+                        <option value="{{ $objetivo->id }}"
+                            {{ old('ods_id') == $objetivo->id ? 'selected' : '' }}>
 
-                    </option>
+                            {{ $objetivo->codigo }} - {{ $objetivo->nombre }}
 
-                @endforeach
+                        </option>
 
-            </select>
+                    @endforeach
+
+                </select>
+
+            </div>
 
         </div>
 
         <!-- Meta ODS -->
-        <div class="flex items-center">
+        <div class="flex items-center gap-4">
 
             <label for="ods_meta_id"
-                   class="w-52 text-sm font-semibold text-gray-700">
+                   class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
                 Meta ODS
                 <span class="text-red-500">*</span>
+
             </label>
 
-            <select
-                id="ods_meta_id"
-                name="ods_meta_id"
-                required
-                class="flex-1 rounded-lg border-gray-300">
+            <div class="min-w-0 flex-1">
 
-                <option value="">
-                    Seleccione un ODS primero
-                </option>
+                <select id="ods_meta_id"
+                        name="ods_meta_id"
+                        required
+                        class="h-10 w-full min-w-0 rounded-md border-gray-300 px-3 text-sm">
 
-            </select>
+                    <option value="">
+                        Seleccione un ODS primero
+                    </option>
+
+                </select>
+
+            </div>
 
         </div>
 
@@ -73,73 +81,77 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
+    const ods = document.getElementById('ods_id');
+    const meta = document.getElementById('ods_meta_id');
 
-        const ods = document.getElementById('ods_id');
-        const meta = document.getElementById('ods_meta_id');
+    const metaSeleccionada =
+        @json(old('ods_meta_id'));
 
-        ods.addEventListener('change', function () {
+    function cargarMetas(
+        odsId,
+        seleccionada = null
+    ) {
+        meta.innerHTML =
+            '<option value="">Cargando...</option>';
 
+        if (!odsId) {
             meta.innerHTML =
-                '<option value="">Cargando...</option>';
+                '<option value="">Seleccione un ODS primero</option>';
 
-            if (!this.value) {
+            return;
+        }
+
+        fetch(`/objetivos/ods/${odsId}/metas`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(
+                        'Error al obtener las metas.'
+                    );
+                }
+
+                return response.json();
+            })
+            .then(data => {
+                meta.innerHTML =
+                    '<option value="">Seleccione una meta ODS</option>';
+
+                if (data.length === 0) {
+                    meta.innerHTML =
+                        '<option value="">No existen metas registradas</option>';
+
+                    return;
+                }
+
+                data.forEach(item => {
+                    const option = new Option(
+                        `${item.codigo} - ${item.nombre}`,
+                        item.id
+                    );
+
+                    option.selected =
+                        String(item.id) === String(seleccionada);
+
+                    meta.add(option);
+                });
+            })
+            .catch(error => {
+                console.error(error);
 
                 meta.innerHTML =
-                    '<option value="">Seleccione un ODS primero</option>';
+                    '<option value="">Error al cargar las metas</option>';
+            });
+    }
 
-                return;
-
-            }
-
-            fetch(`/objetivos/ods/${this.value}/metas`)
-
-                .then(response => {
-
-                    if (!response.ok) {
-                        throw new Error('Error al obtener las metas.');
-                    }
-
-                    return response.json();
-
-                })
-
-                .then(data => {
-
-                    meta.innerHTML =
-                        '<option value="">Seleccione una meta ODS</option>';
-
-                    if (data.length === 0) {
-
-                        meta.innerHTML =
-                            '<option value="">No existen metas registradas</option>';
-
-                        return;
-
-                    }
-
-                    data.forEach(item => {
-
-                        meta.innerHTML += `
-                            <option value="${item.id}">
-                                ${item.codigo} - ${item.nombre}
-                            </option>
-                        `;
-
-                    });
-
-                })
-
-                .catch(error => {
-
-                    console.error(error);
-
-                    meta.innerHTML =
-                        '<option value="">Error al cargar las metas</option>';
-
-                });
-
-        });
-
+    ods.addEventListener('change', function () {
+        cargarMetas(this.value);
     });
+
+    if (ods.value) {
+        cargarMetas(
+            ods.value,
+            metaSeleccionada
+        );
+    }
+});
 </script>

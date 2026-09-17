@@ -21,45 +21,6 @@ class ObjetivoService
     }
 
     /**
-     * Obtener resumen de objetivos de la entidad.
-     */
-    public function obtenerResumen(User $usuario): array
-    {
-        $entidadId = $this->obtenerEntidadId($usuario);
-
-        $totalObjetivos = $this->objetivoRepository
-            ->contarPorEntidad($entidadId);
-
-        return [
-            'totalObjetivos' => $totalObjetivos,
-
-            'objetivosActivos' =>
-                $this->objetivoRepository
-                    ->contarPorEstadoYEntidad(
-                        EstadoObjetivo::ACTIVO->value,
-                        $entidadId
-                    ),
-
-            'objetivosInactivos' =>
-                $this->objetivoRepository
-                    ->contarPorEstadoYEntidad(
-                        EstadoObjetivo::INACTIVO->value,
-                        $entidadId
-                    ),
-
-            'totalODS' => $this->objetivoRepository
-                ->obtenerOdsActivos()
-                ->count(),
-
-            'totalPND' => $this->objetivoRepository
-                ->obtenerPndActivos()
-                ->count(),
-
-            'totalOEI' => $totalObjetivos,
-        ];
-    }
-
-    /**
      * Listar objetivos de la entidad.
      */
     public function listar(

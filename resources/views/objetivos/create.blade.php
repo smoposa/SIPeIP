@@ -113,8 +113,12 @@
 
         @endif
 
-        <div class="overflow-y-auto"
-             style="height: calc(100vh - 230px);">
+        <div class="min-w-0 w-full max-w-full overflow-y-auto"
+            style="
+                height: calc(100vh - 190px);
+                max-width: 100%;
+                overflow-x: hidden;
+            ">
 
             <form method="POST"
                   action="{{ route('objetivos.store') }}">
