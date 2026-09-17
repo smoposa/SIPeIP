@@ -32,6 +32,10 @@ use App\Repositories\Eloquent\PlanRepository;
 use App\Repositories\Contracts\ObjetivoRepositoryInterface;
 use App\Repositories\Eloquent\ObjetivoRepository;
 
+// Metas
+use App\Repositories\Contracts\MetaRepositoryInterface;
+use App\Repositories\Eloquent\MetaRepository;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -79,6 +83,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ObjetivoRepositoryInterface::class,
             ObjetivoRepository::class
+        );
+
+        // Metas
+        $this->app->bind(
+            MetaRepositoryInterface::class,
+            MetaRepository::class
         );
     }
 
