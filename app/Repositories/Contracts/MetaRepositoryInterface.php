@@ -10,6 +10,15 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface MetaRepositoryInterface
 {
+    public function contarPorEntidad(
+        int $entidadId
+    ): int;
+
+    public function contarPorEstadoYEntidad(
+        string $estado,
+        int $entidadId
+    ): int;
+
     public function listarPorEntidad(
         int $entidadId,
         int $porPagina = 15

@@ -11,6 +11,39 @@ use Illuminate\Database\Eloquent\Collection;
 
 class MetaRepository implements MetaRepositoryInterface
 {
+    public function contarPorEntidad(
+        int $entidadId
+    ): int {
+        return Meta::query()
+            ->whereHas(
+                'objetivo.plan',
+                fn ($query) => $query->where(
+                    'entidad_id',
+                    $entidadId
+                )
+            )
+            ->count();
+    }
+
+    public function contarPorEstadoYEntidad(
+        string $estado,
+        int $entidadId
+    ): int {
+        return Meta::query()
+            ->where(
+                'estado',
+                $estado
+            )
+            ->whereHas(
+                'objetivo.plan',
+                fn ($query) => $query->where(
+                    'entidad_id',
+                    $entidadId
+                )
+            )
+            ->count();
+    }
+
     public function listarPorEntidad(
         int $entidadId,
         int $porPagina = 15

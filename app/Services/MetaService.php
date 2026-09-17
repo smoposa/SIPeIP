@@ -33,6 +33,36 @@ class MetaService
             );
     }
 
+        /**
+     * Obtener el resumen de metas de la entidad.
+     */
+    public function obtenerResumen(
+        User $usuario
+    ): array {
+        $entidadId = $this->obtenerEntidadId(
+            $usuario
+        );
+
+        return [
+            'totalMetas' => $this->metaRepository
+                ->contarPorEntidad(
+                    $entidadId
+                ),
+
+            'metasActivas' => $this->metaRepository
+                ->contarPorEstadoYEntidad(
+                    EstadoMeta::ACTIVO->value,
+                    $entidadId
+                ),
+
+            'metasInactivas' => $this->metaRepository
+                ->contarPorEstadoYEntidad(
+                    EstadoMeta::INACTIVO->value,
+                    $entidadId
+                ),
+        ];
+    }
+
     /**
      * Obtener los datos necesarios para crear una meta.
      */

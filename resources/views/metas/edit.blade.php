@@ -1,31 +1,12 @@
 <x-objetivos-layout title="Editar Meta">
 
-    @if(session('success'))
-        <div id="alertSuccess"
-             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-
-            {{ session('success') }}
-
-        </div>
-
-        <script>
-            setTimeout(() => {
-                const alerta = document.getElementById('alertSuccess');
-
-                if (alerta) {
-                    alerta.remove();
-                }
-            }, 3000);
-        </script>
-    @endif
-
     <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-0">
+    <div class="mb-0 border-b border-gray-300 bg-white">
 
-        <div class="flex">
+        <div class="flex flex-wrap items-center">
 
             <a href="{{ route('metas.detalle', $meta->id) }}"
-               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+               class="mr-8 py-2 text-sm font-medium text-blue-500 hover:text-blue-800">
 
                 <i class="bi bi-chevron-left"></i>
 
@@ -37,33 +18,35 @@
 
     </div>
 
-    <!-- Información -->
-    <div class="bg-white p-6 shadow-sm">
+    <!-- Contenido -->
+    <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
 
         <!-- Encabezado -->
         <div class="mb-6">
 
             <h2 class="text-2xl font-semibold text-gray-800">
-                Actualizar Meta
+                Actualizar meta institucional
             </h2>
 
             <p class="mt-1 text-sm text-gray-500">
-                Modifique la información de la Meta Institucional.
+                Modifique la información general y los valores de la meta.
             </p>
 
         </div>
 
         <!-- Validaciones -->
-        @if ($errors->any())
+        @if($errors->any())
 
-            <div class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
+            <div class="mb-6 rounded-lg border border-red-300 bg-red-50 p-4">
 
-                <ul class="list-disc list-inside text-sm text-red-700">
+                <p class="mb-2 text-sm font-semibold text-red-700">
+                    Revise los siguientes campos:
+                </p>
 
-                    @foreach ($errors->all() as $error)
+                <ul class="list-inside list-disc text-sm text-red-700">
 
+                    @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
-
                     @endforeach
 
                 </ul>
@@ -72,403 +55,431 @@
 
         @endif
 
+        @if(session('error'))
+
+            <div class="mb-6 rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-700">
+                {{ session('error') }}
+            </div>
+
+        @endif
+
         <!-- Scroll -->
-        <div class="overflow-y-auto" style="height: calc(100vh - 300px);">
+        <div class="min-w-0 w-full max-w-full overflow-y-auto"
+             style="
+                height: calc(100vh - 300px);
+                overflow-x: hidden;
+             ">
 
-<form method="POST"
-      action="{{ route('metas.update', $meta->id) }}">
+            <form method="POST"
+                  action="{{ route('metas.update', $meta->id) }}"
+                  class="min-w-0 w-full max-w-full"
+                  style="overflow-x: hidden;">
 
-    @csrf
-    @method('PUT')
+                @csrf
+                @method('PUT')
 
-    <div class="space-y-6">
+                <div class="space-y-8">
 
-        <!-- ===================== -->
-        <!-- Información General -->
-        <!-- ===================== -->
+                    <!-- Información general -->
+                    <div>
 
-        <div>
+                        <div class="mb-5 border-b border-gray-200 bg-[#F3F2F1] px-4 py-2">
 
-            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">
+                            <h3 class="text-sm font-semibold text-gray-700">
+                                Información general
+                            </h3>
 
-                Información General
+                        </div>
 
-            </h3>
+                        <div class="space-y-5 pl-8">
 
-            <!-- Objetivo -->
+                            <!-- Objetivo -->
+                            <div class="flex items-center gap-4">
 
-            <div class="flex items-center mb-4">
+                                <label for="objetivo_id"
+                                       class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
 
-                <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
+                                    Objetivo estratégico
+                                    <span class="text-red-500">*</span>
 
-                    Objetivo Estratégico
-                    <span class="text-red-500">*</span>
+                                </label>
 
-                </label>
+                                <div class="min-w-0 flex-1">
 
-                <div class="flex-1">
+                                    <select id="objetivo_id"
+                                            name="objetivo_id"
+                                            required
+                                            class="h-10 w-full min-w-0 rounded-lg border-gray-300 px-3 text-sm focus:border-blue-500 focus:ring-blue-500">
 
-                    <select
-                        name="objetivo_id"
-                        required
-                        class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
+                                        <option value="">
+                                            Seleccione un objetivo
+                                        </option>
 
-                        <option value="">Seleccione...</option>
+                                        @foreach($objetivos as $objetivo)
 
-                        @foreach($objetivos as $objetivo)
+                                            <option value="{{ $objetivo->id }}"
+                                                {{ old(
+                                                    'objetivo_id',
+                                                    $meta->objetivo_id
+                                                ) == $objetivo->id ? 'selected' : '' }}>
 
-                            <option
-                                value="{{ $objetivo->id }}"
-                                {{ old('objetivo_id', $meta->objetivo_id) == $objetivo->id ? 'selected' : '' }}>
+                                                {{ $objetivo->codigo }} - {{ $objetivo->nombre }}
 
-                                {{ $objetivo->codigo }}
-                                -
-                                {{ $objetivo->nombre }}
+                                            </option>
 
-                            </option>
+                                        @endforeach
 
-                        @endforeach
+                                    </select>
 
-                    </select>
+                                </div>
+
+                            </div>
+
+                            <!-- Código -->
+                            <div class="flex items-center gap-4">
+
+                                <label for="codigo"
+                                       class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+                                    Código
+                                </label>
+
+                                <div class="min-w-0 flex-1">
+
+                                    <input type="text"
+                                           id="codigo"
+                                           value="{{ $meta->codigo }}"
+                                           readonly
+                                           class="h-10 w-full min-w-0 cursor-not-allowed rounded-lg border-gray-300 bg-gray-100 px-3 text-sm text-gray-500">
+
+                                </div>
+
+                            </div>
+
+                            <!-- Nombre -->
+                            <div class="flex items-center gap-4">
+
+                                <label for="nombre"
+                                       class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
+                                    Nombre de la meta
+                                    <span class="text-red-500">*</span>
+
+                                </label>
+
+                                <div class="min-w-0 flex-1">
+
+                                    <input type="text"
+                                           id="nombre"
+                                           name="nombre"
+                                           maxlength="255"
+                                           value="{{ old('nombre', $meta->nombre) }}"
+                                           required
+                                           class="h-10 w-full min-w-0 rounded-lg border-gray-300 px-3 text-sm focus:border-blue-500 focus:ring-blue-500">
+
+                                </div>
+
+                            </div>
+
+                            <!-- Descripción -->
+                            <div class="flex items-start gap-4">
+
+                                <label for="descripcion"
+                                       class="w-52 flex-shrink-0 pt-2 text-sm font-semibold text-gray-700">
+                                    Descripción
+                                </label>
+
+                                <div class="min-w-0 flex-1">
+
+                                    <textarea id="descripcion"
+                                              name="descripcion"
+                                              rows="4"
+                                              class="w-full min-w-0 rounded-lg border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500">{{ old('descripcion', $meta->descripcion) }}</textarea>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Valores -->
+                    <div>
+
+                        <div class="mb-5 border-b border-gray-200 bg-[#F3F2F1] px-4 py-2">
+
+                            <h3 class="text-sm font-semibold text-gray-700">
+                                Valores de la meta
+                            </h3>
+
+                        </div>
+
+                        <div class="space-y-5 pl-8">
+
+                            <!-- Línea base -->
+                            <div class="flex items-center gap-4">
+
+                                <label for="linea_base"
+                                       class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
+                                    Línea base
+                                    <span class="text-red-500">*</span>
+
+                                </label>
+
+                                <div class="min-w-0 flex-1">
+
+                                    <input type="number"
+                                           id="linea_base"
+                                           name="linea_base"
+                                           step="0.01"
+                                           min="0"
+                                           max="99999999.99"
+                                           value="{{ old('linea_base', $meta->linea_base) }}"
+                                           required
+                                           class="h-10 w-full min-w-0 rounded-lg border-gray-300 px-3 text-sm focus:border-blue-500 focus:ring-blue-500">
+
+                                </div>
+
+                            </div>
+
+                            <!-- Valor meta -->
+                            <div class="flex items-center gap-4">
+
+                                <label for="valor_meta"
+                                       class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
+                                    Valor meta
+                                    <span class="text-red-500">*</span>
+
+                                </label>
+
+                                <div class="min-w-0 flex-1">
+
+                                    <input type="number"
+                                           id="valor_meta"
+                                           name="valor_meta"
+                                           step="0.01"
+                                           min="0"
+                                           max="99999999.99"
+                                           value="{{ old('valor_meta', $meta->valor_meta) }}"
+                                           required
+                                           class="h-10 w-full min-w-0 rounded-lg border-gray-300 px-3 text-sm focus:border-blue-500 focus:ring-blue-500">
+
+                                </div>
+
+                            </div>
+
+                            <!-- Unidad de medida -->
+                            <div class="flex items-center gap-4">
+
+                                <label for="unidad_medida"
+                                       class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
+                                    Unidad de medida
+                                    <span class="text-red-500">*</span>
+
+                                </label>
+
+                                <div class="min-w-0 flex-1">
+
+                                    @php
+                                        $unidadesMedida = [
+                                            'Porcentaje',
+                                            'Número',
+                                            'Cantidad',
+                                            'Personas',
+                                            'Beneficiarios',
+                                            'Instituciones',
+                                            'Centros de Salud',
+                                            'Hospitales',
+                                            'Establecimientos',
+                                            'Kilómetros',
+                                            'Metros cuadrados',
+                                            'Hectáreas',
+                                            'Dólares',
+                                            'Documentos',
+                                            'Procesos',
+                                            'Capacitaciones',
+                                            'Minutos',
+                                            'Horas',
+                                            'Días',
+                                            'Meses',
+                                            'Años',
+                                            'Unidades',
+                                            'Otro',
+                                        ];
+                                    @endphp
+
+                                    <select id="unidad_medida"
+                                            name="unidad_medida"
+                                            required
+                                            class="h-10 w-full min-w-0 rounded-lg border-gray-300 px-3 text-sm focus:border-blue-500 focus:ring-blue-500">
+
+                                        <option value="">
+                                            Seleccione una unidad
+                                        </option>
+
+                                        @foreach($unidadesMedida as $unidad)
+
+                                            <option value="{{ $unidad }}"
+                                                {{ old(
+                                                    'unidad_medida',
+                                                    $meta->unidad_medida
+                                                ) === $unidad ? 'selected' : '' }}>
+
+                                                {{ $unidad }}
+
+                                            </option>
+
+                                        @endforeach
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Planificación -->
+                    <div>
+
+                        <div class="mb-5 border-b border-gray-200 bg-[#F3F2F1] px-4 py-2">
+
+                            <h3 class="text-sm font-semibold text-gray-700">
+                                Planificación y responsabilidad
+                            </h3>
+
+                        </div>
+
+                        <div class="space-y-5 pl-8">
+
+                            <!-- Período -->
+                            <div class="flex items-center gap-4">
+
+                                <label class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
+                                    Período de vigencia
+                                    <span class="text-red-500">*</span>
+
+                                </label>
+
+                                <div class="flex min-w-0 flex-1 items-center gap-3">
+
+                                    <input type="number"
+                                           id="periodo_inicio"
+                                           name="periodo_inicio"
+                                           min="2000"
+                                           max="2100"
+                                           value="{{ old(
+                                                'periodo_inicio',
+                                                $meta->periodo_inicio
+                                           ) }}"
+                                           required
+                                           class="h-10 w-32 rounded-lg border-gray-300 px-3 text-sm focus:border-blue-500 focus:ring-blue-500">
+
+                                    <span class="font-semibold text-gray-500">
+                                        -
+                                    </span>
+
+                                    <input type="number"
+                                           id="periodo_fin"
+                                           name="periodo_fin"
+                                           min="2000"
+                                           max="2100"
+                                           value="{{ old(
+                                                'periodo_fin',
+                                                $meta->periodo_fin
+                                           ) }}"
+                                           required
+                                           class="h-10 w-32 rounded-lg border-gray-300 px-3 text-sm focus:border-blue-500 focus:ring-blue-500">
+
+                                </div>
+
+                            </div>
+
+                            <!-- Responsable -->
+                            <div class="flex items-center gap-4">
+
+                                <label for="responsable_id"
+                                       class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+
+                                    Responsable
+                                    <span class="text-red-500">*</span>
+
+                                </label>
+
+                                <div class="min-w-0 flex-1">
+
+                                    <select id="responsable_id"
+                                            name="responsable_id"
+                                            required
+                                            class="h-10 w-full min-w-0 rounded-lg border-gray-300 px-3 text-sm focus:border-blue-500 focus:ring-blue-500">
+
+                                        <option value="">
+                                            Seleccione un responsable
+                                        </option>
+
+                                        @foreach($responsables as $responsable)
+
+                                            <option value="{{ $responsable->id }}"
+                                                {{ old(
+                                                    'responsable_id',
+                                                    $meta->responsable_id
+                                                ) == $responsable->id ? 'selected' : '' }}>
+
+                                                {{ $responsable->nombres }}
+                                                {{ $responsable->apellidos }}
+
+                                                @if($responsable->cargo)
+                                                    - {{ $responsable->cargo }}
+                                                @endif
+
+                                            </option>
+
+                                        @endforeach
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Acciones -->
+                    <div class="border-t border-gray-200 pt-6">
+
+                        <div class="flex flex-wrap justify-end gap-3">
+
+                            <a href="{{ route('metas.detalle', $meta->id) }}"
+                               class="inline-flex h-10 items-center justify-center rounded-lg bg-gray-200 px-5 text-sm font-medium text-gray-700 transition hover:bg-gray-300">
+
+                                Cancelar
+
+                            </a>
+
+                            <button type="submit"
+                                    class="inline-flex h-10 items-center justify-center rounded-lg bg-[#024687] px-5 text-sm font-medium text-white transition hover:bg-[#01325f]">
+
+                                <i class="bi bi-check-circle mr-2"></i>
+
+                                Actualizar meta
+
+                            </button>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
-            </div>
-
-            <!-- Código -->
-
-            <div class="flex items-center mb-4">
-
-                <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-
-                    Código
-
-                </label>
-
-                <div class="flex-1">
-
-                    <input
-                        type="text"
-                        value="{{ $meta->codigo }}"
-                        disabled
-                        class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm bg-gray-100 text-gray-700 font-medium">
-
-                </div>
-
-            </div>
-
-            <!-- Nombre -->
-
-            <div class="flex items-center mb-4">
-
-                <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-
-                    Nombre
-                    <span class="text-red-500">*</span>
-
-                </label>
-
-                <div class="flex-1">
-
-                    <input
-                        type="text"
-                        name="nombre"
-                        maxlength="255"
-                        value="{{ old('nombre', $meta->nombre) }}"
-                        required
-                        class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
-
-                </div>
-
-            </div>
-
-            <!-- Descripción -->
-
-            <div class="flex items-start">
-
-                <label class="w-44 flex-shrink-0 pt-2 text-sm font-medium text-gray-700">
-
-                    Descripción
-
-                </label>
-
-                <div class="flex-1">
-
-                    <textarea
-                        name="descripcion"
-                        rows="4"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm">{{ old('descripcion', $meta->descripcion) }}</textarea>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- ===================== -->
-        <!-- Valores -->
-        <!-- ===================== -->
-
-        <div>
-
-            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">
-
-                Valores
-
-            </h3>
-
-            <!-- Línea base -->
-
-            <div class="flex items-center mb-4">
-
-                <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-
-                    Línea base
-                    <span class="text-red-500">*</span>
-
-                </label>
-
-                <div class="flex-1">
-
-                    <input
-                        type="number"
-                        step="0.01"
-                        name="linea_base"
-                        value="{{ old('linea_base', $meta->linea_base) }}"
-                        required
-                        class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
-
-                </div>
-
-            </div>
-
-            <!-- Valor meta -->
-
-            <div class="flex items-center mb-4">
-
-                <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-
-                    Valor meta
-                    <span class="text-red-500">*</span>
-
-                </label>
-
-                <div class="flex-1">
-
-                    <input
-                        type="number"
-                        step="0.01"
-                        name="valor_meta"
-                        value="{{ old('valor_meta', $meta->valor_meta) }}"
-                        required
-                        class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
-
-                </div>
-
-            </div>
-
-            <!-- Unidad de medida -->
-
-            <div class="flex items-center">
-
-                <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-
-                    Unidad de medida
-                    <span class="text-red-500">*</span>
-
-                </label>
-
-                <div class="flex-1">
-
-                    <select
-                        name="unidad_medida"
-                        required
-                        class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
-
-                        <option value="">Seleccione...</option>
-
-                        <option value="Porcentaje" {{ old('unidad_medida', $meta->unidad_medida) == 'Porcentaje' ? 'selected' : '' }}>Porcentaje</option>
-                        <option value="Número" {{ old('unidad_medida', $meta->unidad_medida) == 'Número' ? 'selected' : '' }}>Número</option>
-                        <option value="Cantidad" {{ old('unidad_medida', $meta->unidad_medida) == 'Cantidad' ? 'selected' : '' }}>Cantidad</option>
-                        <option value="Personas" {{ old('unidad_medida', $meta->unidad_medida) == 'Personas' ? 'selected' : '' }}>Personas</option>
-                        <option value="Instituciones" {{ old('unidad_medida', $meta->unidad_medida) == 'Instituciones' ? 'selected' : '' }}>Instituciones</option>
-                        <option value="Kilómetros" {{ old('unidad_medida', $meta->unidad_medida) == 'Kilómetros' ? 'selected' : '' }}>Kilómetros</option>
-                        <option value="Hectáreas" {{ old('unidad_medida', $meta->unidad_medida) == 'Hectáreas' ? 'selected' : '' }}>Hectáreas</option>
-                        <option value="Dólares" {{ old('unidad_medida', $meta->unidad_medida) == 'Dólares' ? 'selected' : '' }}>Dólares</option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-        </div>
-                <!-- ===================== -->
-        <!-- Planificación -->
-        <!-- ===================== -->
-
-        <div>
-
-            <h3 class="text-lg font-semibold text-gray-800 border-b pb-2 mb-4">
-
-                Planificación
-
-            </h3>
-
-            <!-- Período inicio -->
-
-            <div class="flex items-center mb-4">
-
-                <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-
-                    Período inicio
-                    <span class="text-red-500">*</span>
-
-                </label>
-
-                <div class="flex-1">
-
-                    <input
-                        type="number"
-                        name="periodo_inicio"
-                        min="2020"
-                        max="2100"
-                        value="{{ old('periodo_inicio', $meta->periodo_inicio) }}"
-                        required
-                        class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
-
-                </div>
-
-            </div>
-
-            <!-- Período fin -->
-
-            <div class="flex items-center mb-4">
-
-                <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-
-                    Período fin
-                    <span class="text-red-500">*</span>
-
-                </label>
-
-                <div class="flex-1">
-
-                    <input
-                        type="number"
-                        name="periodo_fin"
-                        min="2020"
-                        max="2100"
-                        value="{{ old('periodo_fin', $meta->periodo_fin) }}"
-                        required
-                        class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
-
-                </div>
-
-            </div>
-
-            <!-- Responsable -->
-
-            <div class="flex items-center mb-4">
-
-                <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-
-                    Responsable
-                    <span class="text-red-500">*</span>
-
-                </label>
-
-                <div class="flex-1">
-
-                    <select
-                        name="responsable_id"
-                        required
-                        class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
-
-                        <option value="">
-                            Seleccione...
-                        </option>
-
-                        @foreach($responsables as $responsable)
-
-                            <option
-                                value="{{ $responsable->id }}"
-                                {{ old('responsable_id', $meta->responsable_id) == $responsable->id ? 'selected' : '' }}>
-
-                                {{ $responsable->nombres }}
-                                {{ $responsable->apellidos }}
-                                - {{ $responsable->cargo }}
-
-                            </option>
-
-                        @endforeach
-
-                    </select>
-
-                </div>
-
-            </div>
-
-            <!-- Estado -->
-
-            <div class="flex items-center">
-
-                <label class="w-44 flex-shrink-0 text-sm font-medium text-gray-700">
-
-                    Estado
-                    <span class="text-red-500">*</span>
-
-                </label>
-
-                <div class="flex-1">
-
-                    <select
-                        name="estado"
-                        required
-                        class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm">
-
-                        <option value="Activo"
-                            {{ old('estado', $meta->estado) == 'Activo' ? 'selected' : '' }}>
-                            Activo
-                        </option>
-
-                        <option value="Inactivo"
-                            {{ old('estado', $meta->estado) == 'Inactivo' ? 'selected' : '' }}>
-                            Inactivo
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Botones -->
-
-        <div class="flex justify-end gap-3 pt-6 border-t">
-
-            <a href="{{ route('metas.detalle', $meta->id) }}"
-               class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
-
-                Cancelar
-
-            </a>
-
-            <button
-                type="submit"
-                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
-
-                Actualizar Meta
-
-            </button>
-
-        </div>
-
-    </div>
-
-</form>
+            </form>
 
         </div>
 

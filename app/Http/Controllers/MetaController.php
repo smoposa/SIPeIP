@@ -16,21 +16,30 @@ class MetaController extends Controller
     ) {
     }
 
-    /**
+     /**
      * Listar las metas de la entidad.
      */
     public function listar(): View
     {
         $this->autorizar('metas');
 
+        $usuario = auth()->user();
+
         $metas = $this->metaService->listar(
-            auth()->user()
+            $usuario
         );
 
-        return view(
-            'metas.listar',
-            compact('metas')
-        );
+        $resumen = $this->metaService
+            ->obtenerResumen(
+                $usuario
+            );
+
+        return view('metas.listar', [
+            'metas' => $metas,
+            'totalMetas' => $resumen['totalMetas'],
+            'metasActivas' => $resumen['metasActivas'],
+            'metasInactivas' => $resumen['metasInactivas'],
+        ]);
     }
 
     /**

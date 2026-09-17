@@ -1,12 +1,34 @@
 <x-objetivos-layout title="Detalle de la Meta">
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-0">
+    <!-- Mensaje de éxito -->
+    @if(session('success'))
 
-        <div class="flex">
+        <div id="alertSuccess"
+             class="fixed top-5 right-5 z-50 rounded-lg bg-green-600 px-6 py-3 text-white shadow-lg">
+
+            {{ session('success') }}
+
+        </div>
+
+        <script>
+            setTimeout(() => {
+                const alerta = document.getElementById('alertSuccess');
+
+                if (alerta) {
+                    alerta.remove();
+                }
+            }, 3000);
+        </script>
+
+    @endif
+
+    <!-- Barra de acciones -->
+    <div class="mb-0 border-b border-gray-300 bg-white">
+
+        <div class="flex flex-wrap items-center">
 
             <a href="{{ route('metas.listar') }}"
-            class="py-2 text-sm font-medium text-blue-600 hover:text-green-800 mr-8">
+               class="mr-8 py-2 text-sm font-medium text-blue-500 hover:text-blue-800">
 
                 <i class="bi bi-chevron-left"></i>
 
@@ -14,63 +36,28 @@
 
             </a>
 
-            <a href="{{ route('metas.detalle', $meta->id) }}"
-            class="{{ request()->routeIs('metas.detalle')
-                        ? 'px-3 py-2 text-sm text-green-700 bg-gray-100 transition'
-                        : 'px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition' }}">
+            <a href="{{ route('metas.edit', $meta->id) }}"
+               class="px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100">
 
-                <i class="bi bi-info-circle text-green-600 me-2"></i>
+                <i class="bi bi-pencil text-blue-500 me-2"></i>
 
-                Información General
+                Editar información
 
             </a>
 
-            <a href="#"
-            class="{{ request()->routeIs('metas.indicadores')
-                        ? 'px-3 py-2 text-sm text-green-700 bg-gray-100 transition'
-                        : 'px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition' }}">
+            <a href="{{ route('metas.editarestado', $meta->id) }}"
+               class="px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100">
 
-                <i class="bi bi-graph-up text-green-600 me-2"></i>
+                <i class="bi bi-check2-circle text-blue-500 me-2"></i>
 
-                Indicadores
-
-            </a>
-
-            <a href="#"
-            class="{{ request()->routeIs('metas.seguimiento')
-                        ? 'px-3 py-2 text-sm text-green-700 bg-gray-100 transition'
-                        : 'px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition' }}">
-
-                <i class="bi bi-clipboard-data text-green-600 me-2"></i>
-
-                Seguimiento
-
-            </a>
-
-            <a href="#"
-            class="{{ request()->routeIs('metas.presupuesto')
-                        ? 'px-3 py-2 text-sm text-green-700 bg-gray-100 transition'
-                        : 'px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition' }}">
-
-                <i class="bi bi-cash-stack text-green-600 me-2"></i>
-
-                Presupuesto
-
-            </a>
-
-            <a href="#"
-            class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-
-                <i class="bi bi-clock-history text-green-600 me-2"></i>
-
-                Historial
+                Editar estado
 
             </a>
 
             <a href="{{ url()->current() }}"
-            class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+               class="px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100">
 
-                <i class="bi bi-arrow-clockwise text-green-600 me-2"></i>
+                <i class="bi bi-arrow-clockwise text-blue-500 me-2"></i>
 
                 Actualizar
 
@@ -81,24 +68,26 @@
     </div>
 
     <!-- Scroll -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
+    <div class="min-w-0 w-full max-w-full overflow-y-auto"
+         style="
+            height: calc(100vh - 180px);
+            overflow-x: hidden;
+         ">
 
-        <div class="bg-white p-6 shadow-sm">
+        <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
 
             <!-- Cabecera -->
-            <div class="flex items-center gap-4 mb-0 pb-6">
+            <div class="mb-0 flex min-w-0 items-center gap-4 pb-6">
 
-                <div class="w-16 h-16 rounded-full bg-[#16A34A]
-                            flex items-center justify-center
-                            text-white text-3xl">
+                <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-[#024687] text-3xl text-white">
 
                     <i class="bi bi-bullseye"></i>
 
                 </div>
 
-                <div>
+                <div class="min-w-0">
 
-                    <h2 class="text-xl font-semibold text-gray-800">
+                    <h2 class="break-words text-xl font-semibold text-gray-800">
                         {{ $meta->nombre }}
                     </h2>
 
@@ -110,17 +99,17 @@
 
             </div>
 
-            <!-- Información General -->
-            <div class="bg-gray-100 border-b border-gray-200">
+            <!-- Información general -->
+            <div class="border-b border-gray-200 bg-gray-100">
 
-                <div class="flex justify-between items-center px-4 py-2">
+                <div class="flex items-center justify-between px-4 py-2">
 
                     <h4 class="text-sm font-semibold text-gray-800">
                         Información general
                     </h4>
 
                     <a href="{{ route('metas.edit', $meta->id) }}"
-                    class="text-sm text-blue-600 hover:text-blue-800">
+                       class="text-sm text-blue-600 hover:text-blue-800">
 
                         Editar
 
@@ -130,121 +119,165 @@
 
             </div>
 
-            <!-- Datos -->
-            <div class="px-4 py-3">
+            <!-- Datos generales -->
+            <div class="px-4 py-4">
 
-                <div class="space-y-4 mb-6">
+                <div class="mb-6 space-y-4">
 
                     <!-- Código -->
-                    <div class="flex">
+                    <div class="flex min-w-0">
 
-                        <span class="w-44 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Código
                         </span>
 
-                        <span class="text-sm text-gray-600">
+                        <span class="min-w-0 break-words text-sm text-gray-600">
                             {{ $meta->codigo }}
                         </span>
 
                     </div>
 
                     <!-- Objetivo -->
-                    <div class="flex">
+                    <div class="flex min-w-0">
 
-                        <span class="w-44 text-sm font-semibold text-gray-700">
-                            Objetivo Estratégico
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                            Objetivo estratégico
                         </span>
 
-                        <span class="text-sm text-gray-600">
-                            {{ $meta->objetivo->codigo }} - {{ $meta->objetivo->nombre }}
+                        <span class="min-w-0 break-words text-sm text-gray-600">
+
+                            {{ $meta->objetivo?->codigo ?? 'No registra' }}
+
+                            @if($meta->objetivo?->nombre)
+                                - {{ $meta->objetivo->nombre }}
+                            @endif
+
                         </span>
 
                     </div>
 
                     <!-- Plan -->
-                    <div class="flex">
+                    <div class="flex min-w-0">
 
-                        <span class="w-44 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Plan
                         </span>
 
-                        <span class="text-sm text-gray-600">
-                            {{ $meta->objetivo->plan->codigo }} - {{ $meta->objetivo->plan->nombre }}
+                        <span class="min-w-0 break-words text-sm text-gray-600">
+
+                            {{ $meta->objetivo?->plan?->codigo ?? 'No registra' }}
+
+                            @if($meta->objetivo?->plan?->nombre)
+                                - {{ $meta->objetivo->plan->nombre }}
+                            @endif
+
+                        </span>
+
+                    </div>
+
+                    <!-- Entidad -->
+                    <div class="flex min-w-0">
+
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                            Entidad
+                        </span>
+
+                        <span class="min-w-0 break-words text-sm text-gray-600">
+                            {{ $meta->objetivo?->plan?->entidad?->nombre ?? 'No registra' }}
                         </span>
 
                     </div>
 
                     <!-- Nombre -->
-                    <div class="flex">
+                    <div class="flex min-w-0">
 
-                        <span class="w-44 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Nombre
                         </span>
 
-                        <span class="text-sm font-medium text-[#16A34A]">
+                        <span class="min-w-0 break-words text-sm font-medium text-[#024687]">
                             {{ $meta->nombre }}
                         </span>
 
                     </div>
 
                     <!-- Descripción -->
-                    <div class="flex items-start">
+                    <div class="flex min-w-0 items-start">
 
                         <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Descripción
                         </span>
 
-                        <span class="text-sm text-gray-600 leading-relaxed">
+                        <span class="min-w-0 break-words text-sm leading-relaxed text-gray-600">
                             {{ $meta->descripcion ?: 'No registra' }}
                         </span>
 
                     </div>
 
-                    <!-- Línea base -->
-                    <div class="flex">
+                </div>
 
-                        <span class="w-44 text-sm font-semibold text-gray-700">
+            </div>
+
+            <!-- Valores y período -->
+            <div class="border-b border-gray-200 bg-gray-100">
+
+                <div class="px-4 py-2">
+
+                    <h4 class="text-sm font-semibold text-gray-800">
+                        Valores y período
+                    </h4>
+
+                </div>
+
+            </div>
+
+            <div class="px-4 py-4">
+
+                <div class="space-y-4">
+
+                    <!-- Línea base -->
+                    <div class="flex min-w-0">
+
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Línea base
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ number_format($meta->linea_base, 2) }}
-                            {{ $meta->unidad_medida }}
+                            {{ number_format((float) $meta->linea_base, 2) }}
                         </span>
 
                     </div>
 
                     <!-- Valor meta -->
-                    <div class="flex">
+                    <div class="flex min-w-0">
 
-                        <span class="w-44 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Valor meta
                         </span>
 
                         <span class="text-sm text-gray-600">
-                            {{ number_format($meta->valor_meta, 2) }}
-                            {{ $meta->unidad_medida }}
+                            {{ number_format((float) $meta->valor_meta, 2) }}
                         </span>
 
                     </div>
 
                     <!-- Unidad -->
-                    <div class="flex">
+                    <div class="flex min-w-0">
 
-                        <span class="w-44 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Unidad de medida
                         </span>
 
-                        <span class="text-sm text-gray-600">
+                        <span class="min-w-0 break-words text-sm text-gray-600">
                             {{ $meta->unidad_medida }}
                         </span>
 
                     </div>
 
                     <!-- Período -->
-                    <div class="flex">
+                    <div class="flex min-w-0">
 
-                        <span class="w-44 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Período
                         </span>
 
@@ -255,36 +288,20 @@
                     </div>
 
                     <!-- Responsable -->
-                    <div class="flex">
+                    <div class="flex min-w-0">
 
-                        <span class="w-44 text-sm font-semibold text-gray-700">
+                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
                             Responsable
                         </span>
 
-                        <span class="text-sm text-gray-600">
+                        <span class="min-w-0 break-words text-sm text-gray-600">
 
-                            {{ $meta->responsable->nombres }}
-                            {{ $meta->responsable->apellidos }}
+                            {{ $meta->responsable?->nombres ?? 'No registra' }}
+                            {{ $meta->responsable?->apellidos }}
 
-                            @if($meta->responsable->cargo)
+                            @if($meta->responsable?->cargo)
                                 - {{ $meta->responsable->cargo }}
                             @endif
-
-                        </span>
-
-                    </div>
-
-                    <!-- Registrado por -->
-                    <div class="flex">
-
-                        <span class="w-44 text-sm font-semibold text-gray-700">
-                            Registrado por
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-
-                            {{ $meta->usuario->nombres }}
-                            {{ $meta->usuario->apellidos }}
 
                         </span>
 
@@ -294,9 +311,8 @@
 
             </div>
 
-
             <!-- Estado -->
-            <div class="bg-gray-100 border-b border-gray-200">
+            <div class="border-b border-gray-200 bg-gray-100">
 
                 <div class="px-4 py-2">
 
@@ -308,45 +324,41 @@
 
             </div>
 
-            <div class="px-4 py-2">
+            <div class="px-4 py-4">
 
-                <div class="flex items-center mb-4">
+                <div class="flex items-center">
 
-                    <div class="flex items-center">
+                    <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                        Estado
+                    </span>
 
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Estado
+                    @if($meta->estado === 'Activo')
+
+                        <span class="rounded-full bg-green-100 px-2 py-1 text-xs text-green-700">
+                            Habilitada
                         </span>
 
-                        @if($meta->estado == 'Activo')
+                    @else
 
-                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                                Habilitada
-                            </span>
+                        <span class="rounded-full bg-red-100 px-2 py-1 text-xs text-red-700">
+                            Deshabilitada
+                        </span>
 
-                        @else
+                    @endif
 
-                            <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                                Deshabilitada
-                            </span>
+                    <a href="{{ route('metas.editarestado', $meta->id) }}"
+                       class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
 
-                        @endif
+                        Editar
 
-                        <a href="#"
-                        class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
-
-                            Editar
-
-                        </a>
-
-                    </div>
+                    </a>
 
                 </div>
 
             </div>
 
             <!-- Auditoría -->
-            <div class="bg-gray-100 border-b border-gray-200">
+            <div class="border-b border-gray-200 bg-gray-100">
 
                 <div class="px-4 py-2">
 
@@ -358,11 +370,30 @@
 
             </div>
 
-            <div class="px-4 py-2">
+            <div class="px-4 py-4">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 
-                    <!-- Fecha de creación -->
+                    <!-- Usuario creador -->
+                    <div>
+
+                        <p class="text-sm font-semibold text-gray-700">
+                            Registrado por
+                        </p>
+
+                        <p class="mt-1 text-sm text-gray-600">
+
+                            {{ $meta->usuario?->nombres
+                                ?? $meta->usuario?->name
+                                ?? 'No registra' }}
+
+                            {{ $meta->usuario?->apellidos }}
+
+                        </p>
+
+                    </div>
+
+                    <!-- Creación -->
                     <div>
 
                         <p class="text-sm font-semibold text-gray-700">
@@ -375,7 +406,7 @@
 
                     </div>
 
-                    <!-- Última actualización -->
+                    <!-- Actualización -->
                     <div>
 
                         <p class="text-sm font-semibold text-gray-700">
@@ -391,7 +422,9 @@
                 </div>
 
             </div>
+
         </div>
+
     </div>
 
 </x-objetivos-layout>
