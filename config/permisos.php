@@ -222,6 +222,35 @@ return [
 
         ],
 
+                /*
+        |--------------------------------------------------------------------------
+        | Indicadores
+        |--------------------------------------------------------------------------
+        */
+
+        'indicadores' => [
+
+            'crear' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_PLANIFICACION',
+                'ANALISTA_PLANIFICACION',
+            ],
+
+            'editar' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_PLANIFICACION',
+                'ANALISTA_PLANIFICACION',
+            ],
+
+            'estado' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_PLANIFICACION',
+                'ANALISTA_PLANIFICACION',
+            ],
+
+        ],
+
+
         /*
         |--------------------------------------------------------------------------
         | Usuarios

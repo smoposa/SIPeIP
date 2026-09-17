@@ -318,30 +318,35 @@ Route::middleware([
 
 
     // Indicadores
-    Route::prefix('indicadores')->group(function () {
+    Route::prefix('indicadores')
+        ->middleware('role:indicadores')
+        ->group(function () {
 
-        Route::get('/listar', [IndicadorController::class, 'listar'])
-            ->name('indicadores.listar');
+            Route::get('/listar', [IndicadorController::class, 'listar'])
+                ->name('indicadores.listar');
 
-        Route::get('/crear', [IndicadorController::class, 'create'])
-            ->name('indicadores.create');
+            Route::get('/crear', [IndicadorController::class, 'create'])
+                ->name('indicadores.create');
 
-        Route::post('/guardar', [IndicadorController::class, 'store'])
-            ->name('indicadores.store');
+            Route::post('/crear', [IndicadorController::class, 'store'])
+                ->name('indicadores.store');
 
-        Route::get('/detalle/{id}', [IndicadorController::class, 'detalle'])
-            ->name('indicadores.detalle');
+            Route::get('/{id}/detalle', [IndicadorController::class, 'detalle'])
+                ->name('indicadores.detalle');
 
-        Route::get('/editar/{id}', [IndicadorController::class, 'editar'])
-            ->name('indicadores.edit');
+            Route::get('/{id}/editar', [IndicadorController::class, 'edit'])
+                ->name('indicadores.edit');
 
-        Route::put('/actualizar/{id}', [IndicadorController::class, 'update'])
-            ->name('indicadores.update');
+            Route::put('/{id}/editar', [IndicadorController::class, 'update'])
+                ->name('indicadores.update');
 
-        Route::patch('/estado/{id}', [IndicadorController::class, 'cambiarEstado'])
-            ->name('indicadores.estado');
+            Route::get('/{id}/estado', [IndicadorController::class, 'editarEstado'])
+                ->name('indicadores.editarestado');
 
-    });
+            Route::put('/{id}/estado', [IndicadorController::class, 'actualizarEstado'])
+                ->name('indicadores.actualizarestado');
+
+        });
 
     // Programas
     Route::prefix('programas')

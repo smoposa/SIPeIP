@@ -2,69 +2,58 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Indicador extends Model
 {
-    /**
-     * Tabla asociada.
-     */
+    use HasFactory;
+
     protected $table = 'indicadores';
 
-    /**
-     * Campos asignables.
-     */
     protected $fillable = [
-
         'meta_id',
-
         'codigo',
-
         'nombre',
-
         'tipo',
-
         'formula',
-
         'unidad_medida',
-
         'frecuencia',
-
         'responsable_id',
-
         'estado',
-
         'usuario_id',
-
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | Relaciones
-    |--------------------------------------------------------------------------
-    */
-
     /**
-     * Meta a la que pertenece.
+     * Meta institucional a la que pertenece.
      */
-    public function meta()
+    public function meta(): BelongsTo
     {
-        return $this->belongsTo(Meta::class);
+        return $this->belongsTo(
+            Meta::class
+        );
     }
 
     /**
-     * Responsable del indicador.
+     * Usuario responsable del indicador.
      */
-    public function responsable()
+    public function responsable(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'responsable_id');
+        return $this->belongsTo(
+            User::class,
+            'responsable_id'
+        );
     }
 
     /**
-     * Usuario que registró.
+     * Usuario que registró el indicador.
      */
-    public function usuario()
+    public function usuario(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'usuario_id');
+        return $this->belongsTo(
+            User::class,
+            'usuario_id'
+        );
     }
 }

@@ -36,6 +36,10 @@ use App\Repositories\Eloquent\ObjetivoRepository;
 use App\Repositories\Contracts\MetaRepositoryInterface;
 use App\Repositories\Eloquent\MetaRepository;
 
+// Indicadores
+use App\Repositories\Contracts\IndicadorRepositoryInterface;
+use App\Repositories\Eloquent\IndicadorRepository;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -89,6 +93,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             MetaRepositoryInterface::class,
             MetaRepository::class
+        );
+
+        // Indicadores
+        $this->app->bind(
+            IndicadorRepositoryInterface::class,
+            IndicadorRepository::class
         );
     }
 
