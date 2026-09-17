@@ -4,6 +4,8 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Indicador;
 use App\Models\Meta;
+use App\Models\Objetivo;
+use App\Models\Plan;
 use App\Models\User;
 use App\Repositories\Contracts\IndicadorRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -91,6 +93,61 @@ class IndicadorRepository implements IndicadorRepositoryInterface
             ->findOrFail($id);
     }
 
+    /**
+     * Obtener los planes activos
+     * pertenecientes a la entidad.
+     */
+    public function obtenerPlanesActivosPorEntidad(
+        int $entidadId
+    ): Collection {
+        return Plan::query()
+            ->where(
+                'entidad_id',
+                $entidadId
+            )
+            ->where(
+                'estado',
+                'Activo'
+            )
+            ->orderBy('nombre')
+            ->get();
+    }
+
+    /**
+     * Obtener los objetivos activos pertenecientes
+     * a planes activos de la entidad.
+     */
+    public function obtenerObjetivosActivosPorEntidad(
+        int $entidadId
+    ): Collection {
+        return Objetivo::query()
+            ->with([
+                'plan.entidad',
+            ])
+            ->where(
+                'estado',
+                'Activo'
+            )
+            ->whereHas(
+                'plan',
+                fn ($query) => $query
+                    ->where(
+                        'entidad_id',
+                        $entidadId
+                    )
+                    ->where(
+                        'estado',
+                        'Activo'
+                    )
+            )
+            ->orderBy('codigo')
+            ->get();
+    }
+
+    /**
+     * Obtener las metas activas pertenecientes
+     * a objetivos y planes activos de la entidad.
+     */
     public function obtenerMetasActivasPorEntidad(
         int $entidadId
     ): Collection {
@@ -126,6 +183,10 @@ class IndicadorRepository implements IndicadorRepositoryInterface
             ->get();
     }
 
+    /**
+     * Buscar una meta activa perteneciente
+     * a un objetivo y plan activos de la entidad.
+     */
     public function buscarMetaActivaPorIdYEntidad(
         int $metaId,
         int $entidadId
@@ -162,6 +223,10 @@ class IndicadorRepository implements IndicadorRepositoryInterface
             ->first();
     }
 
+    /**
+     * Obtener responsables activos
+     * pertenecientes a la entidad.
+     */
     public function obtenerResponsablesActivosPorEntidad(
         int $entidadId
     ): Collection {
@@ -179,6 +244,10 @@ class IndicadorRepository implements IndicadorRepositoryInterface
             ->get();
     }
 
+    /**
+     * Buscar un responsable activo
+     * perteneciente a la entidad.
+     */
     public function buscarResponsableActivoPorIdYEntidad(
         int $responsableId,
         int $entidadId
@@ -199,14 +268,18 @@ class IndicadorRepository implements IndicadorRepositoryInterface
     public function crear(
         array $datos
     ): Indicador {
-        return Indicador::create($datos);
+        return Indicador::create(
+            $datos
+        );
     }
 
     public function actualizar(
         Indicador $indicador,
         array $datos
     ): Indicador {
-        $indicador->update($datos);
+        $indicador->update(
+            $datos
+        );
 
         return $indicador->refresh();
     }

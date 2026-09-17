@@ -33,7 +33,7 @@ class MetaService
             );
     }
 
-        /**
+    /**
      * Obtener el resumen de metas de la entidad.
      */
     public function obtenerResumen(
@@ -74,6 +74,16 @@ class MetaService
             $usuario
         );
 
+        $planes = $this->metaRepository
+            ->obtenerPlanesActivosPorEntidad(
+                $entidadId
+            );
+
+        $objetivos = $this->metaRepository
+            ->obtenerObjetivosActivosPorEntidad(
+                $entidadId
+            );
+
         $objetivoSeleccionado = null;
 
         if ($objetivoId) {
@@ -87,10 +97,9 @@ class MetaService
         return [
             'codigo' => $this->generarCodigo(),
 
-            'objetivos' => $this->metaRepository
-                ->obtenerObjetivosActivosPorEntidad(
-                    $entidadId
-                ),
+            'planes' => $planes,
+
+            'objetivos' => $objetivos,
 
             'responsables' => $this->metaRepository
                 ->obtenerResponsablesActivosPorEntidad(
@@ -116,22 +125,39 @@ class MetaService
             $usuario
         );
 
-        return [
-            'meta' => $this->metaRepository
-                ->buscarPorIdYEntidad(
-                    $id,
-                    $entidadId
-                ),
+        $meta = $this->metaRepository
+            ->buscarPorIdYEntidad(
+                $id,
+                $entidadId
+            );
 
-            'objetivos' => $this->metaRepository
-                ->obtenerObjetivosActivosPorEntidad(
-                    $entidadId
-                ),
+        $planes = $this->metaRepository
+            ->obtenerPlanesActivosPorEntidad(
+                $entidadId
+            );
+
+        $objetivos = $this->metaRepository
+            ->obtenerObjetivosActivosPorEntidad(
+                $entidadId
+            );
+
+        return [
+            'meta' => $meta,
+
+            'planes' => $planes,
+
+            'objetivos' => $objetivos,
 
             'responsables' => $this->metaRepository
                 ->obtenerResponsablesActivosPorEntidad(
                     $entidadId
                 ),
+
+            'objetivoSeleccionado' =>
+                $meta->objetivo,
+
+            'planSeleccionado' =>
+                $meta->objetivo?->plan,
         ];
     }
 
@@ -160,9 +186,16 @@ class MetaService
             $usuario
         );
 
+        $planId = (int) $datos['plan_id'];
+
         $objetivo = $this->obtenerObjetivoAccesible(
             (int) $datos['objetivo_id'],
             $entidadId
+        );
+
+        $this->validarRelacionPlanObjetivo(
+            $objetivo,
+            $planId
         );
 
         $responsable =
@@ -170,6 +203,12 @@ class MetaService
                 (int) $datos['responsable_id'],
                 $entidadId
             );
+
+        /*
+         * plan_id se utiliza para validar el contexto,
+         * pero no pertenece a la tabla metas.
+         */
+        unset($datos['plan_id']);
 
         $datos['objetivo_id'] = $objetivo->id;
         $datos['responsable_id'] = $responsable->id;
@@ -200,9 +239,16 @@ class MetaService
                 $entidadId
             );
 
+        $planId = (int) $datos['plan_id'];
+
         $objetivo = $this->obtenerObjetivoAccesible(
             (int) $datos['objetivo_id'],
             $entidadId
+        );
+
+        $this->validarRelacionPlanObjetivo(
+            $objetivo,
+            $planId
         );
 
         $responsable =
@@ -210,6 +256,11 @@ class MetaService
                 (int) $datos['responsable_id'],
                 $entidadId
             );
+
+        /*
+         * plan_id no pertenece a la tabla metas.
+         */
+        unset($datos['plan_id']);
 
         $datos['objetivo_id'] = $objetivo->id;
         $datos['responsable_id'] = $responsable->id;
@@ -317,7 +368,8 @@ class MetaService
     }
 
     /**
-     * Validar que el objetivo pertenezca a la entidad.
+     * Obtener un objetivo activo perteneciente
+     * a la entidad del usuario.
      */
     private function obtenerObjetivoAccesible(
         int $objetivoId,
@@ -339,7 +391,23 @@ class MetaService
     }
 
     /**
-     * Validar que el responsable pertenezca a la entidad.
+     * Validar que el objetivo pertenezca
+     * al plan seleccionado.
+     */
+    private function validarRelacionPlanObjetivo(
+        Objetivo $objetivo,
+        int $planId
+    ): void {
+        if ((int) $objetivo->plan_id !== $planId) {
+            throw new DomainException(
+                'El objetivo seleccionado no pertenece al plan institucional indicado.'
+            );
+        }
+    }
+
+    /**
+     * Obtener un responsable activo perteneciente
+     * a la entidad del usuario.
      */
     private function obtenerResponsableAccesible(
         int $responsableId,

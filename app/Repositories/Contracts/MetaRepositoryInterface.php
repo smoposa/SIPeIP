@@ -31,6 +31,10 @@ interface MetaRepositoryInterface
         int $entidadId
     ): Meta;
 
+    public function obtenerPlanesActivosPorEntidad(
+        int $entidadId
+    ): Collection;
+
     public function obtenerObjetivosActivosPorEntidad(
         int $entidadId
     ): Collection;

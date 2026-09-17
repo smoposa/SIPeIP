@@ -4,6 +4,15 @@
     $metaSeleccionada
 )
 
+    <!-- Contexto completo de planificación -->
+    <input type="hidden"
+           name="plan_id"
+           value="{{ $planSeleccionado->id }}">
+
+    <input type="hidden"
+           name="objetivo_id"
+           value="{{ $objetivoSeleccionado->id }}">
+
     <input type="hidden"
            name="meta_id"
            value="{{ $metaSeleccionada->id }}">
@@ -21,11 +30,16 @@
 
         <div class="min-w-0 pl-8">
 
-            <!-- Código -->
+            <p class="mb-5 text-xs text-gray-500">
+                El indicador quedará asociado automáticamente a esta meta,
+                su objetivo estratégico y su plan institucional.
+            </p>
+
+            <!-- Código de la meta -->
             <div class="mb-4 flex min-w-0 items-start gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Código
+                    Código de la meta
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
@@ -34,11 +48,11 @@
 
             </div>
 
-            <!-- Nombre -->
+            <!-- Nombre de la meta -->
             <div class="mb-4 flex min-w-0 items-start gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Nombre
+                    Nombre de la meta
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
@@ -55,9 +69,11 @@
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
+
                     {{ $objetivoSeleccionado->codigo }}
                     -
                     {{ $objetivoSeleccionado->nombre }}
+
                 </span>
 
             </div>
@@ -70,9 +86,11 @@
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
+
                     {{ $planSeleccionado->codigo }}
                     -
                     {{ $planSeleccionado->nombre }}
+
                 </span>
 
             </div>
@@ -81,7 +99,7 @@
             <div class="mb-4 flex min-w-0 items-start gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Entidad
+                    Nombre de la entidad
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
@@ -90,11 +108,11 @@
 
             </div>
 
-            <!-- Estado -->
+            <!-- Estado de la meta -->
             <div class="flex min-w-0 items-center gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Estado
+                    Estado de la meta
                 </span>
 
                 @if($metaSeleccionada->estado === 'Activo')

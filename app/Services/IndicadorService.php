@@ -77,19 +77,20 @@ class IndicadorService
             $usuario
         );
 
+        $planes = $this->indicadorRepository
+            ->obtenerPlanesActivosPorEntidad(
+                $entidadId
+            );
+
+        $objetivos = $this->indicadorRepository
+            ->obtenerObjetivosActivosPorEntidad(
+                $entidadId
+            );
+
         $metas = $this->indicadorRepository
             ->obtenerMetasActivasPorEntidad(
                 $entidadId
             );
-
-        $planes = $metas
-            ->map(
-                fn (Meta $meta) =>
-                    $meta->objetivo?->plan
-            )
-            ->filter()
-            ->unique('id')
-            ->values();
 
         $metaSeleccionada = null;
 
@@ -105,6 +106,8 @@ class IndicadorService
             'codigo' => $this->generarCodigo(),
 
             'planes' => $planes,
+
+            'objetivos' => $objetivos,
 
             'metas' => $metas,
 
@@ -135,22 +138,49 @@ class IndicadorService
             $usuario
         );
 
-        return [
-            'indicador' => $this->indicadorRepository
-                ->buscarPorIdYEntidad(
-                    $id,
-                    $entidadId
-                ),
+        $indicador = $this->indicadorRepository
+            ->buscarPorIdYEntidad(
+                $id,
+                $entidadId
+            );
 
-            'metas' => $this->indicadorRepository
-                ->obtenerMetasActivasPorEntidad(
-                    $entidadId
-                ),
+        $planes = $this->indicadorRepository
+            ->obtenerPlanesActivosPorEntidad(
+                $entidadId
+            );
+
+        $objetivos = $this->indicadorRepository
+            ->obtenerObjetivosActivosPorEntidad(
+                $entidadId
+            );
+
+        $metas = $this->indicadorRepository
+            ->obtenerMetasActivasPorEntidad(
+                $entidadId
+            );
+
+        return [
+            'indicador' => $indicador,
+
+            'planes' => $planes,
+
+            'objetivos' => $objetivos,
+
+            'metas' => $metas,
 
             'responsables' => $this->indicadorRepository
                 ->obtenerResponsablesActivosPorEntidad(
                     $entidadId
                 ),
+
+            'metaSeleccionada' =>
+                $indicador->meta,
+
+            'objetivoSeleccionado' =>
+                $indicador->meta?->objetivo,
+
+            'planSeleccionado' =>
+                $indicador->meta?->objetivo?->plan,
         ];
     }
 
@@ -179,9 +209,18 @@ class IndicadorService
             $usuario
         );
 
+        $planId = (int) $datos['plan_id'];
+        $objetivoId = (int) $datos['objetivo_id'];
+
         $meta = $this->obtenerMetaAccesible(
             (int) $datos['meta_id'],
             $entidadId
+        );
+
+        $this->validarJerarquiaPlanificacion(
+            $meta,
+            $objetivoId,
+            $planId
         );
 
         $responsable =
@@ -189,6 +228,15 @@ class IndicadorService
                 (int) $datos['responsable_id'],
                 $entidadId
             );
+
+        /*
+         * plan_id y objetivo_id sirven para validar
+         * el contexto, pero no pertenecen a indicadores.
+         */
+        unset(
+            $datos['plan_id'],
+            $datos['objetivo_id']
+        );
 
         $datos['meta_id'] = $meta->id;
         $datos['responsable_id'] = $responsable->id;
@@ -219,9 +267,18 @@ class IndicadorService
                 $entidadId
             );
 
+        $planId = (int) $datos['plan_id'];
+        $objetivoId = (int) $datos['objetivo_id'];
+
         $meta = $this->obtenerMetaAccesible(
             (int) $datos['meta_id'],
             $entidadId
+        );
+
+        $this->validarJerarquiaPlanificacion(
+            $meta,
+            $objetivoId,
+            $planId
         );
 
         $responsable =
@@ -229,6 +286,14 @@ class IndicadorService
                 (int) $datos['responsable_id'],
                 $entidadId
             );
+
+        /*
+         * Estos campos no pertenecen a la tabla indicadores.
+         */
+        unset(
+            $datos['plan_id'],
+            $datos['objetivo_id']
+        );
 
         $datos['meta_id'] = $meta->id;
         $datos['responsable_id'] = $responsable->id;
@@ -336,7 +401,8 @@ class IndicadorService
     }
 
     /**
-     * Validar que la meta pertenezca a la entidad.
+     * Obtener una meta activa perteneciente
+     * a la entidad del usuario.
      */
     private function obtenerMetaAccesible(
         int $metaId,
@@ -358,7 +424,26 @@ class IndicadorService
     }
 
     /**
-     * Validar que el responsable pertenezca a la entidad.
+     * Validar la relación Plan → Objetivo → Meta.
+     */
+    private function validarJerarquiaPlanificacion(
+        Meta $meta,
+        int $objetivoId,
+        int $planId
+    ): void {
+        if (
+            (int) $meta->objetivo_id !== $objetivoId ||
+            (int) $meta->objetivo?->plan_id !== $planId
+        ) {
+            throw new DomainException(
+                'La meta seleccionada no pertenece al objetivo y plan institucional indicados.'
+            );
+        }
+    }
+
+    /**
+     * Obtener un responsable activo perteneciente
+     * a la entidad del usuario.
      */
     private function obtenerResponsableAccesible(
         int $responsableId,

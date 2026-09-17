@@ -15,11 +15,28 @@ class StoreMetaRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'plan_id' => [
+                'required',
+                'integer',
+                Rule::exists('planes', 'id')
+                    ->where('estado', 'Activo'),
+            ],
+
             'objetivo_id' => [
                 'required',
                 'integer',
                 Rule::exists('objetivos', 'id')
-                    ->where('estado', 'Activo'),
+                    ->where(
+                        fn ($query) => $query
+                            ->where(
+                                'plan_id',
+                                $this->input('plan_id')
+                            )
+                            ->where(
+                                'estado',
+                                'Activo'
+                            )
+                    ),
             ],
 
             'nombre' => [
@@ -75,6 +92,22 @@ class StoreMetaRequest extends FormRequest
                 Rule::exists('users', 'id')
                     ->where('estado', 'Activo'),
             ],
+        ];
+    }
+
+    public function attributes(): array
+    {
+        return [
+            'plan_id' => 'plan institucional',
+            'objetivo_id' => 'objetivo estratégico',
+            'nombre' => 'nombre de la meta',
+            'descripcion' => 'descripción',
+            'linea_base' => 'línea base',
+            'valor_meta' => 'valor meta',
+            'unidad_medida' => 'unidad de medida',
+            'periodo_inicio' => 'año de inicio',
+            'periodo_fin' => 'año de finalización',
+            'responsable_id' => 'responsable',
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\Metas\UpdateMetaRequest;
 use App\Http\Requests\Metas\UpdateMetaStatusRequest;
 use App\Services\MetaService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class MetaController extends Controller
@@ -16,7 +17,7 @@ class MetaController extends Controller
     ) {
     }
 
-     /**
+    /**
      * Listar las metas de la entidad.
      */
     public function listar(): View
@@ -45,16 +46,21 @@ class MetaController extends Controller
     /**
      * Mostrar el formulario de creación.
      */
-    public function create(): View
-    {
+    public function create(
+        Request $request
+    ): View {
         $this->autorizar('metas');
+
+        $objetivoId = $request->filled('objetivo_id')
+            ? $request->integer('objetivo_id')
+            : null;
 
         return view(
             'metas.create',
             $this->metaService
                 ->obtenerDatosCreacion(
                     auth()->user(),
-                    session('objetivo_id')
+                    $objetivoId
                 )
         );
     }
@@ -73,12 +79,16 @@ class MetaController extends Controller
         );
 
         session([
-            'objetivo_id' => $meta->objetivo_id,
             'meta_id' => $meta->id,
         ]);
 
         return redirect()
-            ->route('metas.create')
+            ->route(
+                'metas.create',
+                [
+                    'objetivo_id' => $meta->objetivo_id,
+                ]
+            )
             ->with(
                 'meta_registrada',
                 true

@@ -21,8 +21,12 @@
 
                 </h2>
 
-                <p class="mt-2 text-sm text-gray-500">
+                <p class="mt-2 text-sm leading-relaxed text-gray-500">
                     El indicador institucional se registró exitosamente.
+                </p>
+
+                <p class="mt-2 text-sm leading-relaxed text-gray-500">
+                    El proceso de registro de la planificación ha finalizado.
                 </p>
 
             </div>
@@ -31,18 +35,22 @@
                         sm:flex-row sm:justify-end">
 
                 <a href="{{ route('indicadores.listar') }}"
-                   class="inline-flex h-10 items-center justify-center
-                          rounded-md bg-gray-200 px-4 text-sm font-medium
-                          text-gray-700 transition hover:bg-gray-300">
+                   class="inline-flex h-10 items-center justify-center rounded-md
+                          bg-gray-200 px-4 text-sm font-medium text-gray-700
+                          transition hover:bg-gray-300
+                          focus:outline-none focus:ring-2 focus:ring-gray-400
+                          focus:ring-offset-2">
 
-                    Ver listado
+                    Volver al listado
 
                 </a>
 
-                <a href="{{ route('dashboard') }}"
-                   class="inline-flex h-10 items-center justify-center
-                          rounded-md bg-[#18874E] px-4 text-sm font-medium
-                          text-white transition hover:bg-green-700">
+                <a href="{{ route('planes.listar') }}"
+                   class="inline-flex h-10 items-center justify-center rounded-md
+                          bg-[#18874E] px-4 text-sm font-medium text-white
+                          transition hover:bg-green-700
+                          focus:outline-none focus:ring-2 focus:ring-green-600
+                          focus:ring-offset-2">
 
                     Finalizar
 

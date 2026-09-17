@@ -31,6 +31,14 @@ interface IndicadorRepositoryInterface
         int $entidadId
     ): Indicador;
 
+    public function obtenerPlanesActivosPorEntidad(
+        int $entidadId
+    ): Collection;
+
+    public function obtenerObjetivosActivosPorEntidad(
+        int $entidadId
+    ): Collection;
+
     public function obtenerMetasActivasPorEntidad(
         int $entidadId
     ): Collection;
@@ -49,7 +57,9 @@ interface IndicadorRepositoryInterface
         int $entidadId
     ): ?User;
 
-    public function crear(array $datos): Indicador;
+    public function crear(
+        array $datos
+    ): Indicador;
 
     public function actualizar(
         Indicador $indicador,

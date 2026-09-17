@@ -13,7 +13,8 @@
 
         <script>
             setTimeout(() => {
-                const alerta = document.getElementById('alertSuccess');
+                const alerta =
+                    document.getElementById('alertSuccess');
 
                 if (alerta) {
                     alerta.remove();
@@ -23,13 +24,13 @@
 
     @endif
 
-    <!-- Modal -->
+    <!-- Modal de registro exitoso -->
     @include('indicadores.partials.modal-exito')
 
-    <!-- Contenido -->
+    <!-- Contenido principal -->
     <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
 
-        <!-- Encabezado -->
+        <!-- Encabezado de la página -->
         <div class="mb-4">
 
             <h2 class="text-2xl font-semibold leading-tight text-gray-800">
@@ -83,13 +84,10 @@
 
         @endif
 
-        <!-- Scroll -->
-        <div class="min-w-0 w-full max-w-full overflow-y-auto"
-             style="
-                height: calc(100vh - 190px);
-                max-width: 100%;
-                overflow-x: hidden;
-             ">
+        <!-- Contenido con desplazamiento vertical -->
+        <div class="w-full min-w-0 max-w-full
+                    overflow-y-auto overflow-x-hidden"
+             style="height: calc(100vh - 190px);">
 
             <form method="POST"
                   action="{{ route('indicadores.store') }}"
@@ -99,6 +97,10 @@
 
                 @include('indicadores.partials.barra-progreso')
 
+                <!--
+                    El encabezado se muestra únicamente cuando
+                    se continúa desde una Meta registrada.
+                -->
                 @if(
                     $planSeleccionado &&
                     $objetivoSeleccionado &&
@@ -109,6 +111,10 @@
 
                 @endif
 
+                <!--
+                    Desde el menú mostrará los selectores:
+                    Plan → Objetivo → Meta.
+                -->
                 @include('indicadores.partials.informacion-general')
 
                 @include('indicadores.partials.acciones')

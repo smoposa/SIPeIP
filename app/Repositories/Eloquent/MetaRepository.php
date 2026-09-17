@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Meta;
 use App\Models\Objetivo;
+use App\Models\Plan;
 use App\Models\User;
 use App\Repositories\Contracts\MetaRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -91,6 +92,30 @@ class MetaRepository implements MetaRepositoryInterface
             ->findOrFail($id);
     }
 
+    /**
+     * Obtener todos los planes activos
+     * pertenecientes a la entidad.
+     */
+    public function obtenerPlanesActivosPorEntidad(
+        int $entidadId
+    ): Collection {
+        return Plan::query()
+            ->where(
+                'entidad_id',
+                $entidadId
+            )
+            ->where(
+                'estado',
+                'Activo'
+            )
+            ->orderBy('nombre')
+            ->get();
+    }
+
+    /**
+     * Obtener los objetivos activos
+     * pertenecientes a planes activos de la entidad.
+     */
     public function obtenerObjetivosActivosPorEntidad(
         int $entidadId
     ): Collection {
@@ -98,7 +123,10 @@ class MetaRepository implements MetaRepositoryInterface
             ->with([
                 'plan.entidad',
             ])
-            ->where('estado', 'Activo')
+            ->where(
+                'estado',
+                'Activo'
+            )
             ->whereHas(
                 'plan',
                 fn ($query) => $query
@@ -115,6 +143,10 @@ class MetaRepository implements MetaRepositoryInterface
             ->get();
     }
 
+    /**
+     * Buscar un objetivo activo perteneciente
+     * a un plan activo de la entidad.
+     */
     public function buscarObjetivoActivoPorIdYEntidad(
         int $objetivoId,
         int $entidadId
@@ -124,7 +156,10 @@ class MetaRepository implements MetaRepositoryInterface
                 'plan.entidad',
             ])
             ->whereKey($objetivoId)
-            ->where('estado', 'Activo')
+            ->where(
+                'estado',
+                'Activo'
+            )
             ->whereHas(
                 'plan',
                 fn ($query) => $query
@@ -140,6 +175,10 @@ class MetaRepository implements MetaRepositoryInterface
             ->first();
     }
 
+    /**
+     * Obtener responsables activos
+     * pertenecientes a la entidad.
+     */
     public function obtenerResponsablesActivosPorEntidad(
         int $entidadId
     ): Collection {
@@ -157,6 +196,10 @@ class MetaRepository implements MetaRepositoryInterface
             ->get();
     }
 
+    /**
+     * Buscar un responsable activo
+     * perteneciente a la entidad.
+     */
     public function buscarResponsableActivoPorIdYEntidad(
         int $responsableId,
         int $entidadId
@@ -174,16 +217,21 @@ class MetaRepository implements MetaRepositoryInterface
             ->first();
     }
 
-    public function crear(array $datos): Meta
-    {
-        return Meta::create($datos);
+    public function crear(
+        array $datos
+    ): Meta {
+        return Meta::create(
+            $datos
+        );
     }
 
     public function actualizar(
         Meta $meta,
         array $datos
     ): Meta {
-        $meta->update($datos);
+        $meta->update(
+            $datos
+        );
 
         return $meta->refresh();
     }

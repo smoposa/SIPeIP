@@ -8,6 +8,7 @@ use App\Http\Requests\Objetivos\UpdateObjetivoStatusRequest;
 use App\Services\ObjetivoService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ObjetivoController extends Controller
@@ -37,19 +38,22 @@ class ObjetivoController extends Controller
     /**
      * Mostrar formulario de creación.
      */
-    public function create(): View
-    {
+    public function create(
+        Request $request
+    ): View {
         $this->autorizar('objetivos');
 
-        $datos = $this->objetivoService
-            ->obtenerDatosCreacion(
-                auth()->user(),
-                session('plan_id')
-            );
+        $planId = $request->filled('plan_id')
+            ? $request->integer('plan_id')
+            : null;
 
         return view(
             'objetivos.create',
-            $datos
+            $this->objetivoService
+                ->obtenerDatosCreacion(
+                    auth()->user(),
+                    $planId
+                )
         );
     }
 
@@ -95,12 +99,16 @@ class ObjetivoController extends Controller
         );
 
         session([
-            'plan_id' => $objetivo->plan_id,
             'objetivo_id' => $objetivo->id,
         ]);
 
         return redirect()
-            ->route('objetivos.create')
+            ->route(
+                'objetivos.create',
+                [
+                    'plan_id' => $objetivo->plan_id,
+                ]
+            )
             ->with(
                 'objetivo_registrado',
                 true

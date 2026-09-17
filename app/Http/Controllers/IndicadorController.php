@@ -10,7 +10,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-
 class IndicadorController extends Controller
 {
     public function __construct(
@@ -95,15 +94,16 @@ class IndicadorController extends Controller
             );
 
         session([
-            'meta_id' =>
-                $indicador->meta_id,
-
-            'indicador_id' =>
-                $indicador->id,
+            'indicador_id' => $indicador->id,
         ]);
 
         return redirect()
-            ->route('indicadores.create')
+            ->route(
+                'indicadores.create',
+                [
+                    'meta_id' => $indicador->meta_id,
+                ]
+            )
             ->with(
                 'indicador_registrado',
                 true

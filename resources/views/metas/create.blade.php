@@ -13,7 +13,8 @@
 
         <script>
             setTimeout(() => {
-                const alerta = document.getElementById('alertSuccess');
+                const alerta =
+                    document.getElementById('alertSuccess');
 
                 if (alerta) {
                     alerta.remove();
@@ -31,7 +32,7 @@
                 bg-white p-6 shadow-sm"
          style="height: calc(100dvh - 51px);">
 
-        <!-- Encabezado -->
+        <!-- Encabezado de la página -->
         <div class="mb-4 flex-shrink-0">
 
             <h2 class="text-2xl font-semibold leading-tight text-gray-800">
@@ -86,8 +87,8 @@
 
         @endif
 
-        <!-- Scroll interno -->
-        <div class="min-h-0 min-w-0 w-full max-w-full flex-1
+        <!-- Contenido con desplazamiento interno -->
+        <div class="min-h-0 w-full min-w-0 max-w-full flex-1
                     overflow-y-auto overflow-x-hidden">
 
             <form method="POST"
@@ -98,12 +99,20 @@
 
                 @include('metas.partials.barra-progreso')
 
+                <!--
+                    Este encabezado aparece solamente cuando
+                    se continúa desde un objetivo registrado.
+                -->
                 @if($planSeleccionado && $objetivoSeleccionado)
 
                     @include('metas.partials.encabezado')
 
                 @endif
 
+                <!--
+                    Desde el menú mostrará los selectores Plan → Objetivo.
+                    Desde el asistente enviará ambos valores ocultos.
+                -->
                 @include('metas.partials.informacion-general')
 
                 @include('metas.partials.acciones')

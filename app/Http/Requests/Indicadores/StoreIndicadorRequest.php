@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Indicadores;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreIndicadorRequest extends FormRequest
 {
@@ -20,10 +21,48 @@ class StoreIndicadorRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'plan_id' => [
+                'required',
+                'integer',
+                Rule::exists('planes', 'id')
+                    ->where(
+                        'estado',
+                        'Activo'
+                    ),
+            ],
+
+            'objetivo_id' => [
+                'required',
+                'integer',
+                Rule::exists('objetivos', 'id')
+                    ->where(
+                        fn ($query) => $query
+                            ->where(
+                                'plan_id',
+                                $this->input('plan_id')
+                            )
+                            ->where(
+                                'estado',
+                                'Activo'
+                            )
+                    ),
+            ],
+
             'meta_id' => [
                 'required',
                 'integer',
-                'exists:metas,id',
+                Rule::exists('metas', 'id')
+                    ->where(
+                        fn ($query) => $query
+                            ->where(
+                                'objetivo_id',
+                                $this->input('objetivo_id')
+                            )
+                            ->where(
+                                'estado',
+                                'Activo'
+                            )
+                    ),
             ],
 
             'nombre' => [
@@ -58,7 +97,11 @@ class StoreIndicadorRequest extends FormRequest
             'responsable_id' => [
                 'required',
                 'integer',
-                'exists:users,id',
+                Rule::exists('users', 'id')
+                    ->where(
+                        'estado',
+                        'Activo'
+                    ),
             ],
         ];
     }
@@ -69,6 +112,8 @@ class StoreIndicadorRequest extends FormRequest
     public function attributes(): array
     {
         return [
+            'plan_id' => 'plan institucional',
+            'objetivo_id' => 'objetivo estratégico',
             'meta_id' => 'meta institucional',
             'nombre' => 'nombre del indicador',
             'tipo' => 'tipo de indicador',

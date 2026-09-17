@@ -1,5 +1,6 @@
 @if($planSeleccionado)
 
+    <!-- Identificador del plan seleccionado -->
     <input type="hidden"
            name="plan_id"
            value="{{ $planSeleccionado->id }}">
@@ -17,11 +18,15 @@
 
         <div class="min-w-0 pl-8">
 
-            <!-- Código -->
+            <p class="mb-5 text-xs text-gray-500">
+                El objetivo quedará asociado automáticamente a este plan institucional.
+            </p>
+
+            <!-- Código del plan -->
             <div class="mb-4 flex min-w-0 items-start gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Código
+                    Código del plan
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
@@ -30,11 +35,11 @@
 
             </div>
 
-            <!-- Nombre -->
+            <!-- Nombre del plan -->
             <div class="mb-4 flex min-w-0 items-start gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Nombre
+                    Nombre del plan
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
@@ -47,7 +52,7 @@
             <div class="mb-4 flex min-w-0 items-start gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Entidad
+                    Nombre de la entidad
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
@@ -56,11 +61,11 @@
 
             </div>
 
-            <!-- Estado -->
+            <!-- Estado administrativo -->
             <div class="flex min-w-0 items-center gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Estado
+                    Estado administrativo
                 </span>
 
                 @if($planSeleccionado->estado === 'Activo')

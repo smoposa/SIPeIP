@@ -1,5 +1,10 @@
 @if($planSeleccionado && $objetivoSeleccionado)
 
+    <!-- Contexto seleccionado -->
+    <input type="hidden"
+           name="plan_id"
+           value="{{ $planSeleccionado->id }}">
+
     <input type="hidden"
            name="objetivo_id"
            value="{{ $objetivoSeleccionado->id }}">
@@ -17,11 +22,15 @@
 
         <div class="min-w-0 pl-8">
 
-            <!-- Código -->
+            <p class="mb-5 text-xs text-gray-500">
+                La meta quedará asociada automáticamente a este objetivo y a su plan institucional.
+            </p>
+
+            <!-- Código del objetivo -->
             <div class="mb-4 flex min-w-0 items-start gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Código
+                    Código del objetivo
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
@@ -30,11 +39,11 @@
 
             </div>
 
-            <!-- Nombre -->
+            <!-- Nombre del objetivo -->
             <div class="mb-4 flex min-w-0 items-start gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Nombre
+                    Nombre del objetivo
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
@@ -51,9 +60,11 @@
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
+
                     {{ $planSeleccionado->codigo }}
                     -
                     {{ $planSeleccionado->nombre }}
+
                 </span>
 
             </div>
@@ -62,7 +73,7 @@
             <div class="mb-4 flex min-w-0 items-start gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Entidad
+                    Nombre de la entidad
                 </span>
 
                 <span class="min-w-0 flex-1 break-words text-sm text-gray-800">
@@ -71,11 +82,11 @@
 
             </div>
 
-            <!-- Estado -->
+            <!-- Estado administrativo -->
             <div class="flex min-w-0 items-center gap-4">
 
                 <span class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Estado
+                    Estado del objetivo
                 </span>
 
                 @if($objetivoSeleccionado->estado === 'Activo')
