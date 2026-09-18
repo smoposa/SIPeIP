@@ -2,12 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+
 /* ==========================================================
    ENLACES PRINCIPALES
    (Inicio, Reportes, Auditoría)
 ========================================================== */
 
-.sidebar-link{
+.sidebar-link {
     @apply flex items-center gap-3 px-5 py-3 text-sm
            text-gray-700
            hover:bg-gray-100
@@ -15,48 +16,197 @@
            transition-colors;
 }
 
-.sidebar-link-active{
+.sidebar-link-active {
     @apply flex items-center gap-3 px-5 py-3 text-sm
            bg-white
            text-[#024687]
            font-semibold;
 }
 
+
 /* ==========================================================
    GRUPOS DESPLEGABLES
-   (Configuración, Planificación, Inversión...)
+   (Configuración, Catálogos, Planificación, Inversión...)
 ========================================================== */
 
-.sidebar-group{
+.sidebar-group {
     @apply flex items-center justify-between px-5 py-3 text-sm
            cursor-pointer
            text-gray-700
            hover:bg-gray-100
+           hover:text-[#024687]
            transition-colors;
 }
 
-.sidebar-active{
+.sidebar-active {
     @apply flex items-center justify-between px-5 py-3 text-sm
            bg-white
            text-[#024687]
            font-semibold;
 }
+
 
 /* ==========================================================
    SUBMENÚS
    (Roles, Usuarios, Entidades...)
 ========================================================== */
 
-.sidebar-submenu{
+.sidebar-submenu {
     @apply block px-4 py-2 text-sm
            text-gray-700
            hover:bg-gray-100
+           hover:text-[#024687]
            transition-colors;
 }
 
-.sidebar-submenu-active{
+.sidebar-submenu-active {
     @apply block px-4 py-2 text-sm
            bg-white
            text-[#024687]
            font-semibold;
+}
+
+
+/* ==========================================================
+   SIDEBAR COMPACTO
+========================================================== */
+
+
+/* ----------------------------------------------------------
+   Ocultar los nombres de los módulos
+---------------------------------------------------------- */
+
+.sidebar-collapsed nav span {
+    display: none !important;
+}
+
+
+/* ----------------------------------------------------------
+   Ocultar las flechas de los grupos desplegables
+---------------------------------------------------------- */
+
+.sidebar-collapsed nav summary > .bi-chevron-down {
+    display: none !important;
+}
+
+
+/* ----------------------------------------------------------
+   Ocultar completamente los submenús
+---------------------------------------------------------- */
+
+.sidebar-collapsed nav details > div {
+    display: none !important;
+}
+
+
+/* ----------------------------------------------------------
+   Centrar enlaces principales
+---------------------------------------------------------- */
+
+.sidebar-collapsed .sidebar-link,
+.sidebar-collapsed .sidebar-link-active {
+    justify-content: center !important;
+    gap: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+
+/* ----------------------------------------------------------
+   Centrar grupos desplegables
+---------------------------------------------------------- */
+
+.sidebar-collapsed .sidebar-group,
+.sidebar-collapsed .sidebar-active {
+    justify-content: center !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+
+/* Centrar el contenedor interno del ícono */
+
+.sidebar-collapsed .sidebar-group > div,
+.sidebar-collapsed .sidebar-active > div {
+    justify-content: center !important;
+    gap: 0 !important;
+    width: 100%;
+}
+
+
+/* ----------------------------------------------------------
+   Fondo de los módulos que no están seleccionados
+---------------------------------------------------------- */
+
+.sidebar-collapsed .sidebar-link,
+.sidebar-collapsed .sidebar-group {
+    background-color: transparent !important;
+}
+
+
+/* ----------------------------------------------------------
+   Fondo blanco del módulo seleccionado
+---------------------------------------------------------- */
+
+.sidebar-collapsed .sidebar-link-active,
+.sidebar-collapsed .sidebar-active {
+    background-color: #ffffff !important;
+}
+
+
+/* ----------------------------------------------------------
+   Tamaño de los íconos
+---------------------------------------------------------- */
+
+.sidebar-collapsed nav i {
+    flex-shrink: 0;
+    font-size: 17px;
+}
+
+
+/* ----------------------------------------------------------
+   Color de los íconos que no están seleccionados
+---------------------------------------------------------- */
+
+.sidebar-collapsed .sidebar-link i,
+.sidebar-collapsed .sidebar-group i {
+    color: #4b5563 !important;
+}
+
+
+/* ----------------------------------------------------------
+   Color azul del ícono seleccionado
+---------------------------------------------------------- */
+
+.sidebar-collapsed .sidebar-link-active i,
+.sidebar-collapsed .sidebar-active i {
+    color: #024687 !important;
+}
+
+
+/* ----------------------------------------------------------
+   Efecto al pasar el cursor sobre módulos no seleccionados
+---------------------------------------------------------- */
+
+.sidebar-collapsed .sidebar-link:hover,
+.sidebar-collapsed .sidebar-group:hover {
+    background-color: #e5e7eb !important;
+}
+
+.sidebar-collapsed .sidebar-link:hover i,
+.sidebar-collapsed .sidebar-group:hover i {
+    color: #024687 !important;
+}
+
+
+/* ----------------------------------------------------------
+   Eliminar marcador nativo de los elementos details
+---------------------------------------------------------- */
+
+.sidebar-collapsed summary {
+    list-style: none;
+}
+
+.sidebar-collapsed summary::-webkit-details-marker {
+    display: none;
 }
