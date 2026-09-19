@@ -28,7 +28,7 @@ class SectorController extends Controller
         );
 
         return view(
-            'catalogos.inversion.sectores.create',
+            'clasificacion-inversion.sectores.create',
             [
                 'macrosectores' => $this->service
                     ->obtenerMacrosectoresActivos(),
@@ -71,7 +71,7 @@ class SectorController extends Controller
         );
 
         return view(
-            'catalogos.inversion.sectores.edit',
+            'clasificacion-inversion.sectores.edit',
             [
                 'sector' => $this->service
                     ->obtenerSectorPorId($sector),

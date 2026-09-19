@@ -28,7 +28,7 @@ class SubsectorController extends Controller
         );
 
         return view(
-            'catalogos.inversion.subsectores.create',
+            'clasificacion-inversion.subsectores.create',
             [
                 'macrosectores' => $this->service
                     ->obtenerMacrosectoresActivos(),
@@ -71,7 +71,7 @@ class SubsectorController extends Controller
         );
 
         return view(
-            'catalogos.inversion.subsectores.edit',
+            'clasificacion-inversion.subsectores.edit',
             [
                 'subsector' => $this->service
                     ->obtenerSubsectorPorId($subsector),

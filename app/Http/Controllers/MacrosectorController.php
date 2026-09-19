@@ -19,7 +19,7 @@ class MacrosectorController extends Controller
     /**
      * Mostrar el formulario de creación.
      */
-    public function create(): View
+    public function create()
     {
         $this->autorizar(
             'clasificacion_inversion',
@@ -27,7 +27,7 @@ class MacrosectorController extends Controller
         );
 
         return view(
-            'catalogos.inversion.macrosectores.create'
+            'clasificacion-inversion.macrosectores.create'
         );
     }
 
@@ -57,21 +57,18 @@ class MacrosectorController extends Controller
     /**
      * Mostrar el formulario de edición.
      */
-    public function edit(
-        int $macrosector
-    ): View {
+    public function edit(int $macrosector)
+    {
         $this->autorizar(
             'clasificacion_inversion',
             'editar'
         );
 
         return view(
-            'catalogos.inversion.macrosectores.edit',
+            'clasificacion-inversion.macrosectores.edit',
             [
                 'macrosector' => $this->service
-                    ->obtenerMacrosectorPorId(
-                        $macrosector
-                    ),
+                    ->obtenerMacrosectorPorId($macrosector),
             ]
         );
     }
