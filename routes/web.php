@@ -500,33 +500,52 @@ Route::middleware([
 
         });
 
-    // Programas
+    /*
+    |--------------------------------------------------------------------------
+    | Programas de inversión pública
+    |--------------------------------------------------------------------------
+    */
+
     Route::prefix('programas')
         ->name('programas.')
+        ->middleware('role:programas')
         ->controller(ProgramaController::class)
         ->group(function () {
 
-            Route::get('/', 'listar')
+            Route::get('/', 'index')
                 ->name('listar');
 
             Route::get('/crear', 'create')
                 ->name('create');
 
-            Route::post('/crear', 'store')
+            Route::post('/', 'store')
                 ->name('store');
 
-            Route::get('/detalle/{id}', 'detalle')
+            Route::get('/{programa}/detalle', 'detalle')
+                ->whereNumber('programa')
                 ->name('detalle');
 
-            Route::get('/editar/{id}', 'edit')
+            Route::get('/{programa}/editar', 'edit')
+                ->whereNumber('programa')
                 ->name('edit');
 
-            Route::put('/editar/{id}', 'update')
+            Route::put('/{programa}', 'update')
+                ->whereNumber('programa')
                 ->name('update');
 
-            Route::patch('/estado/{id}', 'editarEstado')
+            Route::put(
+                '/{programa}/estado',
+                'actualizarEstado'
+            )
+                ->whereNumber('programa')
                 ->name('estado');
 
+            Route::put(
+                '/{programa}/estado-proceso',
+                'actualizarEstadoProceso'
+            )
+                ->whereNumber('programa')
+                ->name('estado-proceso');
     });
 
     // Proyectos

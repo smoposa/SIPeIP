@@ -1,91 +1,119 @@
-<x-programas-layout title="Crear Programa">
+<x-programas-layout title="Crear programa">
 
-    @if(session('success'))
-        <div id="alertSuccess"
-             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-
-            {{ session('success') }}
-
-        </div>
-
-        <script>
-            setTimeout(() => {
-                const alerta = document.getElementById('alertSuccess');
-
-                if (alerta) {
-                    alerta.remove();
-                }
-            }, 3000);
-        </script>
-    @endif
-
-    @if ($errors->any())
-
-        <div class="mb-4 rounded-md border border-red-300 bg-red-50 p-4">
-
-            <h3 class="text-sm font-semibold text-red-800 mb-2">
-                Se encontraron los siguientes errores:
-            </h3>
-
-            <ul class="list-disc list-inside text-sm text-red-700">
-
-                @foreach ($errors->all() as $error)
-
-                    <li>{{ $error }}</li>
-
-                @endforeach
-
-            </ul>
-
-        </div>
-
-    @endif
-
-    {{-- ================= CONTENIDO ================= --}}
-    <div class="bg-white p-6 shadow-sm">
+    <div class="mx-auto max-w-5xl space-y-5">
 
         {{-- Encabezado --}}
-        <div class="mb-1">
+        <div class="rounded-lg border border-gray-200 bg-white">
 
-            <h2 class="text-2xl font-semibold text-gray-800 leading-tight">
-                Registrar un nuevo programa institucional
-            </h2>
+            <div class="flex flex-col gap-4 px-5 py-4
+                        sm:flex-row sm:items-center sm:justify-between">
 
-            <a href="{{ route('programas.listar') }}"
-                class="inline-flex items-center mt-0.5 text-sm font-medium text-blue-600 hover:text-blue-800">
+                <div class="flex items-center gap-3">
 
-                <i class="bi bi-arrow-left-short text-lg mr-1"></i>
+                    <div class="flex h-11 w-11 flex-shrink-0 items-center
+                                justify-center rounded-lg border
+                                border-gray-200 bg-gray-100">
 
-                Regresar
+                        <i class="bi bi-collection text-xl text-gray-600"></i>
 
-            </a>
+                    </div>
+
+                    <div>
+
+                        <p class="text-xs font-medium uppercase
+                                  tracking-wide text-gray-400">
+                            Inversión pública
+                        </p>
+
+                        <h2 class="text-lg font-semibold text-gray-800">
+                            Registrar programa de inversión
+                        </h2>
+
+                        <p class="mt-0.5 text-sm text-gray-500">
+                            Registre el programa y alinéelo con la
+                            planificación institucional de la entidad.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <a
+                    href="{{ route('programas.listar') }}"
+                    class="inline-flex items-center justify-center gap-2
+                           rounded-md border border-gray-300 bg-white
+                           px-4 py-2 text-sm font-medium text-gray-700
+                           transition hover:bg-gray-50"
+                >
+                    <i class="bi bi-arrow-left"></i>
+
+                    Regresar
+                </a>
+
+            </div>
 
         </div>
 
-        @include('programas.partials.modal-exito')
+        {{-- Errores generales --}}
+        @if($errors->any())
 
-        <!-- Scroll -->
-        <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
+            <div
+                class="rounded-lg border border-red-200
+                       bg-red-50 px-4 py-3"
+                role="alert"
+            >
+                <div class="flex items-start gap-3">
 
-            <!-- Formulario -->
-            <form method="POST"
-                action="{{ route('programas.store') }}">
+                    <i class="bi bi-exclamation-circle
+                              mt-0.5 text-red-600"></i>
 
-                @csrf
+                    <div>
 
-                @include('programas.partials.barra-progreso')
+                        <p class="text-sm font-medium text-red-700">
+                            No se pudo registrar el programa.
+                        </p>
 
-                @include('programas.partials.contexto-planificacion')
+                        <p class="mt-1 text-xs text-red-600">
+                            Revise los campos señalados e intente nuevamente.
+                        </p>
 
-                @include('programas.partials.informacion-general')
+                    </div>
 
-                @include('programas.partials.estado')
+                </div>
 
-                @include('programas.partials.acciones')
+            </div>
 
-            </form>
+        @endif
 
-        </div>
+        {{-- Formulario --}}
+        <form
+            method="POST"
+            action="{{ route('programas.store') }}"
+        >
+            @csrf
+
+            <div
+                class="overflow-y-auto pr-1"
+                style="height: calc(100vh - 220px); min-height: 420px;"
+            >
+                @include(
+                    'programas.partials.contexto-planificacion'
+                )
+
+                @include(
+                    'programas.partials.informacion-general'
+                )
+
+                @include(
+                    'programas.partials.estado'
+                )
+
+                @include(
+                    'programas.partials.acciones'
+                )
+            </div>
+
+        </form>
 
     </div>
 

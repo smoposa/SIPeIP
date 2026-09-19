@@ -44,6 +44,10 @@ use App\Repositories\Eloquent\IndicadorRepository;
 use App\Repositories\Contracts\ClasificacionInversionRepositoryInterface;
 use App\Repositories\Eloquent\ClasificacionInversionRepository;
 
+// Programas
+use App\Repositories\Contracts\ProgramaRepositoryInterface;
+use App\Repositories\Eloquent\ProgramaRepository;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -109,6 +113,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ClasificacionInversionRepositoryInterface::class,
             ClasificacionInversionRepository::class
+        );
+
+        // Programas
+        $this->app->bind(
+            ProgramaRepositoryInterface::class,
+            ProgramaRepository::class
         );
     }
 

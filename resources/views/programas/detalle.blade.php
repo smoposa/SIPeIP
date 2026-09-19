@@ -1,214 +1,463 @@
-<x-programas-layout title="Detalle del Programa">
+<x-programas-layout title="Detalle del programa">
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-0">
+    <div class="space-y-5">
 
-        <div class="flex">
+        @if(session('success'))
 
-            <a href="{{ route('programas.listar') }}"
-                class="py-2 text-sm font-medium text-blue-600 hover:text-green-800 mr-8">
+            <div
+                id="alertSuccess"
+                class="fixed right-5 top-5 z-50 rounded-lg
+                       bg-green-600 px-6 py-3 text-sm
+                       text-white shadow-lg"
+                role="alert"
+            >
+                {{ session('success') }}
+            </div>
 
-                <i class="bi bi-chevron-left"></i>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const alerta =
+                        document.getElementById('alertSuccess');
 
-                Regresar
+                    if (!alerta) {
+                        return;
+                    }
 
-            </a>
+                    setTimeout(function () {
+                        alerta.remove();
+                    }, 3000);
+                });
+            </script>
 
-            <a href="{{ route('programas.detalle', $programa->id) }}"
-                class="{{ request()->routeIs('programas.detalle')
-                    ? 'px-3 py-2 text-sm text-green-700 bg-gray-100 transition'
-                    : 'px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition' }}">
+        @endif
 
-                <i class="bi bi-info-circle text-green-600 me-2"></i>
+        {{-- Encabezado --}}
+        <div class="rounded-lg border border-gray-200 bg-white">
 
-                Información General
+            <div class="flex flex-col gap-4 px-5 py-4
+                        lg:flex-row lg:items-center lg:justify-between">
 
-            </a>
+                <div class="flex min-w-0 items-center gap-3">
 
-            <a href="#"
-                class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                    <div class="flex h-12 w-12 flex-shrink-0 items-center
+                                justify-center rounded-lg border
+                                border-gray-200 bg-gray-100">
 
-                <i class="bi bi-folder2-open text-green-600 me-2"></i>
+                        <i class="bi bi-collection text-xl text-gray-600"></i>
 
-                Proyectos
+                    </div>
 
-            </a>
+                    <div class="min-w-0">
 
-            <a href="#"
-                class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                        <p class="font-mono text-xs font-semibold
+                                  text-[#024687]">
+                            {{ $programa->codigo }}
+                        </p>
 
-                <i class="bi bi-clock-history text-green-600 me-2"></i>
+                        <h2 class="truncate text-lg font-semibold
+                                   text-gray-800">
+                            {{ $programa->nombre }}
+                        </h2>
 
-                Historial
+                        <p class="mt-0.5 text-sm text-gray-500">
+                            {{ $programa->entidad?->nombre
+                                ?? 'Entidad no registrada' }}
+                        </p>
 
-            </a>
+                    </div>
 
-            <a href="{{ url()->current() }}"
-                class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
+                </div>
 
-                <i class="bi bi-arrow-clockwise text-green-600 me-2"></i>
+                <div class="flex flex-wrap items-center gap-2">
 
-                Actualizar
+                    <a
+                        href="{{ route('programas.listar') }}"
+                        class="inline-flex items-center gap-2 rounded-md
+                               border border-gray-300 bg-white px-3 py-2
+                               text-sm font-medium text-gray-700
+                               transition hover:bg-gray-50"
+                    >
+                        <i class="bi bi-arrow-left"></i>
 
-            </a>
+                        Regresar
+                    </a>
+
+                    @if(puedeHacer('programas', 'editar'))
+
+                        <a
+                            href="{{ route(
+                                'programas.edit',
+                                $programa->id
+                            ) }}"
+                            class="inline-flex items-center gap-2
+                                   rounded-md bg-blue-600 px-3 py-2
+                                   text-sm font-medium text-white
+                                   transition hover:bg-blue-700"
+                        >
+                            <i class="bi bi-pencil"></i>
+
+                            Editar
+                        </a>
+
+                    @endif
+
+                </div>
+
+            </div>
 
         </div>
 
-    </div>
+        <div
+            class="overflow-y-auto pr-1"
+            style="height: calc(100vh - 190px); min-height: 420px;"
+        >
+            <div class="space-y-5">
 
-    <!-- Scroll -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
+                {{-- Estados --}}
+                <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
 
-        <div class="bg-white p-6 shadow-sm">
+                    <div class="rounded-lg border
+                                border-gray-200 bg-white p-5">
 
-            <!-- Cabecera -->
-            <div class="flex items-center gap-4 mb-0 pb-6">
+                        <p class="text-xs font-medium uppercase
+                                  tracking-wide text-gray-500">
+                            Estado administrativo
+                        </p>
 
-                <div class="w-16 h-16 rounded-full bg-[#16A34A]
-                            flex items-center justify-center
-                            text-white text-3xl">
+                        <div class="mt-3 flex flex-wrap
+                                    items-center justify-between gap-3">
 
-                    <i class="bi bi-diagram-3"></i>
+                            @if($programa->estado === 'Activo')
 
-                </div>
+                                <span class="inline-flex items-center
+                                             gap-1.5 rounded-full
+                                             bg-green-50 px-2.5 py-1
+                                             text-xs font-medium
+                                             text-green-700">
 
-                <div>
+                                    <span class="h-1.5 w-1.5
+                                                 rounded-full bg-green-500">
+                                    </span>
 
-                    <h2 class="text-xl font-semibold text-gray-800">
-                        {{ $programa->nombre }}
-                    </h2>
+                                    Activo
+                                </span>
 
-                    <p class="text-gray-500">
-                        {{ $programa->codigo }}
-                    </p>
+                            @else
 
-                </div>
+                                <span class="inline-flex items-center
+                                             gap-1.5 rounded-full
+                                             bg-red-50 px-2.5 py-1
+                                             text-xs font-medium
+                                             text-red-700">
 
-            </div>
+                                    <span class="h-1.5 w-1.5
+                                                 rounded-full bg-red-500">
+                                    </span>
 
-            <!-- Información General -->
-            <div class="bg-gray-100 border-b border-gray-200">
-
-                <div class="flex justify-between items-center px-4 py-2">
-
-                    <h4 class="text-sm font-semibold text-gray-800">
-                        Información general
-                    </h4>
-
-                    <a href="{{ route('programas.edit', $programa->id) }}"
-                        class="text-sm text-blue-600 hover:text-blue-800">
-
-                        Editar
-
-                    </a>
-
-                </div>
-
-            </div>
-
-            <!-- Datos -->
-            <div class="px-4 py-3">
-
-                <div class="space-y-4 mb-6">
-
-                    <!-- Código -->
-                    <div class="flex">
-
-                        <span class="w-44 text-sm font-semibold text-gray-700">
-                            Código
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $programa->codigo }}
-                        </span>
-
-                    </div>
-
-                    <!-- Nombre -->
-                    <div class="flex">
-
-                        <span class="w-44 text-sm font-semibold text-gray-700">
-                            Nombre
-                        </span>
-
-                        <span class="text-sm font-medium text-[#16A34A]">
-                            {{ $programa->nombre }}
-                        </span>
-
-                    </div>
-
-                    <!-- Descripción -->
-                    <div class="flex items-start">
-
-                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                            Descripción
-                        </span>
-
-                        <span class="text-sm text-gray-600 leading-relaxed">
-                            {{ $programa->descripcion ?: 'No registra' }}
-                        </span>
-
-                    </div>
-
-                    <!-- Período -->
-                    <div class="flex">
-
-                        <span class="w-44 text-sm font-semibold text-gray-700">
-                            Período
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $programa->periodo_inicio }}
-                            -
-                            {{ $programa->periodo_fin }}
-                        </span>
-
-                    </div>
-
-                    <!-- Responsable -->
-                    <div class="flex">
-
-                        <span class="w-44 text-sm font-semibold text-gray-700">
-                            Responsable
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-
-                            {{ $programa->responsable->nombres }}
-                            {{ $programa->responsable->apellidos }}
-
-                            @if($programa->responsable->cargo)
-
-                                - {{ $programa->responsable->cargo }}
+                                    Inactivo
+                                </span>
 
                             @endif
 
-                        </span>
+                            @if(puedeHacer('programas', 'estado'))
+
+                                <form
+                                    method="POST"
+                                    action="{{ route(
+                                        'programas.estado',
+                                        $programa->id
+                                    ) }}"
+                                >
+                                    @csrf
+                                    @method('PUT')
+
+                                    <input
+                                        type="hidden"
+                                        name="estado"
+                                        value="{{
+                                            $programa->estado === 'Activo'
+                                                ? 0
+                                                : 1
+                                        }}"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="text-xs font-medium
+                                               text-blue-600
+                                               hover:text-blue-800"
+                                    >
+                                        {{ $programa->estado === 'Activo'
+                                            ? 'Inactivar'
+                                            : 'Activar' }}
+                                    </button>
+
+                                </form>
+
+                            @endif
+
+                        </div>
 
                     </div>
 
-                    <!-- Objetivos -->
-                    <div class="flex items-start">
+                    <div class="rounded-lg border
+                                border-gray-200 bg-white p-5">
 
-                        <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                            Objetivos asociados
-                        </span>
+                        <p class="text-xs font-medium uppercase
+                                  tracking-wide text-gray-500">
+                            Estado del proceso
+                        </p>
 
-                        <div class="text-sm text-gray-600 space-y-1">
+                        @php
+                            $claseProceso = match(
+                                $programa->estado_proceso
+                            ) {
+                                'Priorizado' =>
+                                    'bg-green-50 text-green-700',
+
+                                'En revisión' =>
+                                    'bg-blue-50 text-blue-700',
+
+                                'Observado' =>
+                                    'bg-amber-50 text-amber-700',
+
+                                'Negado' =>
+                                    'bg-red-50 text-red-700',
+
+                                default =>
+                                    'bg-gray-100 text-gray-700',
+                            };
+                        @endphp
+
+                        <div class="mt-3 flex flex-col gap-3
+                                    sm:flex-row sm:items-center
+                                    sm:justify-between">
+
+                            <span class="inline-flex w-fit rounded-full
+                                         px-2.5 py-1 text-xs font-medium
+                                         {{ $claseProceso }}">
+                                {{ $programa->estado_proceso }}
+                            </span>
+
+                            @if(puedeHacer('programas', 'proceso'))
+
+                                <form
+                                    method="POST"
+                                    action="{{ route(
+                                        'programas.estado-proceso',
+                                        $programa->id
+                                    ) }}"
+                                    class="flex items-center gap-2"
+                                >
+                                    @csrf
+                                    @method('PUT')
+
+                                    <select
+                                        name="estado_proceso"
+                                        required
+                                        class="rounded-md border-gray-300
+                                               py-1.5 text-xs shadow-sm
+                                               focus:border-blue-500
+                                               focus:ring-blue-500"
+                                    >
+                                        @foreach(
+                                            \App\Enums\EstadoProcesoPrograma::cases()
+                                            as $estadoProceso
+                                        )
+
+                                            <option
+                                                value="{{ $estadoProceso->value }}"
+                                                @selected(
+                                                    $programa->estado_proceso
+                                                    === $estadoProceso->value
+                                                )
+                                            >
+                                                {{ $estadoProceso->value }}
+                                            </option>
+
+                                        @endforeach
+                                    </select>
+
+                                    <button
+                                        type="submit"
+                                        class="rounded-md bg-blue-600
+                                               px-3 py-1.5 text-xs
+                                               font-medium text-white
+                                               transition hover:bg-blue-700"
+                                    >
+                                        Actualizar
+                                    </button>
+
+                                </form>
+
+                            @endif
+
+                        </div>
+
+                        @error('estado_proceso')
+
+                            <p class="mt-2 text-xs text-red-600">
+                                {{ $message }}
+                            </p>
+
+                        @enderror
+
+                    </div>
+
+                </div>
+
+                {{-- Información general --}}
+                <div class="rounded-lg border
+                            border-gray-200 bg-white">
+
+                    <div class="border-b border-gray-200 px-5 py-3">
+
+                        <h3 class="text-sm font-semibold text-gray-800">
+                            Información general
+                        </h3>
+
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
+
+                        <div>
+
+                            <p class="text-xs font-medium
+                                      uppercase text-gray-500">
+                                Período
+                            </p>
+
+                            <p class="mt-1 text-sm text-gray-700">
+                                {{ $programa->periodo_inicio }}
+                                –
+                                {{ $programa->periodo_fin }}
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs font-medium
+                                      uppercase text-gray-500">
+                                Proyectos relacionados
+                            </p>
+
+                            <p class="mt-1 text-sm text-gray-700">
+                                {{ $programa->proyectos->count() }}
+                            </p>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs font-medium
+                                      uppercase text-gray-500">
+                                Responsable
+                            </p>
+
+                            <p class="mt-1 text-sm text-gray-700">
+                                {{ $programa->responsable?->nombres
+                                    ?? 'No registra' }}
+
+                                {{ $programa->responsable?->apellidos
+                                    ?? '' }}
+                            </p>
+
+                            @if($programa->responsable?->cargo)
+
+                                <p class="mt-0.5 text-xs text-gray-500">
+                                    {{ $programa->responsable->cargo }}
+                                </p>
+
+                            @endif
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs font-medium
+                                      uppercase text-gray-500">
+                                Registrado por
+                            </p>
+
+                            <p class="mt-1 text-sm text-gray-700">
+                                {{ $programa->usuario?->nombres
+                                    ?? 'No registra' }}
+
+                                {{ $programa->usuario?->apellidos
+                                    ?? '' }}
+                            </p>
+
+                        </div>
+
+                        <div class="md:col-span-2">
+
+                            <p class="text-xs font-medium
+                                      uppercase text-gray-500">
+                                Descripción
+                            </p>
+
+                            <p class="mt-1 whitespace-pre-line
+                                      text-sm leading-relaxed text-gray-700">
+                                {{ $programa->descripcion
+                                    ?: 'No registra' }}
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{-- Objetivos --}}
+                <div class="rounded-lg border
+                            border-gray-200 bg-white">
+
+                    <div class="border-b border-gray-200 px-5 py-3">
+
+                        <h3 class="text-sm font-semibold text-gray-800">
+                            Alineación con Objetivos Estratégicos
+                            Institucionales
+                        </h3>
+
+                    </div>
+
+                    <div class="p-5">
+
+                        <div class="space-y-3">
 
                             @forelse($programa->objetivos as $objetivo)
 
-                                <div>
+                                <div class="rounded-md border
+                                            border-gray-200 bg-gray-50 p-4">
 
-                                    {{ $objetivo->codigo }}
-                                    -
-                                    {{ $objetivo->nombre }}
+                                    <p class="font-mono text-xs
+                                              font-semibold text-[#024687]">
+                                        {{ $objetivo->codigo }}
+                                    </p>
+
+                                    <p class="mt-1 text-sm
+                                              font-medium text-gray-800">
+                                        {{ $objetivo->nombre }}
+                                    </p>
+
+                                    @if($objetivo->descripcion)
+
+                                        <p class="mt-1 text-xs
+                                                  leading-relaxed text-gray-500">
+                                            {{ $objetivo->descripcion }}
+                                        </p>
+
+                                    @endif
 
                                 </div>
 
                             @empty
 
-                                <span>No registra</span>
+                                <p class="py-4 text-center
+                                          text-sm text-gray-500">
+                                    No existen objetivos asociados.
+                                </p>
 
                             @endforelse
 
@@ -216,110 +465,51 @@
 
                     </div>
 
-                    <!-- Registrado por -->
-                    <div class="flex">
+                </div>
 
-                        <span class="w-44 text-sm font-semibold text-gray-700">
-                            Registrado por
-                        </span>
+                {{-- Auditoría básica --}}
+                <div class="rounded-lg border
+                            border-gray-200 bg-white">
 
-                        <span class="text-sm text-gray-600">
+                    <div class="border-b border-gray-200 px-5 py-3">
 
-                            {{ $programa->usuario->nombres }}
-                            {{ $programa->usuario->apellidos }}
-
-                        </span>
+                        <h3 class="text-sm font-semibold text-gray-800">
+                            Trazabilidad básica
+                        </h3>
 
                     </div>
 
-                </div>
+                    <div class="grid grid-cols-1 gap-5 p-5 md:grid-cols-2">
 
-            </div>
+                        <div>
 
-            <!-- Estado -->
-            <div class="bg-gray-100 border-b border-gray-200">
+                            <p class="text-xs font-medium
+                                      uppercase text-gray-500">
+                                Fecha de creación
+                            </p>
 
-                <div class="px-4 py-2">
+                            <p class="mt-1 text-sm text-gray-700">
+                                {{ $programa->created_at?->format(
+                                    'd/m/Y H:i'
+                                ) ?? 'No registra' }}
+                            </p>
 
-                    <h4 class="text-sm font-semibold text-gray-800">
-                        Estado del programa
-                    </h4>
+                        </div>
 
-                </div>
+                        <div>
 
-            </div>
+                            <p class="text-xs font-medium
+                                      uppercase text-gray-500">
+                                Última actualización
+                            </p>
 
-            <div class="px-4 py-2">
+                            <p class="mt-1 text-sm text-gray-700">
+                                {{ $programa->updated_at?->format(
+                                    'd/m/Y H:i'
+                                ) ?? 'No registra' }}
+                            </p>
 
-                <div class="flex items-center mb-4">
-
-                    <span class="w-40 text-sm font-semibold text-gray-700">
-                        Estado
-                    </span>
-
-                    @if($programa->estado == 'Activo')
-
-                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                            Activo
-                        </span>
-
-                    @else
-
-                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                            Inactivo
-                        </span>
-
-                    @endif
-
-                    <a href="{{ route('programas.edit', $programa->id) }}"
-                        class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
-
-                        Editar
-
-                    </a>
-
-                </div>
-
-            </div>
-
-            <!-- Auditoría -->
-            <div class="bg-gray-100 border-b border-gray-200">
-
-                <div class="px-4 py-2">
-
-                    <h4 class="text-sm font-semibold text-gray-800">
-                        Auditoría
-                    </h4>
-
-                </div>
-
-            </div>
-
-            <div class="px-4 py-2">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                    <div>
-
-                        <p class="text-sm font-semibold text-gray-700">
-                            Fecha de creación
-                        </p>
-
-                        <p class="mt-1 text-sm text-gray-600">
-                            {{ $programa->created_at?->format('d/m/Y H:i') ?? 'No registra' }}
-                        </p>
-
-                    </div>
-
-                    <div>
-
-                        <p class="text-sm font-semibold text-gray-700">
-                            Última actualización
-                        </p>
-
-                        <p class="mt-1 text-sm text-gray-600">
-                            {{ $programa->updated_at?->format('d/m/Y H:i') ?? 'No registra' }}
-                        </p>
+                        </div>
 
                     </div>
 

@@ -2,286 +2,179 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProgramaRequest;
-use App\Models\Programa;
-use App\Models\Objetivo;
+use App\Http\Requests\Programas\StoreProgramaRequest;
+use App\Http\Requests\Programas\UpdateProgramaProcessStatusRequest;
+use App\Http\Requests\Programas\UpdateProgramaRequest;
+use App\Http\Requests\Programas\UpdateProgramaStatusRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Services\ProgramaService;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class ProgramaController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Dashboard
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | Listado
-    |--------------------------------------------------------------------------
-    */
-
-    // Listado de programas.
-    public function listar()
-    {
-        $programas = Programa::with([
-                'responsable',
-                'usuario',
-                'objetivos'
-            ])
-            ->orderBy('id', 'desc')
-            ->paginate(10);
-
-        return view('programas.listar', compact('programas'));
-    }
-    
-    /*
-    |--------------------------------------------------------------------------
-    | Crear Programa
-    |--------------------------------------------------------------------------
-    */
-
-    // Formulario para crear un programa.
-    public function create()
-    {
-        // Generar código automático
-        $ultimoPrograma = Programa::orderByDesc('id')->first();
-
-        if ($ultimoPrograma) {
-
-            $partes = explode('-', $ultimoPrograma->codigo);
-
-            $ultimoNumero = (int) end($partes);
-
-            $nuevoNumero = str_pad($ultimoNumero + 1, 2, '0', STR_PAD_LEFT);
-
-        } else {
-
-            $nuevoNumero = '01';
-
-        }
-
-        $codigo = 'PROG-' . $nuevoNumero;
-
-        // Responsables (Directores de Inversión Pública)
-        $responsables = User::where('estado', 'Activo')
-            ->whereHas('rol', function ($query) {
-                $query->where('nombre', 'Director de Inversión Pública');
-            })
-            ->orderBy('nombres')
-            ->get();
-
-        // Objetivos disponibles
-        $objetivos = Objetivo::where('estado', 'Activo')
-            ->orderBy('codigo')
-            ->get();
-
-        return view('programas.create', compact(
-            'codigo',
-            'responsables',
-            'objetivos'
-        ));
+    public function __construct(
+        private readonly ProgramaService $service
+    ) {
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Guardar Programa
-    |--------------------------------------------------------------------------
-    */
-
-
-    // Registrar programa.
-    public function store(ProgramaRequest $request)
+    /**
+     * Mostrar los programas de la entidad.
+     */
+    public function index(): View
     {
-        DB::beginTransaction();
+        $this->autorizar('programas');
 
-        try {
+        $usuario = $this->usuarioAutenticado();
 
-            // Generar código automático
-            $ultimoPrograma = Programa::orderByDesc('id')->first();
+        return view(
+            'programas.listar',
+            array_merge(
+                [
+                    'programas' => $this->service->listar(
+                        $usuario
+                    ),
+                ],
+                $this->service->obtenerResumen(
+                    $usuario
+                )
+            )
+        );
+    }
 
-            if ($ultimoPrograma) {
+    /**
+     * Mostrar el formulario de creación.
+     */
+    public function create(): View
+    {
+        $this->autorizar(
+            'programas',
+            'crear'
+        );
 
-                $partes = explode('-', $ultimoPrograma->codigo);
+        return view(
+            'programas.create',
+            $this->service->obtenerDatosFormulario(
+                $this->usuarioAutenticado()
+            )
+        );
+    }
 
-                $ultimoNumero = (int) end($partes);
+    /**
+     * Registrar un programa.
+     */
+    public function store(
+        StoreProgramaRequest $request
+    ): RedirectResponse {
+        $this->autorizar(
+            'programas',
+            'crear'
+        );
 
-                $nuevoNumero = str_pad($ultimoNumero + 1, 2, '0', STR_PAD_LEFT);
+        $programa = $this->service->crear(
+            $this->usuarioAutenticado(),
+            $request->validated()
+        );
 
-            } else {
-
-                $nuevoNumero = '01';
-
-            }
-
-            $codigo = 'PROG-' . $nuevoNumero;
-
-            // Crear programa
-            $programa = Programa::create([
-
-                'codigo'           => $codigo,
-
-                'nombre'           => $request->nombre,
-
-                'descripcion'      => $request->descripcion,
-
-                'periodo_inicio'   => $request->periodo_inicio,
-
-                'periodo_fin'      => $request->periodo_fin,
-
-                'responsable_id'   => $request->responsable_id,
-
-                'estado'           => $request->estado,
-
-                'usuario_id'       => Auth::id(),
-
-            ]);
-
-            // Asociar Objetivos Estratégicos
-            $programa->objetivos()->sync(
-                $request->objetivos
+        return redirect()
+            ->route(
+                'programas.detalle',
+                $programa->id
+            )
+            ->with(
+                'success',
+                'Programa registrado correctamente.'
             );
-
-            DB::commit();
-
-            return redirect()
-                ->route('programas.create')
-                ->with('programa_registrado', $programa->id);
-
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'error' => $e->getMessage()
-                ]);
-
-        }
-    }
-        /*
-    |--------------------------------------------------------------------------
-    | Detalle
-    |--------------------------------------------------------------------------
-    */
-
-    // Mostrar detalle del programa.
-    public function detalle($id)
-    {
-        $programa = Programa::with([
-            'responsable',
-            'usuario',
-            'objetivos.metas.indicadores'
-        ])->findOrFail($id);
-
-        return view('programas.detalle', compact('programa'));
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Editar
-    |--------------------------------------------------------------------------
-    */
+    /**
+     * Mostrar el detalle de un programa.
+     */
+    public function detalle(
+        int $programa
+    ): View {
+        $this->autorizar('programas');
 
-    // Formulario de edición.
-    public function edit($id)
-    {
-        $programa = Programa::with('objetivos')
-            ->findOrFail($id);
-
-        $responsables = User::where('estado', 'Activo')
-            ->whereHas('rol', function ($query) {
-                $query->where('nombre', 'Director de Inversión Pública');
-            })
-            ->orderBy('nombres')
-            ->get();
-
-        $objetivos = Objetivo::where('estado', 'Activo')
-            ->orderBy('codigo')
-            ->get();
-
-        return view('programas.edit', compact(
-            'programa',
-            'responsables',
-            'objetivos'
-        ));
+        return view(
+            'programas.detalle',
+            [
+                'programa' => $this->service
+                    ->obtenerPorId(
+                        $this->usuarioAutenticado(),
+                        $programa
+                    ),
+            ]
+        );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Actualizar
-    |--------------------------------------------------------------------------
-    */
+    /**
+     * Mostrar el formulario de edición.
+     */
+    public function edit(
+        int $programa
+    ): View {
+        $this->autorizar(
+            'programas',
+            'editar'
+        );
 
-    // Actualizar programa.
-    public function update(ProgramaRequest $request, $id)
-    {
-        DB::beginTransaction();
+        return view(
+            'programas.edit',
+            $this->service->obtenerDatosEdicion(
+                $this->usuarioAutenticado(),
+                $programa
+            )
+        );
+    }
 
-        try {
+    /**
+     * Actualizar un programa.
+     */
+    public function update(
+        UpdateProgramaRequest $request,
+        int $programa
+    ): RedirectResponse {
+        $this->autorizar(
+            'programas',
+            'editar'
+        );
 
-            $programa = Programa::findOrFail($id);
+        $this->service->actualizar(
+            $this->usuarioAutenticado(),
+            $programa,
+            $request->validated()
+        );
 
-            $programa->update([
-
-                'nombre'          => $request->nombre,
-
-                'descripcion'     => $request->descripcion,
-
-                'periodo_inicio'  => $request->periodo_inicio,
-
-                'periodo_fin'     => $request->periodo_fin,
-
-                'responsable_id'  => $request->responsable_id,
-
-                'estado'          => $request->estado,
-
-            ]);
-
-            // Actualizar objetivos asociados
-            $programa->objetivos()->sync(
-                $request->objetivos
+        return redirect()
+            ->route(
+                'programas.detalle',
+                $programa
+            )
+            ->with(
+                'success',
+                'Programa actualizado correctamente.'
             );
-
-            DB::commit();
-
-            return redirect()
-                ->route('programas.listar')
-                ->with('success', 'Programa actualizado correctamente.');
-
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'error' => $e->getMessage()
-                ]);
-
-        }
     }
 
-        /*
-    |--------------------------------------------------------------------------
-    | Estado
-    |--------------------------------------------------------------------------
-    */
+    /**
+     * Actualizar el estado administrativo.
+     */
+    public function actualizarEstado(
+        UpdateProgramaStatusRequest $request,
+        int $programa
+    ): RedirectResponse {
+        $this->autorizar(
+            'programas',
+            'estado'
+        );
 
-    // Cambiar estado del programa.
-    public function editarEstado($id)
-    {
-        $programa = Programa::findOrFail($id);
-
-        $programa->estado = $programa->estado === 'Activo'
-            ? 'Inactivo'
-            : 'Activo';
-
-        $programa->save();
+        $this->service->actualizarEstado(
+            $this->usuarioAutenticado(),
+            $programa,
+            $request->boolean('estado')
+        );
 
         return redirect()
             ->route('programas.listar')
@@ -290,5 +183,49 @@ class ProgramaController extends Controller
                 'Estado del programa actualizado correctamente.'
             );
     }
-}
 
+    /**
+     * Actualizar el estado del proceso.
+     */
+    public function actualizarEstadoProceso(
+        UpdateProgramaProcessStatusRequest $request,
+        int $programa
+    ): RedirectResponse {
+        $this->autorizar(
+            'programas',
+            'proceso'
+        );
+
+        $this->service->actualizarEstadoProceso(
+            $this->usuarioAutenticado(),
+            $programa,
+            $request->validated('estado_proceso')
+        );
+
+        return redirect()
+            ->route(
+                'programas.detalle',
+                $programa
+            )
+            ->with(
+                'success',
+                'Estado del proceso actualizado correctamente.'
+            );
+    }
+
+    /**
+     * Obtener el usuario autenticado.
+     */
+    private function usuarioAutenticado(): User
+    {
+        $usuario = Auth::user();
+
+        if (!$usuario instanceof User) {
+            throw new AuthenticationException(
+                'Debe iniciar sesión para acceder al módulo.'
+            );
+        }
+
+        return $usuario;
+    }
+}
