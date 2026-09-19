@@ -48,6 +48,10 @@ use App\Repositories\Eloquent\ClasificacionInversionRepository;
 use App\Repositories\Contracts\ProgramaRepositoryInterface;
 use App\Repositories\Eloquent\ProgramaRepository;
 
+// Proyectos
+use App\Repositories\Contracts\ProyectoRepositoryInterface;
+use App\Repositories\Eloquent\ProyectoRepository;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -119,6 +123,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             ProgramaRepositoryInterface::class,
             ProgramaRepository::class
+        );
+
+        // Proyectos
+        $this->app->bind(
+            ProyectoRepositoryInterface::class,
+            ProyectoRepository::class
         );
     }
 

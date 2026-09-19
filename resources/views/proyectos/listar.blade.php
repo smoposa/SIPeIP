@@ -1,232 +1,272 @@
 <x-proyectos-layout title="Proyectos">
 
-    @if(session('success'))
+    @if (session('success'))
         <div id="alertSuccess"
-            class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+            class="fixed right-5 top-5 z-50 rounded-lg bg-green-600 px-6 py-3 text-white shadow-lg">
 
             {{ session('success') }}
-
         </div>
 
         <script>
             setTimeout(() => {
-                const alerta = document.getElementById('alertSuccess');
-
-                if (alerta) {
-                    alerta.remove();
-                }
+                document.getElementById('alertSuccess')?.remove();
             }, 3000);
         </script>
     @endif
 
-    <!-- Encabezado -->
-    <div class="mb-2">
-
-        <h2 class="text-2xl font-semibold text-gray-800">
-
-            Proyectos de Inversión
-
-        </h2>
-
-    </div>
-
-    <!-- Resumen -->
-    <div class="flex items-center justify-between mb-4">
+    {{-- Encabezado --}}
+    <div class="mb-4 flex items-start justify-between gap-4">
 
         <div>
+            <h2 class="text-2xl font-semibold text-gray-800">
+                Proyectos de inversión pública
+            </h2>
 
-            <p class="text-sm text-gray-500">
-
-                {{ $proyectos->count() }} registros ·
-
-                <span class="text-blue-600 font-medium">
-                    {{ $proyectos->where('estado','Planificado')->count() }}
-                </span>
-
-                planificados ·
-
-                <span class="text-green-600 font-medium">
-                    {{ $proyectos->where('estado','En ejecución')->count() }}
-                </span>
-
-                en ejecución
-
+            <p class="mt-1 text-sm text-gray-500">
+                Registro, clasificación y priorización de los proyectos
+                pertenecientes a la entidad.
             </p>
-
         </div>
 
-        <a href="{{ route('proyectos.create') }}"
-            class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
+        @if (puedeHacer('proyectos', 'crear'))
+            <a href="{{ route('proyectos.create') }}"
+                class="inline-flex items-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700">
 
-            <i class="bi bi-plus-lg"></i>
-
-            Crear proyecto
-
-        </a>
+                <i class="bi bi-plus-lg"></i>
+                Crear proyecto
+            </a>
+        @endif
 
     </div>
 
-    <!-- Tabla -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 210px);">
+    {{-- Resumen --}}
+    <div class="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
 
-        <div class="bg-white border border-gray-200 rounded-lg">
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+            <p class="text-xs font-medium uppercase text-gray-500">
+                Total de proyectos
+            </p>
+
+            <p class="mt-1 text-2xl font-semibold text-gray-800">
+                {{ $totalProyectos }}
+            </p>
+        </div>
+
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+            <p class="text-xs font-medium uppercase text-gray-500">
+                Activos
+            </p>
+
+            <p class="mt-1 text-2xl font-semibold text-green-700">
+                {{ $totalActivos }}
+            </p>
+        </div>
+
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+            <p class="text-xs font-medium uppercase text-gray-500">
+                Inactivos
+            </p>
+
+            <p class="mt-1 text-2xl font-semibold text-red-700">
+                {{ $totalInactivos }}
+            </p>
+        </div>
+
+        <div class="rounded-lg border border-gray-200 bg-white p-4">
+            <p class="text-xs font-medium uppercase text-gray-500">
+                Presupuesto registrado
+            </p>
+
+            <p class="mt-1 text-xl font-semibold text-blue-700">
+                USD {{ number_format((float) $presupuestoTotal, 2) }}
+            </p>
+        </div>
+
+    </div>
+
+    {{-- Tabla --}}
+    <div class="overflow-y-auto"
+        style="height: calc(100vh - 310px);">
+
+        <div class="overflow-x-auto rounded-lg border border-gray-200 bg-white">
 
             <table class="min-w-full">
 
-                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+                <thead class="sticky top-0 z-10 border-b border-gray-200 bg-gray-50">
 
                     <tr>
-
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Nro
+                        <th class="px-3 py-3 text-left text-xs font-semibold uppercase text-gray-600">
+                            Nro.
                         </th>
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Código
-                        </th>
-
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                        <th class="px-3 py-3 text-left text-xs font-semibold uppercase text-gray-600">
                             Proyecto
                         </th>
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                        <th class="px-3 py-3 text-left text-xs font-semibold uppercase text-gray-600">
+                            Clasificación
+                        </th>
+
+                        <th class="px-3 py-3 text-left text-xs font-semibold uppercase text-gray-600">
+                            Presupuesto
+                        </th>
+
+                        <th class="px-3 py-3 text-left text-xs font-semibold uppercase text-gray-600">
+                            Proceso
+                        </th>
+
+                        <th class="px-3 py-3 text-left text-xs font-semibold uppercase text-gray-600">
                             Estado
                         </th>
 
+                        <th class="px-3 py-3 text-right text-xs font-semibold uppercase text-gray-600">
+                            Acciones
+                        </th>
                     </tr>
 
                 </thead>
 
                 <tbody>
 
-                    @forelse($proyectos as $proyecto)
+                    @forelse ($proyectos as $proyecto)
 
-                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <tr class="border-b border-gray-100 align-top hover:bg-gray-50">
 
-                            <!-- Nro -->
-                            <td class="px-2 py-2 text-sm text-gray-600">
-
-                                {{ $loop->iteration }}
-
+                            <td class="px-3 py-3 text-sm text-gray-500">
+                                {{ ($proyectos->firstItem() ?? 1) + $loop->index }}
                             </td>
 
-                            <!-- Código -->
-                            <td class="px-2 py-2 text-sm text-gray-600">
-
-                                {{ $proyecto->codigo }}
-
-                            </td>
-
-                            <!-- Proyecto -->
-                            <td class="px-2 py-2">
+                            <td class="px-3 py-3">
 
                                 <a href="{{ route('proyectos.detalle', $proyecto->id) }}"
-                                    class="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+                                    class="text-sm font-semibold text-blue-600 hover:text-blue-800 hover:underline">
 
-                                    {{ \Illuminate\Support\Str::limit($proyecto->nombre,120) }}
-
+                                    {{ $proyecto->codigo }}
+                                    -
+                                    {{ \Illuminate\Support\Str::limit(
+                                        $proyecto->nombre,
+                                        75
+                                    ) }}
                                 </a>
 
-                                <div class="mt-1 text-xs">
-
+                                <p class="mt-1 text-xs text-gray-500">
                                     <span class="font-medium text-gray-600">
-
                                         Programa:
-
                                     </span>
 
-                                    <span class="text-gray-500">
+                                    {{ $proyecto->programa?->codigo ?? 'No registra' }}
+                                    -
+                                    {{ $proyecto->programa?->nombre ?? 'No registra' }}
+                                </p>
 
-                                        {{ $proyecto->programa?->codigo }}
-
-                                        -
-
-                                        {{ $proyecto->programa?->nombre }}
-
-                                    </span>
-
-                                </div>
-
-                                <div class="text-xs">
-
+                                <p class="mt-1 text-xs text-gray-500">
                                     <span class="font-medium text-gray-600">
-
                                         Responsable:
-
                                     </span>
 
-                                    <span class="text-gray-500">
+                                    {{ $proyecto->responsable?->nombres ?? 'No registra' }}
+                                    {{ $proyecto->responsable?->apellidos ?? '' }}
+                                </p>
 
-                                        {{ $proyecto->responsable?->nombres ?? 'No registra' }}
-
-                                        {{ $proyecto->responsable?->apellidos ?? '' }}
-
-                                    </span>
-
-                                </div>
-
-                                <div class="text-xs">
-
+                                <p class="mt-1 text-xs text-gray-500">
                                     <span class="font-medium text-gray-600">
-
-                                        Presupuesto:
-
+                                        Ejecución:
                                     </span>
 
-                                    <span class="text-gray-500">
-
-                                        $ {{ number_format($proyecto->presupuesto_aprobado,2) }}
-
-                                    </span>
-
-                                </div>
+                                    {{ $proyecto->estado }}
+                                </p>
 
                             </td>
 
-                            <!-- Estado -->
-                            <td class="px-2 py-2">
+                            <td class="px-3 py-3 text-sm text-gray-600">
 
-                                @switch($proyecto->estado)
+                                <p class="font-medium text-gray-700">
+                                    {{ $proyecto->subsector?->codigo ?? 'Sin código' }}
+                                    -
+                                    {{ $proyecto->subsector?->nombre ?? 'Sin subsector' }}
+                                </p>
 
-                                    @case('Planificado')
+                                <p class="mt-1 text-xs text-gray-500">
+                                    {{ $proyecto->subsector?->sector?->nombre ?? 'Sin sector' }}
+                                </p>
 
-                                        <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">
+                                <p class="text-xs text-gray-500">
+                                    {{ $proyecto->subsector?->sector?->macrosector?->nombre ?? 'Sin macrosector' }}
+                                </p>
 
-                                            Planificado
+                            </td>
 
-                                        </span>
+                            <td class="whitespace-nowrap px-3 py-3 text-sm font-medium text-gray-700">
+                                USD {{ number_format(
+                                    (float) $proyecto->presupuesto_aprobado,
+                                    2
+                                ) }}
+                            </td>
 
-                                        @break
+                            <td class="px-3 py-3">
 
-                                    @case('En ejecución')
+                                @php
+                                    $claseProceso = match (
+                                        $proyecto->estado_proceso
+                                    ) {
+                                        'Priorizado' =>
+                                            'bg-green-100 text-green-700',
 
-                                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
+                                        'Observado' =>
+                                            'bg-amber-100 text-amber-700',
 
-                                            En ejecución
+                                        'Negado' =>
+                                            'bg-red-100 text-red-700',
 
-                                        </span>
+                                        'En revisión' =>
+                                            'bg-blue-100 text-blue-700',
 
-                                        @break
+                                        default =>
+                                            'bg-gray-100 text-gray-700',
+                                    };
+                                @endphp
 
-                                    @case('Finalizado')
+                                <span class="inline-flex rounded-full px-2 py-1 text-xs font-medium {{ $claseProceso }}">
+                                    {{ $proyecto->estado_proceso }}
+                                </span>
 
-                                        <span class="px-2 py-1 text-xs rounded-full bg-gray-200 text-gray-700">
+                            </td>
 
-                                            Finalizado
+                            <td class="px-3 py-3">
 
-                                        </span>
+                                @if ($proyecto->estado_administrativo === 'Activo')
+                                    <span class="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
+                                        Activo
+                                    </span>
+                                @else
+                                    <span class="inline-flex rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700">
+                                        Inactivo
+                                    </span>
+                                @endif
 
-                                        @break
+                            </td>
 
-                                    @default
+                            <td class="px-3 py-3 text-right">
 
-                                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
+                                <div class="flex justify-end gap-2">
 
-                                            Suspendido
+                                    <a href="{{ route('proyectos.detalle', $proyecto->id) }}"
+                                        title="Ver detalle"
+                                        class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-gray-300 text-gray-600 transition hover:bg-gray-100">
 
-                                        </span>
+                                        <i class="bi bi-eye"></i>
+                                    </a>
 
-                                @endswitch
+                                    @if (puedeHacer('proyectos', 'editar'))
+                                        <a href="{{ route('proyectos.edit', $proyecto->id) }}"
+                                            title="Editar proyecto"
+                                            class="inline-flex h-8 w-8 items-center justify-center rounded-md border border-blue-300 text-blue-600 transition hover:bg-blue-50">
+
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                    @endif
+
+                                </div>
 
                             </td>
 
@@ -235,14 +275,11 @@
                     @empty
 
                         <tr>
+                            <td colspan="7"
+                                class="px-4 py-10 text-center text-sm text-gray-500">
 
-                            <td colspan="4"
-                                class="px-4 py-6 text-center text-gray-500">
-
-                                No existen proyectos registrados.
-
+                                No existen proyectos registrados para su entidad.
                             </td>
-
                         </tr>
 
                     @endforelse
@@ -255,37 +292,23 @@
 
     </div>
 
-    <!-- Pie -->
-    <div class="flex items-center justify-between mt-6">
+    {{-- Paginación --}}
+    <div class="mt-5 flex items-center justify-between gap-4">
 
         <p class="text-sm text-gray-600">
-
             Mostrando
-
             <span class="font-medium">
-
                 {{ $proyectos->firstItem() ?? 0 }}
-
             </span>
-
             a
-
             <span class="font-medium">
-
                 {{ $proyectos->lastItem() ?? 0 }}
-
             </span>
-
             de
-
             <span class="font-medium">
-
                 {{ $proyectos->total() }}
-
             </span>
-
             registros.
-
         </p>
 
         {{ $proyectos->links() }}

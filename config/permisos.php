@@ -275,6 +275,40 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Proyectos de inversión pública
+        |--------------------------------------------------------------------------
+        */
+
+        'proyectos' => [
+            'crear' => [
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+                'DIRECTOR_INVERSION',
+                'ANALISTA_INVERSION',
+            ],
+
+            'editar' => [
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+                'DIRECTOR_INVERSION',
+                'ANALISTA_INVERSION',
+            ],
+
+            'estado' => [
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+                'DIRECTOR_INVERSION',
+            ],
+
+            'proceso' => [
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+                'DIRECTOR_INVERSION',
+            ],
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
         | Planes
         |--------------------------------------------------------------------------
         */

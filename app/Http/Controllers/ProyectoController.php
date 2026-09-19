@@ -2,318 +2,251 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProyectoRequest;
-use App\Models\Programa;
-use App\Models\Proyecto;
+use App\Enums\EstadoProcesoProyecto;
+use App\Enums\EstadoProyecto;
+use App\Http\Requests\Proyectos\StoreProyectoRequest;
+use App\Http\Requests\Proyectos\UpdateProyectoProcessStatusRequest;
+use App\Http\Requests\Proyectos\UpdateProyectoRequest;
+use App\Http\Requests\Proyectos\UpdateProyectoStatusRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Services\ProyectoService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class ProyectoController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Dashboard
-    |--------------------------------------------------------------------------
-    */
-
-    /*
-    |--------------------------------------------------------------------------
-    | Listado
-    |--------------------------------------------------------------------------
-    */
-
-    // Listado de proyectos.
-    public function listar()
-    {
-        $proyectos = Proyecto::with([
-                'programa',
-                'responsable',
-                'usuario'
-            ])
-            ->orderBy('id', 'desc')
-            ->paginate(10);
-
-        return view('proyectos.listar', compact('proyectos'));
+    public function __construct(
+        private readonly ProyectoService $service
+    ) {
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Crear Proyecto
-    |--------------------------------------------------------------------------
-    */
-
-    // Formulario para crear un proyecto.
-    public function create()
+    /**
+     * Listar los proyectos de la entidad.
+     */
+    public function index(): View
     {
-        // Generar código automático
-        $ultimoProyecto = Proyecto::orderByDesc('id')->first();
+        $this->autorizar('proyectos');
 
-        if ($ultimoProyecto) {
+        $usuario = $this->usuarioAutenticado();
 
-            $partes = explode('-', $ultimoProyecto->codigo);
+        return view(
+            'proyectos.listar',
+            [
+                'proyectos' => $this->service
+                    ->listar($usuario),
 
-            $ultimoNumero = (int) end($partes);
-
-            $nuevoNumero = str_pad($ultimoNumero + 1, 2, '0', STR_PAD_LEFT);
-
-        } else {
-
-            $nuevoNumero = '01';
-
-        }
-
-        $codigo = 'PRY-' . $nuevoNumero;
-
-        // Programas disponibles
-        $programas = Programa::where('estado', 'Activo')
-            ->orderBy('codigo')
-            ->get();
-
-        // Responsables (Directores de Inversión Pública)
-        $responsables = User::where('estado', 'Activo')
-            ->whereHas('rol', function ($query) {
-
-                $query->where(
-                    'nombre',
-                    'Director de Inversión Pública'
-                );
-
-            })
-            ->orderBy('nombres')
-            ->get();
-
-        return view('proyectos.create', compact(
-            'codigo',
-            'programas',
-            'responsables'
-        ));
+                ...$this->service
+                    ->obtenerResumen($usuario),
+            ]
+        );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Guardar Proyecto
-    |--------------------------------------------------------------------------
-    */
-        // Registrar proyecto.
-    public function store(ProyectoRequest $request)
+    /**
+     * Mostrar el formulario de creación.
+     */
+    public function create(): View
     {
-        DB::beginTransaction();
+        $this->autorizar(
+            'proyectos',
+            'crear'
+        );
 
-        try {
-
-            // Generar código automático
-            $ultimoProyecto = Proyecto::orderByDesc('id')->first();
-
-            if ($ultimoProyecto) {
-
-                $partes = explode('-', $ultimoProyecto->codigo);
-
-                $ultimoNumero = (int) end($partes);
-
-                $nuevoNumero = str_pad($ultimoNumero + 1, 2, '0', STR_PAD_LEFT);
-
-            } else {
-
-                $nuevoNumero = '01';
-
-            }
-
-            $codigo = 'PRY-' . $nuevoNumero;
-
-            // Crear proyecto
-            $proyecto = Proyecto::create([
-
-                'programa_id'            => $request->programa_id,
-
-                'codigo'                 => $codigo,
-
-                'nombre'                 => $request->nombre,
-
-                'descripcion'            => $request->descripcion,
-
-                'fecha_inicio'           => $request->fecha_inicio,
-
-                'fecha_fin'              => $request->fecha_fin,
-
-                'presupuesto_aprobado'   => $request->presupuesto_aprobado,
-
-                'responsable_id'         => $request->responsable_id,
-
-                'estado'                 => $request->estado,
-
-                'usuario_id'             => Auth::id(),
-
-            ]);
-
-            DB::commit();
-
-            return redirect()
-                ->route('proyectos.create')
-                ->with('proyecto_registrado', $proyecto->id);
-
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'error' => $e->getMessage()
-                ]);
-
-        }
+        return view(
+            'proyectos.create',
+            $this->service->obtenerDatosFormulario(
+                $this->usuarioAutenticado()
+            )
+        );
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Detalle
-    |--------------------------------------------------------------------------
-    */
-        // Mostrar detalle del proyecto.
-    public function detalle($id)
-    {
-        $proyecto = Proyecto::with([
-            'programa',
-            'responsable',
-            'usuario'
-        ])->findOrFail($id);
+    /**
+     * Registrar un proyecto.
+     */
+    public function store(
+        StoreProyectoRequest $request
+    ): RedirectResponse {
+        $this->autorizar(
+            'proyectos',
+            'crear'
+        );
 
-        return view('proyectos.detalle', compact('proyecto'));
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Editar
-    |--------------------------------------------------------------------------
-    */
-
-    // Formulario de edición.
-    public function edit($id)
-    {
-        $proyecto = Proyecto::findOrFail($id);
-
-        // Programas disponibles
-        $programas = Programa::where('estado', 'Activo')
-            ->orderBy('codigo')
-            ->get();
-
-        // Responsables
-        $responsables = User::where('estado', 'Activo')
-            ->whereHas('rol', function ($query) {
-
-                $query->where(
-                    'nombre',
-                    'Director de Inversión Pública'
-                );
-
-            })
-            ->orderBy('nombres')
-            ->get();
-
-        return view('proyectos.edit', compact(
-            'proyecto',
-            'programas',
-            'responsables'
-        ));
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Actualizar
-    |--------------------------------------------------------------------------
-    */
-
-    // Actualizar proyecto.
-    public function update(ProyectoRequest $request, $id)
-    {
-        DB::beginTransaction();
-
-        try {
-
-            $proyecto = Proyecto::findOrFail($id);
-
-            $proyecto->update([
-
-                'programa_id'            => $request->programa_id,
-
-                'nombre'                 => $request->nombre,
-
-                'descripcion'            => $request->descripcion,
-
-                'fecha_inicio'           => $request->fecha_inicio,
-
-                'fecha_fin'              => $request->fecha_fin,
-
-                'presupuesto_aprobado'   => $request->presupuesto_aprobado,
-
-                'responsable_id'         => $request->responsable_id,
-
-                'estado'                 => $request->estado,
-
-            ]);
-
-            DB::commit();
-
-            return redirect()
-                ->route('proyectos.listar')
-                ->with(
-                    'success',
-                    'Proyecto actualizado correctamente.'
-                );
-
-        } catch (\Exception $e) {
-
-            DB::rollBack();
-
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'error' => $e->getMessage()
-                ]);
-
-        }
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Estado
-    |--------------------------------------------------------------------------
-    */
-
-    // Cambiar estado del proyecto.
-    public function editarEstado($id)
-    {
-        $proyecto = Proyecto::findOrFail($id);
-
-        switch ($proyecto->estado) {
-
-            case 'Planificado':
-                $proyecto->estado = 'En ejecución';
-                break;
-
-            case 'En ejecución':
-                $proyecto->estado = 'Finalizado';
-                break;
-
-            case 'Finalizado':
-                $proyecto->estado = 'Suspendido';
-                break;
-
-            default:
-                $proyecto->estado = 'Planificado';
-                break;
-
-        }
-
-        $proyecto->save();
+        $proyecto = $this->service->crear(
+            $this->usuarioAutenticado(),
+            $request->validated()
+        );
 
         return redirect()
-            ->route('proyectos.listar')
+            ->route(
+                'proyectos.detalle',
+                $proyecto->id
+            )
             ->with(
                 'success',
-                'Estado del proyecto actualizado correctamente.'
+                'Proyecto registrado correctamente.'
             );
+    }
+
+    /**
+     * Mostrar el detalle de un proyecto.
+     */
+    public function detalle(
+        int $proyecto
+    ): View {
+        $this->autorizar('proyectos');
+
+        return view(
+            'proyectos.detalle',
+            [
+                'proyecto' => $this->service
+                    ->obtenerPorId(
+                        $this->usuarioAutenticado(),
+                        $proyecto
+                    ),
+
+                'estadosProceso' =>
+                    EstadoProcesoProyecto::cases(),
+            ]
+        );
+    }
+
+    /**
+     * Mostrar el formulario de edición.
+     */
+    public function edit(
+        int $proyecto
+    ): View {
+        $this->autorizar(
+            'proyectos',
+            'editar'
+        );
+
+        $usuario = $this->usuarioAutenticado();
+
+        $registro = $this->service
+            ->obtenerPorId(
+                $usuario,
+                $proyecto
+            );
+
+        return view(
+            'proyectos.edit',
+            [
+                ...$this->service
+                    ->obtenerDatosFormulario(
+                        $usuario,
+                        $registro
+                    ),
+
+                'estadosEjecucion' =>
+                    EstadoProyecto::cases(),
+            ]
+        );
+    }
+
+    /**
+     * Actualizar la información de un proyecto.
+     */
+    public function update(
+        UpdateProyectoRequest $request,
+        int $proyecto
+    ): RedirectResponse {
+        $this->autorizar(
+            'proyectos',
+            'editar'
+        );
+
+        $this->service->actualizar(
+            $this->usuarioAutenticado(),
+            $proyecto,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route(
+                'proyectos.detalle',
+                $proyecto
+            )
+            ->with(
+                'success',
+                'Proyecto actualizado correctamente.'
+            );
+    }
+
+    /**
+     * Activar o inactivar administrativamente un proyecto.
+     */
+    public function actualizarEstado(
+        UpdateProyectoStatusRequest $request,
+        int $proyecto
+    ): RedirectResponse {
+        $this->autorizar(
+            'proyectos',
+            'estado'
+        );
+
+        $this->service
+            ->actualizarEstadoAdministrativo(
+                $this->usuarioAutenticado(),
+                $proyecto,
+                $request->boolean('estado')
+            );
+
+        return redirect()
+            ->route(
+                'proyectos.detalle',
+                $proyecto
+            )
+            ->with(
+                'success',
+                'Estado administrativo actualizado correctamente.'
+            );
+    }
+
+    /**
+     * Actualizar el estado del proceso de priorización.
+     */
+    public function actualizarEstadoProceso(
+        UpdateProyectoProcessStatusRequest $request,
+        int $proyecto
+    ): RedirectResponse {
+        $this->autorizar(
+            'proyectos',
+            'proceso'
+        );
+
+        $this->service
+            ->actualizarEstadoProceso(
+                $this->usuarioAutenticado(),
+                $proyecto,
+                $request->validated()[
+                    'estado_proceso'
+                ]
+            );
+
+        return redirect()
+            ->route(
+                'proyectos.detalle',
+                $proyecto
+            )
+            ->with(
+                'success',
+                'Estado del proceso actualizado correctamente.'
+            );
+    }
+
+    /**
+     * Obtener el usuario autenticado.
+     */
+    private function usuarioAutenticado(): User
+    {
+        $usuario = Auth::user();
+
+        abort_unless(
+            $usuario instanceof User,
+            401
+        );
+
+        return $usuario;
     }
 }

@@ -548,32 +548,44 @@ Route::middleware([
                 ->name('estado-proceso');
     });
 
-    // Proyectos
+    /*
+    |--------------------------------------------------------------------------
+    | Proyectos de inversión pública
+    |--------------------------------------------------------------------------
+    */
+
     Route::prefix('proyectos')
         ->name('proyectos.')
+        ->middleware('role:proyectos')
+        ->controller(ProyectoController::class)
         ->group(function () {
-
-            Route::get('/', [ProyectoController::class, 'listar'])
+            Route::get('/', 'index')
                 ->name('listar');
 
-            Route::get('/crear', [ProyectoController::class, 'create'])
+            Route::get('/crear', 'create')
                 ->name('create');
 
-            Route::post('/', [ProyectoController::class, 'store'])
+            Route::post('/', 'store')
                 ->name('store');
 
-            Route::get('/{proyecto}/detalle', [ProyectoController::class, 'detalle'])
+            Route::get('/{proyecto}/detalle', 'detalle')
                 ->name('detalle');
 
-            Route::get('/{proyecto}/editar', [ProyectoController::class, 'edit'])
+            Route::get('/{proyecto}/editar', 'edit')
                 ->name('edit');
 
-            Route::put('/{proyecto}', [ProyectoController::class, 'update'])
+            Route::put('/{proyecto}', 'update')
                 ->name('update');
 
-            Route::patch('/{proyecto}/estado', [ProyectoController::class, 'editarEstado'])
-                ->name('estado');
+            Route::put(
+                '/{proyecto}/estado',
+                'actualizarEstado'
+            )->name('estado');
 
+            Route::put(
+                '/{proyecto}/estado-proceso',
+                'actualizarEstadoProceso'
+            )->name('estado-proceso');
     });
 
 }); // Cierre del middleware auth

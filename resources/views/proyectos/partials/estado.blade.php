@@ -1,94 +1,118 @@
-<!-- Estado -->
-<div class="mb-8">
+<div class="mb-6 rounded-lg border border-gray-200 bg-white p-6">
 
-    <!-- Encabezado -->
-    <div class="bg-[#F3F2F1] border-b border-gray-200 px-4 py-2 mb-5">
+    <h3 class="mb-5 text-lg font-semibold text-gray-800">
+        Estados del proyecto
+    </h3>
 
-        <h2 class="text-sm font-semibold text-gray-700">
-            Estado
-        </h2>
+    @if (isset($proyecto))
 
-    </div>
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 
-    <!-- Contenido -->
-    <div class="pl-8">
+            {{-- Estado de ejecución --}}
+            <div>
+                <label for="estado"
+                    class="mb-1 block text-sm font-medium text-gray-700">
 
-        <div class="flex items-center">
-
-            <label class="w-52 text-sm font-semibold text-gray-700">
-                Estado
-            </label>
-
-            <div class="flex flex-wrap gap-6">
-
-                <!-- Planificado -->
-                <label class="inline-flex items-center">
-
-                    <input
-                        type="radio"
-                        name="estado"
-                        value="Planificado"
-                        {{ old('estado', $proyecto->estado ?? 'Planificado') == 'Planificado' ? 'checked' : '' }}
-                        class="text-blue-600 border-gray-300 focus:ring-blue-500">
-
-                    <span class="ml-2 text-sm text-gray-700">
-                        Planificado
-                    </span>
-
+                    Estado de ejecución
+                    <span class="text-red-500">*</span>
                 </label>
 
-                <!-- En ejecución -->
-                <label class="inline-flex items-center">
+                <select
+                    id="estado"
+                    name="estado"
+                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
 
-                    <input
-                        type="radio"
-                        name="estado"
-                        value="En ejecución"
-                        {{ old('estado', $proyecto->estado ?? '') == 'En ejecución' ? 'checked' : '' }}
-                        class="text-blue-600 border-gray-300 focus:ring-blue-500">
+                    @foreach ($estadosEjecucion as $estado)
+                        <option
+                            value="{{ $estado->value }}"
+                            @selected(
+                                old(
+                                    'estado',
+                                    $proyecto->estado
+                                ) === $estado->value
+                            )>
 
-                    <span class="ml-2 text-sm text-gray-700">
-                        En ejecución
-                    </span>
+                            {{ $estado->value }}
+                        </option>
+                    @endforeach
 
-                </label>
+                </select>
 
-                <!-- Finalizado -->
-                <label class="inline-flex items-center">
+                @error('estado')
+                    <p class="mt-1 text-sm text-red-600">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
 
-                    <input
-                        type="radio"
-                        name="estado"
-                        value="Finalizado"
-                        {{ old('estado', $proyecto->estado ?? '') == 'Finalizado' ? 'checked' : '' }}
-                        class="text-blue-600 border-gray-300 focus:ring-blue-500">
+            {{-- Estado administrativo --}}
+            <div>
+                <p class="mb-1 text-sm font-medium text-gray-700">
+                    Estado administrativo
+                </p>
 
-                    <span class="ml-2 text-sm text-gray-700">
-                        Finalizado
-                    </span>
+                <div class="rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
+                    {{ $proyecto->estado_administrativo }}
+                </div>
 
-                </label>
+                <p class="mt-1 text-xs text-gray-500">
+                    Se gestiona desde el detalle del proyecto.
+                </p>
+            </div>
 
-                <!-- Suspendido -->
-                <label class="inline-flex items-center">
+            {{-- Estado del proceso --}}
+            <div>
+                <p class="mb-1 text-sm font-medium text-gray-700">
+                    Estado del proceso
+                </p>
 
-                    <input
-                        type="radio"
-                        name="estado"
-                        value="Suspendido"
-                        {{ old('estado', $proyecto->estado ?? '') == 'Suspendido' ? 'checked' : '' }}
-                        class="text-blue-600 border-gray-300 focus:ring-blue-500">
+                <div class="rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
+                    {{ $proyecto->estado_proceso }}
+                </div>
 
-                    <span class="ml-2 text-sm text-gray-700">
-                        Suspendido
-                    </span>
-
-                </label>
-
+                <p class="mt-1 text-xs text-gray-500">
+                    Se gestiona desde el detalle del proyecto.
+                </p>
             </div>
 
         </div>
 
-    </div>
+    @else
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+
+            <div class="rounded-md border border-gray-200 bg-gray-50 p-4">
+                <p class="text-xs font-medium uppercase text-gray-500">
+                    Ejecución inicial
+                </p>
+
+                <p class="mt-1 text-sm font-semibold text-gray-800">
+                    Planificado
+                </p>
+            </div>
+
+            <div class="rounded-md border border-gray-200 bg-gray-50 p-4">
+                <p class="text-xs font-medium uppercase text-gray-500">
+                    Estado administrativo
+                </p>
+
+                <p class="mt-1 text-sm font-semibold text-green-700">
+                    Activo
+                </p>
+            </div>
+
+            <div class="rounded-md border border-gray-200 bg-gray-50 p-4">
+                <p class="text-xs font-medium uppercase text-gray-500">
+                    Estado del proceso
+                </p>
+
+                <p class="mt-1 text-sm font-semibold text-gray-800">
+                    Borrador
+                </p>
+            </div>
+
+        </div>
+
+    @endif
 
 </div>
