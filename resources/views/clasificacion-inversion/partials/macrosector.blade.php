@@ -7,6 +7,7 @@
 <details class="mb-3 overflow-hidden rounded-lg
                 border border-gray-200 bg-white">
 
+    {{-- Encabezado del macrosector --}}
     <summary class="flex cursor-pointer list-none items-center
                     justify-between bg-gray-50 px-4 py-3
                     transition hover:bg-gray-100">
@@ -64,14 +65,39 @@
 
     </summary>
 
+    {{-- Contenido del macrosector --}}
     <div class="space-y-3 border-t border-gray-200 p-3">
 
+        {{-- Acciones del macrosector --}}
         @if(
-            puedeHacer('clasificacion_inversion', 'editar')
+            puedeHacer('clasificacion_inversion', 'crear')
+            || puedeHacer('clasificacion_inversion', 'editar')
             || puedeHacer('clasificacion_inversion', 'estado')
         )
 
             <div class="flex flex-wrap items-center justify-end gap-2">
+
+                @if(
+                    puedeHacer('clasificacion_inversion', 'crear')
+                    && $macrosector->estado === 'Activo'
+                )
+
+                    <a
+                        href="{{ route(
+                            'clasificacion-inversion.sectores.create',
+                            ['macrosector_id' => $macrosector->id]
+                        ) }}"
+                        class="inline-flex items-center gap-2 rounded-md
+                               bg-blue-600 px-3 py-1.5 text-xs
+                               font-medium text-white transition
+                               hover:bg-blue-700"
+                    >
+                        <i class="bi bi-plus-lg"></i>
+
+                        Nuevo sector
+                    </a>
+
+                @endif
 
                 @if(puedeHacer('clasificacion_inversion', 'editar'))
 
@@ -107,14 +133,16 @@
                         <input
                             type="hidden"
                             name="estado"
-                            value="{{ $macrosector->estado === 'Activo' ? 0 : 1 }}"
+                            value="{{ $macrosector->estado === 'Activo'
+                                ? 0
+                                : 1 }}"
                         >
 
                         <button
                             type="submit"
-                            class="inline-flex items-center gap-2 rounded-md
-                                   border px-3 py-1.5 text-xs font-medium
-                                   transition
+                            class="inline-flex items-center gap-2
+                                   rounded-md border px-3 py-1.5
+                                   text-xs font-medium transition
                                    {{ $macrosector->estado === 'Activo'
                                        ? 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
                                        : 'border-green-200 bg-green-50 text-green-700 hover:bg-green-100' }}"
@@ -138,6 +166,7 @@
 
         @endif
 
+        {{-- Sectores pertenecientes al macrosector --}}
         @forelse($macrosector->sectores as $sector)
 
             @include(
@@ -150,9 +179,34 @@
             <div class="rounded-md border border-dashed
                         border-gray-300 px-4 py-6 text-center">
 
-                <p class="text-sm text-gray-500">
+                <i class="bi bi-diagram-2 text-2xl text-gray-300"></i>
+
+                <p class="mt-2 text-sm text-gray-500">
                     Este macrosector no tiene sectores registrados.
                 </p>
+
+                @if(
+                    puedeHacer('clasificacion_inversion', 'crear')
+                    && $macrosector->estado === 'Activo'
+                )
+
+                    <a
+                        href="{{ route(
+                            'clasificacion-inversion.sectores.create',
+                            ['macrosector_id' => $macrosector->id]
+                        ) }}"
+                        class="mt-3 inline-flex items-center gap-2
+                               rounded-md border border-blue-200
+                               bg-blue-50 px-3 py-1.5 text-xs
+                               font-medium text-blue-700
+                               transition hover:bg-blue-100"
+                    >
+                        <i class="bi bi-plus-lg"></i>
+
+                        Registrar primer sector
+                    </a>
+
+                @endif
 
             </div>
 
