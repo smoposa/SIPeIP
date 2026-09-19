@@ -16,6 +16,11 @@ use App\Http\Controllers\MetaController;
 use App\Http\Controllers\IndicadorController;
 use App\Http\Controllers\ProyectoController;
 
+use App\Http\Controllers\ClasificacionInversionController;
+use App\Http\Controllers\MacrosectorController;
+use App\Http\Controllers\SectorController;
+use App\Http\Controllers\SubsectorController;
+
 // Página principal
 Route::get('/', function () {
     return redirect('/login');
@@ -207,6 +212,153 @@ Route::middleware([
                 ->whereNumber('id')
                 ->name('detalle');
             */
+    });
+
+        /*
+    |--------------------------------------------------------------------------
+    | Catálogo: Clasificación de la inversión
+    |--------------------------------------------------------------------------
+    */
+
+    Route::prefix('catalogos/clasificacion-inversion')
+        ->name('clasificacion-inversion.')
+        ->middleware('role:clasificacion_inversion')
+        ->group(function () {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Panel principal
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/',
+                [ClasificacionInversionController::class, 'index']
+            )->name('index');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Macrosector
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/macrosectores/crear',
+                [MacrosectorController::class, 'create']
+            )->name('macrosectores.create');
+
+            Route::post(
+                '/macrosectores',
+                [MacrosectorController::class, 'store']
+            )->name('macrosectores.store');
+
+            Route::get(
+                '/macrosectores/{macrosector}/editar',
+                [MacrosectorController::class, 'edit']
+            )->whereNumber('macrosector')
+                ->name('macrosectores.edit');
+
+            Route::put(
+                '/macrosectores/{macrosector}',
+                [MacrosectorController::class, 'update']
+            )->whereNumber('macrosector')
+                ->name('macrosectores.update');
+
+            Route::put(
+                '/macrosectores/{macrosector}/estado',
+                [MacrosectorController::class, 'actualizarEstado']
+            )->whereNumber('macrosector')
+                ->name('macrosectores.estado');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Sectores
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/sectores/crear',
+                [SectorController::class, 'create']
+            )->name('sectores.create');
+
+            Route::post(
+                '/sectores',
+                [SectorController::class, 'store']
+            )->name('sectores.store');
+
+            Route::get(
+                '/sectores/{sector}/editar',
+                [SectorController::class, 'edit']
+            )->whereNumber('sector')
+                ->name('sectores.edit');
+
+            Route::put(
+                '/sectores/{sector}',
+                [SectorController::class, 'update']
+            )->whereNumber('sector')
+                ->name('sectores.update');
+
+            Route::put(
+                '/sectores/{sector}/estado',
+                [SectorController::class, 'actualizarEstado']
+            )->whereNumber('sector')
+                ->name('sectores.estado');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Subsectores
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/subsectores/crear',
+                [SubsectorController::class, 'create']
+            )->name('subsectores.create');
+
+            Route::post(
+                '/subsectores',
+                [SubsectorController::class, 'store']
+            )->name('subsectores.store');
+
+            Route::get(
+                '/subsectores/{subsector}/editar',
+                [SubsectorController::class, 'edit']
+            )->whereNumber('subsector')
+                ->name('subsectores.edit');
+
+            Route::put(
+                '/subsectores/{subsector}',
+                [SubsectorController::class, 'update']
+            )->whereNumber('subsector')
+                ->name('subsectores.update');
+
+            Route::put(
+                '/subsectores/{subsector}/estado',
+                [SubsectorController::class, 'actualizarEstado']
+            )->whereNumber('subsector')
+                ->name('subsectores.estado');
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Consultas dinámicas
+            |--------------------------------------------------------------------------
+            */
+
+            Route::get(
+                '/macrosectores/{macrosector}/sectores',
+                [SectorController::class, 'porMacrosector']
+            )->whereNumber('macrosector')
+                ->name('macrosectores.sectores');
+
+            Route::get(
+                '/sectores/{sector}/subsectores',
+                [SubsectorController::class, 'porSector']
+            )->whereNumber('sector')
+                ->name('sectores.subsectores');
     });
 
     // Objetivos

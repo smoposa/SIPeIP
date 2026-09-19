@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Ejecutar los seeders principales del sistema.
      */
     public function run(): void
     {
@@ -50,6 +50,21 @@ class DatabaseSeeder extends Seeder
             PndPoliticaSeeder::class,
             PndEstrategiaSeeder::class,
             PndMetaSeeder::class,
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | CATÁLOGOS - CLASIFICACIÓN DE LA INVERSIÓN
+            |--------------------------------------------------------------------------
+            |
+            | ClasificacionInversionSeeder crea:
+            | - Macrosectores
+            | - Sectores
+            | - Subsectores
+            |
+            */
+
+            ClasificacionInversionSeeder::class,
 
 
             /*

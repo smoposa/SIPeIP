@@ -113,6 +113,24 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Clasificación de la inversión
+        |--------------------------------------------------------------------------
+        */
+
+        'clasificacion_inversion' => [
+            'ADMIN_GLOBAL',
+            'ADMIN_SISTEMA',
+            'ADMIN_INSTITUCIONAL',
+            'DIRECTOR_PLANIFICACION',
+            'ANALISTA_PLANIFICACION',
+            'DIRECTOR_INVERSION',
+            'ANALISTA_INVERSION',
+            'AUDITOR_INSTITUCIONAL',
+            'CONSULTA_INSTITUCIONAL',
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
         | Inversión Pública
         |--------------------------------------------------------------------------
         */
@@ -193,6 +211,31 @@ return [
     */
 
     'acciones' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Clasificación de la inversión
+        |--------------------------------------------------------------------------
+        */
+
+        'clasificacion_inversion' => [
+
+            'crear' => [
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+            ],
+
+            'editar' => [
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+            ],
+
+            'estado' => [
+                'ADMIN_GLOBAL',
+                'ADMIN_SISTEMA',
+            ],
+
+        ],
 
         /*
         |--------------------------------------------------------------------------

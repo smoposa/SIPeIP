@@ -40,6 +40,10 @@ use App\Repositories\Eloquent\MetaRepository;
 use App\Repositories\Contracts\IndicadorRepositoryInterface;
 use App\Repositories\Eloquent\IndicadorRepository;
 
+// Clasificación de la inversión
+use App\Repositories\Contracts\ClasificacionInversionRepositoryInterface;
+use App\Repositories\Eloquent\ClasificacionInversionRepository;
+
 class RepositoryServiceProvider extends ServiceProvider
 {
     /**
@@ -99,6 +103,12 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(
             IndicadorRepositoryInterface::class,
             IndicadorRepository::class
+        );
+
+        // Clasificación de la inversión
+        $this->app->bind(
+            ClasificacionInversionRepositoryInterface::class,
+            ClasificacionInversionRepository::class
         );
     }
 
