@@ -339,6 +339,34 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Objetivos estratégicos institucionales
+        |--------------------------------------------------------------------------
+        */
+
+        'objetivos' => [
+
+            'crear' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_PLANIFICACION',
+                'ANALISTA_PLANIFICACION',
+            ],
+
+            'editar' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_PLANIFICACION',
+                'ANALISTA_PLANIFICACION',
+            ],
+
+            'estado' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_PLANIFICACION',
+                'ANALISTA_PLANIFICACION',
+            ],
+
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
         | Indicadores
         |--------------------------------------------------------------------------
         */

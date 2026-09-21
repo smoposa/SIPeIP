@@ -1,11 +1,10 @@
 <!-- Barra de acciones -->
 <div class="mb-0 border-b border-gray-300 bg-white">
 
-    <div class="flex flex-wrap items-center gap-1">
+    <div class="flex flex-wrap items-center">
 
-        <!-- Regresar -->
         <a href="{{ route('objetivos.listar') }}"
-           class="mr-6 py-2 text-sm font-medium text-blue-600
+           class="mr-8 py-2 text-sm font-medium text-blue-500
                   hover:text-blue-800">
 
             <i class="bi bi-chevron-left"></i>
@@ -13,27 +12,32 @@
 
         </a>
 
-        <!-- Editar información -->
-        <a href="{{ route('objetivos.edit', $objetivo->id) }}"
-           class="px-3 py-2 text-sm text-gray-700
-                  transition hover:bg-gray-100">
+        @if(puedeHacer('objetivos', 'editar'))
 
-            <i class="bi bi-pencil me-2 text-blue-500"></i>
-            Editar información
+            <a href="{{ route('objetivos.edit', $objetivo->id) }}"
+               class="px-3 py-2 text-sm text-gray-700
+                      transition hover:bg-gray-100">
 
-        </a>
+                <i class="bi bi-pencil me-2 text-blue-500"></i>
+                Editar información
 
-        <!-- Editar estado -->
-        <a href="{{ route('objetivos.editarestado', $objetivo->id) }}"
-           class="px-3 py-2 text-sm text-gray-700
-                  transition hover:bg-gray-100">
+            </a>
 
-            <i class="bi bi-check2-circle me-2 text-blue-500"></i>
-            Editar estado
+        @endif
 
-        </a>
+        @if(puedeHacer('objetivos', 'estado'))
 
-        <!-- Actualizar -->
+            <a href="{{ route('objetivos.editarestado', $objetivo->id) }}"
+               class="px-3 py-2 text-sm text-gray-700
+                      transition hover:bg-gray-100">
+
+                <i class="bi bi-check2-circle me-2 text-blue-500"></i>
+                Editar estado
+
+            </a>
+
+        @endif
+
         <a href="{{ url()->current() }}"
            class="px-3 py-2 text-sm text-gray-700
                   transition hover:bg-gray-100">
@@ -43,17 +47,14 @@
 
         </a>
 
-        <!-- Separador -->
-        <span class="px-2 text-gray-300" aria-hidden="true">
-            |
-        </span>
+        <!-- Separador visual -->
+        <span class="px-2 text-gray-300"> | </span>
 
-        <!-- Registrar meta -->
         @if(puedeVer('metas') && $objetivo->estado === 'Activo')
 
             <a href="{{ route('metas.create', ['objetivo_id' => $objetivo->id]) }}"
                class="px-3 py-2 text-sm font-medium text-green-700
-                      transition hover:bg-green-50">
+                      hover:bg-green-50">
 
                 <i class="bi bi-plus-circle me-2"></i>
                 Registrar meta
