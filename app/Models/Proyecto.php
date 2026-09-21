@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Proyecto extends Model
 {
@@ -94,5 +95,15 @@ class Proyecto extends Model
             User::class,
             'usuario_id'
         );
+    }
+
+    public function avances(): HasMany
+    {
+        return $this->hasMany(Avance::class);
+    }
+
+    public function presupuestos(): HasMany
+    {
+        return $this->hasMany(Presupuesto::class);
     }
 }

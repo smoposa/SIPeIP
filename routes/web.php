@@ -20,6 +20,8 @@ use App\Http\Controllers\ClasificacionInversionController;
 use App\Http\Controllers\MacrosectorController;
 use App\Http\Controllers\SectorController;
 use App\Http\Controllers\SubsectorController;
+use App\Http\Controllers\AvanceController;
+use App\Http\Controllers\PresupuestoController;
 
 // Página principal
 Route::get('/', function () {
@@ -587,6 +589,33 @@ Route::middleware([
                 'actualizarEstadoProceso'
             )->name('estado-proceso');
     });
+
+    Route::prefix('seguimiento/avances')
+        ->name('avances.')
+        ->middleware('role:avances')
+        ->controller(AvanceController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('listar');
+            Route::get('/crear', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('/proyectos/{proyecto}/indicadores', 'indicadores')->whereNumber('proyecto')->name('indicadores');
+            Route::get('/{avance}/detalle', 'detalle')->whereNumber('avance')->name('detalle');
+            Route::get('/{avance}/editar', 'edit')->whereNumber('avance')->name('edit');
+            Route::put('/{avance}', 'update')->whereNumber('avance')->name('update');
+        });
+
+    Route::prefix('seguimiento/presupuestos')
+        ->name('presupuestos.')
+        ->middleware('role:presupuestos')
+        ->controller(PresupuestoController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('listar');
+            Route::get('/crear', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('/{presupuesto}/detalle', 'detalle')->whereNumber('presupuesto')->name('detalle');
+            Route::get('/{presupuesto}/editar', 'edit')->whereNumber('presupuesto')->name('edit');
+            Route::put('/{presupuesto}', 'update')->whereNumber('presupuesto')->name('update');
+        });
 
 }); // Cierre del middleware auth
 require __DIR__.'/auth.php';

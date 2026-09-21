@@ -42,6 +42,22 @@
 
         <div class="flex items-center gap-2">
 
+            @if (puedeHacer('avances', 'crear'))
+                <a href="{{ route('avances.create', ['proyecto_id' => $proyecto->id]) }}"
+                    class="inline-flex items-center rounded-md border border-green-300 px-4 py-2 text-sm font-medium text-green-700 transition hover:bg-green-50">
+                    <i class="bi bi-graph-up-arrow mr-2"></i>
+                    Registrar avance
+                </a>
+            @endif
+
+            @if (puedeHacer('presupuestos', 'crear'))
+                <a href="{{ route('presupuestos.create', ['proyecto_id' => $proyecto->id]) }}"
+                    class="inline-flex items-center rounded-md border border-emerald-300 px-4 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-50">
+                    <i class="bi bi-cash-coin mr-2"></i>
+                    Registrar presupuesto
+                </a>
+            @endif
+
             @if (puedeHacer('proyectos', 'editar'))
                 <a href="{{ route('proyectos.edit', $proyecto->id) }}"
                     class="inline-flex items-center rounded-md border border-blue-300 px-4 py-2 text-sm font-medium text-blue-600 transition hover:bg-blue-50">

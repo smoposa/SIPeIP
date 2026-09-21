@@ -22,37 +22,8 @@
     @endif
 
     <!-- Barra de acciones -->
-    <div class="mb-0 border-b border-gray-300 bg-white">
+     @include('objetivos.partials.barra-menu')
 
-        <div class="flex flex-wrap items-center gap-1">
-
-            <a href="{{ route('objetivos.listar') }}"
-               class="mr-6 py-2 text-sm font-medium text-blue-600 hover:text-blue-800">
-
-                <i class="bi bi-chevron-left"></i>
-                Regresar
-
-            </a>
-
-            <a href="{{ route('objetivos.edit', $objetivo->id) }}"
-               class="px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100">
-
-                <i class="bi bi-pencil mr-2 text-blue-500"></i>
-                Editar información
-
-            </a>
-
-            <a href="{{ url()->current() }}"
-               class="px-3 py-2 text-sm text-gray-700 transition hover:bg-gray-100">
-
-                <i class="bi bi-arrow-clockwise mr-2 text-blue-500"></i>
-                Actualizar
-
-            </a>
-
-        </div>
-
-    </div>
 
     <!-- Contenido -->
     <div class="min-w-0 w-full overflow-x-hidden overflow-y-auto"

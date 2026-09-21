@@ -151,21 +151,13 @@ return [
             'CONSULTA_INSTITUCIONAL',
         ],
 
-        'presupuesto' => [
-            'ADMIN_SISTEMA',
-            'DIRECTOR_INVERSION',
-            'ANALISTA_INVERSION',
-            'AUDITOR_INSTITUCIONAL',
-            'CONSULTA_INSTITUCIONAL',
-        ],
-
         /*
         |--------------------------------------------------------------------------
         | Seguimiento
         |--------------------------------------------------------------------------
         */
 
-        'seguimiento' => [
+        'avances' => [
             'ADMIN_SISTEMA',
             'DIRECTOR_PLANIFICACION',
             'DIRECTOR_INVERSION',
@@ -174,7 +166,7 @@ return [
             'CONSULTA_INSTITUCIONAL',
         ],
 
-        'evaluacion' => [
+        'presupuestos' => [
             'ADMIN_SISTEMA',
             'DIRECTOR_PLANIFICACION',
             'DIRECTOR_INVERSION',
@@ -305,6 +297,16 @@ return [
                 'ADMIN_SISTEMA',
                 'DIRECTOR_INVERSION',
             ],
+        ],
+
+        'avances' => [
+            'crear' => ['ADMIN_SISTEMA', 'DIRECTOR_INVERSION', 'ANALISTA_INVERSION'],
+            'editar' => ['ADMIN_SISTEMA', 'DIRECTOR_INVERSION', 'ANALISTA_INVERSION'],
+        ],
+
+        'presupuestos' => [
+            'crear' => ['ADMIN_SISTEMA', 'DIRECTOR_INVERSION', 'ANALISTA_INVERSION'],
+            'editar' => ['ADMIN_SISTEMA', 'DIRECTOR_INVERSION', 'ANALISTA_INVERSION'],
         ],
 
         /*

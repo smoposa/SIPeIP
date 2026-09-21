@@ -72,6 +72,17 @@ class PlanRepository implements PlanRepositoryInterface
         return Plan::with([
                 'entidad',
                 'usuario',
+                'objetivos' => function ($query) {
+                    $query
+                        ->with([
+                            'pnd',
+                            'politicaPnd',
+                            'ods',
+                            'metaOds',
+                        ])
+                        ->withCount('metas')
+                        ->orderBy('codigo');
+                },
             ])
             ->where('entidad_id', $entidadId)
             ->where('id', $id)

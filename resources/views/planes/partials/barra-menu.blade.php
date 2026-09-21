@@ -1,0 +1,68 @@
+<!-- Barra de acciones -->
+<div class="mb-0 border-b border-gray-300 bg-white">
+
+    <div class="flex flex-wrap items-center">
+
+        <a href="{{ route('planes.listar') }}"
+           class="mr-8 py-2 text-sm font-medium text-blue-500
+                  hover:text-blue-800">
+
+            <i class="bi bi-chevron-left"></i>
+            Regresar
+
+        </a>
+
+        @if(puedeHacer('planes', 'editar'))
+
+            <a href="{{ route('planes.edit', $plan->id) }}"
+               class="px-3 py-2 text-sm text-gray-700
+                      transition hover:bg-gray-100">
+
+                <i class="bi bi-pencil me-2 text-blue-500"></i>
+                Editar información
+
+            </a>
+
+        @endif
+
+        @if(puedeHacer('planes', 'estado'))
+
+            <a href="{{ route('planes.editarestado', $plan->id) }}"
+               class="px-3 py-2 text-sm text-gray-700
+                      transition hover:bg-gray-100">
+
+                <i class="bi bi-check2-circle me-2 text-blue-500"></i>
+                Editar estado
+
+            </a>
+
+        @endif
+
+        <a href="{{ url()->current() }}"
+           class="px-3 py-2 text-sm text-gray-700
+                  transition hover:bg-gray-100">
+
+            <i class="bi bi-arrow-clockwise me-2 text-blue-500"></i>
+            Actualizar
+
+        </a>
+
+        <!-- Separador visual -->
+        <span class="px-2 text-gray-300"> | </span>
+
+        @if(puedeVer('objetivos') && $plan->estado === 'Activo')
+
+            <a href="{{ route('objetivos.create', ['plan_id' => $plan->id]) }}"
+            class="px-3 py-2 text-sm font-medium text-green-700
+                    hover:bg-green-50">
+
+                <i class="bi bi-plus-circle me-2"></i>
+                Registrar OEI
+
+            </a>
+
+        @endif
+
+    </div>
+
+</div>

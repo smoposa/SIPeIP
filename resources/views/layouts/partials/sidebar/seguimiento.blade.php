@@ -1,18 +1,17 @@
 <!-- ================= SEGUIMIENTO ================= -->
 
-@if(puedeVer('seguimiento') || puedeVer('evaluacion'))
+@if(puedeVer('avances') || puedeVer('presupuestos'))
 
-    <details class="mt-2">
+    <details class="mt-2"
+        {{ request()->routeIs('avances.*') || request()->routeIs('presupuestos.*') ? 'open' : '' }}>
 
-        <summary class="sidebar-group">
+        <summary class="{{ request()->routeIs('avances.*') || request()->routeIs('presupuestos.*') ? 'sidebar-active' : 'sidebar-group' }}">
 
             <div class="flex items-center gap-3">
 
                 <i class="bi bi-clipboard-check"></i>
 
-                <span class="text-red-600">
-                    Seguimiento
-                </span>
+                <span>Seguimiento</span>
 
             </div>
 
@@ -23,14 +22,11 @@
         <div class="ml-4 mt-1 space-y-0.5">
 
             <!-- Avances -->
-            @if(puedeVer('seguimiento'))
+            @if(puedeVer('avances'))
 
-                <a href="#"
-                   class="sidebar-submenu">
-
-                    <span class="text-red-500">
-                        Avances
-                    </span>
+                <a href="{{ route('avances.listar') }}"
+                   class="{{ request()->routeIs('avances.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                    Avances
 
                 </a>
 
@@ -38,14 +34,11 @@
 
 
             <!-- Presupuesto -->
-            @if(puedeVer('evaluacion'))
+            @if(puedeVer('presupuestos'))
 
-                <a href="#"
-                   class="sidebar-submenu">
-
-                    <span class="text-red-500">
-                        Presupuesto
-                    </span>
+                <a href="{{ route('presupuestos.listar') }}"
+                   class="{{ request()->routeIs('presupuestos.*') ? 'sidebar-submenu-active' : 'sidebar-submenu' }}">
+                    Presupuestos
 
                 </a>
 

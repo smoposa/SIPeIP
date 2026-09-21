@@ -51,6 +51,10 @@ use App\Repositories\Eloquent\ProgramaRepository;
 // Proyectos
 use App\Repositories\Contracts\ProyectoRepositoryInterface;
 use App\Repositories\Eloquent\ProyectoRepository;
+use App\Repositories\Contracts\AvanceRepositoryInterface;
+use App\Repositories\Eloquent\AvanceRepository;
+use App\Repositories\Contracts\PresupuestoRepositoryInterface;
+use App\Repositories\Eloquent\PresupuestoRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -130,6 +134,9 @@ class RepositoryServiceProvider extends ServiceProvider
             ProyectoRepositoryInterface::class,
             ProyectoRepository::class
         );
+
+        $this->app->bind(AvanceRepositoryInterface::class, AvanceRepository::class);
+        $this->app->bind(PresupuestoRepositoryInterface::class, PresupuestoRepository::class);
     }
 
     /**
