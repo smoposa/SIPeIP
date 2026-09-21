@@ -367,6 +367,35 @@ return [
 
         /*
         |--------------------------------------------------------------------------
+        | Metas institucionales
+        |--------------------------------------------------------------------------
+        */
+
+        'metas' => [
+
+            'crear' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_PLANIFICACION',
+                'ANALISTA_PLANIFICACION',
+            ],
+
+            'editar' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_PLANIFICACION',
+                'ANALISTA_PLANIFICACION',
+            ],
+
+            'estado' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_PLANIFICACION',
+                'ANALISTA_PLANIFICACION',
+            ],
+
+        ],
+
+
+        /*
+        |--------------------------------------------------------------------------
         | Indicadores
         |--------------------------------------------------------------------------
         */

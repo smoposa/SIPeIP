@@ -72,6 +72,10 @@ class MetaRepository implements MetaRepositoryInterface
             ->first();
     }
 
+    /**
+     * Buscar una meta por ID asegurando que pertenezca
+     * a la entidad indicada.
+     */
     public function buscarPorIdYEntidad(
         int $id,
         int $entidadId
@@ -81,6 +85,14 @@ class MetaRepository implements MetaRepositoryInterface
                 'objetivo.plan.entidad',
                 'responsable',
                 'usuario',
+
+                'indicadores' => function ($query) {
+                    $query
+                        ->with([
+                            'responsable',
+                        ])
+                        ->orderBy('codigo');
+                },
             ])
             ->whereHas(
                 'objetivo.plan',
