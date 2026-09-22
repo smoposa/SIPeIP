@@ -31,6 +31,38 @@
 
         @endif
 
+        <!-- Barra de Menu -->
+        @include('programas.partials.barra-menu')
+
+
+
+    <!-- Contenido -->
+    <div class="min-w-0 w-full overflow-x-hidden overflow-y-auto"
+         style="height: calc(100vh - 100px);">
+
+        <div class="min-w-0 bg-white p-6 shadow-sm">
+
+            <!-- Cabecera -->
+             @include('programas.partials.encabezado-detalle')
+            
+
+            <!-- Información general -->
+             @include('programas.partials.informacion-general-detalle')
+            
+
+            <!-- Metas institucionales -->
+             @include('programas.partials.alineacion-oei')
+            
+
+            <!-- Estado y Auditoría -->
+            
+
+        </div>
+
+    </div>
+
+
+
         {{-- Encabezado --}}
         <div class="rounded-lg border border-gray-200 bg-white">
 
