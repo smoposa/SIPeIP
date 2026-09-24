@@ -23,6 +23,7 @@ use App\Http\Controllers\SubsectorController;
 use App\Http\Controllers\AvanceController;
 use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\DashboardController;
 
 // Página principal
 Route::get('/', function () {
@@ -30,9 +31,7 @@ Route::get('/', function () {
 });
 
 // Dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware([
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware([
     'auth',
     'verified',
     'sesion.activa',
