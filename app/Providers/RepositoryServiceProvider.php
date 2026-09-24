@@ -55,6 +55,8 @@ use App\Repositories\Contracts\AvanceRepositoryInterface;
 use App\Repositories\Eloquent\AvanceRepository;
 use App\Repositories\Contracts\PresupuestoRepositoryInterface;
 use App\Repositories\Eloquent\PresupuestoRepository;
+use App\Repositories\Contracts\ReporteRepositoryInterface;
+use App\Repositories\Eloquent\ReporteRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -137,6 +139,7 @@ class RepositoryServiceProvider extends ServiceProvider
 
         $this->app->bind(AvanceRepositoryInterface::class, AvanceRepository::class);
         $this->app->bind(PresupuestoRepositoryInterface::class, PresupuestoRepository::class);
+        $this->app->bind(ReporteRepositoryInterface::class, ReporteRepository::class);
     }
 
     /**

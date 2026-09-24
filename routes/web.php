@@ -22,6 +22,7 @@ use App\Http\Controllers\SectorController;
 use App\Http\Controllers\SubsectorController;
 use App\Http\Controllers\AvanceController;
 use App\Http\Controllers\PresupuestoController;
+use App\Http\Controllers\ReporteController;
 
 // Página principal
 Route::get('/', function () {
@@ -615,6 +616,16 @@ Route::middleware([
             Route::get('/{presupuesto}/detalle', 'detalle')->whereNumber('presupuesto')->name('detalle');
             Route::get('/{presupuesto}/editar', 'edit')->whereNumber('presupuesto')->name('edit');
             Route::put('/{presupuesto}', 'update')->whereNumber('presupuesto')->name('update');
+        });
+
+    Route::prefix('reportes')
+        ->name('reportes.')
+        ->middleware('role:reportes')
+        ->controller(ReporteController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/excel', 'excel')->name('excel');
+            Route::get('/pdf', 'pdf')->name('pdf');
         });
 
 }); // Cierre del middleware auth
