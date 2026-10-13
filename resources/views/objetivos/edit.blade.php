@@ -264,7 +264,7 @@
                                     <option value="{{ $item->id }}"
                                         {{ old('ods_id', $objetivo->ods_id) == $item->id ? 'selected' : '' }}>
 
-                                        {{ $item->codigo }} - {{ $item->nombre }}
+                                        {{ $item->agenda->nombre }} · {{ $item->codigo }} - {{ $item->nombre }}
 
                                     </option>
 
@@ -362,7 +362,7 @@
                     return;
                 }
 
-                fetch(`/objetivos/pnd/${pndId}/politicas`)
+                fetch(`/objetivos/pnd/${pndId}/politicas?objetivo_id={{ $objetivo->id }}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Error al obtener las políticas.');
@@ -413,7 +413,7 @@
                     return;
                 }
 
-                fetch(`/objetivos/ods/${odsId}/metas`)
+                fetch(`/objetivos/ods/${odsId}/metas?objetivo_id={{ $objetivo->id }}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error('Error al obtener las metas.');

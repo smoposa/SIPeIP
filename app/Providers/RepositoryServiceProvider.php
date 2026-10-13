@@ -65,6 +65,11 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(
+            \App\Repositories\Contracts\CatalogoRepositoryInterface::class,
+            \App\Repositories\Eloquent\CatalogoRepository::class
+        );
+
         // PND
         $this->app->bind(
             PndRepositoryInterface::class,

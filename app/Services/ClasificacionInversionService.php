@@ -11,7 +11,8 @@ use Illuminate\Database\Eloquent\Collection;
 class ClasificacionInversionService
 {
     public function __construct(
-        private readonly ClasificacionInversionRepositoryInterface $repository
+        private readonly ClasificacionInversionRepositoryInterface $repository,
+        private readonly CatalogoService $catalogos
     ) {
     }
 
@@ -131,10 +132,7 @@ class ClasificacionInversionService
         Sector $sector,
         array $datos
     ): Sector {
-        return $this->repository->actualizarSector(
-            $sector,
-            $datos
-        );
+        return $this->catalogos->guardar('sectores', $datos, $sector->id);
     }
 
     public function actualizarEstadoSector(
@@ -184,10 +182,7 @@ class ClasificacionInversionService
         Subsector $subsector,
         array $datos
     ): Subsector {
-        return $this->repository->actualizarSubsector(
-            $subsector,
-            $datos
-        );
+        return $this->catalogos->guardar('subsectores', $datos, $subsector->id);
     }
 
     public function actualizarEstadoSubsector(

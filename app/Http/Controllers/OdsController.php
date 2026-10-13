@@ -18,9 +18,14 @@ class OdsController extends Controller
      */
     public function index(): View
     {
-        $ods = $this->odsService->obtenerTodos();
+        $agendas = $this->odsService->listarAgendas();
 
-        return view('ods.index', compact('ods'));
+        return view('ods.index', compact('agendas'));
+    }
+
+    public function agenda(int $agenda): View
+    {
+        return view('ods.objetivos', $this->odsService->datosAgenda($agenda));
     }
 
     /**

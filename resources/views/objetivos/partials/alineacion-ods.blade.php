@@ -36,7 +36,7 @@
                         <option value="{{ $objetivo->id }}"
                             {{ old('ods_id') == $objetivo->id ? 'selected' : '' }}>
 
-                            {{ $objetivo->codigo }} - {{ $objetivo->nombre }}
+                            {{ $objetivo->agenda->nombre }} · {{ $objetivo->codigo }} - {{ $objetivo->nombre }}
 
                         </option>
 

@@ -11,9 +11,15 @@ class PndObjetivo extends Model
 {
     use HasFactory;
 
+    public function scopeDisponibles(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('estado', 'Activo')->whereHas('eje', fn ($eje) => $eje->where('estado', 'Activo')->whereHas('pnd', fn ($pnd) => $pnd->where('estado', 'Activo')));
+    }
+
     protected $table = 'pnd_objetivos';
 
     protected $fillable = [
+        'estado',
         'pnd_eje_id',
         'numero',
         'nombre',

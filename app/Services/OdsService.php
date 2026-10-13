@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Ods;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use App\Repositories\Contracts\OdsRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -11,6 +12,19 @@ class OdsService
     public function __construct(
         private readonly OdsRepositoryInterface $odsRepository
     ) {
+    }
+
+    public function listarAgendas(): LengthAwarePaginator
+    {
+        return $this->odsRepository->listarAgendas();
+    }
+
+    public function datosAgenda(int $id): array
+    {
+        return [
+            'agenda' => $this->odsRepository->obtenerAgenda($id),
+            'ods' => $this->odsRepository->obtenerTodosOrdenados($id),
+        ];
     }
 
     /**

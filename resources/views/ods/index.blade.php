@@ -1,113 +1,275 @@
-<x-catalogos-layout title="ODS">
+<x-catalogos-layout title="Agendas ODS">
 
-    <!-- Encabezado -->
-    <div class="mb-4">
+    <div class="space-y-4">
 
-        <h2 class="text-2xl font-semibold text-gray-800">
-            17 Objetivos de Desarrollo para transformar el mundo
-        </h2>
+        <!-- Notificaciones -->
+        @include('ods.partials.avisos')
 
-        <p class="mt-1 text-sm text-gray-500">
-            El 25 de septiembre de 2015 la Asamblea General de Naciones Unidas aprobó, por unanimidad, la Agenda 2030 para el Desarrollo Sostenible: un plan de acción en favor de las personas, el planeta, la prosperidad y la paz universal. Cuenta con 17 Objetivos de Desarrollo Sostenible (ODS) y 169 metas concretas a desarrollar con horizonte 2030.
-        </p>
+        <!-- Encabezado -->
+        <div class="mb-4">
 
-    </div>
-
-
-    <!-- Relación entre ODS e imágenes -->
-    @php
-
-        $imagenesOds = [
-            1  => '1-fin-de-la-pobreza-11.jpg',
-            2  => '2-hambre-cero-20.jpg',
-            3  => '3-salud-y-bienestar-3.jpg',
-            4  => '4-educacion-de-calidad-3.jpg',
-            5  => '5-igualdad-de-genero-3.jpg',
-            6  => '6-agua-limpia-y-saneamiento-3.jpg',
-            7  => '7-energia-asequible-y-no-contaminante-3.jpg',
-            8  => '8-trabajo-decente-y-crecimiento-economico-3.jpg',
-            9  => '9-industria-innovacion-e-infraestructura-3.jpg',
-            10 => '10-reduccion-de-las-desigualdades-3.jpg',
-            11 => '11-ciudades-y-comunidades-sostenibles-3.jpg',
-            12 => '12-produccion-y-consumo-responsables-3.jpg',
-            13 => '13-accion-por-el-clima-3.jpg',
-            14 => '14-vida-submarina-3.jpg',
-            15 => '15-vida-de-ecosistemas-terrestres-3.jpg',
-            16 => '16-paz-justicia-e-instituciones-solidas-3.jpg',
-            17 => '17-alianzas-para-lograr-los-objetivos-3.jpg',
-        ];
-
-    @endphp
-
-
-    <!-- Scroll vertical -->
-    <div class="overflow-y-auto"
-         style="height: calc(100vh - 200px);">
-
-        <!-- Grid ODS -->
-        <div class="grid grid-cols-2
-                    sm:grid-cols-3
-                    md:grid-cols-4
-                    xl:grid-cols-8
-                    gap-4
-                    pb-6">
-
-            @forelse($ods as $item)
-
-                <div class="group">
-
-<!-- Imagen ODS -->
-<a href="{{ route('ods.detalle', $item->id) }}"
-   class="block overflow-hidden
-          border border-gray-200
-          bg-white
-          transition duration-200
-          hover:shadow-md
-          cursor-pointer">
-
-    @if(isset($imagenesOds[$item->id]))
-
-        <img
-            src="{{ asset(
-                'images/ods/' .
-                $imagenesOds[$item->id]
-            ) }}"
-            alt="ODS {{ $item->id }} - {{ $item->nombre }}"
-            class="w-full h-auto object-cover
-                   transition duration-200
-                   hover:opacity-90">
-
-    @else
-
-        <div class="flex items-center justify-center
-                    h-40 bg-gray-100
-                    text-sm text-gray-400">
-
-            Imagen no disponible
+            <p class="mt-1 text-sm text-gray-500">
+                Consulte y administre las agendas de desarrollo sostenible registradas en el sistema.
+            </p>
 
         </div>
 
-    @endif
+        <!-- Buscador, filtro, resumen y acciones -->
+        <div class="flex items-center gap-4 mb-4">
 
-</a>
+            <!-- Buscador -->
+            <div class="relative flex-1 max-w-md">
 
-                </div>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                    <i class="bi bi-search"></i>
+                </span>
 
-            @empty
+                <input
+                    type="text"
+                    id="buscarAgenda"
+                    placeholder="Buscar agenda..."
+                    class="w-full border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm
+                        focus:ring-blue-500 focus:border-blue-500">
 
-                <div class="col-span-full
-                            py-10
-                            text-center
-                            text-sm
-                            text-gray-500">
+            </div>
 
-                    No existen Objetivos de Desarrollo Sostenible registrados.
+            <!-- Filtro Estado -->
+            <select
+                id="filtroEstado"
+                class="w-48 rounded-md border border-gray-300 px-3 py-2 text-sm
+                    text-gray-700 focus:border-blue-500 focus:ring-blue-500">
 
-                </div>
+                <option value="">Todos los estados</option>
+                <option value="Activo">Activos</option>
+                <option value="Inactivo">Inactivos</option>
 
-            @endforelse
+            </select>
+
+            <!-- Resumen de estados -->
+            <div class="flex-1">
+
+                <p class="text-sm text-gray-500">
+
+                    <span class="text-blue-600 font-medium">
+                        {{ $agendas->total() }}
+                    </span>
+                    registros ·
+
+                    <span class="text-green-600 font-medium">
+                        {{ $agendas->getCollection()->where('estado', 'Activo')->count() }}
+                    </span>
+                    activas ·
+
+                    <span class="text-red-600 font-medium">
+                        {{ $agendas->getCollection()->where('estado', 'Inactivo')->count() }}
+                    </span>
+                    inactivas
+
+                </p>
+
+            </div>
+
+            <!-- Crear agenda -->
+            @if(puedeHacer('ods', 'crear'))
+
+                <a
+                    href="{{ route('catalogos.gestion.create', 'ods-agendas') }}"
+                    class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
+                        text-white text-sm font-medium px-4 py-2 rounded-md
+                        transition whitespace-nowrap">
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Crear agenda
+
+                </a>
+
+            @endif
 
         </div>
+
+        <!-- Listado de agendas -->
+        <div class="bg-white border border-gray-200 rounded-lg overflow-x-auto">
+
+            <table class="w-full text-sm text-left">
+
+                <thead class="bg-gray-50 text-gray-600">
+
+                    <tr>
+                        <th class="p-4">Agenda</th>
+                        <th class="p-4">Período</th>
+                        <th class="p-4">Objetivos</th>
+                        <th class="p-4">Estado</th>
+                        <th class="p-4">Acciones</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @forelse($agendas as $agenda)
+
+                        <tr
+                            class="fila-agenda border-t border-gray-200 hover:bg-gray-50"
+                            data-nombre="{{ $agenda->nombre }}"
+                            data-periodo="{{ $agenda->periodo_inicio }}–{{ $agenda->periodo_fin }}"
+                            data-estado="{{ $agenda->estado }}">
+
+                            <td class="p-4">
+
+                                <a
+                                    href="{{ route('ods.agenda', $agenda->id) }}"
+                                    class="font-semibold text-blue-700 hover:underline">
+
+                                    {{ $agenda->nombre }}
+
+                                </a>
+
+                            </td>
+
+                            <td class="p-4">
+                                {{ $agenda->periodo_inicio }}–{{ $agenda->periodo_fin }}
+                            </td>
+
+                            <td class="p-4">
+                                {{ $agenda->ods_count }}
+                            </td>
+
+                            <td class="p-4">
+
+                                <span
+                                    class="inline-flex rounded-full px-3 py-1 text-xs
+                                        {{ $agenda->estado === 'Activo'
+                                            ? 'bg-green-50 text-green-700'
+                                            : 'bg-gray-100 text-gray-600' }}">
+
+                                    {{ $agenda->estado }}
+
+                                </span>
+
+                            </td>
+
+                            <td class="p-4">
+
+                                <div class="flex flex-wrap items-center gap-4">
+
+                                    <a
+                                        href="{{ route('ods.agenda', $agenda->id) }}"
+                                        class="text-blue-600 hover:underline">
+
+                                        Ver objetivos
+
+                                    </a>
+
+                                    @if(puedeHacer('ods', 'editar'))
+
+                                        <a
+                                            href="{{ route('catalogos.gestion.edit', ['ods-agendas', $agenda->id]) }}"
+                                            class="text-blue-600 hover:underline">
+
+                                            Editar
+
+                                        </a>
+
+                                    @endif
+
+                                    @include('catalogos.gestion.estado', [
+                                        'modulo' => 'ods',
+                                        'recursoEstado' => 'ods-agendas',
+                                        'registroEstado' => $agenda,
+                                    ])
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                    @empty
+
+                        <tr>
+
+                            <td colspan="5" class="p-8 text-center text-gray-500">
+                                No existen agendas registradas.
+                            </td>
+
+                        </tr>
+
+                    @endforelse
+
+                    <tr id="sinResultadosAgenda" class="hidden">
+
+                        <td colspan="5" class="p-8 text-center text-gray-500">
+                            No se encontraron agendas con los filtros seleccionados.
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- Paginación -->
+        <div class="mt-4">
+            {{ $agendas->links() }}
+        </div>
+
+        <!-- Buscador y filtro -->
+        <script>
+
+            document.addEventListener('DOMContentLoaded', function () {
+
+                const buscador = document.getElementById('buscarAgenda');
+                const filtroEstado = document.getElementById('filtroEstado');
+                const filas = document.querySelectorAll('.fila-agenda');
+                const sinResultados = document.getElementById('sinResultadosAgenda');
+
+                function filtrarAgendas() {
+
+                    const texto = buscador.value.toLowerCase().trim();
+                    const estado = filtroEstado.value;
+
+                    let visibles = 0;
+
+                    filas.forEach(function (fila) {
+
+                        const nombre = (fila.dataset.nombre || '').toLowerCase();
+                        const periodo = (fila.dataset.periodo || '').toLowerCase();
+                        const estadoAgenda = fila.dataset.estado || '';
+
+                        const coincideTexto =
+                            nombre.includes(texto) ||
+                            periodo.includes(texto);
+
+                        const coincideEstado =
+                            estado === '' ||
+                            estadoAgenda === estado;
+
+                        const mostrar = coincideTexto && coincideEstado;
+
+                        fila.style.display = mostrar ? '' : 'none';
+
+                        if (mostrar) {
+                            visibles++;
+                        }
+
+                    });
+
+                    sinResultados.classList.toggle(
+                        'hidden',
+                        visibles > 0 || filas.length === 0
+                    );
+
+                }
+
+                buscador.addEventListener('input', filtrarAgendas);
+                filtroEstado.addEventListener('change', filtrarAgendas);
+
+            });
+
+        </script>
 
     </div>
 

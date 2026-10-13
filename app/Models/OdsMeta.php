@@ -9,6 +9,11 @@ class OdsMeta extends Model
 {
     use HasFactory;
 
+    public function scopeDisponibles(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('estado', 'Activo')->whereHas('ods', fn ($ods) => $ods->disponibles());
+    }
+
     protected $table = 'ods_metas';
 
     protected $fillable = [

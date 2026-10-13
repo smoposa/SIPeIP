@@ -1,4 +1,10 @@
 <x-catalogos-layout title="PND">
+    @if(puedeVer('pnd'))
+        <div class="flex flex-wrap gap-3 py-3 mb-4 border-b border-gray-200">
+            <a href="{{ route('catalogos.gestion.index', 'pnd') }}" class="text-sm font-semibold text-blue-600">Gestionar catálogo</a>
+        </div>
+    @endif
+
 
     <!-- =========================================================
          INFORMACIÓN GENERAL DEL PND

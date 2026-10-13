@@ -14,6 +14,7 @@ class PndEje extends Model
     protected $table = 'pnd_ejes';
 
     protected $fillable = [
+        'estado',
         'pnd_id',
         'numero',
         'nombre',

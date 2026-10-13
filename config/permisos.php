@@ -203,6 +203,17 @@ return [
     */
 
     'acciones' => [
+        'ods' => [
+            'crear' => ['ADMIN_GLOBAL', 'ADMIN_SISTEMA'],
+            'editar' => ['ADMIN_GLOBAL', 'ADMIN_SISTEMA'],
+            'estado' => ['ADMIN_GLOBAL', 'ADMIN_SISTEMA'],
+        ],
+        'pnd' => [
+            'crear' => ['ADMIN_GLOBAL', 'ADMIN_SISTEMA'],
+            'editar' => ['ADMIN_GLOBAL', 'ADMIN_SISTEMA'],
+            'estado' => ['ADMIN_GLOBAL', 'ADMIN_SISTEMA'],
+        ],
+
 
         /*
         |--------------------------------------------------------------------------

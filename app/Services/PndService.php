@@ -17,29 +17,29 @@ class PndService
      * Obtener la estructura completa del
      * Plan Nacional de Desarrollo.
      */
-    public function obtenerEstructura(): ?Pnd
+    public function obtenerEstructura(?int $id = null): ?Pnd
     {
-        return $this->pndRepository->obtenerConEstructura();
+        return $this->pndRepository->obtenerConEstructura($id);
     }
 
     /**
      * Obtener los totales generales del
      * Plan Nacional de Desarrollo.
      */
-    public function obtenerResumen(): array
+    public function obtenerResumen(?int $id = null): array
     {
-        return $this->pndRepository->obtenerResumen();
+        return $this->pndRepository->obtenerResumen($id);
     }
 
     /**
      * Obtener toda la información necesaria
      * para la pantalla principal del PND.
      */
-    public function obtenerDatosIndex(): array
+    public function obtenerDatosIndex(?int $id = null): array
     {
         return [
-            'pnd' => $this->obtenerEstructura(),
-            'resumen' => $this->obtenerResumen(),
+            'pnd' => $this->obtenerEstructura($id),
+            'resumen' => $this->obtenerResumen($id),
         ];
     }
 

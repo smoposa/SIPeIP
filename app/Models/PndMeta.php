@@ -13,6 +13,7 @@ class PndMeta extends Model
     protected $table = 'pnd_metas';
 
     protected $fillable = [
+        'estado',
         'pnd_objetivo_id',
         'numero',
         'descripcion',

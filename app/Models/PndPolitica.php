@@ -11,9 +11,15 @@ class PndPolitica extends Model
 {
     use HasFactory;
 
+    public function scopeDisponibles(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    {
+        return $query->where('estado', 'Activo')->whereHas('objetivo', fn ($objetivo) => $objetivo->disponibles());
+    }
+
     protected $table = 'pnd_politicas';
 
     protected $fillable = [
+        'estado',
         'pnd_objetivo_id',
         'codigo',
         'nombre',

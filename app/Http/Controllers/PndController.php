@@ -16,9 +16,10 @@ class PndController extends Controller
      * Mostrar la pantalla principal del
      * Plan Nacional de Desarrollo.
      */
-    public function index(): View
+    public function index(\Illuminate\Http\Request $request): View
     {
-        $datos = $this->pndService->obtenerDatosIndex();
+        $seleccion = $request->validate(['plan' => ['nullable', 'integer', 'exists:pnd,id']]);
+        $datos = $this->pndService->obtenerDatosIndex(isset($seleccion['plan']) ? (int) $seleccion['plan'] : null);
 
         return view('pnd.index', $datos);
     }

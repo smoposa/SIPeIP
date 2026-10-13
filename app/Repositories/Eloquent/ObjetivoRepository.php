@@ -23,7 +23,7 @@ class ObjetivoRepository implements ObjetivoRepositoryInterface
                 'plan',
                 'pnd.eje.pnd',
                 'politicaPnd',
-                'ods',
+                'ods.agenda',
                 'metaOds',
             ])
             ->whereHas(
@@ -53,7 +53,7 @@ class ObjetivoRepository implements ObjetivoRepositoryInterface
                 'plan.entidad',
                 'pnd.eje.pnd',
                 'politicaPnd',
-                'ods',
+                'ods.agenda',
                 'metaOds',
                 'usuario',
             ])
@@ -89,25 +89,14 @@ class ObjetivoRepository implements ObjetivoRepositoryInterface
 
     public function obtenerPndActivos(): Collection
     {
-        return PndObjetivo::query()
-            ->with([
-                'eje.pnd',
-            ])
-            ->whereHas(
-                'eje.pnd',
-                fn ($query) => $query->where(
-                    'estado',
-                    'Activo'
-                )
-            )
+        return PndObjetivo::query()->disponibles()->with(['eje.pnd'])
             ->orderBy('numero')
             ->get();
     }
 
     public function obtenerOdsActivos(): Collection
     {
-        return Ods::query()
-            ->where('estado', 'Activo')
+        return Ods::query()->disponibles()->with('agenda')
             ->orderBy('codigo')
             ->get();
     }
@@ -115,7 +104,7 @@ class ObjetivoRepository implements ObjetivoRepositoryInterface
     public function obtenerPoliticasActivasPorPnd(
         int $pndObjetivoId
     ): Collection {
-        return PndPolitica::query()
+        return PndPolitica::query()->disponibles()
             ->where(
                 'pnd_objetivo_id',
                 $pndObjetivoId
@@ -132,9 +121,8 @@ class ObjetivoRepository implements ObjetivoRepositoryInterface
     public function obtenerMetasActivasPorOds(
         int $odsId
     ): Collection {
-        return OdsMeta::query()
+        return OdsMeta::query()->disponibles()
             ->where('ods_id', $odsId)
-            ->where('estado', 'Activo')
             ->orderBy('codigo')
             ->get([
                 'id',

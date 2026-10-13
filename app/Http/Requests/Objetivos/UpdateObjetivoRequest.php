@@ -4,6 +4,12 @@ namespace App\Http\Requests\Objetivos;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\Objetivo;
+use App\Models\Ods;
+use App\Models\OdsMeta;
+use App\Models\PndObjetivo;
+use App\Models\PndPolitica;
+use App\Rules\CatalogoDisponible;
 
 class UpdateObjetivoRequest extends FormRequest
 {
@@ -14,6 +20,8 @@ class UpdateObjetivoRequest extends FormRequest
 
     public function rules(): array
     {
+        $actual = Objetivo::query()->whereHas('plan', fn ($plan) => $plan->where('entidad_id', $this->user()->entidad_id))->findOrFail($this->route('id'));
+
         return [
             'plan_id' => [
                 'required',
@@ -25,9 +33,11 @@ class UpdateObjetivoRequest extends FormRequest
                 'required',
                 'integer',
                 'exists:pnd_objetivos,id',
+                new CatalogoDisponible(PndObjetivo::class, (int) $actual->pnd_id),
             ],
 
             'pnd_politica_id' => [
+                new CatalogoDisponible(PndPolitica::class, $actual->pnd_politica_id),
                 'required',
                 'integer',
                 Rule::exists('pnd_politicas', 'id')
@@ -42,11 +52,12 @@ class UpdateObjetivoRequest extends FormRequest
             'ods_id' => [
                 'required',
                 'integer',
-                Rule::exists('ods', 'id')
-                    ->where('estado', 'Activo'),
+                Rule::exists('ods', 'id'),
+                new CatalogoDisponible(Ods::class, (int) $actual->ods_id),
             ],
 
             'ods_meta_id' => [
+                new CatalogoDisponible(OdsMeta::class, $actual->ods_meta_id),
                 'required',
                 'integer',
                 Rule::exists('ods_metas', 'id')
@@ -56,7 +67,6 @@ class UpdateObjetivoRequest extends FormRequest
                                 'ods_id',
                                 $this->input('ods_id')
                             )
-                            ->where('estado', 'Activo')
                     ),
             ],
 

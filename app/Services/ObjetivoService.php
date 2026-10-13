@@ -80,23 +80,27 @@ class ObjetivoService
     ): array {
         $entidadId = $this->obtenerEntidadId($usuario);
 
+        $objetivo = $this->objetivoRepository->buscarPorIdYEntidad($id, $entidadId);
+        $ods = $this->objetivoRepository->obtenerOdsActivos();
+        if ($objetivo->ods && !$ods->contains('id', $objetivo->ods_id)) {
+            $ods->push($objetivo->ods);
+        }
+        $pnd = $this->objetivoRepository->obtenerPndActivos();
+        if ($objetivo->pnd && !$pnd->contains('id', $objetivo->pnd_id)) {
+            $pnd->push($objetivo->pnd);
+        }
+
         return [
-            'objetivo' => $this->objetivoRepository
-                ->buscarPorIdYEntidad(
-                    $id,
-                    $entidadId
-                ),
+            'objetivo' => $objetivo,
 
             'planes' => $this->objetivoRepository
                 ->obtenerPlanesActivosPorEntidad(
                     $entidadId
                 ),
 
-            'pnd' => $this->objetivoRepository
-                ->obtenerPndActivos(),
+            'pnd' => $pnd,
 
-            'ods' => $this->objetivoRepository
-                ->obtenerOdsActivos(),
+            'ods' => $ods,
         ];
     }
 
@@ -194,25 +198,35 @@ class ObjetivoService
     /**
      * Obtener políticas activas de un objetivo PND.
      */
-    public function obtenerPoliticas(
-        int $pndId
-    ): Collection {
-        return $this->objetivoRepository
-            ->obtenerPoliticasActivasPorPnd(
-                $pndId
-            );
+    public function obtenerPoliticas(int $pndId, ?int $objetivoId = null, ?User $usuario = null): Collection
+    {
+        $registros = $this->objetivoRepository->obtenerPoliticasActivasPorPnd($pndId);
+        if ($objetivoId && $usuario) {
+            $objetivo = $this->obtenerAccesible($objetivoId, $usuario);
+            $historico = $objetivo->politicaPnd;
+            if ((int) $objetivo->pnd_id === $pndId && $historico && !$registros->contains('id', $historico->id)) {
+                $registros->push($historico);
+            }
+        }
+
+        return $registros;
     }
 
     /**
      * Obtener metas activas de un ODS.
      */
-    public function obtenerMetasOds(
-        int $odsId
-    ): Collection {
-        return $this->objetivoRepository
-            ->obtenerMetasActivasPorOds(
-                $odsId
-            );
+    public function obtenerMetasOds(int $odsId, ?int $objetivoId = null, ?User $usuario = null): Collection
+    {
+        $registros = $this->objetivoRepository->obtenerMetasActivasPorOds($odsId);
+        if ($objetivoId && $usuario) {
+            $objetivo = $this->obtenerAccesible($objetivoId, $usuario);
+            $historico = $objetivo->metaOds;
+            if ((int) $objetivo->ods_id === $odsId && $historico && !$registros->contains('id', $historico->id)) {
+                $registros->push($historico);
+            }
+        }
+
+        return $registros;
     }
 
     /**

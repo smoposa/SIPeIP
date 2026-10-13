@@ -18,7 +18,7 @@ interface PndRepositoryInterface
      *         │   └── Estrategias
      *         └── Metas
      */
-    public function obtenerConEstructura(): ?Pnd;
+    public function obtenerConEstructura(?int $id = null): ?Pnd;
 
     /**
      * Obtiene los totales generales de la estructura
@@ -32,7 +32,7 @@ interface PndRepositoryInterface
      *     metas: int
      * }
      */
-    public function obtenerResumen(): array;
+    public function obtenerResumen(?int $id = null): array;
 
     /**
      * Obtiene un Objetivo Nacional con la información

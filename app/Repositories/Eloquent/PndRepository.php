@@ -3,11 +3,7 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Pnd;
-use App\Models\PndEje;
 use App\Models\PndObjetivo;
-use App\Models\PndPolitica;
-use App\Models\PndEstrategia;
-use App\Models\PndMeta;
 use App\Repositories\Contracts\PndRepositoryInterface;
 
 class PndRepository implements PndRepositoryInterface
@@ -16,7 +12,7 @@ class PndRepository implements PndRepositoryInterface
      * Obtiene el Plan Nacional de Desarrollo con toda
      * la estructura necesaria para su visualización.
      */
-    public function obtenerConEstructura(): ?Pnd
+    public function obtenerConEstructura(?int $id = null): ?Pnd
     {
         return Pnd::query()
             ->with([
@@ -36,6 +32,9 @@ class PndRepository implements PndRepositoryInterface
                     $query->orderBy('numero');
                 },
             ])
+            ->when($id, fn ($query) => $query->whereKey($id))
+            ->orderByDesc('periodo_inicio')
+            ->orderByDesc('id')
             ->first();
     }
 
@@ -43,14 +42,19 @@ class PndRepository implements PndRepositoryInterface
      * Obtiene los totales generales de la estructura
      * del Plan Nacional de Desarrollo.
      */
-    public function obtenerResumen(): array
+    public function obtenerResumen(?int $id = null): array
     {
+        $pnd = $this->obtenerConEstructura($id);
+        $ejes = $pnd?->ejes ?? collect();
+        $objetivos = $ejes->flatMap(fn ($eje) => $eje->objetivos);
+        $politicas = $objetivos->flatMap(fn ($objetivo) => $objetivo->politicas);
+
         return [
-            'ejes' => PndEje::count(),
-            'objetivos' => PndObjetivo::count(),
-            'politicas' => PndPolitica::count(),
-            'estrategias' => PndEstrategia::count(),
-            'metas' => PndMeta::count(),
+            'ejes' => $ejes->count(),
+            'objetivos' => $objetivos->count(),
+            'politicas' => $politicas->count(),
+            'estrategias' => $politicas->sum(fn ($politica) => $politica->estrategias->count()),
+            'metas' => $objetivos->sum(fn ($objetivo) => $objetivo->metas->count()),
         ];
     }
 

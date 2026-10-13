@@ -61,13 +61,16 @@ class ObjetivoController extends Controller
      * Obtener políticas activas de un objetivo PND.
      */
     public function obtenerPoliticas(
-        int $pnd
+        int $pnd,
+        \Illuminate\Http\Request $request
     ): JsonResponse {
         $this->autorizar('objetivos');
 
+        $datos = $request->validate(['objetivo_id' => ['nullable', 'integer', 'min:1']]);
+
         return response()->json(
             $this->objetivoService
-                ->obtenerPoliticas($pnd)
+                ->obtenerPoliticas($pnd, isset($datos['objetivo_id']) ? (int) $datos['objetivo_id'] : null, $request->user())
         );
     }
 
@@ -75,13 +78,16 @@ class ObjetivoController extends Controller
      * Obtener metas activas de un ODS.
      */
     public function obtenerMetasOds(
-        int $ods
+        int $ods,
+        \Illuminate\Http\Request $request
     ): JsonResponse {
         $this->autorizar('objetivos');
 
+        $datos = $request->validate(['objetivo_id' => ['nullable', 'integer', 'min:1']]);
+
         return response()->json(
             $this->objetivoService
-                ->obtenerMetasOds($ods)
+                ->obtenerMetasOds($ods, isset($datos['objetivo_id']) ? (int) $datos['objetivo_id'] : null, $request->user())
         );
     }
 

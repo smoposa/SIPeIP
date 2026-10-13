@@ -177,12 +177,30 @@ Route::middleware([
 
     });
 
+    // Gestión de catálogos: controlador, validación, servicio y repositorio.
+    Route::prefix('catalogos/gestion/{recurso}')
+        ->name('catalogos.gestion.')
+        ->controller(\App\Http\Controllers\GestionCatalogoController::class)
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/crear', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('/{id}/detalle', 'show')->whereNumber('id')->name('show');
+            Route::get('/{id}/editar', 'edit')->whereNumber('id')->name('edit');
+            Route::put('/{id}', 'update')->whereNumber('id')->name('update');
+            Route::put('/{id}/estado', 'estado')->whereNumber('id')->name('estado');
+        });
+
     // Objetivos de Desarrollo Sostenible
     Route::prefix('ods')
+        ->middleware('role:ods')
         ->group(function () {
 
             Route::get('/', [OdsController::class, 'index'])
                 ->name('ods.index');
+
+            Route::get('/agendas/{agenda}', [OdsController::class, 'agenda'])
+                ->whereNumber('agenda')->name('ods.agenda');
 
             Route::get('/{ods}', [OdsController::class, 'detalle'])
                 ->name('ods.detalle');
@@ -191,6 +209,7 @@ Route::middleware([
 
     // Plan Nacional de Desarrollo
     Route::prefix('pnd')
+        ->middleware('role:pnd')
         ->name('pnd.')
         ->group(function () {
 

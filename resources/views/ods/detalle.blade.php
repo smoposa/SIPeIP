@@ -1,16 +1,17 @@
 <x-catalogos-layout title="Detalle ODS">
+    @include('ods.partials.avisos')
 
     <!-- Barra de acciones -->
     <div class="bg-white border-b border-gray-300">
 
-        <div class="flex">
+        <div class="flex flex-wrap items-center">
 
-            <a href="{{ route('ods.index') }}"
+            <a href="{{ route('ods.agenda', $ods->agenda_id) }}"
                class="py-2 text-sm font-medium text-blue-500
                       hover:text-blue-800 mr-8">
 
                 <i class="bi bi-chevron-left"></i>
-                Regresar
+                {{ $ods->agenda->nombre }}
 
             </a>
 
@@ -23,6 +24,11 @@
 
             </a>
 
+            @if(puedeHacer('ods', 'crear'))
+                <a class="px-3 py-2 text-sm text-blue-600" href="{{ route('catalogos.gestion.create', ['recurso' => 'ods-metas', 'padre' => $ods->id]) }}">Crear meta ODS</a>
+            @endif
+            @if(puedeHacer('ods', 'editar'))<a class="px-3 py-2 text-sm text-blue-600" href="{{ route('catalogos.gestion.edit', ['ods', $ods->id]) }}">Editar objetivo</a>@endif
+            <div class="px-3 py-2">@include('catalogos.gestion.estado', ['modulo' => 'ods', 'recursoEstado' => 'ods', 'registroEstado' => $ods])</div>
         </div>
 
     </div>
@@ -54,6 +60,10 @@
     @endphp
 
 
+    @if($ods->agenda->estado === 'Inactivo' || $ods->estado === 'Inactivo')
+        <p class="my-3 text-sm text-amber-700">Este objetivo o su agenda están inactivos. Se mantiene la consulta del historial.</p>
+    @endif
+
     <!-- Scroll vertical -->
     <div class="overflow-y-auto"
          style="height: calc(100vh - 180px);">
@@ -69,12 +79,12 @@
                 <!-- Imagen -->
                 <div class="w-20 h-20 flex-shrink-0">
 
-                    @if(isset($imagenesOds[$ods->id]))
+                    @if(isset($imagenesOds[(int) str_replace('ODS-', '', $ods->codigo)]))
 
                         <img
                             src="{{ asset(
                                 'images/ods/' .
-                                $imagenesOds[$ods->id]
+                                $imagenesOds[(int) str_replace('ODS-', '', $ods->codigo)]
                             ) }}"
                             alt="{{ $ods->nombre }}"
                             class="w-full h-full object-cover">
@@ -103,7 +113,7 @@
                     </h2>
 
                     <p class="mt-1 text-sm text-gray-500">
-                        {{ $ods->codigo }}
+                        {{ $ods->codigo }} · {{ $ods->estado }}
                     </p>
 
                     <p class="mt-1 text-sm text-gray-500">
@@ -182,6 +192,12 @@
 
                         </button>
 
+
+                        <div class="flex flex-wrap items-center gap-4 px-4 py-2 bg-white text-sm">
+                            <span class="text-gray-500">{{ $meta->estado }}</span>
+                            @if(puedeHacer('ods', 'editar'))<a class="text-blue-600" href="{{ route('catalogos.gestion.edit', ['ods-metas', $meta->id]) }}">Editar meta</a>@endif
+                            @include('catalogos.gestion.estado', ['modulo' => 'ods', 'recursoEstado' => 'ods-metas', 'registroEstado' => $meta])
+                        </div>
 
                         <!-- Descripción -->
                         <div

@@ -13,6 +13,7 @@ class PndEstrategia extends Model
     protected $table = 'pnd_estrategias';
 
     protected $fillable = [
+        'estado',
         'pnd_politica_id',
         'codigo',
         'descripcion',
