@@ -196,16 +196,60 @@ Route::middleware([
         ->middleware('role:ods')
         ->group(function () {
 
+            // Agendas: listado y panel lateral
             Route::get('/', [OdsController::class, 'index'])
-                ->name('ods.index');
+                ->name('ods.agendas.index');
 
-            Route::get('/agendas/{agenda}', [OdsController::class, 'agenda'])
-                ->whereNumber('agenda')->name('ods.agenda');
+            // Agendas: registrar
+            Route::post('/agendas', [OdsController::class, 'store'])
+                ->name('ods.agendas.store');
 
-            Route::get('/{ods}', [OdsController::class, 'detalle'])
-                ->name('ods.detalle');
+            // Agendas: actualizar información y estado
+            Route::put('/agendas/{agenda}', [OdsController::class, 'update'])
+                ->whereNumber('agenda')
+                ->name('ods.agendas.update');
+
+
+            // Objetivos: listado por agenda y panel lateral
+            Route::get('/agendas/{agenda}/objetivos', [OdsController::class, 'listarObjetivos'])
+                ->whereNumber('agenda')
+                ->name('ods.objetivos.index');
+
+            // Objetivos: registrar
+            Route::post('/agendas/{agenda}/objetivos', [OdsController::class, 'guardarObjetivo'])
+                ->whereNumber('agenda')
+                ->name('ods.objetivos.store');
+
+            // Objetivos: actualizar información y estado
+            Route::put('/objetivos/{ods}', [OdsController::class, 'actualizarObjetivo'])
+                ->whereNumber('ods')
+                ->name('ods.objetivos.update');
+
+
+            // Metas: listado por objetivo y panel lateral
+            Route::get('/objetivos/{ods}/metas', [OdsController::class, 'listarMetas'])
+                ->whereNumber('ods')
+                ->name('ods.metas.index');
+
+            // Metas: registrar
+            Route::post(
+                '/objetivos/{ods}/metas',
+                [\App\Http\Controllers\OdsMetaController::class, 'store']
+            )
+                ->whereNumber('ods')
+                ->name('ods.metas.store');
+
+            // Metas: actualizar información y estado
+            Route::put(
+                '/objetivos/{ods}/metas/{meta}',
+                [\App\Http\Controllers\OdsMetaController::class, 'update']
+            )
+                ->whereNumber('ods')
+                ->whereNumber('meta')
+                ->name('ods.metas.update');
 
     });
+    
 
     // Plan Nacional de Desarrollo
     Route::prefix('pnd')

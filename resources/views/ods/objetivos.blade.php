@@ -1,121 +1,496 @@
 <x-catalogos-layout :title="$agenda->nombre">
-    @include('ods.partials.avisos')
-    <div class="flex flex-wrap items-center gap-4 py-3 border-b border-gray-200 mb-4">
-        <a href="{{ route('ods.index') }}" class="text-sm text-blue-600"><i class="bi bi-chevron-left"></i> Agendas ODS</a>
-        @if(puedeHacer('ods', 'crear'))
-            <a href="{{ route('catalogos.gestion.create', ['recurso' => 'ods', 'padre' => $agenda->id]) }}" class="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700">Crear objetivo ODS</a>
-        @endif
-        @if(puedeHacer('ods', 'editar'))<a class="text-sm text-blue-600" href="{{ route('catalogos.gestion.edit', ['ods-agendas', $agenda->id]) }}">Editar agenda</a>@endif
-        @include('catalogos.gestion.estado', ['modulo' => 'ods', 'recursoEstado' => 'ods-agendas', 'registroEstado' => $agenda])
-    </div>
-    <div class="mb-5">
-        <h2 class="text-2xl font-semibold text-gray-800">{{ $agenda->nombre }}</h2>
-        <p class="text-sm text-gray-500 mt-1">{{ $agenda->periodo_inicio }}–{{ $agenda->periodo_fin }} · {{ $ods->count() }} objetivos · {{ $agenda->estado }}</p>
-        @if($agenda->descripcion)<p class="text-sm text-gray-600 mt-2">{{ $agenda->descripcion }}</p>@endif
-        @if($agenda->estado === 'Inactivo')<p class="mt-2 text-sm text-amber-700">Agenda inactiva. Su información se conserva para consulta y no se utiliza en nuevas alineaciones.</p>@endif
-    </div>
-    <!-- Relación entre ODS e imágenes -->
-    @php
 
-        $imagenesOds = [
-            1  => '1-fin-de-la-pobreza-11.jpg',
-            2  => '2-hambre-cero-20.jpg',
-            3  => '3-salud-y-bienestar-3.jpg',
-            4  => '4-educacion-de-calidad-3.jpg',
-            5  => '5-igualdad-de-genero-3.jpg',
-            6  => '6-agua-limpia-y-saneamiento-3.jpg',
-            7  => '7-energia-asequible-y-no-contaminante-3.jpg',
-            8  => '8-trabajo-decente-y-crecimiento-economico-3.jpg',
-            9  => '9-industria-innovacion-e-infraestructura-3.jpg',
-            10 => '10-reduccion-de-las-desigualdades-3.jpg',
-            11 => '11-ciudades-y-comunidades-sostenibles-3.jpg',
-            12 => '12-produccion-y-consumo-responsables-3.jpg',
-            13 => '13-accion-por-el-clima-3.jpg',
-            14 => '14-vida-submarina-3.jpg',
-            15 => '15-vida-de-ecosistemas-terrestres-3.jpg',
-            16 => '16-paz-justicia-e-instituciones-solidas-3.jpg',
-            17 => '17-alianzas-para-lograr-los-objetivos-3.jpg',
-        ];
+    <div class="space-y-4">
 
-    @endphp
+        <!-- Notificaciones -->
+        @include('ods.partials.avisos')
 
 
-    <!-- Scroll vertical -->
-    <div class="overflow-y-auto"
-         style="max-height: calc(100vh - 320px);">
 
-        <!-- Grid ODS -->
-        <div class="grid grid-cols-2
-                    sm:grid-cols-3
-                    md:grid-cols-4
-                    xl:grid-cols-8
-                    gap-4
-                    pb-6">
 
-            @forelse($ods as $item)
 
-                <div class="group">
 
-<!-- Imagen ODS -->
-<a href="{{ route('ods.detalle', $item->id) }}"
-   class="block overflow-hidden
-          border border-gray-200
-          bg-white
-          transition duration-200
-          hover:shadow-md
-          cursor-pointer">
 
-    @if(isset($imagenesOds[(int) str_replace('ODS-', '', $item->codigo)]))
 
-        <img
-            src="{{ asset(
-                'images/ods/' .
-                $imagenesOds[(int) str_replace('ODS-', '', $item->codigo)]
-            ) }}"
-            alt="{{ $item->codigo }} - {{ $item->nombre }}"
-            class="w-full h-auto object-cover
-                   transition duration-200
-                   hover:opacity-90">
 
-    @else
 
-        <div class="flex items-center justify-center
-                    h-40 bg-gray-100
-                    text-sm text-gray-400">
 
-            Imagen no disponible
+        <!-- Barra de acciones -->
+        <div class="flex flex-wrap items-center gap-6 py-3
+                    border-b border-gray-200 text-sm">
+
+            <a href="{{ route('ods.index') }}"
+               class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800">
+
+                <i class="bi bi-chevron-left"></i>
+                Regresar
+
+            </a>
+
+            @if(puedeHacer('ods', 'editar'))
+
+                <a href="{{ route('catalogos.gestion.edit', ['ods-agendas', $agenda->id]) }}"
+                   class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800">
+
+                    <i class="bi bi-pencil"></i>
+                    Editar información
+
+                </a>
+
+            @endif
+
+            @include('catalogos.gestion.estado', [
+                'modulo' => 'ods',
+                'recursoEstado' => 'ods-agendas',
+                'registroEstado' => $agenda,
+            ])
+
+            <a href="{{ route('ods.agenda', $agenda->id) }}"
+               class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800">
+
+                <i class="bi bi-arrow-clockwise"></i>
+                Actualizar
+
+            </a>
 
         </div>
 
-    @endif
+        <!-- Identificación de la agenda -->
+        <div class="flex items-center gap-4 py-2">
 
-</a>
+            <div class="flex h-16 w-16 shrink-0 items-center justify-center
+                        rounded-full bg-blue-600 text-white">
 
-                    <p class="mt-2 text-sm font-medium text-gray-800">{{ $item->codigo }} · {{ $item->nombre }}</p>
-                    <p class="mt-1 text-xs text-gray-500">{{ $item->metas_count }} metas · {{ $item->estado }}</p>
-                    <div class="flex flex-wrap gap-3 mt-2 text-sm">
-                        @if(puedeHacer('ods', 'editar'))
-                            <a class="text-blue-600" href="{{ route('catalogos.gestion.edit', ['ods', $item->id]) }}">Editar</a>
+                <i class="bi bi-journal-text text-3xl"></i>
+
+            </div>
+
+            <div>
+
+                <h2 class="text-xl font-semibold text-gray-900">
+                    {{ $agenda->nombre }}
+                </h2>
+
+                <p class="mt-1 text-sm text-gray-500">
+                    Agenda de Desarrollo Sostenible
+                </p>
+
+            </div>
+
+        </div>
+
+        <!-- Información general -->
+        <div>
+
+            <!-- Encabezado -->
+            <div class="flex items-center justify-between
+                        bg-gray-100 px-4 py-2 border-b border-gray-200">
+
+                <h3 class="text-sm font-medium text-gray-800">
+                    Información general
+                </h3>
+
+                @if(puedeHacer('ods', 'editar'))
+
+                    <a href="{{ route('catalogos.gestion.edit', ['ods-agendas', $agenda->id]) }}"
+                       class="text-sm text-blue-600 hover:underline">
+
+                        Editar
+
+                    </a>
+
+                @endif
+
+            </div>
+
+            <!-- Datos de la agenda -->
+            <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-4 px-4 py-4">
+
+                <div class="grid grid-cols-[140px_1fr] gap-3">
+
+                    <dt class="text-sm font-medium text-gray-700">
+                        Nombre
+                    </dt>
+
+                    <dd class="text-sm text-gray-600 break-words">
+                        {{ $agenda->nombre }}
+                    </dd>
+
+                </div>
+
+                <div class="grid grid-cols-[140px_1fr] gap-3">
+
+                    <dt class="text-sm font-medium text-gray-700">
+                        Estado
+                    </dt>
+
+                    <dd>
+
+                        @if($agenda->estado === 'Activo')
+
+                            <span class="inline-flex items-center gap-1.5 text-sm text-green-600">
+
+                                <i class="bi bi-check-lg"></i>
+                                Activo
+
+                            </span>
+
+                        @else
+
+                            <span class="inline-flex items-center gap-1.5 text-sm text-red-600">
+
+                                <i class="bi bi-x-lg"></i>
+                                Inactivo
+
+                            </span>
+
                         @endif
-                        @include('catalogos.gestion.estado', ['modulo' => 'ods', 'recursoEstado' => 'ods', 'registroEstado' => $item])
-                    </div>
-                </div>
 
-            @empty
-
-                <div class="col-span-full
-                            py-10
-                            text-center
-                            text-sm
-                            text-gray-500">
-
-                    No existen Objetivos de Desarrollo Sostenible registrados.
+                    </dd>
 
                 </div>
 
-            @endforelse
+                <div class="grid grid-cols-[140px_1fr] gap-3">
+
+                    <dt class="text-sm font-medium text-gray-700">
+                        Período
+                    </dt>
+
+                    <dd class="text-sm text-gray-600">
+                        {{ $agenda->periodo_inicio }}–{{ $agenda->periodo_fin }}
+                    </dd>
+
+                </div>
+
+                <div class="grid grid-cols-[140px_1fr] gap-3">
+
+                    <dt class="text-sm font-medium text-gray-700">
+                        Objetivos
+                    </dt>
+
+                    <dd class="text-sm text-gray-600">
+                        {{ $ods->count() }}
+                    </dd>
+
+                </div>
+
+                <div class="grid grid-cols-[140px_1fr] gap-3 md:col-span-2">
+
+                    <dt class="text-sm font-medium text-gray-700">
+                        Descripción
+                    </dt>
+
+                    <dd class="text-sm text-gray-600 whitespace-pre-line break-words">{{ $agenda->descripcion ?: 'Sin descripción registrada.' }}</dd>
+
+                </div>
+
+            </dl>
+
+            @if($agenda->estado === 'Inactivo')
+
+                <p class="mx-4 mb-4 text-sm text-amber-700">
+                    Agenda inactiva. Su información se conserva para consulta
+                    y no se utiliza en nuevas alineaciones.
+                </p>
+
+            @endif
 
         </div>
+
+        <!-- Encabezado del listado -->
+        <div class="bg-gray-100 px-4 py-2 border-b border-gray-200">
+
+            <h3 class="text-sm font-medium text-gray-800">
+                Objetivos de Desarrollo Sostenible
+            </h3>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- Buscador, filtro, resumen y crear -->
+        <div class="flex flex-wrap items-center gap-4">
+
+            <!-- Buscador -->
+            <div class="relative flex-1 max-w-md">
+
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                    <i class="bi bi-search"></i>
+                </span>
+
+                <input
+                    type="text"
+                    id="buscarObjetivo"
+                    placeholder="Buscar objetivo..."
+                    class="w-full border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm
+                           focus:ring-blue-500 focus:border-blue-500">
+
+            </div>
+
+            <!-- Filtro de estado -->
+            <select
+                id="filtroEstadoObjetivo"
+                class="w-48 rounded-md border border-gray-300 px-3 py-2 text-sm
+                       text-gray-700 focus:border-blue-500 focus:ring-blue-500">
+
+                <option value="">Todos los estados</option>
+                <option value="Activo">Activos</option>
+                <option value="Inactivo">Inactivos</option>
+
+            </select>
+
+            <!-- Resumen -->
+            <div class="flex-1">
+
+                <p class="text-sm text-gray-500">
+
+                    <span class="text-blue-600 font-medium">
+                        {{ $ods->count() }}
+                    </span>
+                    registros ·
+
+                    <span class="text-green-600 font-medium">
+                        {{ $ods->where('estado', 'Activo')->count() }}
+                    </span>
+                    activos ·
+
+                    <span class="text-red-600 font-medium">
+                        {{ $ods->where('estado', 'Inactivo')->count() }}
+                    </span>
+                    inactivos
+
+                </p>
+
+            </div>
+
+            <!-- Crear objetivo -->
+            @if(puedeHacer('ods', 'crear'))
+
+                <a href="{{ route('catalogos.gestion.create', [
+                        'recurso' => 'ods',
+                        'padre' => $agenda->id,
+                    ]) }}"
+                   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
+                          text-white text-sm font-medium px-4 py-2 rounded-md
+                          transition whitespace-nowrap">
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Crear objetivo ODS
+
+                </a>
+
+            @endif
+
+        </div>
+
+        <!-- Listado de objetivos -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+
+            <!-- Scroll independiente -->
+            <div class="overflow-auto"
+                 style="max-height: calc(100vh - 340px);">
+
+                <table class="min-w-full">
+
+                    <!-- Encabezado fijo -->
+                    <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+
+                        <tr>
+
+                            <th class="px-4 py-2 text-left text-sm font-semibold text-gray-700">
+                                Nro
+                            </th>
+
+                            <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                                Código
+                            </th>
+
+                            <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                                Objetivo
+                            </th>
+
+                            <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                                Metas
+                            </th>
+
+                            <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
+                                Estado
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @forelse($ods as $item)
+
+                            <tr
+                                class="fila-objetivo border-b border-gray-100 hover:bg-gray-50 transition"
+                                data-codigo="{{ $item->codigo }}"
+                                data-nombre="{{ $item->nombre }}"
+                                data-estado="{{ $item->estado }}"
+                            >
+
+                                <!-- Nro -->
+                                <td class="px-4 py-2 text-sm text-gray-600">
+                                    {{ $loop->iteration }}
+                                </td>
+
+                                <!-- Código -->
+                                <td class="px-2 py-2 text-xs text-gray-600 whitespace-nowrap">
+                                    {{ $item->codigo }}
+                                </td>
+
+                                <!-- Objetivo -->
+                                <td class="px-2 py-2 text-xs font-medium max-w-xl">
+
+                                    <a href="{{ route('ods.detalle', $item->id) }}"
+                                       class="text-blue-600 hover:text-blue-800 hover:underline">
+
+                                        <span class="block line-clamp-2"
+                                              title="{{ $item->nombre }}">
+
+                                            {{ $item->nombre }}
+
+                                        </span>
+
+                                    </a>
+
+                                </td>
+
+                                <!-- Metas -->
+                                <td class="px-2 py-2 text-xs text-gray-600">
+                                    {{ $item->metas_count }}
+                                </td>
+
+                                <!-- Estado -->
+                                <td class="px-2 py-2 whitespace-nowrap">
+
+                                    @if($item->estado === 'Activo')
+
+                                        <span class="inline-flex items-center gap-1.5 text-xs text-green-600">
+
+                                            <i class="bi bi-check-lg font-bold"></i>
+
+                                            Activo
+
+                                        </span>
+
+                                    @else
+
+                                        <span class="inline-flex items-center gap-1.5 text-xs text-red-600">
+
+                                            <i class="bi bi-x-lg font-bold"></i>
+
+                                            Inactivo
+
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+                            </tr>
+
+                        @empty
+
+                            <tr>
+
+                                <td colspan="5"
+                                    class="px-4 py-6 text-center text-sm text-gray-500">
+
+                                    No existen objetivos registrados en esta agenda.
+
+                                </td>
+
+                            </tr>
+
+                        @endforelse
+
+                        <!-- Sin coincidencias -->
+                        <tr id="sinResultadosObjetivo" class="hidden">
+
+                            <td colspan="5"
+                                class="px-4 py-6 text-center text-sm text-gray-500">
+
+                                No se encontraron objetivos con los filtros seleccionados.
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- Buscador y filtro -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+
+                const buscador = document.getElementById('buscarObjetivo');
+                const filtroEstado = document.getElementById('filtroEstadoObjetivo');
+                const filas = document.querySelectorAll('.fila-objetivo');
+                const sinResultados = document.getElementById('sinResultadosObjetivo');
+
+                function filtrarObjetivos() {
+
+                    const texto = buscador.value.toLowerCase().trim();
+                    const estado = filtroEstado.value;
+
+                    let visibles = 0;
+
+                    filas.forEach(function (fila) {
+
+                        const codigo = (fila.dataset.codigo || '').toLowerCase();
+                        const nombre = (fila.dataset.nombre || '').toLowerCase();
+                        const estadoObjetivo = fila.dataset.estado || '';
+
+                        const coincideTexto =
+                            codigo.includes(texto) ||
+                            nombre.includes(texto);
+
+                        const coincideEstado =
+                            estado === '' ||
+                            estadoObjetivo === estado;
+
+                        const mostrar = coincideTexto && coincideEstado;
+
+                        fila.style.display = mostrar ? '' : 'none';
+
+                        if (mostrar) {
+                            visibles++;
+                        }
+
+                    });
+
+                    sinResultados.classList.toggle(
+                        'hidden',
+                        visibles > 0 || filas.length === 0
+                    );
+
+                }
+
+                buscador.addEventListener('input', filtrarObjetivos);
+                filtroEstado.addEventListener('change', filtrarObjetivos);
+
+            });
+        </script>
 
     </div>
 

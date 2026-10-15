@@ -41,7 +41,7 @@
             @if(puedeVer('ods'))
 
                 <a
-                    href="{{ route('ods.index') }}"
+                    href="{{ route('ods.agendas.index') }}"
                     class="{{ request()->routeIs('ods.*')
                         ? 'sidebar-submenu-active'
                         : 'sidebar-submenu' }}"

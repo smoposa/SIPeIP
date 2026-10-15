@@ -4,15 +4,20 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Ods;
 use App\Models\AgendaOds;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use App\Models\OdsMeta;
 use App\Repositories\Contracts\OdsRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class OdsRepository implements OdsRepositoryInterface
 {
     public function listarAgendas(): LengthAwarePaginator
     {
-        return AgendaOds::query()->withCount('ods')->orderByDesc('periodo_inicio')->orderByDesc('id')->paginate(10);
+        return AgendaOds::query()
+            ->withCount('ods')
+            ->orderByDesc('periodo_inicio')
+            ->orderByDesc('id')
+            ->paginate(10);
     }
 
     public function obtenerAgenda(int $id): AgendaOds
@@ -20,17 +25,43 @@ class OdsRepository implements OdsRepositoryInterface
         return AgendaOds::query()->findOrFail($id);
     }
 
-    /**
-     * Obtener todos los ODS ordenados por código.
-     */
-    public function obtenerTodosOrdenados(?int $agendaId = null): Collection
+    public function crearAgenda(array $datos): AgendaOds
     {
-        return Ods::query()->withCount('metas')->when($agendaId, fn ($query) => $query->where('agenda_id', $agendaId))->orderBy('codigo')->get();
+        return AgendaOds::query()->create($datos);
     }
 
-    /**
-     * Obtener un ODS con sus metas asociadas.
-     */
+    public function actualizarAgenda(
+        AgendaOds $agenda,
+        array $datos
+    ): AgendaOds {
+        $agenda->update($datos);
+
+        return $agenda;
+    }
+
+    public function actualizarEstadoAgenda(
+        AgendaOds $agenda,
+        string $estado
+    ): AgendaOds {
+        $agenda->update([
+            'estado' => $estado,
+        ]);
+
+        return $agenda;
+    }
+
+    public function obtenerTodosOrdenados(?int $agendaId = null): Collection
+    {
+        return Ods::query()
+            ->withCount('metas')
+            ->when(
+                $agendaId,
+                fn ($query) => $query->where('agenda_id', $agendaId)
+            )
+            ->orderBy('codigo')
+            ->get();
+    }
+
     public function obtenerConMetas(Ods $ods): Ods
     {
         $ods->load([
@@ -41,5 +72,60 @@ class OdsRepository implements OdsRepositoryInterface
         ]);
 
         return $ods;
+    }
+
+    /**
+     * Bloquear la agenda durante la generación del código y el registro.
+     */
+    public function obtenerAgendaParaActualizar(int $id): AgendaOds
+    {
+        return AgendaOds::query()
+            ->lockForUpdate()
+            ->findOrFail($id);
+    }
+
+    /**
+     * Registrar un objetivo.
+     */
+    public function crearObjetivo(array $datos): Ods
+    {
+        return Ods::query()->create($datos);
+    }
+
+    /**
+     * Actualizar los datos del objetivo.
+     */
+    public function actualizarObjetivo(
+        Ods $ods,
+        array $datos
+    ): Ods {
+        $ods->update($datos);
+
+        return $ods;
+    }
+
+    public function actualizarEstadoObjetivo(
+        Ods $ods,
+        string $estado
+    ): Ods {
+        $ods->update([
+            'estado' => $estado,
+        ]);
+
+        return $ods;
+    }
+
+    public function crearMeta(array $datos): OdsMeta
+    {
+        return OdsMeta::query()->create($datos);
+    }
+
+    public function actualizarMeta(
+        OdsMeta $meta,
+        array $datos
+    ): OdsMeta {
+        $meta->update($datos);
+
+        return $meta;
     }
 }
