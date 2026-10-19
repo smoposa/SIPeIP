@@ -86,4 +86,10 @@ interface ClasificacionInversionRepositoryInterface
         Subsector $subsector,
         array $datos
     ): Subsector;
+
+    public function listarMacrosectoresCatalogo(): Collection;
+
+    public function listarSectoresCatalogo(int $macrosectorId): Collection;
+
+    public function listarSubsectoresCatalogo(int $sectorId): Collection;
 }

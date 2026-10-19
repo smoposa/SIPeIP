@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClasificacionInversion\StoreMacrosectorRequest;
 use App\Http\Requests\ClasificacionInversion\UpdateClasificacionStatusRequest;
 use App\Http\Requests\ClasificacionInversion\UpdateMacrosectorRequest;
+use App\Http\Requests\ClasificacionInversion\GuardarMacrosectorPanelRequest;
+use App\Models\Macrosector;
 use App\Services\ClasificacionInversionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -131,5 +133,41 @@ class MacrosectorController extends Controller
                 'success',
                 'Estado del macrosector actualizado correctamente.'
             );
+    }
+
+    /**
+     * Registrar desde el panel lateral.
+     */
+    public function storePanel(
+        GuardarMacrosectorPanelRequest $request
+    ): RedirectResponse {
+        $this->autorizar('clasificacion_inversion', 'crear');
+
+        $registro = $this->service->registrarMacrosectorPanel(
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('clasificacion-inversion.index')
+            ->with('success', 'Macrosector registrado correctamente.');
+    }
+
+    /**
+     * El Request distingue los permisos de información y estado.
+     */
+    public function updatePanel(
+        GuardarMacrosectorPanelRequest $request,
+        Macrosector $macrosector
+    ): RedirectResponse {
+        $this->autorizar('clasificacion_inversion');
+
+        $registro = $this->service->guardarMacrosectorPanel(
+            $macrosector,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('clasificacion-inversion.index')
+            ->with('success', 'Macrosector actualizado correctamente.');
     }
 }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClasificacionInversion\StoreSubsectorRequest;
 use App\Http\Requests\ClasificacionInversion\UpdateClasificacionStatusRequest;
 use App\Http\Requests\ClasificacionInversion\UpdateSubsectorRequest;
+use App\Http\Requests\ClasificacionInversion\GuardarSubsectorPanelRequest;
+use App\Models\Subsector;
+use App\Models\Sector;
 use App\Services\ClasificacionInversionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -152,5 +155,57 @@ class SubsectorController extends Controller
                     $sector
                 )
         );
+    }
+
+    /**
+     * Listado de subsectores de un sector (HTML).
+     * La consulta porSector() continúa entregando JSON.
+     */
+    public function index(int $sector): View
+    {
+        $this->autorizar('clasificacion_inversion');
+
+        return view(
+            'clasificacion-inversion.subsectores.index',
+            $this->service->datosListadoSubsectores($sector)
+        );
+    }
+
+    /**
+     * Registrar desde el panel lateral.
+     */
+    public function storePanel(
+        GuardarSubsectorPanelRequest $request,
+        Sector $sector
+    ): RedirectResponse {
+        $this->autorizar('clasificacion_inversion', 'crear');
+
+        $registro = $this->service->registrarSubsectorPanel(
+            $sector,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('clasificacion-inversion.subsectores.index', ['sector' => $registro->sector_id])
+            ->with('success', 'Subsector registrado correctamente.');
+    }
+
+    /**
+     * El Request distingue los permisos de información y estado.
+     */
+    public function updatePanel(
+        GuardarSubsectorPanelRequest $request,
+        Subsector $subsector
+    ): RedirectResponse {
+        $this->autorizar('clasificacion_inversion');
+
+        $registro = $this->service->guardarSubsectorPanel(
+            $subsector,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('clasificacion-inversion.subsectores.index', ['sector' => $registro->sector_id])
+            ->with('success', 'Subsector actualizado correctamente.');
     }
 }

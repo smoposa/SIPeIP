@@ -218,4 +218,37 @@ class ClasificacionInversionRepository implements
 
         return $subsector->refresh();
     }
+
+    /**
+     * Listar macrosectores con los totales de sus dos niveles inferiores.
+     */
+    public function listarMacrosectoresCatalogo(): Collection
+    {
+        return Macrosector::query()
+            ->withCount('sectores')
+            ->with([
+                'sectores' => fn ($query) => $query
+                    ->select('id', 'macrosector_id')
+                    ->withCount('subsectores'),
+            ])
+            ->orderBy('nombre')
+            ->get();
+    }
+
+    public function listarSectoresCatalogo(int $macrosectorId): Collection
+    {
+        return Sector::query()
+            ->where('macrosector_id', $macrosectorId)
+            ->withCount('subsectores')
+            ->orderBy('nombre')
+            ->get();
+    }
+
+    public function listarSubsectoresCatalogo(int $sectorId): Collection
+    {
+        return Subsector::query()
+            ->where('sector_id', $sectorId)
+            ->orderBy('codigo')
+            ->get();
+    }
 }

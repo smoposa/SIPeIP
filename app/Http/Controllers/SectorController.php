@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClasificacionInversion\StoreSectorRequest;
 use App\Http\Requests\ClasificacionInversion\UpdateClasificacionStatusRequest;
 use App\Http\Requests\ClasificacionInversion\UpdateSectorRequest;
+use App\Http\Requests\ClasificacionInversion\GuardarSectorPanelRequest;
+use App\Models\Sector;
+use App\Models\Macrosector;
 use App\Services\ClasificacionInversionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -152,5 +155,57 @@ class SectorController extends Controller
                     $macrosector
                 )
         );
+    }
+
+    /**
+     * Listado de sectores de un macrosector (HTML).
+     * La consulta porMacrosector() continúa entregando JSON.
+     */
+    public function index(int $macrosector): View
+    {
+        $this->autorizar('clasificacion_inversion');
+
+        return view(
+            'clasificacion-inversion.sectores.index',
+            $this->service->datosListadoSectores($macrosector)
+        );
+    }
+
+    /**
+     * Registrar desde el panel lateral.
+     */
+    public function storePanel(
+        GuardarSectorPanelRequest $request,
+        Macrosector $macrosector
+    ): RedirectResponse {
+        $this->autorizar('clasificacion_inversion', 'crear');
+
+        $registro = $this->service->registrarSectorPanel(
+            $macrosector,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('clasificacion-inversion.sectores.index', ['macrosector' => $registro->macrosector_id])
+            ->with('success', 'Sector registrado correctamente.');
+    }
+
+    /**
+     * El Request distingue los permisos de información y estado.
+     */
+    public function updatePanel(
+        GuardarSectorPanelRequest $request,
+        Sector $sector
+    ): RedirectResponse {
+        $this->autorizar('clasificacion_inversion');
+
+        $registro = $this->service->guardarSectorPanel(
+            $sector,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('clasificacion-inversion.sectores.index', ['macrosector' => $registro->macrosector_id])
+            ->with('success', 'Sector actualizado correctamente.');
     }
 }

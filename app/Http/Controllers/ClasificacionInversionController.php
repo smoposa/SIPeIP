@@ -22,7 +22,7 @@ class ClasificacionInversionController extends Controller
 
         return view(
             'clasificacion-inversion.index',
-            $this->service->obtenerResumen()
+            $this->service->datosListadoMacrosectores()
         );
     }
 }
