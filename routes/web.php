@@ -249,7 +249,7 @@ Route::middleware([
                 ->name('ods.metas.update');
 
     });
-    
+
 
     // Plan Nacional de Desarrollo
     Route::prefix('pnd')
@@ -257,26 +257,119 @@ Route::middleware([
         ->name('pnd.')
         ->group(function () {
 
-            // Listado del Plan Nacional de Desarrollo
+            // Planes: listado y panel lateral.
             Route::get('/', [PndController::class, 'index'])
                 ->name('index');
 
-            // Detalle de un Objetivo Nacional
+            // Planes: registrar.
+            Route::post('/planes', [PndController::class, 'store'])
+                ->name('planes.store');
+
+            // Planes: actualizar información y estado.
+            Route::put('/planes/{pnd}', [PndController::class, 'update'])
+                ->whereNumber('pnd')
+                ->name('planes.update');
+
+            Route::post(
+                '/objetivos/{objetivo}/politicas',
+                [\App\Http\Controllers\PndPoliticaController::class, 'store']
+            )
+                ->whereNumber('objetivo')
+                ->name('politicas.store');
+
+            Route::put(
+                '/objetivos/{objetivo}/politicas/{politica}',
+                [\App\Http\Controllers\PndPoliticaController::class, 'update']
+            )
+                ->whereNumber('objetivo')
+                ->whereNumber('politica')
+                ->name('politicas.update');
+
+            Route::post(
+                '/objetivos/{objetivo}/politicas/{politica}/estrategias',
+                [\App\Http\Controllers\PndEstrategiaController::class, 'store']
+            )
+                ->whereNumber('objetivo')
+                ->whereNumber('politica')
+                ->name('estrategias.store');
+
+            Route::put(
+                '/objetivos/{objetivo}/politicas/{politica}/estrategias/{estrategia}',
+                [\App\Http\Controllers\PndEstrategiaController::class, 'update']
+            )
+                ->whereNumber('objetivo')
+                ->whereNumber('politica')
+                ->whereNumber('estrategia')
+                ->name('estrategias.update');
+
+            Route::post(
+                '/objetivos/{objetivo}/metas',
+                [\App\Http\Controllers\PndMetaController::class, 'store']
+            )
+                ->whereNumber('objetivo')
+                ->name('metas.store');
+
+            Route::put(
+                '/objetivos/{objetivo}/metas/{meta}',
+                [\App\Http\Controllers\PndMetaController::class, 'update']
+            )
+                ->whereNumber('objetivo')
+                ->whereNumber('meta')
+                ->name('metas.update');
+
+
+            // Objetivos: registrar dentro del eje.
+            Route::post(
+                '/ejes/{eje}/objetivos',
+                [\App\Http\Controllers\PndObjetivoController::class, 'store']
+            )
+                ->whereNumber('eje')
+                ->name('objetivos.store');
+
+            // Objetivos: actualizar información y estado.
+            Route::put(
+                '/objetivos/{objetivo}',
+                [\App\Http\Controllers\PndObjetivoController::class, 'update']
+            )
+                ->whereNumber('objetivo')
+                ->name('objetivos.update');
+
+
+            // Ejes: listado por plan.
+            Route::get('/planes/{pnd}/ejes', [PndController::class, 'listarEjes'])
+                ->whereNumber('pnd')
+                ->name('ejes.index');
+
+            // Ejes: registrar desde el panel lateral.
+            Route::post(
+                '/planes/{pnd}/ejes',
+                [\App\Http\Controllers\PndEjeController::class, 'store']
+            )
+                ->whereNumber('pnd')
+                ->name('ejes.store');
+
+            // Ejes: actualizar información y estado.
+            Route::put(
+                '/ejes/{eje}',
+                [\App\Http\Controllers\PndEjeController::class, 'update']
+            )
+                ->whereNumber('eje')
+                ->name('ejes.update');
+
+
+            // Objetivos: listado por eje.
+            Route::get(
+                '/ejes/{eje}/objetivos',
+                [PndController::class, 'listarObjetivos']
+            )
+                ->whereNumber('eje')
+                ->name('objetivos.index');
+
+            // Objetivos: detalle con políticas, estrategias y metas.
             Route::get('/objetivos/{id}', [PndController::class, 'objetivo'])
                 ->whereNumber('id')
                 ->name('objetivo');
 
-            /*
-            |--------------------------------------------------------------------------
-            | Detalle general del PND
-            |--------------------------------------------------------------------------
-            | Temporalmente deshabilitado mientras se reestructura
-            | esta funcionalidad con la nueva arquitectura por capas.
-            |
-            Route::get('/{id}', [PndController::class, 'detalle'])
-                ->whereNumber('id')
-                ->name('detalle');
-            */
     });
 
         /*
