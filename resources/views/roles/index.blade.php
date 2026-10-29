@@ -1,12 +1,34 @@
 <x-roles-layout title="Todos los roles">
 
+    <!-- Migas de pan -->
+    <x-slot name="breadcrumbs">
+
+        <nav aria-label="Migas de pan">
+
+            <ol class="flex items-center text-xs">
+
+                <li aria-current="page"
+                    class="font-medium text-gray-700">
+
+                    Roles
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+    </x-slot>
+
+
     <div class="space-y-4">
 
-        <!-- Notificacion de Éxito -->
+        <!-- Notificación de éxito -->
         @if(session('success'))
 
             <div id="alertSuccess"
-                class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+                 role="status"
+                 class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
 
                 {{ session('success') }}
 
@@ -14,13 +36,7 @@
 
             <script>
                 setTimeout(() => {
-
-                    const alerta = document.getElementById('alertSuccess');
-
-                    if (alerta) {
-                        alerta.remove();
-                    }
-
+                    document.getElementById('alertSuccess')?.remove();
                 }, 3000);
             </script>
 
@@ -30,37 +46,40 @@
         <!-- Barra de navegación -->
         <div class="bg-white border-b border-gray-300 mb-4">
 
-            <div class="flex">
+            <div class="flex flex-wrap">
 
-                <!-- Roles - Activo -->
+                <!-- Roles -->
                 <a href="{{ route('roles.index') }}"
-                class="px-3 py-2 text-sm font-medium text-gray-800
-                        border-b-2 border-blue-500
-                        hover:bg-gray-100 transition">
+                   aria-current="page"
+                   class="px-3 py-2 text-sm font-medium text-gray-800
+                          border-b-2 border-blue-500
+                          hover:bg-gray-100 transition">
 
-                    <i class="bi bi-person-check text-blue-500 me-2"></i>
+                    <i class="bi bi-person-check text-blue-500 me-2" aria-hidden="true"></i>
                     Roles
 
                 </a>
 
-                <!-- Asignación de Roles -->
-                <a href="{{ route('roles.asignacion') }}"
-                class="px-3 py-2 text-sm font-medium text-gray-800
-                        border-b-2 border-transparent
-                        hover:bg-gray-100 transition">
 
-                    <i class="bi bi-list-check text-blue-500 me-2"></i>
+                <!-- Asignación de roles -->
+                <a href="{{ route('roles.asignacion') }}"
+                   class="px-3 py-2 text-sm font-medium text-gray-800
+                          border-b-2 border-transparent
+                          hover:bg-gray-100 transition">
+
+                    <i class="bi bi-list-check text-blue-500 me-2" aria-hidden="true"></i>
                     Asignación de Roles
 
                 </a>
 
+
                 <!-- Actualizar -->
                 <a href="{{ url()->current() }}"
-                class="px-3 py-2 text-sm font-medium text-gray-700
-                        border-b-2 border-transparent
-                        hover:bg-gray-100 transition">
+                   class="px-3 py-2 text-sm font-medium text-gray-700
+                          border-b-2 border-transparent
+                          hover:bg-gray-100 transition">
 
-                    <i class="bi bi-arrow-clockwise text-blue-500 me-2"></i>
+                    <i class="bi bi-arrow-clockwise text-blue-500 me-2" aria-hidden="true"></i>
                     Actualizar
 
                 </a>
@@ -71,30 +90,32 @@
 
 
         <!-- Buscador, filtro, resumen y acciones -->
-        <div class="flex items-center gap-4 mb-4">
+        <div class="flex flex-wrap items-center gap-4 mb-4">
 
             <!-- Buscador -->
             <div class="relative flex-1 max-w-md">
 
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
-                    <i class="bi bi-search"></i>
+                    <i class="bi bi-search" aria-hidden="true"></i>
                 </span>
 
                 <input
                     type="text"
                     id="buscarRol"
                     placeholder="Buscar rol..."
+                    aria-label="Buscar rol"
                     class="w-full border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm
-                        focus:ring-blue-500 focus:border-blue-500">
+                           focus:ring-blue-500 focus:border-blue-500">
 
             </div>
 
 
-            <!-- Filtro Estado -->
+            <!-- Filtro de estado -->
             <select
                 id="filtroEstado"
+                aria-label="Filtrar roles por estado"
                 class="w-48 rounded-md border border-gray-300 px-3 py-2 text-sm
-                    text-gray-700 focus:border-blue-500 focus:ring-blue-500">
+                       text-gray-700 focus:border-blue-500 focus:ring-blue-500">
 
                 <option value="">Todos los estados</option>
                 <option value="Activo">Activos</option>
@@ -103,7 +124,7 @@
             </select>
 
 
-            <!-- Resumen de estados -->
+            <!-- Resumen -->
             <div class="flex-1">
 
                 <p class="text-sm text-gray-500">
@@ -132,12 +153,11 @@
             @if(puedeHacer('roles', 'crear'))
 
                 <a href="{{ route('roles.create') }}"
-                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
-                        text-white text-sm font-medium px-4 py-2 rounded-md
-                        transition whitespace-nowrap">
+                   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
+                          text-white text-sm font-medium px-4 py-2 rounded-md
+                          transition whitespace-nowrap">
 
-                    <i class="bi bi-plus-lg"></i>
-
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i>
                     Crear rol
 
                 </a>
@@ -146,13 +166,13 @@
 
         </div>
 
-        <!-- Listado de roles -->
+
+        <!-- Listado -->
         @include('roles.partials.listado-roles')
 
 
         <!-- Buscador y filtro -->
         <script>
-
             document.addEventListener('DOMContentLoaded', function () {
 
                 const buscador = document.getElementById('buscarRol');
@@ -166,8 +186,8 @@
 
                     filas.forEach(function (fila) {
 
-                        const nombre = fila.dataset.nombre || '';
-                        const descripcion = fila.dataset.descripcion || '';
+                        const nombre = (fila.dataset.nombre || '').toLowerCase();
+                        const descripcion = (fila.dataset.descripcion || '').toLowerCase();
                         const estadoRol = fila.dataset.estado || '';
 
                         const coincideTexto =
@@ -175,13 +195,10 @@
                             descripcion.includes(texto);
 
                         const coincideEstado =
-                            estado === '' ||
-                            estadoRol === estado;
+                            estado === '' || estadoRol === estado;
 
                         fila.style.display =
-                            coincideTexto && coincideEstado
-                                ? ''
-                                : 'none';
+                            coincideTexto && coincideEstado ? '' : 'none';
 
                     });
 
@@ -191,7 +208,6 @@
                 filtroEstado.addEventListener('change', filtrarRoles);
 
             });
-
         </script>
 
     </div>

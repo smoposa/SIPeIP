@@ -1,126 +1,139 @@
 <x-programas-layout title="Editar programa">
 
-    <div class="mx-auto max-w-5xl space-y-5">
+    <!-- Migas de pan -->
+    <x-slot name="breadcrumbs">
 
-        {{-- Encabezado --}}
-        <div class="rounded-lg border border-gray-200 bg-white">
+        <nav aria-label="Migas de pan">
 
-            <div class="flex flex-col gap-4 px-5 py-4
-                        sm:flex-row sm:items-center sm:justify-between">
+            <ol class="flex flex-wrap items-center gap-2 text-xs">
 
-                <div class="flex items-center gap-3">
+                <li>
+                    <a href="{{ route('programas.listar') }}"
+                       class="text-gray-500 hover:text-blue-600">
+                        Programas de inversión
+                    </a>
+                </li>
 
-                    <div class="flex h-11 w-11 flex-shrink-0 items-center
-                                justify-center rounded-lg border
-                                border-gray-200 bg-gray-100">
+                <li aria-hidden="true" class="text-gray-400">/</li>
 
-                        <i class="bi bi-collection text-xl text-gray-600"></i>
+                <li>
+                    <a href="{{ route('programas.detalle', $programa->id) }}"
+                       class="text-gray-500 hover:text-blue-600">
+                        Detalle del programa
+                    </a>
+                </li>
 
-                    </div>
+                <li aria-hidden="true" class="text-gray-400">/</li>
 
-                    <div>
+                <li aria-current="page"
+                    class="font-medium text-gray-700">
+                    Editar programa
+                </li>
 
-                        <p class="text-xs font-medium uppercase
-                                  tracking-wide text-gray-400">
-                            Inversión pública
-                        </p>
+            </ol>
 
-                        <h2 class="text-lg font-semibold text-gray-800">
-                            Editar programa de inversión
-                        </h2>
+        </nav>
 
-                        <p class="mt-0.5 text-sm text-gray-500">
-                            Actualice la información institucional
-                            y la alineación estratégica del programa.
-                        </p>
+    </x-slot>
 
-                    </div>
 
-                </div>
+    <!-- Notificaciones -->
+    @include('programas.partials.avisos')
 
-                <a
-                    href="{{ route(
-                        'programas.detalle',
-                        $programa->id
-                    ) }}"
-                    class="inline-flex items-center justify-center gap-2
-                           rounded-md border border-gray-300 bg-white
-                           px-4 py-2 text-sm font-medium text-gray-700
-                           transition hover:bg-gray-50"
-                >
-                    <i class="bi bi-arrow-left"></i>
 
-                    Regresar
-                </a>
+    <!-- Barra de acciones -->
+    <div class="bg-white border-b border-gray-300 mb-0">
 
-            </div>
+        <div class="flex gap-6">
+
+            <a href="{{ route('programas.detalle', $programa->id) }}"
+               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+
+                <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                Regresar
+
+            </a>
 
         </div>
 
-        {{-- Errores generales --}}
+    </div>
+
+
+    <!-- Información -->
+    <div class="bg-white p-6 shadow-sm">
+
+        <!-- Encabezado -->
+        <div class="mb-6">
+
+            <h2 class="text-2xl font-semibold text-gray-800">
+                Actualizar información del programa
+            </h2>
+
+            <p class="mt-1 text-sm text-gray-500">
+                A continuación puede actualizar los datos generales
+                y la alineación estratégica del programa.
+            </p>
+
+        </div>
+
+
+        <!-- Validaciones -->
         @if($errors->any())
 
-            <div
-                class="rounded-lg border border-red-200
-                       bg-red-50 px-4 py-3"
-                role="alert"
-            >
-                <div class="flex items-start gap-3">
+            <div role="alert"
+                 class="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
 
-                    <i class="bi bi-exclamation-circle
-                              mt-0.5 text-red-600"></i>
+                <ul class="list-disc list-inside text-sm text-red-700">
 
-                    <div>
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
 
-                        <p class="text-sm font-medium text-red-700">
-                            No se pudo actualizar el programa.
-                        </p>
-
-                        <p class="mt-1 text-xs text-red-600">
-                            Revise los campos señalados e intente nuevamente.
-                        </p>
-
-                    </div>
-
-                </div>
+                </ul>
 
             </div>
 
         @endif
 
-        {{-- Formulario --}}
-        <form
-            method="POST"
-            action="{{ route(
-                'programas.update',
-                $programa->id
-            ) }}"
-        >
-            @csrf
-            @method('PUT')
 
-            <div
-                class="overflow-y-auto pr-1"
-                style="height: calc(100vh - 220px); min-height: 420px;"
-            >
-                @include(
-                    'programas.partials.contexto-planificacion'
-                )
+        <!-- Scroll -->
+        <div class="overflow-y-auto"
+             style="height: calc(100vh - 300px);">
 
-                @include(
-                    'programas.partials.informacion-general'
-                )
+            <form method="POST"
+                  action="{{ route('programas.update', $programa->id) }}">
 
-                @include(
-                    'programas.partials.estado'
-                )
+                @csrf
+                @method('PUT')
 
-                @include(
-                    'programas.partials.acciones'
-                )
-            </div>
 
-        </form>
+                <!-- Campos -->
+                @include('programas.partials.form-editar')
+
+
+                <!-- Botones -->
+                <div class="flex justify-end gap-3 mt-10 pr-8">
+
+                    <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+
+                        Actualizar
+
+                    </button>
+
+
+                    <a href="{{ route('programas.detalle', $programa->id) }}"
+                       class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+
+                        Cancelar
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
 

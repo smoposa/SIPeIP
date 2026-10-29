@@ -42,11 +42,6 @@
                         Estado
                     </th>
 
-                    <th scope="col"
-                        class="px-2 py-2 text-center text-sm font-semibold text-gray-700">
-                        Acciones
-                    </th>
-
                 </tr>
 
             </thead>
@@ -222,16 +217,6 @@
                                 </span>
 
                             @endif
-
-                        </td>
-
-
-                        <!-- Acciones -->
-                        <td class="px-2 py-2 text-center">
-
-                            @include('proyectos.partials.acciones-listado', [
-                                'proyecto' => $proyecto
-                            ])
 
                         </td>
 

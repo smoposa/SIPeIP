@@ -18,4 +18,10 @@
 
     </div>
 
+    <script>
+        window.setTimeout(() => {
+            document.getElementById('avisoExitoProgramas')?.remove();
+        }, 3000);
+    </script>
+
 @endif

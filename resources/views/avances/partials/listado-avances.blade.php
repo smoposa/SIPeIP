@@ -44,11 +44,6 @@
                         Estado
                     </th>
 
-                    <th scope="col"
-                        class="px-2 py-2 text-center text-sm font-semibold text-gray-700">
-                        Acciones
-                    </th>
-
                 </tr>
 
             </thead>
@@ -167,37 +162,7 @@
                         </td>
 
 
-                        <td class="px-2 py-2">
 
-                            <div class="flex items-center justify-center gap-2">
-
-                                <a href="{{ route('avances.detalle', $avance) }}"
-                                   title="Ver detalle"
-                                   aria-label="Ver avance de {{ $avance->proyecto?->codigo }}, {{ $avance->periodo }} {{ $avance->anio }}"
-                                   class="inline-flex h-8 w-8 items-center justify-center rounded-md
-                                          border border-gray-300 text-gray-600 transition hover:bg-gray-100">
-
-                                    <i class="bi bi-eye" aria-hidden="true"></i>
-
-                                </a>
-
-                                @if($avance->estado === 'Borrador' && puedeHacer('avances', 'editar'))
-
-                                    <a href="{{ route('avances.edit', $avance) }}"
-                                       title="Editar avance"
-                                       aria-label="Editar avance de {{ $avance->proyecto?->codigo }}, {{ $avance->periodo }} {{ $avance->anio }}"
-                                       class="inline-flex h-8 w-8 items-center justify-center rounded-md
-                                              border border-gray-300 text-gray-600 transition hover:bg-gray-100">
-
-                                        <i class="bi bi-pencil" aria-hidden="true"></i>
-
-                                    </a>
-
-                                @endif
-
-                            </div>
-
-                        </td>
 
                     </tr>
 

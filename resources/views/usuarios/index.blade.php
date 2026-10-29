@@ -1,5 +1,26 @@
 <x-usuarios-layout title="Todos los Usuarios">
 
+    <!-- Migas de pan -->
+    <x-slot name="breadcrumbs">
+
+        <nav aria-label="Migas de pan">
+
+            <ol class="flex items-center text-xs">
+
+                <li aria-current="page"
+                    class="font-medium text-gray-700">
+
+                    Usuarios
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+    </x-slot>
+
+
     <div class="space-y-4">
 
         <!-- Notificación de Éxito -->

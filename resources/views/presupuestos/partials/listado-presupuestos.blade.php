@@ -33,15 +33,6 @@
 
                     @endforeach
 
-                    @foreach(['Ejecución', 'Estado', 'Acciones'] as $encabezado)
-
-                        <th scope="col"
-                            class="px-2 py-2 text-center text-sm font-semibold text-gray-700">
-                            {{ $encabezado }}
-                        </th>
-
-                    @endforeach
-
                 </tr>
 
             </thead>
@@ -174,40 +165,6 @@
                                 </span>
 
                             @endif
-
-                        </td>
-
-
-                        <!-- Acciones -->
-                        <td class="px-2 py-2">
-
-                            <div class="flex items-center justify-center gap-2">
-
-                                <a href="{{ route('presupuestos.detalle', $presupuesto) }}"
-                                   title="Ver detalle"
-                                   aria-label="Ver presupuesto de {{ $presupuesto->proyecto?->codigo }}, {{ $presupuesto->periodo }} {{ $presupuesto->anio }}"
-                                   class="inline-flex h-8 w-8 items-center justify-center rounded-md
-                                          border border-gray-300 text-gray-600 transition hover:bg-gray-100">
-
-                                    <i class="bi bi-eye" aria-hidden="true"></i>
-
-                                </a>
-
-                                @if($presupuesto->estado === 'Borrador' && puedeHacer('presupuestos', 'editar'))
-
-                                    <a href="{{ route('presupuestos.edit', $presupuesto) }}"
-                                       title="Editar presupuesto"
-                                       aria-label="Editar presupuesto de {{ $presupuesto->proyecto?->codigo }}, {{ $presupuesto->periodo }} {{ $presupuesto->anio }}"
-                                       class="inline-flex h-8 w-8 items-center justify-center rounded-md
-                                              border border-gray-300 text-gray-600 transition hover:bg-gray-100">
-
-                                        <i class="bi bi-pencil" aria-hidden="true"></i>
-
-                                    </a>
-
-                                @endif
-
-                            </div>
 
                         </td>
 
