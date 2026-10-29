@@ -1,210 +1,129 @@
-<x-objetivos-layout title="Indicadores">
+<x-objetivos-layout title="Indicadores institucionales">
 
-    @if(session('success'))
-        <div id="alertSuccess"
-            class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+    <!-- Migas de pan -->
+    <x-slot name="breadcrumbs">
 
-            {{ session('success') }}
+        <nav aria-label="Migas de pan">
 
-        </div>
+            <ol class="flex items-center text-xs">
 
-        <script>
-            setTimeout(() => {
-                const alerta = document.getElementById('alertSuccess');
+                <li aria-current="page"
+                    class="font-medium text-gray-700">
 
-                if (alerta) {
-                    alerta.remove();
-                }
-            }, 3000);
-        </script>
-    @endif
+                    Indicadores institucionales
 
-    <!-- Encabezado -->
-    <div class="mb-2">
+                </li>
 
-        <h2 class="text-2xl font-semibold text-gray-800">
-            Indicadores Institucionales
-        </h2>
+            </ol>
 
-    </div>
+        </nav>
 
-    <!-- Resumen -->
-    <div class="flex items-center justify-between mb-4">
+    </x-slot>
 
-        <div>
 
-            <p class="text-sm text-gray-500">
+    <div class="space-y-4">
 
-                {{ $indicadores->count() }} registros ·
+        <!-- Notificaciones -->
+        @include('indicadores.partials.avisos')
 
-                <span class="text-green-600 font-medium">
-                    {{ $indicadores->where('estado', 'Activo')->count() }}
-                </span>
 
-                activos ·
+        <!-- Encabezado -->
+        <div class="mb-4">
 
-                <span class="text-red-600 font-medium">
-                    {{ $indicadores->where('estado', 'Inactivo')->count() }}
-                </span>
-
-                inactivos
-
+            <p class="mt-1 text-sm text-gray-500">
+                Consulte y administre los indicadores asociados
+                a las metas institucionales de su entidad.
             </p>
 
         </div>
 
-        <a href="{{ route('indicadores.create') }}"
-            class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md transition">
 
-            <i class="bi bi-plus-lg"></i>
+        <!-- Buscador, filtro, resumen y acciones -->
+        <div class="flex flex-wrap items-center gap-4 mb-4">
 
-            Crear indicador
+            <!-- Buscador -->
+            <div class="relative flex-1 max-w-md">
 
-        </a>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
 
-    </div>
+                    <i class="bi bi-search" aria-hidden="true"></i>
 
-    <!-- Tabla -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 210px);">
+                </span>
 
-        <div class="bg-white border border-gray-200 rounded-lg">
+                <input
+                    type="search"
+                    id="buscarIndicador"
+                    placeholder="Buscar indicador institucional..."
+                    aria-label="Buscar indicador por código, nombre, meta o responsable"
+                    class="w-full border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm
+                           focus:ring-blue-500 focus:border-blue-500">
 
-            <table class="min-w-full">
+            </div>
 
-                <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
 
-                    <tr>
+            <!-- Filtro de estado -->
+            <select
+                id="filtroEstadoIndicador"
+                aria-label="Filtrar indicadores por estado"
+                class="w-48 rounded-md border border-gray-300 px-3 py-2 text-sm
+                       text-gray-700 focus:border-blue-500 focus:ring-blue-500">
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Nro
-                        </th>
+                <option value="">Todos los estados</option>
+                <option value="Activo">Activos</option>
+                <option value="Inactivo">Inactivos</option>
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Código
-                        </th>
+            </select>
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Indicador
-                        </th>
 
-                        <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                            Estado
-                        </th>
+            <!-- Resumen -->
+            <div class="flex-1">
 
-                    </tr>
+                <p class="text-sm text-gray-500">
 
-                </thead>
+                    <span class="text-blue-600 font-medium">
+                        {{ $indicadores->count() }}
+                    </span>
+                    registros ·
 
-                <tbody>
+                    <span class="text-green-600 font-medium">
+                        {{ $indicadores->where('estado', 'Activo')->count() }}
+                    </span>
+                    activos ·
 
-                    @forelse($indicadores as $indicador)
+                    <span class="text-red-600 font-medium">
+                        {{ $indicadores->where('estado', 'Inactivo')->count() }}
+                    </span>
+                    inactivos
 
-                        <tr class="border-b border-gray-100 hover:bg-gray-50">
+                </p>
 
-                            <!-- Nro -->
-                            <td class="px-2 py-2 text-sm text-gray-600">
-                                {{ $loop->iteration }}
-                            </td>
+            </div>
 
-                            <!-- Código -->
-                            <td class="px-2 py-2 text-sm text-gray-600">
-                                {{ $indicador->codigo }}
-                            </td>
 
-                            <!-- Indicador -->
-                            <td class="px-2 py-2">
+            <!-- Registrar indicador -->
+            <a href="{{ route('indicadores.create') }}"
+               class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
+                      text-white text-sm font-medium px-4 py-2 rounded-md
+                      transition whitespace-nowrap">
 
-                                <a href="{{ route('indicadores.detalle', $indicador->id) }}"
-                                    class="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+                <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                Registrar indicador
 
-                                    {{ \Illuminate\Support\Str::limit($indicador->nombre, 120) }}
-
-                                </a>
-
-                                <div class="mt-1 text-xs">
-
-                                    <span class="font-medium text-gray-600">
-                                        Meta:
-                                    </span>
-
-                                    <span class="text-gray-500">
-                                        {{ $indicador->meta?->codigo ?? 'No registra' }}
-                                    </span>
-
-                                </div>
-
-                                <div class="text-xs">
-
-                                    <span class="font-medium text-gray-600">
-                                        Responsable:
-                                    </span>
-
-                                    <span class="text-gray-500">
-                                        {{ $indicador->responsable?->nombres }} {{ $indicador->responsable?->apellidos }}
-                                    </span>
-
-                                </div>
-
-                            </td>
-
-                            <!-- Estado -->
-                            <td class="px-2 py-2">
-
-                                @if($indicador->estado == 'Activo')
-
-                                    <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                                        Activo
-                                    </span>
-
-                                @else
-
-                                    <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                                        Inactivo
-                                    </span>
-
-                                @endif
-
-                            </td>
-
-                        </tr>
-
-                    @empty
-
-                        <tr>
-
-                            <td colspan="4"
-                                class="px-4 py-6 text-center text-gray-500">
-
-                                No existen indicadores registrados.
-
-                            </td>
-
-                        </tr>
-
-                    @endforelse
-
-                </tbody>
-
-            </table>
+            </a>
 
         </div>
 
-    </div>
 
-    <!-- Pie -->
-    <div class="flex items-center justify-between mt-6">
+        <!-- Listado -->
+        <div id="gestionIndicadores">
 
-        <p class="text-sm text-gray-600">
+            @include('indicadores.partials.listado-indicadores')
 
-            Mostrando
+        </div>
 
-            <span class="font-medium">
-                {{ $indicadores->count() }}
-            </span>
 
-            registros.
-
-        </p>
+        <!-- Funcionamiento de la pantalla -->
+        @include('indicadores.partials.scripts-indicadores')
 
     </div>
 

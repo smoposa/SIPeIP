@@ -1,103 +1,43 @@
+@props(['title' => 'Planes institucionales'])
+
 <x-app-layout>
-    
-   {{--  <!-- Header -->
+
+    <!-- Encabezado -->
     <x-slot name="header">
-        <h2 class="text-xl text-gray-800 leading-tight">
-            <span class="font-semibold">
-                Planes |
-            </span>
-            <span class="font-normal">
-                {{ $title }}
-            </span>
-        </h2>
-    </x-slot> --}}
 
-    <div class="flex">
+        <!-- Migas de pan -->
+        @isset($breadcrumbs)
 
-        {{--
-            <!-- Submenu -->
-            @if(
-                request()->routeIs('planes.index') ||
-                request()->routeIs('planes.listar') ||
-                request()->routeIs('planes.create')
-            )
+            <div class="-mx-6 -mt-3 mb-1 bg-gray-100 px-6 py-1 text-xs text-gray-500">
 
-            <div id="submenuContainer"
-                class="w-52 border-r border-gray-300">
-
-                @include('submenus.planes')
+                {{ $breadcrumbs }}
 
             </div>
 
-            @endif
-        --}}
+        @endisset
 
 
-        <!-- Contenido -->
-        <div class="flex-1 px-4 pt-1 pb-4">
-            {{ $slot }}
-        </div>
+        <!-- Título -->
+        <h2 class="text-xl text-gray-800 leading-tight">
+
+            <span class="font-semibold">
+                Planificación institucional |
+            </span>
+
+            <span class="font-normal">
+                {{ $title }}
+            </span>
+
+        </h2>
+
+    </x-slot>
+
+
+    <!-- Contenido -->
+    <div class="min-w-0 px-4 pt-1 pb-4">
+
+        {{ $slot }}
 
     </div>
 
 </x-app-layout>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    const submenu = document.getElementById('submenuContainer');
-    const boton = document.getElementById('toggleSubmenu');
-    const menu = document.getElementById('menuPlanes');
-
-    if (!submenu || !boton || !menu) return;
-
-    // Mostrar u ocultar automáticamente en pantallas pequeñas
-    function ajustarSubmenu() {
-
-        const ancho = window.innerWidth;
-
-        if (ancho < 768) {
-
-            submenu.classList.add('hidden');
-
-        } else {
-
-            submenu.classList.remove('hidden');
-
-        }
-
-    }
-
-    ajustarSubmenu();
-
-    window.addEventListener('resize', ajustarSubmenu);
-
-    // Contraer / expandir el submenú
-    boton.addEventListener('click', function () {
-
-        if (submenu.classList.contains('w-52')) {
-
-            submenu.classList.remove('w-52');
-            submenu.classList.add('w-8');
-
-            menu.classList.add('hidden');
-
-            boton.innerHTML =
-                '<i class="bi bi-chevron-double-right"></i>';
-
-        } else {
-
-            submenu.classList.remove('w-8');
-            submenu.classList.add('w-52');
-
-            menu.classList.remove('hidden');
-
-            boton.innerHTML =
-                '<i class="bi bi-chevron-double-left"></i>';
-
-        }
-
-    });
-
-});
-</script>

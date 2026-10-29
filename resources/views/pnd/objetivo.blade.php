@@ -1,4 +1,4 @@
-<x-catalogos-layout title="Detalle Objetivo PNDsdsadad">
+<x-catalogos-layout title="Detalle Objetivo PND">
 
     <!-- =========================================================
          ENCABEZADO

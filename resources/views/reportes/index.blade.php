@@ -1,69 +1,138 @@
-<x-planes-layout title="Reportes">
-    <div class="mb-5">
-        <h2 class="text-2xl font-semibold text-gray-800">Reportes</h2>
-        <p class="text-sm text-gray-500">Consulta y exporta información de planificación, inversión y seguimiento de tu entidad.</p>
-    </div>
-    <form method="GET" action="{{ route('reportes.index') }}" class="mb-5 rounded-lg border border-gray-200 bg-white p-5">
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <label class="block text-sm font-medium text-gray-700">Reporte
-                <select name="tipo" class="mt-1 w-full rounded-md border-gray-300" onchange="this.form.submit()">
-                    @foreach($tipos as $clave => $nombre)
-                        <option value="{{ $clave }}" @selected($tipo === $clave)>{{ $nombre }}</option>
-                    @endforeach
-                </select>
-            </label>
-            <label class="block text-sm font-medium text-gray-700">Año
-                <input name="anio" type="number" min="2000" max="2100" value="{{ $filtros['anio'] ?? '' }}" class="mt-1 w-full rounded-md border-gray-300" placeholder="Todos">
-            </label>
-            @if(in_array($tipo, ['avances', 'presupuestos']))
-                <label class="block text-sm font-medium text-gray-700">Período
-                    <select name="periodo" class="mt-1 w-full rounded-md border-gray-300">
-                        <option value="">Todos</option>
-                        @foreach($periodos as $periodo)
-                            <option value="{{ $periodo }}" @selected(($filtros['periodo'] ?? '') === $periodo)>{{ $periodo }}</option>
-                        @endforeach
-                    </select>
-                </label>
-                <label class="block text-sm font-medium text-gray-700">Proyecto
-                    <select name="proyecto_id" class="mt-1 w-full rounded-md border-gray-300">
-                        <option value="">Todos</option>
-                        @foreach($proyectos as $proyecto)
-                            <option value="{{ $proyecto->id }}" @selected((string)($filtros['proyecto_id'] ?? '') === (string)$proyecto->id)>{{ $proyecto->codigo }} - {{ $proyecto->nombre }}</option>
-                        @endforeach
-                    </select>
-                </label>
-            @endif
+@php
+    $parametrosExportacion = [
+        'tipo' => $tipo,
+        'anio' => $filtros['anio'] ?? null,
+    ];
+
+    if (in_array($tipo, ['avances', 'presupuestos'], true)) {
+        $parametrosExportacion['periodo'] = $filtros['periodo'] ?? null;
+        $parametrosExportacion['proyecto_id'] = $filtros['proyecto_id'] ?? null;
+    }
+
+    $parametrosExportacion = array_filter(
+        $parametrosExportacion,
+        fn ($valor) => $valor !== null && $valor !== ''
+    );
+@endphp
+
+
+<x-reportes-layout title="Consulta y exportación">
+
+    <!-- Migas de pan -->
+    <x-slot name="breadcrumbs">
+
+        <nav aria-label="Migas de pan">
+
+            <ol class="flex items-center text-xs">
+
+                <li aria-current="page"
+                    class="font-medium text-gray-700">
+
+                    Reportes
+
+                </li>
+
+            </ol>
+
+        </nav>
+
+    </x-slot>
+
+
+    <div class="space-y-4">
+
+        <!-- Encabezado -->
+        <div class="mb-4">
+
+            <p class="mt-1 text-sm text-gray-500">
+                Consulte y exporte información de planificación, inversión
+                y seguimiento de su entidad.
+            </p>
+
         </div>
-        @if($errors->any())<p class="mt-3 text-sm text-red-700">{{ $errors->first() }}</p>@endif
-        <div class="mt-4 flex flex-wrap gap-2">
-            <button class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Consultar</button>
-            <a href="{{ route('reportes.index', ['tipo' => $tipo]) }}" class="rounded-md border px-4 py-2 text-sm text-gray-700">Limpiar filtros</a>
-            <a href="{{ route('reportes.excel', request()->only(['tipo', 'anio', 'periodo', 'proyecto_id'])) }}" class="rounded-md bg-green-700 px-4 py-2 text-sm font-medium text-white"><i class="bi bi-file-earmark-excel"></i> Excel</a>
-            <a href="{{ route('reportes.pdf', request()->only(['tipo', 'anio', 'periodo', 'proyecto_id'])) }}" target="_blank" rel="noopener" class="rounded-md bg-[#024687] px-4 py-2 text-sm font-medium text-white"><i class="bi bi-file-earmark-pdf"></i> Ver PDF</a>
+
+
+        <!-- Filtros -->
+        @include('reportes.partials.filtros')
+
+
+        <!-- Resumen y exportación -->
+        <div class="flex flex-wrap items-center justify-between gap-4">
+
+            <!-- Resumen a la izquierda -->
+            <div>
+
+                <p class="text-sm text-gray-500">
+
+                    <span class="font-medium text-blue-600">
+                        {{ $registros->total() }}
+                    </span>
+
+                    registros · {{ $tipos[$tipo] }}
+
+                </p>
+
+                @if($registros->total() > 0)
+
+                    <p class="mt-1 text-xs text-gray-500">
+                        Mostrando {{ $registros->firstItem() }}
+                        a {{ $registros->lastItem() }}
+                    </p>
+
+                @endif
+
+            </div>
+
+
+            <!-- Exportación a la derecha -->
+            <div class="ml-auto flex flex-wrap items-center gap-2">
+
+                <a href="{{ route('reportes.excel', $parametrosExportacion) }}"
+                   class="inline-flex items-center gap-2 rounded-md bg-green-700
+                          px-4 py-2 text-sm font-medium text-white
+                          transition hover:bg-green-800">
+
+                    <i class="bi bi-file-earmark-excel" aria-hidden="true"></i>
+                    Excel
+
+                </a>
+
+
+                <a href="{{ route('reportes.pdf', $parametrosExportacion) }}"
+                   target="_blank"
+                   rel="noopener"
+                   aria-label="Ver reporte PDF en una nueva pestaña"
+                   class="inline-flex items-center gap-2 rounded-md bg-blue-800
+                          px-4 py-2 text-sm font-medium text-white
+                          transition hover:bg-blue-900">
+
+                    <i class="bi bi-file-earmark-pdf" aria-hidden="true"></i>
+                    Ver PDF
+
+                </a>
+
+            </div>
+
         </div>
-    </form>
-    <div class="mb-3 text-sm text-gray-600"><strong>{{ $registros->total() }}</strong> registros · {{ $tipos[$tipo] }}</div>
-    <div class="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50"><tr>
-                <th class="px-3 py-3 text-left text-xs font-semibold uppercase text-gray-600">Nro.</th>
-                @foreach($columnas as $columna)
-                    <th class="px-3 py-3 text-left text-xs font-semibold uppercase text-gray-600">{{ $columna }}</th>
-                @endforeach
-            </tr></thead>
-            <tbody class="divide-y divide-gray-200">
-                @forelse($registros as $registro)
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-3 py-3 text-sm text-gray-500">{{ $registros->firstItem() + $loop->index }}</td>
-                        @foreach($service->fila($tipo, $registro) as $valor)
-                            <td class="px-3 py-3 text-sm text-gray-700">{{ is_float($valor) ? number_format($valor, 2, ',', '.') : ($valor ?? '—') }}</td>
-                        @endforeach
-                    </tr>
-                @empty
-                    <tr><td colspan="{{ count($columnas) + 1 }}" class="px-5 py-10 text-center text-gray-500">No hay registros para los filtros seleccionados.</td></tr>
-                @endforelse
-            </tbody>
-        </table>
+
+
+        <!-- Tabla -->
+        @include('reportes.partials.listado-registros')
+
+
+        <!-- Paginación -->
+        @if($registros->hasPages())
+
+            <div class="mt-4">
+
+                {{ $registros->appends(
+                    request()->only(['tipo', 'anio', 'periodo', 'proyecto_id'])
+                )->links() }}
+
+            </div>
+
+        @endif
+
     </div>
-    <div class="mt-4">{{ $registros->links() }}</div>
-</x-planes-layout>
+
+</x-reportes-layout>

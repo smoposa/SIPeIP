@@ -1,246 +1,150 @@
-<x-objetivos-layout title="OEI">
+<x-objetivos-layout title="Objetivos estratégicos institucionales">
 
-    <!-- Mensaje de éxito -->
-    @if(session('success'))
+    <!-- Migas de pan -->
+    <x-slot name="breadcrumbs">
 
-        <div id="alertSuccess"
-             class="fixed top-5 right-5 z-50 rounded-lg bg-green-600 px-6 py-3 text-white shadow-lg">
+        <nav aria-label="Migas de pan">
 
-            {{ session('success') }}
+            <ol class="flex items-center text-xs">
 
-        </div>
+                <li aria-current="page"
+                    class="font-medium text-gray-700">
 
-        <script>
-            setTimeout(() => {
-                const alerta = document.getElementById('alertSuccess');
+                    Objetivos estratégicos institucionales
 
-                if (alerta) {
-                    alerta.remove();
-                }
-            }, 3000);
-        </script>
+                </li>
 
-    @endif
+            </ol>
 
-    <div class="min-w-0 w-full max-w-full">
+        </nav>
+
+    </x-slot>
+
+
+    <div class="space-y-4">
+
+        <!-- Notificaciones -->
+        @include('objetivos.partials.avisos')
+
 
         <!-- Encabezado -->
-        <div class="mb-2">
+        <div class="mb-4">
 
-            <h2 class="text-2xl font-semibold text-gray-800">
-                Objetivos Estratégicos Institucionales
-            </h2>
-
-        </div>
-
-        <!-- Resumen y acción -->
-        <div class="mb-4 flex flex-wrap items-center justify-between gap-4">
-
-            <p class="text-sm text-gray-500">
-
-                <span class="font-medium text-gray-700">
-                    {{ $objetivos->total() }}
-                </span>
-
-                registros encontrados
-
+            <p class="mt-1 text-sm text-gray-500">
+                Consulte y administre los objetivos estratégicos institucionales
+                registrados en los planes de su entidad.
             </p>
 
-            <a href="{{ route('objetivos.create') }}"
-               class="inline-flex h-10 items-center gap-2 rounded-md bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700">
-
-                <i class="bi bi-plus-lg"></i>
-
-                Crear objetivo
-
-            </a>
-
         </div>
 
-        <!-- Scroll vertical -->
-        <div class="min-w-0 w-full max-w-full overflow-y-auto"
-             style="
-                height: calc(100vh - 175px);
-                overflow-x: hidden;
-             ">
 
-            <!-- Tabla -->
-            <div class="min-w-0 overflow-hidden rounded-lg border border-gray-200 bg-white">
+        <!-- Buscador, filtro, resumen y acciones -->
+        <div class="flex flex-wrap items-center gap-4 mb-4">
 
-                <table class="w-full table-fixed">
+            <!-- Buscador -->
+            <div class="relative flex-1 max-w-md">
 
-                    <thead class="sticky top-0 z-10 border-b border-gray-200 bg-gray-50">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
 
-                        <tr>
+                    <i class="bi bi-search" aria-hidden="true"></i>
 
-                            <th class="w-16 px-3 py-2 text-left text-sm font-semibold text-gray-700">
-                                Nro.
-                            </th>
+                </span>
 
-                            <th class="w-32 px-3 py-2 text-left text-sm font-semibold text-gray-700">
-                                Código
-                            </th>
-
-                            <th class="px-3 py-2 text-left text-sm font-semibold text-gray-700">
-                                Nombre
-                            </th>
-
-                            <th class="w-28 px-3 py-2 text-left text-sm font-semibold text-gray-700">
-                                Estado
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        @forelse($objetivos as $objetivo)
-
-                            <tr class="border-b border-gray-100 hover:bg-gray-50">
-
-                                <!-- Número -->
-                                <td class="px-3 py-3 text-sm text-gray-600">
-
-                                    {{ $objetivos->firstItem() + $loop->index }}
-
-                                </td>
-
-                                <!-- Código -->
-                                <td class="px-3 py-3 text-sm text-gray-600">
-
-                                    {{ $objetivo->codigo }}
-
-                                </td>
-
-                                <!-- Nombre -->
-                                <td class="min-w-0 px-3 py-3">
-
-                                    <a href="{{ route('objetivos.detalle', $objetivo->id) }}"
-                                       class="break-words text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
-
-                                        {{ \Illuminate\Support\Str::limit(
-                                            $objetivo->nombre,
-                                            90
-                                        ) }}
-
-                                    </a>
-
-                                    <div class="mt-1 min-w-0 text-xs">
-
-                                        <span class="font-medium text-gray-600">
-                                            Entidad:
-                                        </span>
-
-                                        <span class="break-words text-gray-500">
-                                            {{ $objetivo->plan?->entidad?->nombre ?? 'No registra' }}
-                                        </span>
-
-                                    </div>
-
-                                    <div class="min-w-0 text-xs">
-
-                                        <span class="font-medium text-gray-600">
-                                            Plan:
-                                        </span>
-
-                                        <span class="break-words text-gray-500">
-
-                                            {{ \Illuminate\Support\Str::limit(
-                                                $objetivo->plan?->nombre ?? 'No registra',
-                                                80
-                                            ) }}
-
-                                        </span>
-
-                                    </div>
-
-                                </td>
-
-                                <!-- Estado -->
-                                <td class="px-3 py-3">
-
-                                    @if($objetivo->estado === 'Activo')
-
-                                        <span class="inline-flex rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700">
-                                            Activo
-                                        </span>
-
-                                    @else
-
-                                        <span class="inline-flex rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700">
-                                            Inactivo
-                                        </span>
-
-                                    @endif
-
-                                </td>
-
-                            </tr>
-
-                        @empty
-
-                            <tr>
-
-                                <td colspan="4"
-                                    class="px-4 py-8 text-center text-sm text-gray-500">
-
-                                    No existen Objetivos Estratégicos Institucionales registrados.
-
-                                </td>
-
-                            </tr>
-
-                        @endforelse
-
-                    </tbody>
-
-                </table>
+                <input
+                    type="search"
+                    id="buscarObjetivo"
+                    placeholder="Buscar objetivo institucional..."
+                    aria-label="Buscar objetivo por código, nombre, entidad o plan"
+                    class="w-full border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm
+                           focus:ring-blue-500 focus:border-blue-500">
 
             </div>
 
-            <!-- Pie de tabla -->
-            <div class="mt-5">
 
-                <div class="flex flex-wrap items-center justify-between gap-4">
+            <!-- Filtro de estado -->
+            <select
+                id="filtroEstadoObjetivo"
+                aria-label="Filtrar objetivos por estado"
+                class="w-48 rounded-md border border-gray-300 px-3 py-2 text-sm
+                       text-gray-700 focus:border-blue-500 focus:ring-blue-500">
 
-                    <p class="text-sm text-gray-600">
+                <option value="">Todos los estados</option>
+                <option value="Activo">Activos</option>
+                <option value="Inactivo">Inactivos</option>
 
-                        Mostrando
+            </select>
 
-                        <span class="font-medium">
-                            {{ $objetivos->firstItem() ?? 0 }}
-                        </span>
 
-                        a
+            <!-- Resumen -->
+            <div class="flex-1">
 
-                        <span class="font-medium">
-                            {{ $objetivos->lastItem() ?? 0 }}
-                        </span>
+                <p class="text-sm text-gray-500">
 
-                        de
+                    <span class="text-blue-600 font-medium">
+                        {{ $objetivos->total() }}
+                    </span>
+                    registros ·
 
-                        <span class="font-medium">
-                            {{ $objetivos->total() }}
-                        </span>
+                    <span class="text-green-600 font-medium">
+                        {{ $objetivos->getCollection()->where('estado', 'Activo')->count() }}
+                    </span>
+                    activos ·
 
-                        registros.
+                    <span class="text-red-600 font-medium">
+                        {{ $objetivos->getCollection()->where('estado', 'Inactivo')->count() }}
+                    </span>
+                    inactivos
 
-                    </p>
-
-                </div>
+                </p>
 
                 @if($objetivos->hasPages())
 
-                    <div class="mt-4">
-                        {{ $objetivos->links() }}
-                    </div>
+                    <p class="mt-1 text-xs text-gray-500">
+                        El buscador, el filtro y los conteos por estado
+                        corresponden a esta página.
+                    </p>
 
                 @endif
 
             </div>
 
+
+            <!-- Registrar objetivo -->
+            <a href="{{ route('objetivos.create') }}"
+               class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
+                      text-white text-sm font-medium px-4 py-2 rounded-md
+                      transition whitespace-nowrap">
+
+                <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                Registrar objetivo
+
+            </a>
+
         </div>
+
+
+        <!-- Listado -->
+        <div id="gestionObjetivos">
+
+            @include('objetivos.partials.listado-objetivos')
+
+        </div>
+
+
+        <!-- Paginación -->
+        @if($objetivos->hasPages())
+
+            <div class="mt-4">
+
+                {{ $objetivos->links() }}
+
+            </div>
+
+        @endif
+
+
+        <!-- Funcionamiento de la pantalla -->
+        @include('objetivos.partials.scripts-objetivos')
 
     </div>
 

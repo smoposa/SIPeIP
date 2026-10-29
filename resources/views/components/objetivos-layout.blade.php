@@ -1,16 +1,37 @@
+@props(['title' => 'Objetivos estratégicos institucionales'])
+
 <x-app-layout>
 
-  {{--   <!-- Header -->
+    <!-- Encabezado -->
     <x-slot name="header">
+
+        <!-- Migas de pan -->
+        @isset($breadcrumbs)
+
+            <div class="-mx-6 -mt-3 mb-1 bg-gray-100 px-6 py-1 text-xs text-gray-500">
+
+                {{ $breadcrumbs }}
+
+            </div>
+
+        @endisset
+
+
+        <!-- Título -->
         <h2 class="text-xl text-gray-800 leading-tight">
+
             <span class="font-semibold">
-                Objetivos |
+                Planificación institucional |
             </span>
+
             <span class="font-normal">
                 {{ $title }}
             </span>
+
         </h2>
-    </x-slot>--}}
+
+    </x-slot>
+
 
     <div class="flex min-w-0 w-full">
 
@@ -21,17 +42,18 @@
             request()->routeIs('objetivos.oei')
         )
 
-        <div id="submenuContainer"
-            class="w-52 border-r border-gray-300">
+            <div id="submenuContainer"
+                 class="w-52 shrink-0 border-r border-gray-300">
 
-            @include('submenus.objetivos')
+                @include('submenus.objetivos')
 
-        </div>
+            </div>
 
         @endif
 
+
         <!-- Contenido -->
-        <div class="min-w-0 max-w-full flex-1 overflow-x-hidden px-4 pb-4 pt-1">
+        <div class="min-w-0 max-w-full flex-1 px-4 pt-1 pb-4">
 
             {{ $slot }}
 
@@ -42,61 +64,34 @@
 </x-app-layout>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        const submenu = document.getElementById('submenuContainer');
+        const boton = document.getElementById('toggleSubmenu');
+        const menu = document.getElementById('menuObjetivos');
 
-    const submenu = document.getElementById('submenuContainer');
-    const boton = document.getElementById('toggleSubmenu');
-    const menu = document.getElementById('menuObjetivos');
+        if (!submenu || !boton || !menu) return;
 
-    if (!submenu || !boton || !menu) return;
-
-    // Mostrar u ocultar automáticamente en pantallas pequeñas
-    function ajustarSubmenu() {
-
-        const ancho = window.innerWidth;
-
-        if (ancho < 768) {
-
-            submenu.classList.add('hidden');
-
-        } else {
-
-            submenu.classList.remove('hidden');
-
+        function ajustarSubmenu() {
+            submenu.classList.toggle('hidden', window.innerWidth < 768);
         }
 
-    }
+        ajustarSubmenu();
 
-    ajustarSubmenu();
+        window.addEventListener('resize', ajustarSubmenu);
 
-    window.addEventListener('resize', ajustarSubmenu);
+        boton.addEventListener('click', function () {
+            const contraer = submenu.classList.contains('w-52');
 
-    // Contraer / expandir el submenú
-    boton.addEventListener('click', function () {
+            submenu.classList.toggle('w-52', !contraer);
+            submenu.classList.toggle('w-8', contraer);
 
-        if (submenu.classList.contains('w-52')) {
+            menu.classList.toggle('hidden', contraer);
 
-            submenu.classList.remove('w-52');
-            submenu.classList.add('w-8');
+            boton.setAttribute('aria-expanded', String(!contraer));
 
-            menu.classList.add('hidden');
-
-            boton.innerHTML =
-                '<i class="bi bi-chevron-double-right"></i>';
-
-        } else {
-
-            submenu.classList.remove('w-8');
-            submenu.classList.add('w-52');
-
-            menu.classList.remove('hidden');
-
-            boton.innerHTML =
-                '<i class="bi bi-chevron-double-left"></i>';
-
-        }
-
+            boton.innerHTML = contraer
+                ? '<i class="bi bi-chevron-double-right" aria-hidden="true"></i>'
+                : '<i class="bi bi-chevron-double-left" aria-hidden="true"></i>';
+        });
     });
-
-});
 </script>
