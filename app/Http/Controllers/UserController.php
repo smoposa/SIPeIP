@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Entidad;
-
 use App\Services\UserService;
 use App\Services\RoleService;
-
 use App\Http\Requests\Usuarios\StoreUserRequest;
 use App\Http\Requests\Usuarios\UpdateUserRequest;
 use App\Http\Requests\Usuarios\UpdateUserStatusRequest;
@@ -17,21 +15,17 @@ use App\Http\Requests\Usuarios\UpdateUserPasswordRequest;
 
 class UserController extends Controller
 {
-    /**
-     * Servicios de usuarios y roles.
-     */
     public function __construct(
         protected UserService $userService,
         protected RoleService $roleService
     ) {
     }
 
-
-    /**
-     * Mostrar listado general de usuarios.
-     */
+    // Mostrar el listado de usuarios.
     public function index()
     {
+        $this->autorizar('usuarios');
+
         $usuarioAutenticado = auth()->user();
 
         $usuarios = $this->userService->obtenerUsuarios(
@@ -50,29 +44,18 @@ class UserController extends Controller
         ]);
     }
 
-
-    /**
-     * Mostrar formulario para crear usuario.
-     */
+    // Mostrar el formulario de creación.
     public function crear()
     {
+        $this->autorizar('usuarios', 'crear');
+
         $usuarioAutenticado = auth()->user();
 
-        /*
-         * Obtener roles disponibles según
-         * el ámbito del usuario autenticado.
-         */
         $roles = $this->roleService->obtenerRolesAsignables(
             $usuarioAutenticado
         );
 
-        /*
-         * Administrador Global:
-         * puede seleccionar cualquier entidad activa.
-         *
-         * Administrador Institucional:
-         * solamente puede utilizar su propia entidad.
-         */
+        // Conservar el ámbito institucional utilizado actualmente.
         if ($usuarioAutenticado->rol?->codigo === 'ADMIN_GLOBAL') {
 
             $entidades = Entidad::where('estado', 'Activo')
@@ -85,6 +68,7 @@ class UserController extends Controller
                 'id',
                 $usuarioAutenticado->entidad_id
             )->get();
+
         }
 
         return view('usuarios.crear', compact(
@@ -93,15 +77,14 @@ class UserController extends Controller
         ));
     }
 
-
-    /**
-     * Registrar usuario.
-     */
+    // Registrar un usuario.
     public function store(StoreUserRequest $request)
     {
+        $this->autorizar('usuarios', 'crear');
+
         $datos = $request->validated();
 
-        // Contraseña temporal inicial.
+        // Conservar la contraseña temporal inicial existente.
         $datos['password'] = '12345678';
 
         $this->userService->crear(
@@ -111,51 +94,57 @@ class UserController extends Controller
 
         return redirect()
             ->route('usuarios.index')
-            ->with(
-                'success',
-                'Usuario registrado correctamente.'
-            );
+            ->with('success', 'Usuario registrado correctamente.');
     }
 
-
-    /**
-     * Mostrar detalle del usuario.
-     */
+    // Mostrar el detalle con los datos necesarios para los paneles.
     public function detalle(User $usuario)
     {
+        $this->autorizar('usuarios');
+
+        $usuarioAutenticado = auth()->user();
+
         $usuario = $this->userService->buscarPorId(
             $usuario->id,
-            auth()->user()
+            $usuarioAutenticado
         );
 
-        return view('usuarios.detalle', compact('usuario'));
-    }
+        $roles = puedeHacer('usuarios', 'editarRol')
+            ? $this->roleService->obtenerRolesAsignables(
+                $usuarioAutenticado
+            )
+            : collect();
 
+        $entidades = puedeHacer('usuarios', 'editarEntidad')
+            ? Entidad::where('estado', 'Activo')
+                ->orderBy('nombre')
+                ->get()
+            : collect();
 
-    /**
-     * Mostrar formulario de edición
-     * de los datos generales del usuario.
-     */
-    public function editar(User $usuario)
-    {
-        $usuario = $this->userService->buscarPorId(
-            $usuario->id,
-            auth()->user()
-        );
-
-        return view('usuarios.editar', compact(
-            'usuario'
+        return view('usuarios.detalle', compact(
+            'usuario',
+            'roles',
+            'entidades'
         ));
     }
 
+    // Abrir el panel de información.
+    public function editar(User $usuario)
+    {
+        return $this->abrirPanel(
+            $usuario->id,
+            'editar',
+            'informacion'
+        );
+    }
 
-    /**
-     * Actualizar usuario.
-     */
+    // Actualizar los datos generales.
     public function update(
         UpdateUserRequest $request,
         User $usuario
     ) {
+        $this->autorizar('usuarios', 'editar');
+
         $usuario = $this->userService->buscarPorId(
             $usuario->id,
             auth()->user()
@@ -168,34 +157,26 @@ class UserController extends Controller
 
         return redirect()
             ->route('usuarios.show', $usuario->id)
-            ->with(
-                'success',
-                'Usuario actualizado correctamente.'
-            );
+            ->with('success', 'Usuario actualizado correctamente.');
     }
 
-
-    /**
-     * Mostrar formulario para modificar estado.
-     */
+    // Abrir el panel de estado.
     public function editarEstado(User $usuario)
     {
-        $usuario = $this->userService->buscarPorId(
+        return $this->abrirPanel(
             $usuario->id,
-            auth()->user()
+            'estado',
+            'estado'
         );
-
-        return view('usuarios.estado', compact('usuario'));
     }
 
-
-    /**
-     * Actualizar estado del usuario.
-     */
+    // Actualizar el estado conservando las restricciones del servicio.
     public function actualizarEstado(
         UpdateUserStatusRequest $request,
         User $usuario
     ) {
+        $this->autorizar('usuarios', 'estado');
+
         $usuario = $this->userService->buscarPorId(
             $usuario->id,
             auth()->user()
@@ -212,11 +193,14 @@ class UserController extends Controller
         } catch (\DomainException $e) {
 
             return redirect()
-                ->route('usuarios.estado', $usuario->id)
-                ->with(
-                    'error',
-                    $e->getMessage()
-                );
+                ->route('usuarios.show', $usuario->id)
+                ->with('abrir_panel_usuario', 'estado')
+                ->with('error', $e->getMessage())
+                ->withInput([
+                    '_usuario_estado_form' => $usuario->id,
+                    'estado' => $request->input('estado'),
+                ]);
+
         }
 
         return redirect()
@@ -227,50 +211,31 @@ class UserController extends Controller
             );
     }
 
-
-    /**
-     * Mostrar usuarios desactivados.
-     */
+    // Mostrar la pantalla existente de usuarios desactivados.
     public function desactivados()
     {
+        $this->autorizar('usuarios');
+
         return view('usuarios.desactivados');
     }
 
-
-    /**
-     * Mostrar formulario para modificar rol.
-     */
+    // Abrir el panel de rol.
     public function editRoles(int $id)
     {
-        $usuarioAutenticado = auth()->user();
-
-        $usuario = $this->userService->buscarPorId(
+        return $this->abrirPanel(
             $id,
-            $usuarioAutenticado
+            'editarRol',
+            'rol'
         );
-
-        /*
-         * Obtener roles disponibles según
-         * el ámbito del usuario autenticado.
-         */
-        $roles = $this->roleService->obtenerRolesAsignables(
-            $usuarioAutenticado
-        );
-
-        return view('usuarios.editroles', compact(
-            'usuario',
-            'roles'
-        ));
     }
 
-
-    /**
-     * Actualizar rol.
-     */
+    // Actualizar el rol según las reglas de asignación existentes.
     public function updateRoles(
         UpdateUserRoleRequest $request,
         int $id
     ) {
+        $this->autorizar('usuarios', 'editarRol');
+
         $usuarioAutenticado = auth()->user();
 
         $usuario = $this->userService->buscarPorId(
@@ -286,41 +251,26 @@ class UserController extends Controller
 
         return redirect()
             ->route('usuarios.show', $usuario->id)
-            ->with(
-                'success',
-                'Rol asignado correctamente.'
-            );
+            ->with('success', 'Rol asignado correctamente.');
     }
 
-
-    /**
-     * Mostrar formulario para modificar entidad.
-     */
+    // Abrir el panel de entidad.
     public function editEntidad(int $id)
     {
-        $usuario = $this->userService->buscarPorId(
+        return $this->abrirPanel(
             $id,
-            auth()->user()
+            'editarEntidad',
+            'entidad'
         );
-
-        $entidades = Entidad::where('estado', 'Activo')
-            ->orderBy('nombre')
-            ->get();
-
-        return view('usuarios.editentidad', compact(
-            'usuario',
-            'entidades'
-        ));
     }
 
-
-    /**
-     * Actualizar entidad.
-     */
+    // Actualizar la entidad asignada.
     public function updateEntidad(
         UpdateUserEntidadRequest $request,
         int $id
     ) {
+        $this->autorizar('usuarios', 'editarEntidad');
+
         $usuario = $this->userService->buscarPorId(
             $id,
             auth()->user()
@@ -333,36 +283,26 @@ class UserController extends Controller
 
         return redirect()
             ->route('usuarios.show', $usuario->id)
-            ->with(
-                'success',
-                'Entidad asignada correctamente.'
-            );
+            ->with('success', 'Entidad asignada correctamente.');
     }
 
-
-    /**
-     * Mostrar formulario para restablecer contraseña.
-     */
+    // Abrir el panel de contraseña.
     public function editPassword(int $id)
     {
-        $usuario = $this->userService->buscarPorId(
+        return $this->abrirPanel(
             $id,
-            auth()->user()
+            'editarPassword',
+            'password'
         );
-
-        return view('usuarios.editpassword', compact(
-            'usuario'
-        ));
     }
 
-
-    /**
-     * Restablecer contraseña.
-     */
+    // Restablecer la contraseña.
     public function updatePassword(
         UpdateUserPasswordRequest $request,
         int $id
     ) {
+        $this->autorizar('usuarios', 'editarPassword');
+
         $usuario = $this->userService->buscarPorId(
             $id,
             auth()->user()
@@ -375,9 +315,24 @@ class UserController extends Controller
 
         return redirect()
             ->route('usuarios.show', $usuario->id)
-            ->with(
-                'success',
-                'Contraseña restablecida correctamente.'
-            );
+            ->with('success', 'Contraseña restablecida correctamente.');
+    }
+
+    // Validar el permiso y el ámbito antes de abrir un panel.
+    private function abrirPanel(
+        int $id,
+        string $accion,
+        string $panel
+    ) {
+        $this->autorizar('usuarios', $accion);
+
+        $usuario = $this->userService->buscarPorId(
+            $id,
+            auth()->user()
+        );
+
+        return redirect()
+            ->route('usuarios.show', $usuario->id)
+            ->with('abrir_panel_usuario', $panel);
     }
 }

@@ -1,7 +1,7 @@
 <!-- Cabecera del usuario -->
 <div class="flex items-center gap-4 mb-0 pb-6">
 
-    <div class="w-16 h-16 rounded-full bg-[#2563EB]
+    <div class="w-16 h-16 rounded-full bg-[#81858f]
                 flex items-center justify-center
                 text-white text-4xl">
 

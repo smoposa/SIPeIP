@@ -12,7 +12,7 @@
     <div class="overflow-y-auto"
          style="height: calc(100vh - 180px);">
 
-        <div class="bg-white p-6 shadow-sm">
+        <div class="min-w-0 bg-white p-6 shadow-sm">
 
             <!-- Cabecera -->
             @include('usuarios.partials.encabezado-detalle')
@@ -32,5 +32,29 @@
         </div>
 
     </div>
+
+
+    <!-- Panel de información -->
+    @include('usuarios.editar')
+
+
+    <!-- Panel de estado -->
+    @include('usuarios.estado')
+
+
+    <!-- Panel de rol -->
+    @include('usuarios.editroles')
+
+
+    <!-- Panel de entidad -->
+    @include('usuarios.editentidad')
+
+
+    <!-- Panel de contraseña -->
+    @include('usuarios.editpassword')
+
+
+    <!-- Funcionamiento de los paneles -->
+    @include('usuarios.partials.script')
 
 </x-usuarios-layout>

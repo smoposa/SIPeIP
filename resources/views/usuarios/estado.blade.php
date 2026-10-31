@@ -1,123 +1,178 @@
-<x-usuarios-layout title="Editar Estado de Usuario">
+@if(puedeHacer('usuarios', 'estado'))
 
-    @if(session('error'))
+    @php
+        $recuperarEstado =
+            (string) old('_usuario_estado_form', '') === (string) $usuario->id;
 
-    <div id="alertError"
-         class="fixed top-5 right-5 z-50
-                bg-red-600 text-white
-                px-6 py-3 rounded-lg shadow-lg">
+        $usuarioHabilitado = $recuperarEstado
+            ? old('estado', 'Inactivo') === 'Activo'
+            : $usuario->estado === 'Activo';
+    @endphp
 
-        <div class="flex items-center gap-2">
 
-            <i class="bi bi-exclamation-circle-fill"></i>
+    <!-- Panel lateral de estado -->
+    <dialog
+        id="panelEstadoUsuario"
+        aria-labelledby="tituloPanelEstadoUsuario"
+        class="bg-white p-0 shadow-xl"
+        style="position: fixed; inset: 0 0 0 auto; margin: 0 0 0 auto;
+               width: min(100%, 480px); height: 100dvh;
+               max-width: 100%; max-height: none; border: 0;">
 
-            <span>
-                {{ session('error') }}
-            </span>
+        <form
+            id="formularioEstadoUsuario"
+            method="POST"
+            action="{{ route('usuarios.actualizarestado', $usuario->id) }}"
+            class="flex h-full flex-col">
 
-        </div>
+            @csrf
+            @method('PUT')
 
-    </div>
+            <input
+                type="hidden"
+                name="_usuario_estado_form"
+                value="{{ $usuario->id }}">
 
-    <script>
-        setTimeout(() => {
 
-            const alerta = document.getElementById('alertError');
+            <!-- Encabezado -->
+            <div class="flex shrink-0 items-center justify-between gap-4
+                        border-b border-gray-200 px-6 py-4">
 
-            if (alerta) {
-                alerta.remove();
-            }
+                <div class="min-w-0">
 
-        }, 4000);
-    </script>
+                    <h2 id="tituloPanelEstadoUsuario"
+                        class="text-xl font-semibold text-gray-800">
 
-@endif
+                        Editar estado
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300">
+                    </h2>
 
-        <div class="flex">
+                    <p class="mt-1 break-words text-sm text-gray-500">
+                        {{ $usuario->nombres }} {{ $usuario->apellidos }}
+                    </p>
 
-            <a href="{{ route('usuarios.show', $usuario->id) }}"
-               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+                </div>
 
-                <i class="bi bi-chevron-left"></i>
-                Regresar
+                <button
+                    type="button"
+                    data-cerrar-panel-estado-usuario
+                    aria-label="Cerrar panel"
+                    class="shrink-0 p-2 text-gray-500
+                           hover:bg-gray-100 hover:text-gray-800">
 
-            </a>
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
 
-        </div>
+                </button>
 
-    </div>
+            </div>
 
-    <!-- Scroll vertical -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
-        <div class="p-6">
+            <!-- Contenido -->
+            <div class="min-h-0 flex-1 overflow-y-auto px-6 py-5">
 
-            <h2 class="text-2xl font-semibold text-gray-800">
-                Editar estado del usuario
-            </h2>
+                <!-- Errores de validación -->
+                @if($recuperarEstado && $errors->any())
 
-            <p class="mt-1 text-sm text-gray-500">
-                Habilite o deshabilite el usuario dentro del sistema.
-            </p>
+                    <div role="alert"
+                         class="mb-5 rounded-md bg-red-50 px-4 py-3
+                                text-sm text-red-800">
 
-        </div>
+                        @foreach($errors->all() as $error)
 
-        <div class="bg-white p-4">
+                            <p>{{ $error }}</p>
 
-            <form method="POST"
-                  action="{{ route('usuarios.actualizarestado', $usuario->id) }}">
+                        @endforeach
 
-                @csrf
-                @method('PUT')
+                    </div>
 
-                <div class="flex items-center gap-20">
+                @endif
 
-                    <label class="text-sm font-medium text-gray-700">
-                        Usuario habilitado
-                    </label>
 
-                    <!-- Si el checkbox está desmarcado -->
-                    <input
-                        type="hidden"
-                        name="estado"
-                        value="Inactivo">
+                <!-- Error de la operación -->
+                @if(session('error'))
 
-                    <!-- Si está marcado -->
+                    <div role="alert"
+                         class="mb-5 rounded-md bg-red-50 px-4 py-3
+                                text-sm text-red-800">
+
+                        {{ session('error') }}
+
+                    </div>
+
+                @endif
+
+
+                <p class="mb-6 text-sm text-gray-500">
+                    Habilite o deshabilite el usuario dentro del sistema.
+                </p>
+
+
+                <!-- Estado -->
+                <input
+                    type="hidden"
+                    name="estado"
+                    value="Inactivo">
+
+                <label for="estadoPanelUsuario"
+                       class="inline-flex items-center gap-3
+                              text-sm font-medium text-gray-700">
+
                     <input
                         type="checkbox"
+                        id="estadoPanelUsuario"
                         name="estado"
                         value="Activo"
-                        {{ $usuario->estado === 'Activo' ? 'checked' : '' }}
+                        @checked($usuarioHabilitado)
                         class="w-5 h-5">
 
-                </div>
+                    Usuario habilitado
 
-                <div class="flex gap-3 mt-20">
+                </label>
 
-                    <button
-                        type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+            </div>
 
-                        Guardar
 
-                    </button>
+            <!-- Acciones -->
+            <div class="flex shrink-0 flex-wrap justify-end gap-3
+                        border-t border-gray-200 bg-white px-6 py-4">
 
-                    <a href="{{ route('usuarios.show', $usuario->id) }}"
-                       class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+                <button
+                    type="submit"
+                    class="inline-flex h-10 items-center justify-center gap-2
+                           rounded-md bg-[#024687] px-5 text-sm
+                           font-medium text-white transition hover:bg-[#01325f]
+                           focus:outline-none focus:ring-2 focus:ring-blue-600
+                           focus:ring-offset-2">
 
-                        Cancelar
+                    <i class="bi bi-check-circle" aria-hidden="true"></i>
+                    Guardar cambios
 
-                    </a>
+                </button>
 
-                </div>
+                <button
+                    type="button"
+                    data-cerrar-panel-estado-usuario
+                    class="inline-flex h-10 items-center justify-center
+                           rounded-md bg-gray-200 px-5 text-sm
+                           font-medium text-gray-700 transition hover:bg-gray-300
+                           focus:outline-none focus:ring-2 focus:ring-gray-400
+                           focus:ring-offset-2">
 
-            </form>
+                    Cancelar
 
-        </div>
+                </button>
 
-    </div>
+            </div>
 
-</x-usuarios-layout>
+        </form>
+
+    </dialog>
+
+
+    <style>
+        #panelEstadoUsuario::backdrop {
+            background: rgb(0 0 0 / 20%);
+        }
+    </style>
+
+@endif

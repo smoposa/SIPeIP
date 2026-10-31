@@ -1,70 +1,122 @@
-<x-usuarios-layout title="Editar Entidad">
+@if(puedeHacer('usuarios', 'editarEntidad'))
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300">
+    @php
+        $recuperarEntidad =
+            (string) old('_usuario_entidad_form', '') === (string) $usuario->id;
 
-        <div class="flex">
+        $entidadSeleccionada = $recuperarEntidad
+            ? old('entidad_id')
+            : $usuario->entidad_id;
+    @endphp
 
-            <a href="{{ route('usuarios.show', $usuario->id) }}"
-               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
+    <!-- Panel de entidad -->
+    <dialog
+        id="panelEntidadUsuario"
+        aria-labelledby="tituloPanelEntidadUsuario"
+        class="bg-white p-0 shadow-xl"
+        style="position: fixed; inset: 0 0 0 auto; margin: 0 0 0 auto;
+               width: min(100%, 480px); height: 100dvh;
+               max-width: 100%; max-height: none; border: 0;">
 
-                <i class="bi bi-chevron-left"></i>
-                Regresar
-            </a>
+        <form
+            id="formularioEntidadUsuario"
+            method="POST"
+            action="{{ route('usuarios.actualizarentidad', $usuario->id) }}"
+            class="flex h-full flex-col">
 
-        </div>
+            @csrf
+            @method('PUT')
 
-    </div>
+            <input type="hidden"
+                   name="_usuario_entidad_form"
+                   value="{{ $usuario->id }}">
 
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
-        <div class="p-6">
+            <!-- Encabezado -->
+            <div class="flex shrink-0 items-center justify-between gap-4
+                        border-b border-gray-200 px-6 py-4">
 
-            <p class="mt-1 text-sm text-gray-500">
-                Seleccione una nueva entidad para el usuario.
-            </p>
+                <div class="min-w-0">
 
-        </div>
+                    <h2 id="tituloPanelEntidadUsuario"
+                        class="text-xl font-semibold text-gray-800">
+                        Editar entidad
+                    </h2>
 
-        <div class="bg-white p-4">
+                    <p class="mt-1 break-words text-sm text-gray-500">
+                        {{ $usuario->nombres }} {{ $usuario->apellidos }}
+                    </p>
 
-            <form method="POST"
-                  action="{{ route('usuarios.actualizarentidad', $usuario->id) }}">
+                </div>
 
-                @csrf
-                @method('PUT')
+                <button type="button"
+                        data-cerrar-panel-entidad-usuario
+                        aria-label="Cerrar panel"
+                        class="shrink-0 p-2 text-gray-500
+                               hover:bg-gray-100 hover:text-gray-800">
 
-                <div class="space-y-6">
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
 
-                    <!-- Entidad actual -->
-                    <div class="flex items-center gap-20">
+                </button>
 
-                        <label class="w-32 text-sm font-medium text-gray-700">
-                            Entidad actual
-                        </label>
+            </div>
 
-                        <span class="text-sm text-gray-900">
-                            {{ $usuario->entidad?->nombre ?? 'No asignada' }}
-                        </span>
+
+            <!-- Contenido -->
+            <div class="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+
+                @if($recuperarEntidad && $errors->any())
+
+                    <div role="alert"
+                         class="mb-5 rounded-md bg-red-50 px-4 py-3
+                                text-sm text-red-800">
+
+                        @foreach($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
 
                     </div>
 
-                    <!-- Nueva entidad -->
-                    <div class="flex items-center gap-20">
+                @endif
 
-                        <label class="w-32 text-sm font-medium text-gray-700">
-                            Cambiar entidad
+                <div class="space-y-6">
+
+                    <div>
+
+                        <p class="text-sm font-medium text-gray-700">
+                            Entidad actual
+                        </p>
+
+                        <p class="mt-1 break-words text-sm text-gray-600">
+                            {{ $usuario->entidad?->nombre ?? 'No asignada' }}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <label for="entidadPanelUsuario"
+                               class="block text-sm font-medium text-gray-700">
+                            Cambiar entidad <span class="text-red-500">*</span>
                         </label>
 
                         <select
+                            id="entidadPanelUsuario"
                             name="entidad_id"
-                            class="w-96 border-gray-300 rounded-md">
+                            required
+                            class="mt-1 w-full rounded-md border border-gray-300
+                                   px-3 py-2 text-sm text-gray-700
+                                   focus:border-blue-500 focus:ring-blue-500">
+
+                            <option value="">Seleccione una entidad</option>
 
                             @foreach($entidades as $entidad)
 
-                                <option
-                                    value="{{ $entidad->id }}"
-                                    {{ $usuario->entidad_id == $entidad->id ? 'selected' : '' }}>
+                                <option value="{{ $entidad->id }}"
+                                    @selected(
+                                        (string) $entidadSeleccionada
+                                        === (string) $entidad->id
+                                    )>
 
                                     {{ $entidad->nombre }}
 
@@ -78,29 +130,41 @@
 
                 </div>
 
-                <div class="flex gap-3 mt-20">
+            </div>
 
-                    <button
-                        type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
 
-                        Guardar
+            <!-- Acciones -->
+            <div class="flex shrink-0 flex-wrap justify-end gap-3
+                        border-t border-gray-200 bg-white px-6 py-4">
 
-                    </button>
+                <button type="submit"
+                        class="inline-flex h-10 items-center justify-center gap-2
+                               rounded-md bg-[#024687] px-5 text-sm font-medium
+                               text-white transition hover:bg-[#01325f]
+                               focus:outline-none focus:ring-2 focus:ring-blue-600
+                               focus:ring-offset-2">
 
-                    <a href="{{ route('usuarios.show', $usuario->id) }}"
-                       class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+                    <i class="bi bi-check-circle" aria-hidden="true"></i>
+                    Guardar cambios
 
-                        Cancelar
+                </button>
 
-                    </a>
+                <button type="button"
+                        data-cerrar-panel-entidad-usuario
+                        class="inline-flex h-10 items-center justify-center
+                               rounded-md bg-gray-200 px-5 text-sm font-medium
+                               text-gray-700 transition hover:bg-gray-300
+                               focus:outline-none focus:ring-2 focus:ring-gray-400
+                               focus:ring-offset-2">
 
-                </div>
+                    Cancelar
 
-            </form>
+                </button>
 
-        </div>
+            </div>
 
-    </div>
+        </form>
 
-</x-usuarios-layout>
+    </dialog>
+
+@endif

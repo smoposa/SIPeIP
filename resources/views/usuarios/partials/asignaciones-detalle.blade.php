@@ -78,9 +78,8 @@
 
                 <!-- Icono -->
                 <div>
-                    <i class="bi bi-building text-4xl text-cyan-500"></i>
+                    <i class="bi bi-building text-4xl text-[#024687]"></i>
                 </div>
-
 
                 <!-- Información -->
                 <div>
