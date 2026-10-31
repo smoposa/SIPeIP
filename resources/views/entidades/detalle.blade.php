@@ -1,8 +1,12 @@
 <x-entidades-layout title="Detalle de Entidad">
 
+    <!-- Notificación de éxito -->
     @if(session('success'))
+
         <div id="alertSuccess"
-             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+             role="status"
+             class="fixed top-5 right-5 bg-green-600 text-white
+                    px-6 py-3 rounded-lg shadow-lg z-50">
 
             {{ session('success') }}
 
@@ -10,373 +14,48 @@
 
         <script>
             setTimeout(() => {
-                const alerta = document.getElementById('alertSuccess');
-
-                if (alerta) {
-                    alerta.remove();
-                }
+                document.getElementById('alertSuccess')?.remove();
             }, 3000);
         </script>
+
     @endif
 
 
     <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300 mb-0">
-
-        <div class="flex">
-
-            <a href="{{ route('entidades.index') }}"
-               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
-
-                <i class="bi bi-chevron-left"></i>
-                Regresar
-
-            </a>
-
-
-            @if(puedeHacer('entidades', 'editar'))
-
-                <a href="{{ route('entidades.edit', $entidad->id) }}"
-                   class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-
-                    <i class="bi bi-pencil text-blue-500 me-2"></i>
-                    Editar información
-
-                </a>
-
-            @endif
-
-
-            @if(puedeHacer('entidades', 'estado'))
-
-                <a href="{{ route('entidades.editarestado', $entidad->id) }}"
-                   class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-
-                    <i class="bi bi-toggle-on text-blue-500 me-2"></i>
-                    Editar estado
-
-                </a>
-
-            @endif
-
-
-            <a href="{{ url()->current() }}"
-               class="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition">
-
-                <i class="bi bi-arrow-clockwise text-blue-500 me-2"></i>
-                Actualizar
-
-            </a>
-
-        </div>
-
-    </div>
+    @include('entidades.partials.barra-menu')
 
 
     <!-- Scroll vertical -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
+    <div class="overflow-y-auto"
+         style="height: calc(100vh - 180px);">
 
-        <!-- Información básica -->
-        <div class="bg-white p-6 shadow-sm">
+        <div class="min-w-0 bg-white p-6 shadow-sm">
 
-            <!-- Cabecera de la entidad -->
-            <div class="flex items-center gap-4 mb-0 pb-6">
-
-                <div class="w-16 h-16 rounded-full bg-[#024687]
-                            flex items-center justify-center
-                            text-white text-3xl">
-
-                    <i class="bi bi-building"></i>
-
-                </div>
-
-                <div>
-
-                    <h2 class="text-xl font-semibold text-gray-800">
-                        {{ $entidad->nombre }}
-                    </h2>
-
-                    <p class="text-gray-500">
-                        {{ $entidad->siglas ?: 'Sin siglas' }}
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- Información General -->
-            <div class="bg-gray-100 border-b border-gray-200">
-
-                <div class="flex justify-between items-center px-4 py-2">
-
-                    <h4 class="text-sm font-semibold text-gray-800">
-                        Información básica
-                    </h4>
-
-                    @if(puedeHacer('entidades', 'editar'))
-
-                        <a href="{{ route('entidades.edit', $entidad->id) }}"
-                           class="text-sm text-blue-600 hover:text-blue-800">
-
-                            Editar
-
-                        </a>
-
-                    @endif
-
-                </div>
-
-            </div>
-
-
-            <!-- Datos -->
-            <div class="px-4 py-2">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 mb-6">
-
-                    <!-- Código Institucional -->
-                    <div class="flex items-center">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Código Institucional
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->codigoInstitucional }}
-                        </span>
-
-                    </div>
-
-
-                    <!-- RUC -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            RUC
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->ruc }}
-                        </span>
-
-                    </div>
-
-
-                    <!-- Provincia -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Provincia
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->provincia }}
-                        </span>
-
-                    </div>
-
-
-                    <!-- Tipo de Entidad -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Tipo de Entidad
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->tipoEntidad }}
-                        </span>
-
-                    </div>
-
-
-                    <!-- Cantón -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Cantón
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->canton }}
-                        </span>
-
-                    </div>
-
-
-                    <!-- Nivel de Gobierno -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Nivel de Gobierno
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->nivelGobierno }}
-                        </span>
-
-                    </div>
-
-
-                    <!-- Parroquia -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Parroquia
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->parroquia ?: 'No registra' }}
-                        </span>
-
-                    </div>
-
-
-                    <!-- Teléfono -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Teléfono
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->telefono ?: 'No registra' }}
-                        </span>
-
-                    </div>
-
-
-                    <!-- Dirección -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Dirección
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->direccion ?: 'No registra' }}
-                        </span>
-
-                    </div>
-
-
-                    <!-- Correo Institucional -->
-                    <div class="flex">
-
-                        <span class="w-40 text-sm font-semibold text-gray-700">
-                            Correo Institucional
-                        </span>
-
-                        <span class="text-sm text-gray-600">
-                            {{ $entidad->correoInstitucional ?: 'No registra' }}
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
+            <!-- Cabecera e información básica -->
+            @include('entidades.partials.informacion-general')
 
 
             <!-- Estado -->
-            <div class="bg-gray-100 border-b border-gray-200">
-                <div class="px-4 py-2">
-                    <h4 class="text-sm font-semibold text-gray-800">
-                        Estado de la entidad
-                    </h4>
-                </div>
-            </div>
-
-            <div class="px-4 py-2">
-
-                <div class="flex items-center mb-4">
-
-                    <span class="w-40 text-sm font-semibold text-gray-700">
-                        Estado
-                    </span>
-
-                    @if($entidad->estado === 'Activo')
-
-                        <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                            Activo
-                        </span>
-
-                    @else
-
-                        <span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">
-                            Inactivo
-                        </span>
-
-                    @endif
-
-                    @if(puedeHacer('entidades', 'estado'))
-
-                        <a href="{{ route('entidades.editarestado', $entidad->id) }}"
-                        class="ml-10 text-sm text-blue-600 hover:text-blue-800 hover:underline">
-
-                            Editar
-
-                        </a>
-
-                    @endif
-
-                </div>
-
-            </div>
+            @include('entidades.partials.estado')
 
 
             <!-- Auditoría -->
-            <div class="bg-gray-100 border-b border-gray-200">
-
-                <div class="px-4 py-2">
-
-                    <h4 class="text-sm font-semibold text-gray-800">
-                        Auditoría
-                    </h4>
-
-                </div>
-
-            </div>
-
-
-            <div class="px-4 py-5">
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                    <!-- Fecha de creación -->
-                    <div>
-
-                        <p class="text-sm font-semibold text-gray-700">
-                            Fecha de creación
-                        </p>
-
-                        <p class="mt-1 text-sm text-gray-600">
-                            {{ $entidad->created_at->format('d/m/Y H:i') }}
-                        </p>
-
-                    </div>
-
-
-                    <!-- Última actualización -->
-                    <div>
-
-                        <p class="text-sm font-semibold text-gray-700">
-                            Última actualización
-                        </p>
-
-                        <p class="mt-1 text-sm text-gray-600">
-                            {{ $entidad->updated_at->format('d/m/Y H:i') }}
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
+            @include('entidades.partials.auditoria')
 
         </div>
 
     </div>
+
+
+    <!-- Panel lateral de información -->
+    @include('entidades.partials.panel-editar')
+
+
+    <!-- Panel lateral de estado -->
+    @include('entidades.partials.panel-estado')
+
+
+    <!-- Funcionamiento de los paneles -->
+    @include('entidades.partials.script')
 
 </x-entidades-layout>

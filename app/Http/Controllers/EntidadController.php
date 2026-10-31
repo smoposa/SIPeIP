@@ -14,10 +14,7 @@ class EntidadController extends Controller
     ) {
     }
 
-
-    /**
-     * Panel principal del módulo de entidades.
-     */
+    // Mostrar el listado de entidades.
     public function index()
     {
         $this->autorizar('entidades');
@@ -29,10 +26,7 @@ class EntidadController extends Controller
         return view('entidades.index', $resumen);
     }
 
-
-    /**
-     * Mostrar formulario para crear una entidad.
-     */
+    // Mostrar el formulario de creación.
     public function create()
     {
         $this->autorizar('entidades', 'crear');
@@ -40,10 +34,7 @@ class EntidadController extends Controller
         return view('entidades.create');
     }
 
-
-    /**
-     * Registrar una nueva entidad.
-     */
+    // Registrar una nueva entidad.
     public function store(StoreEntidadRequest $request)
     {
         $this->autorizar('entidades', 'crear');
@@ -60,10 +51,7 @@ class EntidadController extends Controller
             );
     }
 
-
-    /**
-     * Mostrar detalle de una entidad.
-     */
+    // Mostrar el detalle de una entidad accesible para el usuario.
     public function detalle(int $id)
     {
         $this->autorizar('entidades');
@@ -79,10 +67,7 @@ class EntidadController extends Controller
         );
     }
 
-
-    /**
-     * Mostrar formulario para editar una entidad.
-     */
+    // Redirigir al detalle y abrir el panel de información.
     public function edit(int $id)
     {
         $this->autorizar('entidades', 'editar');
@@ -92,16 +77,12 @@ class EntidadController extends Controller
             auth()->user()
         );
 
-        return view(
-            'entidades.editar',
-            compact('entidad')
-        );
+        return redirect()
+            ->route('entidades.detalle', $entidad->id)
+            ->with('abrir_panel_entidad', 'informacion');
     }
 
-
-    /**
-     * Actualizar una entidad.
-     */
+    // Actualizar la información de una entidad.
     public function update(
         UpdateEntidadRequest $request,
         int $id
@@ -126,10 +107,7 @@ class EntidadController extends Controller
             );
     }
 
-
-    /**
-     * Mostrar formulario para modificar el estado.
-     */
+    // Redirigir al detalle y abrir el panel de estado.
     public function editarEstado(int $id)
     {
         $this->autorizar('entidades', 'estado');
@@ -139,16 +117,12 @@ class EntidadController extends Controller
             auth()->user()
         );
 
-        return view(
-            'entidades.editarestado',
-            compact('entidad')
-        );
+        return redirect()
+            ->route('entidades.detalle', $entidad->id)
+            ->with('abrir_panel_entidad', 'estado');
     }
 
-
-    /**
-     * Actualizar estado de la entidad.
-     */
+    // Actualizar el estado de una entidad.
     public function actualizarEstado(
         UpdateEntidadStatusRequest $request,
         int $id
