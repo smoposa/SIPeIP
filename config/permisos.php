@@ -89,16 +89,16 @@ return [
             'CONSULTA_INSTITUCIONAL',
         ],
 
-        /*
-        |--------------------------------------------------------------------------
-        | Catálogos globales
-        |--------------------------------------------------------------------------
-        */
+                // Catálogos globales
 
         'ods' => [
             'ADMIN_GLOBAL',
             'ADMIN_SISTEMA',
+            'ADMIN_INSTITUCIONAL',
+            'DIRECTOR_PLANIFICACION',
             'ANALISTA_PLANIFICACION',
+            'DIRECTOR_INVERSION',
+            'ANALISTA_INVERSION',
             'AUDITOR_INSTITUCIONAL',
             'CONSULTA_INSTITUCIONAL',
         ],
@@ -106,16 +106,16 @@ return [
         'pnd' => [
             'ADMIN_GLOBAL',
             'ADMIN_SISTEMA',
+            'ADMIN_INSTITUCIONAL',
+            'DIRECTOR_PLANIFICACION',
             'ANALISTA_PLANIFICACION',
+            'DIRECTOR_INVERSION',
+            'ANALISTA_INVERSION',
             'AUDITOR_INSTITUCIONAL',
             'CONSULTA_INSTITUCIONAL',
         ],
 
-        /*
-        |--------------------------------------------------------------------------
-        | Clasificación de la inversión
-        |--------------------------------------------------------------------------
-        */
+        // Clasificación de la inversión
 
         'clasificacion_inversion' => [
             'ADMIN_GLOBAL',
@@ -151,15 +151,12 @@ return [
             'CONSULTA_INSTITUCIONAL',
         ],
 
-        /*
-        |--------------------------------------------------------------------------
-        | Seguimiento
-        |--------------------------------------------------------------------------
-        */
+        // Seguimiento
 
         'avances' => [
             'ADMIN_SISTEMA',
             'DIRECTOR_PLANIFICACION',
+            'ANALISTA_PLANIFICACION',
             'DIRECTOR_INVERSION',
             'ANALISTA_INVERSION',
             'AUDITOR_INSTITUCIONAL',
@@ -169,6 +166,7 @@ return [
         'presupuestos' => [
             'ADMIN_SISTEMA',
             'DIRECTOR_PLANIFICACION',
+            'ANALISTA_PLANIFICACION',
             'DIRECTOR_INVERSION',
             'ANALISTA_INVERSION',
             'AUDITOR_INSTITUCIONAL',
@@ -311,13 +309,39 @@ return [
         ],
 
         'avances' => [
-            'crear' => ['ADMIN_SISTEMA', 'DIRECTOR_INVERSION', 'ANALISTA_INVERSION'],
-            'editar' => ['ADMIN_SISTEMA', 'DIRECTOR_INVERSION', 'ANALISTA_INVERSION'],
+            'crear' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_INVERSION',
+                'ANALISTA_INVERSION',
+            ],
+
+            'editar' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_PLANIFICACION',
+                'ANALISTA_PLANIFICACION',
+                'DIRECTOR_INVERSION',
+                'ANALISTA_INVERSION',
+            ],
         ],
 
         'presupuestos' => [
-            'crear' => ['ADMIN_SISTEMA', 'DIRECTOR_INVERSION', 'ANALISTA_INVERSION'],
-            'editar' => ['ADMIN_SISTEMA', 'DIRECTOR_INVERSION', 'ANALISTA_INVERSION'],
+            'crear' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_INVERSION',
+                'ANALISTA_INVERSION',
+            ],
+
+            'editar' => [
+                'ADMIN_SISTEMA',
+                'ANALISTA_PLANIFICACION',
+                'DIRECTOR_INVERSION',
+                'ANALISTA_INVERSION',
+            ],
+
+            'reabrir' => [
+                'ADMIN_SISTEMA',
+                'DIRECTOR_INVERSION',
+            ],
         ],
 
         /*

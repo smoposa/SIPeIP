@@ -25,9 +25,8 @@
     <!-- Barra de acciones -->
     @include('indicadores.partials.barra-menu')
 
-    <!-- Contenido -->
-    <div class="min-w-0 w-full overflow-x-hidden overflow-y-auto"
-         style="height: calc(100vh - 100px);">
+    <!-- Scroll vertical -->
+    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
         <div class="min-w-0 bg-white p-6 shadow-sm">
 

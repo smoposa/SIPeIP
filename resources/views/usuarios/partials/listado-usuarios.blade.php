@@ -21,7 +21,7 @@
                     </th>
 
                     <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">
-                        Cargo
+                        Rol
                     </th>
 
                     <th class="px-2 py-2 text-left text-sm font-semibold text-gray-700">

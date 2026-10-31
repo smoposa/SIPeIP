@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 interface OdsRepositoryInterface
 {
-    public function listarAgendas(): LengthAwarePaginator;
+    public function listarAgendas(bool $soloActivas = true): LengthAwarePaginator;
 
     public function obtenerAgenda(int $id): AgendaOds;
 

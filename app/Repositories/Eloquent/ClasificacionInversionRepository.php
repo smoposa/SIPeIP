@@ -11,26 +11,32 @@ use Illuminate\Database\Eloquent\Collection;
 class ClasificacionInversionRepository implements
     ClasificacionInversionRepositoryInterface
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Consultas generales
-    |--------------------------------------------------------------------------
-    */
+    // Consultas generales
 
-    /**
-     * Obtener la clasificación completa:
-     * Macrosector → Sector → Subsector.
-     */
-    public function obtenerJerarquia(): Collection
-    {
+    // Obtener la jerarquía con filtro opcional de estado en todos los niveles.
+    public function obtenerJerarquia(
+        bool $soloActivos = true
+    ): Collection {
         return Macrosector::query()
+            ->when(
+                $soloActivos,
+                fn ($consulta) => $consulta->where('estado', 'Activo')
+            )
             ->with([
-                'sectores' => function ($consulta) {
+                'sectores' => function ($consulta) use ($soloActivos) {
                     $consulta
+                        ->when(
+                            $soloActivos,
+                            fn ($query) => $query->where('estado', 'Activo')
+                        )
                         ->orderBy('nombre')
                         ->with([
-                            'subsectores' => function ($consultaSubsector) {
+                            'subsectores' => function ($consultaSubsector) use ($soloActivos) {
                                 $consultaSubsector
+                                    ->when(
+                                        $soloActivos,
+                                        fn ($query) => $query->where('estado', 'Activo')
+                                    )
                                     ->orderBy('codigo');
                             },
                         ]);
@@ -40,40 +46,64 @@ class ClasificacionInversionRepository implements
             ->get();
     }
 
-    /**
-     * Contar macrosectores.
-     */
-    public function contarMacrosectores(): int
-    {
-        return Macrosector::query()->count();
+    // Contar macrosectores según el filtro de estado.
+    public function contarMacrosectores(
+        bool $soloActivos = true
+    ): int {
+        return Macrosector::query()
+            ->when(
+                $soloActivos,
+                fn ($consulta) => $consulta->where('estado', 'Activo')
+            )
+            ->count();
     }
 
-    /**
-     * Contar sectores.
-     */
-    public function contarSectores(): int
-    {
-        return Sector::query()->count();
+    // Contar sectores activos cuyo macrosector también esté activo.
+    public function contarSectores(
+        bool $soloActivos = true
+    ): int {
+        return Sector::query()
+            ->when(
+                $soloActivos,
+                function ($consulta) {
+                    $consulta
+                        ->where('estado', 'Activo')
+                        ->whereHas(
+                            'macrosector',
+                            fn ($query) => $query->where('estado', 'Activo')
+                        );
+                }
+            )
+            ->count();
     }
 
-    /**
-     * Contar subsectores.
-     */
-    public function contarSubsectores(): int
-    {
-        return Subsector::query()->count();
+    // Contar subsectores activos cuyos niveles superiores estén activos.
+    public function contarSubsectores(
+        bool $soloActivos = true
+    ): int {
+        return Subsector::query()
+            ->when(
+                $soloActivos,
+                function ($consulta) {
+                    $consulta
+                        ->where('estado', 'Activo')
+                        ->whereHas('sector', function ($query) {
+                            $query
+                                ->where('estado', 'Activo')
+                                ->whereHas(
+                                    'macrosector',
+                                    fn ($macrosector) => $macrosector
+                                        ->where('estado', 'Activo')
+                                );
+                        });
+                }
+            )
+            ->count();
     }
 
+    // Macrosector
 
-    /*
-    |--------------------------------------------------------------------------
-    | Macrosector
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Obtener macrosectores activos.
-     */
+    // Obtener macrosectores activos para los selectores.
     public function obtenerMacrosectoresActivos(): Collection
     {
         return Macrosector::query()
@@ -82,9 +112,7 @@ class ClasificacionInversionRepository implements
             ->get();
     }
 
-    /**
-     * Obtener un macrosector por ID.
-     */
+    // Obtener un macrosector por ID.
     public function obtenerMacrosectorPorId(int $id): Macrosector
     {
         return Macrosector::query()
@@ -94,17 +122,13 @@ class ClasificacionInversionRepository implements
             ->findOrFail($id);
     }
 
-    /**
-     * Crear un macrosector.
-     */
+    // Crear un macrosector.
     public function crearMacrosector(array $datos): Macrosector
     {
         return Macrosector::create($datos);
     }
 
-    /**
-     * Actualizar un macrosector.
-     */
+    // Actualizar un macrosector.
     public function actualizarMacrosector(
         Macrosector $macrosector,
         array $datos
@@ -114,29 +138,24 @@ class ClasificacionInversionRepository implements
         return $macrosector->refresh();
     }
 
+    // Sector
 
-    /*
-    |--------------------------------------------------------------------------
-    | Sector
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Obtener los sectores activos de un macrosector.
-     */
+    // Obtener sectores activos de un macrosector activo.
     public function obtenerSectoresActivosPorMacrosector(
         int $macrosectorId
     ): Collection {
         return Sector::query()
             ->where('macrosector_id', $macrosectorId)
             ->where('estado', 'Activo')
+            ->whereHas(
+                'macrosector',
+                fn ($consulta) => $consulta->where('estado', 'Activo')
+            )
             ->orderBy('nombre')
             ->get();
     }
 
-    /**
-     * Obtener un sector por ID.
-     */
+    // Obtener un sector por ID.
     public function obtenerSectorPorId(int $id): Sector
     {
         return Sector::query()
@@ -147,17 +166,13 @@ class ClasificacionInversionRepository implements
             ->findOrFail($id);
     }
 
-    /**
-     * Crear un sector.
-     */
+    // Crear un sector.
     public function crearSector(array $datos): Sector
     {
         return Sector::create($datos);
     }
 
-    /**
-     * Actualizar un sector.
-     */
+    // Actualizar un sector.
     public function actualizarSector(
         Sector $sector,
         array $datos
@@ -167,29 +182,28 @@ class ClasificacionInversionRepository implements
         return $sector->refresh();
     }
 
+    // Subsector
 
-    /*
-    |--------------------------------------------------------------------------
-    | Subsector
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Obtener los subsectores activos de un sector.
-     */
+    // Obtener subsectores activos con su sector y macrosector activos.
     public function obtenerSubsectoresActivosPorSector(
         int $sectorId
     ): Collection {
         return Subsector::query()
             ->where('sector_id', $sectorId)
             ->where('estado', 'Activo')
+            ->whereHas('sector', function ($consulta) {
+                $consulta
+                    ->where('estado', 'Activo')
+                    ->whereHas(
+                        'macrosector',
+                        fn ($query) => $query->where('estado', 'Activo')
+                    );
+            })
             ->orderBy('codigo')
             ->get();
     }
 
-    /**
-     * Obtener un subsector por ID.
-     */
+    // Obtener un subsector por ID.
     public function obtenerSubsectorPorId(int $id): Subsector
     {
         return Subsector::query()
@@ -199,17 +213,13 @@ class ClasificacionInversionRepository implements
             ->findOrFail($id);
     }
 
-    /**
-     * Crear un subsector.
-     */
+    // Crear un subsector.
     public function crearSubsector(array $datos): Subsector
     {
         return Subsector::create($datos);
     }
 
-    /**
-     * Actualizar un subsector.
-     */
+    // Actualizar un subsector.
     public function actualizarSubsector(
         Subsector $subsector,
         array $datos
@@ -219,35 +229,101 @@ class ClasificacionInversionRepository implements
         return $subsector->refresh();
     }
 
-    /**
-     * Listar macrosectores con los totales de sus dos niveles inferiores.
-     */
-    public function listarMacrosectoresCatalogo(): Collection
-    {
+    // Listados del catálogo
+
+    // Listar macrosectores y contar sus niveles inferiores según el filtro.
+    public function listarMacrosectoresCatalogo(
+        bool $soloActivos = true
+    ): Collection {
         return Macrosector::query()
-            ->withCount('sectores')
+            ->when(
+                $soloActivos,
+                fn ($consulta) => $consulta->where('estado', 'Activo')
+            )
+            ->withCount([
+                'sectores' => function ($consulta) use ($soloActivos) {
+                    $consulta->when(
+                        $soloActivos,
+                        fn ($query) => $query->where('estado', 'Activo')
+                    );
+                },
+            ])
             ->with([
-                'sectores' => fn ($query) => $query
-                    ->select('id', 'macrosector_id')
-                    ->withCount('subsectores'),
+                'sectores' => function ($consulta) use ($soloActivos) {
+                    $consulta
+                        ->select('id', 'macrosector_id')
+                        ->when(
+                            $soloActivos,
+                            fn ($query) => $query->where('estado', 'Activo')
+                        )
+                        ->withCount([
+                            'subsectores' => function ($query) use ($soloActivos) {
+                                $query->when(
+                                    $soloActivos,
+                                    fn ($subsector) => $subsector
+                                        ->where('estado', 'Activo')
+                                );
+                            },
+                        ]);
+                },
             ])
             ->orderBy('nombre')
             ->get();
     }
 
-    public function listarSectoresCatalogo(int $macrosectorId): Collection
-    {
+    // Listar sectores y contar sus subsectores según el filtro.
+    public function listarSectoresCatalogo(
+        int $macrosectorId,
+        bool $soloActivos = true
+    ): Collection {
         return Sector::query()
             ->where('macrosector_id', $macrosectorId)
-            ->withCount('subsectores')
+            ->when(
+                $soloActivos,
+                function ($consulta) {
+                    $consulta
+                        ->where('estado', 'Activo')
+                        ->whereHas(
+                            'macrosector',
+                            fn ($query) => $query->where('estado', 'Activo')
+                        );
+                }
+            )
+            ->withCount([
+                'subsectores' => function ($consulta) use ($soloActivos) {
+                    $consulta->when(
+                        $soloActivos,
+                        fn ($query) => $query->where('estado', 'Activo')
+                    );
+                },
+            ])
             ->orderBy('nombre')
             ->get();
     }
 
-    public function listarSubsectoresCatalogo(int $sectorId): Collection
-    {
+    // Listar subsectores según su estado y el de sus niveles superiores.
+    public function listarSubsectoresCatalogo(
+        int $sectorId,
+        bool $soloActivos = true
+    ): Collection {
         return Subsector::query()
             ->where('sector_id', $sectorId)
+            ->when(
+                $soloActivos,
+                function ($consulta) {
+                    $consulta
+                        ->where('estado', 'Activo')
+                        ->whereHas('sector', function ($query) {
+                            $query
+                                ->where('estado', 'Activo')
+                                ->whereHas(
+                                    'macrosector',
+                                    fn ($macrosector) => $macrosector
+                                        ->where('estado', 'Activo')
+                                );
+                        });
+                }
+            )
             ->orderBy('codigo')
             ->get();
     }

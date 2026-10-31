@@ -1,7 +1,7 @@
-<!-- Encabezado -->
-<div class="bg-gray-100 border-b border-gray-200">
+<!-- Información general -->
+<div class="border-b border-gray-200 bg-gray-100">
 
-    <div class="flex justify-between items-center px-4 py-2">
+    <div class="flex items-center justify-between px-4 py-2">
 
         <h4 class="text-sm font-semibold text-gray-800">
             Información general
@@ -10,8 +10,10 @@
         @if($presupuesto->estado === 'Borrador' && puedeHacer('presupuestos', 'editar'))
 
             <a href="{{ route('presupuestos.edit', $presupuesto) }}"
-               class="text-sm text-blue-600 hover:text-blue-800">
+               class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+
                 Editar
+
             </a>
 
         @endif
@@ -21,75 +23,77 @@
 </div>
 
 
-<!-- Información -->
-<div class="px-4 py-2">
+<!-- Datos del presupuesto -->
+<div class="px-4 py-5">
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-4 mb-6">
+    <div class="min-w-0 space-y-5">
 
-        <!-- Columna izquierda -->
-        <div class="space-y-4">
+        <!-- Código del proyecto -->
+        <div class="flex min-w-0 items-start gap-4">
 
-            <div class="flex">
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Código del proyecto
+            </span>
 
-                <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Proyecto
-                </span>
-
-                <span class="min-w-0 break-words text-sm text-gray-600">
-
-                    {{ $presupuesto->proyecto?->codigo ?? 'No registra' }}
-
-                    @if($presupuesto->proyecto?->nombre)
-                        - {{ $presupuesto->proyecto->nombre }}
-                    @endif
-
-                </span>
-
-            </div>
-
-
-            <div class="flex">
-
-                <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Año
-                </span>
-
-                <span class="text-sm text-gray-600">
-                    {{ $presupuesto->anio }}
-                </span>
-
-            </div>
+            <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                {{ $presupuesto->proyecto?->codigo ?? 'No registra' }}
+            </span>
 
         </div>
 
 
-        <!-- Columna derecha -->
-        <div class="space-y-4">
+        <!-- Nombre del proyecto -->
+        <div class="flex min-w-0 items-start gap-4">
 
-            <div class="flex">
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Nombre del proyecto
+            </span>
 
-                <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Período
-                </span>
+            <span class="min-w-0 flex-1 break-words text-sm font-medium text-[#0F766E]">
+                {{ $presupuesto->proyecto?->nombre ?? 'No registra' }}
+            </span>
 
-                <span class="text-sm text-gray-600">
-                    {{ $presupuesto->periodo }}
-                </span>
-
-            </div>
+        </div>
 
 
-            <div class="flex">
+        <!-- Año -->
+        <div class="flex min-w-0 items-start gap-4">
 
-                <span class="w-40 flex-shrink-0 text-sm font-semibold text-gray-700">
-                    Fecha de corte
-                </span>
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Año
+            </span>
 
-                <span class="text-sm text-gray-600">
-                    {{ $presupuesto->fecha_corte?->format('d/m/Y') ?? 'No registra' }}
-                </span>
+            <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                {{ $presupuesto->anio }}
+            </span>
 
-            </div>
+        </div>
+
+
+        <!-- Período -->
+        <div class="flex min-w-0 items-start gap-4">
+
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Período
+            </span>
+
+            <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                {{ $presupuesto->periodo }}
+            </span>
+
+        </div>
+
+
+        <!-- Fecha de corte -->
+        <div class="flex min-w-0 items-start gap-4">
+
+            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+                Fecha de corte
+            </span>
+
+            <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+                {{ $presupuesto->fecha_corte?->format('d/m/Y') ?? 'No registra' }}
+            </span>
 
         </div>
 

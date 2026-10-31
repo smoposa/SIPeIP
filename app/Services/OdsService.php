@@ -19,19 +19,29 @@ class OdsService
     }
 
     /**
-     * Listar agendas con el total de objetivos.
+     * Listar agendas según los permisos de consulta del usuario.
      */
     public function listarAgendas(): LengthAwarePaginator
     {
-        return $this->odsRepository->listarAgendas();
+        return $this->odsRepository->listarAgendas(
+            soloActivas: !$this->puedeConsultarHistorial()
+        );
     }
 
     /**
-     * Obtener una agenda.
+     * Obtener una agenda y validar su visibilidad.
      */
     public function obtenerAgenda(int $id): AgendaOds
     {
-        return $this->odsRepository->obtenerAgenda($id);
+        $agenda = $this->odsRepository->obtenerAgenda($id);
+
+        abort_unless(
+            $this->puedeConsultarHistorial()
+                || $agenda->estado === 'Activo',
+            404
+        );
+
+        return $agenda;
     }
 
     /**
@@ -98,13 +108,15 @@ class OdsService
     }
 
     /**
-     * Obtener la agenda y sus objetivos.
+     * Obtener la agenda visible y sus objetivos.
      */
     public function datosAgenda(int $id): array
     {
+        $agenda = $this->obtenerAgenda($id);
+
         return [
-            'agenda' => $this->obtenerAgenda($id),
-            'ods' => $this->odsRepository->obtenerTodosOrdenados($id),
+            'agenda' => $agenda,
+            'ods' => $this->odsRepository->obtenerTodosOrdenados($agenda->id),
         ];
     }
 
@@ -121,6 +133,8 @@ class OdsService
      */
     public function obtenerConMetas(Ods $ods): Ods
     {
+        $this->obtenerAgenda((int) $ods->agenda_id);
+
         return $this->odsRepository->obtenerConMetas($ods);
     }
 
@@ -251,6 +265,18 @@ class OdsService
         return $this->odsRepository->actualizarMeta(
             $meta,
             $campos
+        );
+    }
+
+    /**
+     * Determinar si el usuario puede consultar agendas inactivas.
+     */
+    private function puedeConsultarHistorial(): bool
+    {
+        return in_array(
+            auth()->user()?->rol?->codigo,
+            ['ADMIN_GLOBAL', 'ADMIN_SISTEMA'],
+            true
         );
     }
 }

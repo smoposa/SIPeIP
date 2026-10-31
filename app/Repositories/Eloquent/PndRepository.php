@@ -15,12 +15,15 @@ class PndRepository implements PndRepositoryInterface
 {
     // Planes nacionales
 
-    /**
-     * Listar todos los planes, incluidos los inactivos.
-     */
-    public function listarPlanes(): LengthAwarePaginator
-    {
+    // Listar los planes nacionales con filtro opcional de estado.
+    public function listarPlanes(
+        bool $soloActivos = true
+    ): LengthAwarePaginator {
         return Pnd::query()
+            ->when(
+                $soloActivos,
+                fn ($query) => $query->where('estado', 'Activo')
+            )
             ->withCount('ejes')
             ->with([
                 'ejes' => function ($query) {
@@ -34,63 +37,67 @@ class PndRepository implements PndRepositoryInterface
             ->paginate(10);
     }
 
-    /**
-     * Obtener un plan nacional.
-     */
+    // Obtener un plan nacional.
     public function obtenerPlan(int $id): Pnd
     {
         return Pnd::query()->findOrFail($id);
     }
 
-    /**
-     * Registrar un plan nacional.
-     */
+    // Registrar un plan nacional.
     public function crearPlan(array $datos): Pnd
     {
         return Pnd::query()->create($datos);
     }
 
-
+    // Registrar una política.
     public function crearPolitica(array $datos): PndPolitica
     {
         return PndPolitica::query()->create($datos);
     }
 
-    public function actualizarPolitica(PndPolitica $registro, array $datos): PndPolitica
-    {
+    // Actualizar una política.
+    public function actualizarPolitica(
+        PndPolitica $registro,
+        array $datos
+    ): PndPolitica {
         $registro->update($datos);
 
         return $registro;
     }
 
+    // Registrar una estrategia.
     public function crearEstrategia(array $datos): PndEstrategia
     {
         return PndEstrategia::query()->create($datos);
     }
 
-    public function actualizarEstrategia(PndEstrategia $registro, array $datos): PndEstrategia
-    {
+    // Actualizar una estrategia.
+    public function actualizarEstrategia(
+        PndEstrategia $registro,
+        array $datos
+    ): PndEstrategia {
         $registro->update($datos);
 
         return $registro;
     }
 
+    // Registrar una meta.
     public function crearMeta(array $datos): PndMeta
     {
         return PndMeta::query()->create($datos);
     }
 
-    public function actualizarMeta(PndMeta $registro, array $datos): PndMeta
-    {
+    // Actualizar una meta.
+    public function actualizarMeta(
+        PndMeta $registro,
+        array $datos
+    ): PndMeta {
         $registro->update($datos);
 
         return $registro;
     }
 
-
-    /**
-     * Actualizar los campos recibidos del servicio.
-     */
+    // Actualizar los campos del plan recibidos del servicio.
     public function actualizarPlan(Pnd $pnd, array $datos): Pnd
     {
         $pnd->update($datos);
@@ -98,10 +105,7 @@ class PndRepository implements PndRepositoryInterface
         return $pnd;
     }
 
-    /**
-     * Obtener los ejes del plan con sus objetivos
-     * y los conteos de políticas y metas.
-     */
+    // Obtener los ejes del plan con sus objetivos y conteos de políticas y metas.
     public function obtenerPlanConEjes(int $id): Pnd
     {
         return Pnd::query()
@@ -125,12 +129,16 @@ class PndRepository implements PndRepositoryInterface
             ->findOrFail($id);
     }
 
-    /**
-     * Obtener un plan con toda su estructura.
-     */
-    public function obtenerConEstructura(?int $id = null): ?Pnd
-    {
+    // Obtener un plan con toda su estructura y filtro opcional de estado.
+    public function obtenerConEstructura(
+        ?int $id = null,
+        bool $soloActivos = true
+    ): ?Pnd {
         return Pnd::query()
+            ->when(
+                $soloActivos,
+                fn ($query) => $query->where('estado', 'Activo')
+            )
             ->with([
                 'ejes' => function ($query) {
                     $query->orderBy('numero');
@@ -157,12 +165,15 @@ class PndRepository implements PndRepositoryInterface
             ->first();
     }
 
-    /**
-     * Obtener los totales de la estructura de un plan.
-     */
-    public function obtenerResumen(?int $id = null): array
-    {
-        $pnd = $this->obtenerConEstructura($id);
+    // Obtener los totales de la estructura respetando el filtro de estado.
+    public function obtenerResumen(
+        ?int $id = null,
+        bool $soloActivos = true
+    ): array {
+        $pnd = $this->obtenerConEstructura(
+            $id,
+            $soloActivos
+        );
 
         $ejes = $pnd?->ejes ?? collect();
 
@@ -189,9 +200,7 @@ class PndRepository implements PndRepositoryInterface
 
     // Ejes
 
-    /**
-     * Obtener un eje con su plan y sus objetivos.
-     */
+    // Obtener un eje con su plan y sus objetivos.
     public function obtenerEjeConObjetivos(int $id): PndEje
     {
         return PndEje::query()
@@ -216,17 +225,13 @@ class PndRepository implements PndRepositoryInterface
             ->findOrFail($id);
     }
 
-    /**
-     * Registrar un eje.
-     */
+    // Registrar un eje.
     public function crearEje(array $datos): PndEje
     {
         return PndEje::query()->create($datos);
     }
 
-    /**
-     * Actualizar los campos autorizados del eje.
-     */
+    // Actualizar los campos autorizados del eje.
     public function actualizarEje(PndEje $eje, array $datos): PndEje
     {
         $eje->update($datos);
@@ -236,9 +241,7 @@ class PndRepository implements PndRepositoryInterface
 
     // Objetivos
 
-    /**
-     * Obtener un objetivo nacional con sus relaciones.
-     */
+    // Obtener un objetivo nacional con sus relaciones.
     public function obtenerObjetivoConDetalle(int $id): ?PndObjetivo
     {
         return PndObjetivo::query()
@@ -257,17 +260,13 @@ class PndRepository implements PndRepositoryInterface
             ->find($id);
     }
 
-    /**
-     * Registrar un objetivo nacional.
-     */
+    // Registrar un objetivo nacional.
     public function crearObjetivo(array $datos): PndObjetivo
     {
         return PndObjetivo::query()->create($datos);
     }
 
-    /**
-     * Actualizar los campos autorizados del objetivo.
-     */
+    // Actualizar los campos autorizados del objetivo.
     public function actualizarObjetivo(
         PndObjetivo $objetivo,
         array $datos

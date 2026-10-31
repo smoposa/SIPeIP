@@ -2,15 +2,16 @@
 
 namespace App\Services;
 
-use App\Enums\EstadoEntidad;
-use App\Enums\EstadoPlan;
-use App\Enums\EstadoProcesoPlan;
-use App\Models\Entidad;
-use App\Models\Plan;
 use App\Models\User;
+use App\Models\Plan;
+use App\Models\Entidad;
+use App\Enums\EstadoPlan;
+use App\Enums\EstadoEntidad;
+use App\Enums\EstadoProcesoPlan;
 use App\Repositories\Contracts\PlanRepositoryInterface;
-use DomainException;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use DomainException;
+
 
 class PlanService
 {

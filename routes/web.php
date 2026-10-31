@@ -257,15 +257,12 @@ Route::middleware([
         ->name('pnd.')
         ->group(function () {
 
-            // Planes: listado y panel lateral.
             Route::get('/', [PndController::class, 'index'])
                 ->name('index');
 
-            // Planes: registrar.
             Route::post('/planes', [PndController::class, 'store'])
                 ->name('planes.store');
 
-            // Planes: actualizar información y estado.
             Route::put('/planes/{pnd}', [PndController::class, 'update'])
                 ->whereNumber('pnd')
                 ->name('planes.update');
@@ -317,8 +314,6 @@ Route::middleware([
                 ->whereNumber('meta')
                 ->name('metas.update');
 
-
-            // Objetivos: registrar dentro del eje.
             Route::post(
                 '/ejes/{eje}/objetivos',
                 [\App\Http\Controllers\PndObjetivoController::class, 'store']
@@ -326,7 +321,6 @@ Route::middleware([
                 ->whereNumber('eje')
                 ->name('objetivos.store');
 
-            // Objetivos: actualizar información y estado.
             Route::put(
                 '/objetivos/{objetivo}',
                 [\App\Http\Controllers\PndObjetivoController::class, 'update']
@@ -334,13 +328,10 @@ Route::middleware([
                 ->whereNumber('objetivo')
                 ->name('objetivos.update');
 
-
-            // Ejes: listado por plan.
             Route::get('/planes/{pnd}/ejes', [PndController::class, 'listarEjes'])
                 ->whereNumber('pnd')
                 ->name('ejes.index');
 
-            // Ejes: registrar desde el panel lateral.
             Route::post(
                 '/planes/{pnd}/ejes',
                 [\App\Http\Controllers\PndEjeController::class, 'store']
@@ -348,7 +339,6 @@ Route::middleware([
                 ->whereNumber('pnd')
                 ->name('ejes.store');
 
-            // Ejes: actualizar información y estado.
             Route::put(
                 '/ejes/{eje}',
                 [\App\Http\Controllers\PndEjeController::class, 'update']
@@ -356,8 +346,6 @@ Route::middleware([
                 ->whereNumber('eje')
                 ->name('ejes.update');
 
-
-            // Objetivos: listado por eje.
             Route::get(
                 '/ejes/{eje}/objetivos',
                 [PndController::class, 'listarObjetivos']
@@ -365,7 +353,6 @@ Route::middleware([
                 ->whereNumber('eje')
                 ->name('objetivos.index');
 
-            // Objetivos: detalle con políticas, estrategias y metas.
             Route::get('/objetivos/{id}', [PndController::class, 'objetivo'])
                 ->whereNumber('id')
                 ->name('objetivo');
@@ -841,42 +828,95 @@ Route::middleware([
             )->name('estado-proceso');
     });
 
+    // Seguimiento de avances
     Route::prefix('seguimiento/avances')
         ->name('avances.')
         ->middleware('role:avances')
         ->controller(AvanceController::class)
         ->group(function () {
-            Route::get('/', 'index')->name('listar');
-            Route::get('/crear', 'create')->name('create');
-            Route::post('/', 'store')->name('store');
-            Route::get('/proyectos/{proyecto}/indicadores', 'indicadores')->whereNumber('proyecto')->name('indicadores');
-            Route::get('/{avance}/detalle', 'detalle')->whereNumber('avance')->name('detalle');
-            Route::get('/{avance}/editar', 'edit')->whereNumber('avance')->name('edit');
-            Route::put('/{avance}', 'update')->whereNumber('avance')->name('update');
+
+            Route::get('/', 'index')
+                ->name('listar');
+
+            Route::get('/crear', 'create')
+                ->name('create');
+
+            Route::post('/', 'store')
+                ->name('store');
+
+            Route::get('/proyectos/{proyecto}/indicadores', 'indicadores')
+                ->whereNumber('proyecto')
+                ->name('indicadores');
+
+            Route::get('/{avance}/detalle', 'detalle')
+                ->whereNumber('avance')
+                ->name('detalle');
+
+            Route::get('/{avance}/editar', 'edit')
+                ->whereNumber('avance')
+                ->name('edit');
+
+            Route::put('/{avance}', 'update')
+                ->whereNumber('avance')
+                ->name('update');
+
         });
 
+
+    // Seguimiento presupuestario
     Route::prefix('seguimiento/presupuestos')
         ->name('presupuestos.')
         ->middleware('role:presupuestos')
         ->controller(PresupuestoController::class)
         ->group(function () {
-            Route::get('/', 'index')->name('listar');
-            Route::get('/crear', 'create')->name('create');
-            Route::post('/', 'store')->name('store');
-            Route::get('/{presupuesto}/detalle', 'detalle')->whereNumber('presupuesto')->name('detalle');
-            Route::get('/{presupuesto}/editar', 'edit')->whereNumber('presupuesto')->name('edit');
-            Route::put('/{presupuesto}', 'update')->whereNumber('presupuesto')->name('update');
+
+            Route::get('/', 'index')
+                ->name('listar');
+
+            Route::get('/crear', 'create')
+                ->name('create');
+
+            Route::post('/', 'store')
+                ->name('store');
+
+            Route::get('/{presupuesto}/detalle', 'detalle')
+                ->whereNumber('presupuesto')
+                ->name('detalle');
+
+            Route::get('/{presupuesto}/editar', 'edit')
+                ->whereNumber('presupuesto')
+                ->name('edit');
+
+            Route::put('/{presupuesto}', 'update')
+                ->whereNumber('presupuesto')
+                ->name('update');
+
+            // Reabrir un presupuesto cerrado.
+            Route::put('/{presupuesto}/reabrir', 'reabrir')
+                ->whereNumber('presupuesto')
+                ->name('reabrir');
+
         });
 
+
+    // Reportes
     Route::prefix('reportes')
         ->name('reportes.')
         ->middleware('role:reportes')
         ->controller(ReporteController::class)
         ->group(function () {
-            Route::get('/', 'index')->name('index');
-            Route::get('/excel', 'excel')->name('excel');
-            Route::get('/pdf', 'pdf')->name('pdf');
+
+            Route::get('/', 'index')
+                ->name('index');
+
+            Route::get('/excel', 'excel')
+                ->name('excel');
+
+            Route::get('/pdf', 'pdf')
+                ->name('pdf');
+
         });
 
 }); // Cierre del middleware auth
+
 require __DIR__.'/auth.php';

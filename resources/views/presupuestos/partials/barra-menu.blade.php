@@ -1,7 +1,7 @@
 <!-- Barra de acciones -->
 <div class="bg-white border-b border-gray-300 mb-0">
 
-    <div class="flex flex-wrap">
+    <div class="flex flex-wrap items-center">
 
         <!-- Regresar -->
         <a href="{{ route('presupuestos.listar') }}"
@@ -23,6 +23,31 @@
                 Editar información
 
             </a>
+
+        @endif
+
+
+        <!-- Reabrir presupuesto -->
+        @if($presupuesto->estado === 'Cerrado' && puedeHacer('presupuestos', 'reabrir'))
+
+            <form method="POST"
+                  action="{{ route('presupuestos.reabrir', $presupuesto) }}"
+                  onsubmit="return confirm('¿Desea reabrir este presupuesto? Volverá a Borrador y podrá editarse por los usuarios autorizados.');">
+
+                @csrf
+                @method('PUT')
+
+                <button type="submit"
+                        class="inline-flex items-center px-3 py-2 text-sm
+                               text-gray-700 hover:bg-gray-100 transition">
+
+                    <i class="bi bi-unlock text-blue-500 me-2"
+                       aria-hidden="true"></i>
+                    Reabrir presupuesto
+
+                </button>
+
+            </form>
 
         @endif
 

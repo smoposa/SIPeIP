@@ -14,93 +14,82 @@ interface PndRepositoryInterface
 {
     // Planes nacionales
 
-    /**
-     * Listar los planes nacionales con su cantidad de ejes.
-     */
-    public function listarPlanes(): LengthAwarePaginator;
+    // Listar los planes nacionales con filtro opcional de estado.
+    public function listarPlanes(
+        bool $soloActivos = true
+    ): LengthAwarePaginator;
 
-    /**
-     * Obtener un plan nacional.
-     */
+    // Obtener un plan nacional.
     public function obtenerPlan(int $id): Pnd;
 
-    /**
-     * Registrar un plan nacional.
-     */
+    // Registrar un plan nacional.
     public function crearPlan(array $datos): Pnd;
 
-    /**
-     * Actualizar información y estado de un plan nacional.
-     */
+    // Actualizar información y estado de un plan nacional.
     public function actualizarPlan(Pnd $pnd, array $datos): Pnd;
 
-  public function crearPolitica(array $datos): PndPolitica;
+    // Registrar una política.
+    public function crearPolitica(array $datos): PndPolitica;
 
-    public function actualizarPolitica(PndPolitica $registro, array $datos): PndPolitica;
+    // Actualizar una política.
+    public function actualizarPolitica(
+        PndPolitica $registro,
+        array $datos
+    ): PndPolitica;
 
+    // Registrar una estrategia.
     public function crearEstrategia(array $datos): PndEstrategia;
 
-    public function actualizarEstrategia(PndEstrategia $registro, array $datos): PndEstrategia;
+    // Actualizar una estrategia.
+    public function actualizarEstrategia(
+        PndEstrategia $registro,
+        array $datos
+    ): PndEstrategia;
 
+    // Registrar una meta.
     public function crearMeta(array $datos): PndMeta;
 
-    public function actualizarMeta(PndMeta $registro, array $datos): PndMeta;
+    // Actualizar una meta.
+    public function actualizarMeta(
+        PndMeta $registro,
+        array $datos
+    ): PndMeta;
 
-    /**
-     * Obtener un plan con sus ejes y la cantidad de objetivos por eje.
-     */
+    // Obtener un plan con sus ejes y la cantidad de objetivos por eje.
     public function obtenerPlanConEjes(int $id): Pnd;
 
-    /**
-     * Obtener un plan con su estructura completa.
-     */
-    public function obtenerConEstructura(?int $id = null): ?Pnd;
+    // Obtener un plan con su estructura completa y filtro opcional de estado.
+    public function obtenerConEstructura(
+        ?int $id = null,
+        bool $soloActivos = true
+    ): ?Pnd;
 
-    /**
-     * Obtener los totales de la estructura de un plan.
-     *
-     * @return array{
-     *     ejes: int,
-     *     objetivos: int,
-     *     politicas: int,
-     *     estrategias: int,
-     *     metas: int
-     * }
-     */
-    public function obtenerResumen(?int $id = null): array;
+    // Obtener los totales de ejes, objetivos, políticas, estrategias y metas.
+    public function obtenerResumen(
+        ?int $id = null,
+        bool $soloActivos = true
+    ): array;
 
     // Ejes
 
-    /**
-     * Obtener un eje con sus objetivos.
-     */
+    // Obtener un eje con sus objetivos.
     public function obtenerEjeConObjetivos(int $id): PndEje;
 
-    /**
-     * Registrar un eje.
-     */
+    // Registrar un eje.
     public function crearEje(array $datos): PndEje;
 
-    /**
-     * Actualizar un eje.
-     */
+    // Actualizar un eje.
     public function actualizarEje(PndEje $eje, array $datos): PndEje;
 
     // Objetivos
 
-    /**
-     * Obtener un objetivo con su eje, políticas, estrategias y metas.
-     */
+    // Obtener un objetivo con su eje, políticas, estrategias y metas.
     public function obtenerObjetivoConDetalle(int $id): ?PndObjetivo;
 
-    /**
-     * Registrar un objetivo.
-     */
+    // Registrar un objetivo.
     public function crearObjetivo(array $datos): PndObjetivo;
 
-    /**
-     * Actualizar un objetivo.
-     */
+    // Actualizar un objetivo.
     public function actualizarObjetivo(
         PndObjetivo $objetivo,
         array $datos

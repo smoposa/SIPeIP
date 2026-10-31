@@ -135,7 +135,7 @@
     </div>
 
 
-    <!-- Acciones de los filtros -->
+    <!-- Acciones de los filtros 
     <div class="flex flex-wrap items-center gap-2">
 
         <button type="submit"
@@ -159,6 +159,6 @@
 
         </a>
 
-    </div>
+    </div> -->
 
 </form>

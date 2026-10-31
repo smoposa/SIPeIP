@@ -25,12 +25,8 @@
     <!-- Barra de acciones -->
     @include('metas.partials.barra-menu')
 
-    <!-- Scroll -->
-    <div class="min-w-0 w-full max-w-full overflow-y-auto"
-         style="
-            height: calc(100vh - 180px);
-            overflow-x: hidden;
-         ">
+    <!-- Scroll vertical -->
+    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
         <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
 

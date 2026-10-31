@@ -11,9 +11,16 @@ use Illuminate\Database\Eloquent\Collection;
 
 class OdsRepository implements OdsRepositoryInterface
 {
-    public function listarAgendas(): LengthAwarePaginator
+    /**
+     * Listar agendas con filtro opcional de estado.
+     */
+    public function listarAgendas(bool $soloActivas = true): LengthAwarePaginator
     {
         return AgendaOds::query()
+            ->when(
+                $soloActivas,
+                fn ($query) => $query->where('estado', 'Activo')
+            )
             ->withCount('ods')
             ->orderByDesc('periodo_inicio')
             ->orderByDesc('id')
