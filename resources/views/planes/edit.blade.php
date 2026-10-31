@@ -1,98 +1,225 @@
-<x-planes-layout title="Editar Plan Institucional">
+@if(puedeHacer('planes', 'editar'))
 
-    @if(session('success'))
+    @php
+        $recuperarInformacion =
+            (string) old('_plan_form', '') === (string) $plan->id;
+    @endphp
 
-        <div id="alertSuccess"
-             class="fixed right-5 top-5 z-50 rounded-lg bg-green-600 px-6 py-3 text-white shadow-lg">
 
-            {{ session('success') }}
+    <!-- Panel de información -->
+    <dialog
+        id="panelEditarPlan"
+        aria-labelledby="tituloPanelEditarPlan"
+        class="bg-white p-0 shadow-xl"
+        style="position: fixed; inset: 0 0 0 auto; margin: 0 0 0 auto;
+               width: min(100%, 480px); height: 100dvh;
+               max-width: 100%; max-height: none; border: 0;">
 
-        </div>
+        <form
+            id="formularioEditarPlan"
+            method="POST"
+            action="{{ route('planes.update', $plan->id) }}"
+            class="flex h-full flex-col">
 
-        <script>
-            setTimeout(() => {
-                const alerta = document.getElementById('alertSuccess');
+            @csrf
+            @method('PUT')
 
-                if (alerta) {
-                    alerta.remove();
-                }
-            }, 3000);
-        </script>
+            <input type="hidden"
+                   name="_plan_form"
+                   value="{{ $plan->id }}">
 
-    @endif
 
-    <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
+            <!-- Encabezado -->
+            <div class="flex shrink-0 items-center justify-between gap-4
+                        border-b border-gray-200 px-6 py-4">
 
-        <!-- Encabezado -->
-        <div class="mb-4">
+                <div class="min-w-0">
 
-            <h2 class="text-2xl font-semibold leading-tight text-gray-800">
-                Editar plan institucional
-            </h2>
+                    <h2 id="tituloPanelEditarPlan"
+                        class="text-xl font-semibold text-gray-800">
+                        Editar plan institucional
+                    </h2>
 
-            <a href="{{ route('planes.detalle', $plan->id) }}"
-               class="mt-0.5 inline-flex items-center text-sm font-medium
-                      text-blue-600 hover:text-blue-800">
+                    <p class="mt-1 break-words text-sm text-gray-500">
+                        {{ $plan->codigo }}
+                    </p>
 
-                <i class="bi bi-arrow-left-short mr-1 text-lg"></i>
+                </div>
 
-                Regresar
+                <button type="button"
+                        data-cerrar-panel-plan
+                        aria-label="Cerrar panel"
+                        class="shrink-0 p-2 text-gray-500
+                               hover:bg-gray-100 hover:text-gray-800">
 
-            </a>
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
 
-        </div>
+                </button>
 
-        <!-- Validaciones -->
-        @if($errors->any())
+            </div>
 
-            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4">
 
-                <p class="mb-2 text-sm font-semibold text-red-700">
-                    Revise los siguientes campos:
+            <!-- Contenido -->
+            <div class="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+
+                <!-- Errores -->
+                @if($recuperarInformacion && $errors->any())
+
+                    <div role="alert"
+                         class="mb-5 rounded-md bg-red-50 px-4 py-3
+                                text-sm text-red-800">
+
+                        @foreach($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+
+                    </div>
+
+                @endif
+
+                <p class="mb-5 text-xs text-gray-500">
+                    Los campos con <span class="text-red-500">*</span>
+                    son obligatorios.
                 </p>
 
-                <ul class="list-inside list-disc text-sm text-red-700">
 
-                    @foreach($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+                <div class="space-y-5">
 
-                </ul>
+                    <!-- Nombre -->
+                    <div>
+
+                        <label for="nombrePanelPlan"
+                               class="block text-sm font-medium text-gray-700">
+                            Nombre del plan <span class="text-red-500">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nombrePanelPlan"
+                            name="nombre"
+                            maxlength="255"
+                            required
+                            value="{{ $recuperarInformacion
+                                ? old('nombre')
+                                : $plan->nombre }}"
+                            class="mt-1 w-full rounded-md border border-gray-300
+                                   px-3 py-2 text-sm text-gray-700
+                                   focus:border-blue-500 focus:ring-blue-500">
+
+                    </div>
+
+
+                    <!-- Período -->
+                    <div class="grid grid-cols-2 gap-4">
+
+                        <div>
+
+                            <label for="inicioPanelPlan"
+                                   class="block text-sm font-medium text-gray-700">
+                                Año de inicio
+                                <span class="text-red-500">*</span>
+                            </label>
+
+                            <input
+                                type="number"
+                                id="inicioPanelPlan"
+                                name="periodo_inicio"
+                                min="2000"
+                                max="2100"
+                                required
+                                value="{{ $recuperarInformacion
+                                    ? old('periodo_inicio')
+                                    : $plan->periodo_inicio }}"
+                                class="mt-1 w-full rounded-md border border-gray-300
+                                       px-3 py-2 text-sm text-gray-700
+                                       focus:border-blue-500 focus:ring-blue-500">
+
+                        </div>
+
+                        <div>
+
+                            <label for="finPanelPlan"
+                                   class="block text-sm font-medium text-gray-700">
+                                Año de finalización
+                                <span class="text-red-500">*</span>
+                            </label>
+
+                            <input
+                                type="number"
+                                id="finPanelPlan"
+                                name="periodo_fin"
+                                min="2000"
+                                max="2100"
+                                required
+                                value="{{ $recuperarInformacion
+                                    ? old('periodo_fin')
+                                    : $plan->periodo_fin }}"
+                                class="mt-1 w-full rounded-md border border-gray-300
+                                       px-3 py-2 text-sm text-gray-700
+                                       focus:border-blue-500 focus:ring-blue-500">
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Descripción -->
+                    <div>
+
+                        <label for="descripcionPanelPlan"
+                               class="block text-sm font-medium text-gray-700">
+                            Descripción <span class="text-red-500">*</span>
+                        </label>
+
+                        <textarea
+                            id="descripcionPanelPlan"
+                            name="descripcion"
+                            rows="6"
+                            maxlength="1000"
+                            required
+                            class="mt-1 w-full rounded-md border border-gray-300
+                                   px-3 py-2 text-sm text-gray-700
+                                   focus:border-blue-500 focus:ring-blue-500">{{ $recuperarInformacion ? old('descripcion') : $plan->descripcion }}</textarea>
+
+                    </div>
+
+                </div>
 
             </div>
 
-        @endif
 
-        @if(session('error'))
+            <!-- Acciones -->
+            <div class="flex shrink-0 flex-wrap justify-end gap-3
+                        border-t border-gray-200 bg-white px-6 py-4">
 
-            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4
-                        text-sm text-red-700">
+                <button type="submit"
+                        class="inline-flex h-10 items-center justify-center gap-2
+                               rounded-md bg-[#024687] px-5 text-sm font-medium
+                               text-white transition hover:bg-[#01325f]
+                               focus:outline-none focus:ring-2 focus:ring-blue-600
+                               focus:ring-offset-2">
 
-                {{ session('error') }}
+                    <i class="bi bi-check-circle" aria-hidden="true"></i>
+                    Guardar cambios
+
+                </button>
+
+                <button type="button"
+                        data-cerrar-panel-plan
+                        class="inline-flex h-10 items-center justify-center
+                               rounded-md bg-gray-200 px-5 text-sm font-medium
+                               text-gray-700 transition hover:bg-gray-300
+                               focus:outline-none focus:ring-2 focus:ring-gray-400
+                               focus:ring-offset-2">
+
+                    Cancelar
+
+                </button>
 
             </div>
 
-        @endif
+        </form>
 
-        <!-- Contenido con desplazamiento vertical -->
-        <div class="w-full min-w-0 max-w-full overflow-y-auto overflow-x-hidden"
-             style="height: calc(100vh - 190px);">
+    </dialog>
 
-            <form method="POST"
-                  action="{{ route('planes.update', $plan->id) }}"
-                  class="w-full min-w-0 max-w-full">
-
-                @csrf
-                @method('PUT')
-
-                @include('planes.partials.informacion-general')
-
-                @include('planes.partials.acciones')
-
-            </form>
-
-        </div>
-
-    </div>
-
-</x-planes-layout>
+@endif

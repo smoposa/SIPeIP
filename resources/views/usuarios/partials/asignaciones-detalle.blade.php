@@ -70,7 +70,6 @@
 
         </div>
 
-
         <!-- Entidad -->
         <div class="border border-gray-200 rounded-lg p-6 bg-white">
 

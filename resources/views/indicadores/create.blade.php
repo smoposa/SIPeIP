@@ -13,8 +13,7 @@
 
         <script>
             setTimeout(() => {
-                const alerta =
-                    document.getElementById('alertSuccess');
+                const alerta = document.getElementById('alertSuccess');
 
                 if (alerta) {
                     alerta.remove();
@@ -27,68 +26,67 @@
     <!-- Modal de registro exitoso -->
     @include('indicadores.partials.modal-exito')
 
-    <!-- Contenido principal -->
-    <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
+    <!-- Scroll vertical -->
+    <div class="overflow-y-auto"
+         style="height: calc(100vh - 180px);">
 
-        <!-- Encabezado de la página -->
-        <div class="mb-4">
+        <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
 
-            <h2 class="text-2xl font-semibold leading-tight text-gray-800">
-                Registrar un nuevo indicador institucional
-            </h2>
+            <!-- Encabezado de la página -->
+            <div class="mb-4">
 
-            <a href="{{ route('indicadores.listar') }}"
-               class="mt-0.5 inline-flex items-center text-sm font-medium
-                      text-blue-600 hover:text-blue-800">
+                <h2 class="text-2xl font-semibold leading-tight text-gray-800">
+                    Registrar un nuevo indicador institucional
+                </h2>
 
-                <i class="bi bi-arrow-left-short mr-1 text-lg"></i>
+                <a href="{{ route('indicadores.listar') }}"
+                   class="mt-0.5 inline-flex items-center text-sm font-medium
+                          text-blue-600 hover:text-blue-800">
 
-                Regresar
+                    <i class="bi bi-arrow-left-short mr-1 text-lg"></i>
 
-            </a>
+                    Regresar
 
-        </div>
-
-        <!-- Validaciones -->
-        @if($errors->any())
-
-            <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4">
-
-                <p class="mb-2 text-sm font-semibold text-red-700">
-                    Revise los siguientes campos:
-                </p>
-
-                <ul class="list-inside list-disc text-sm text-red-700">
-
-                    @foreach($errors->all() as $error)
-
-                        <li>{{ $error }}</li>
-
-                    @endforeach
-
-                </ul>
+                </a>
 
             </div>
 
-        @endif
+            <!-- Validaciones -->
+            @if($errors->any())
 
-        <!-- Error general -->
-        @if(session('error'))
+                <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4">
 
-            <div class="mb-5 rounded-lg border border-red-300
-                        bg-red-50 p-4 text-sm text-red-700">
+                    <p class="mb-2 text-sm font-semibold text-red-700">
+                        Revise los siguientes campos:
+                    </p>
 
-                {{ session('error') }}
+                    <ul class="list-inside list-disc text-sm text-red-700">
 
-            </div>
+                        @foreach($errors->all() as $error)
 
-        @endif
+                            <li>{{ $error }}</li>
 
-        <!-- Contenido con desplazamiento vertical -->
-        <div class="w-full min-w-0 max-w-full
-                    overflow-y-auto overflow-x-hidden"
-             style="height: calc(100vh - 190px);">
+                        @endforeach
 
+                    </ul>
+
+                </div>
+
+            @endif
+
+            <!-- Error general -->
+            @if(session('error'))
+
+                <div class="mb-5 rounded-lg border border-red-300
+                            bg-red-50 p-4 text-sm text-red-700">
+
+                    {{ session('error') }}
+
+                </div>
+
+            @endif
+
+            <!-- Formulario -->
             <form method="POST"
                   action="{{ route('indicadores.store') }}"
                   class="w-full min-w-0 max-w-full">

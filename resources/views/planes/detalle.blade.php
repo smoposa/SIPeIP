@@ -1,8 +1,11 @@
 <x-planes-layout title="Detalle del Plan Institucional">
 
     @if(session('success'))
+
         <div id="alertSuccess"
-             class="fixed top-5 right-5 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+             role="status"
+             class="fixed right-5 top-5 z-50 rounded-lg bg-green-600
+                    px-6 py-3 text-white shadow-lg">
 
             {{ session('success') }}
 
@@ -10,39 +13,53 @@
 
         <script>
             setTimeout(() => {
-                const alerta = document.getElementById('alertSuccess');
-
-                if (alerta) {
-                    alerta.remove();
-                }
+                document.getElementById('alertSuccess')?.remove();
             }, 3000);
         </script>
+
+    @endif
+
+    @if(session('error'))
+
+        <div role="alert"
+             class="mb-4 rounded-md border border-red-300
+                    bg-red-50 px-4 py-3 text-sm text-red-700">
+
+            {{ session('error') }}
+
+        </div>
+
     @endif
 
     <!-- Barra de acciones -->
-     @include('planes.partials.barra-menu')
+    @include('planes.partials.barra-menu')
 
+    <!-- Contenido -->
+    <div class="overflow-y-auto"
+         style="height: calc(100vh - 180px);">
 
-    <!-- Scroll vertical -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
+        <div class="min-w-0 bg-white p-6 shadow-sm">
 
-        <div class="bg-white p-6 shadow-sm">
-
-            <!-- Cabecera -->
             @include('planes.partials.encabezado-detalle')
 
-            <!-- Información General y Datos-->
             @include('planes.partials.informacion-general-detalle')
 
-            <!-- Objetivos estratégicos institucionales -->
             @include('planes.partials.objetivos-estrategicos')
 
-            <!-- Estado y versión del plan -->
-            @include('planes.partials.estado-auditoria')
+            @include('planes.partials.estado-detalle')
 
+            @include('planes.partials.auditoria')
 
         </div>
 
     </div>
+
+    <!-- Paneles de edición -->
+    @include('planes.edit')
+
+    @include('planes.editarestado')
+
+    <!-- Comportamiento del detalle -->
+    @include('planes.partials.script')
 
 </x-planes-layout>

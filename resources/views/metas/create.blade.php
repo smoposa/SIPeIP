@@ -13,8 +13,7 @@
 
         <script>
             setTimeout(() => {
-                const alerta =
-                    document.getElementById('alertSuccess');
+                const alerta = document.getElementById('alertSuccess');
 
                 if (alerta) {
                     alerta.remove();
@@ -27,70 +26,66 @@
     <!-- Modal de registro exitoso -->
     @include('metas.partials.modal-exito')
 
-    <!-- Contenido principal -->
-    <div class="flex min-w-0 max-w-full flex-col overflow-hidden
-                bg-white p-6 shadow-sm"
-         style="height: calc(100dvh - 51px);">
+    <!-- Scroll vertical -->
+    <div class="overflow-y-auto"
+         style="height: calc(100vh - 180px);">
 
-        <!-- Encabezado de la página -->
-        <div class="mb-4 flex-shrink-0">
+        <div class="min-w-0 max-w-full bg-white p-6 shadow-sm">
 
-            <h2 class="text-2xl font-semibold leading-tight text-gray-800">
-                Registrar una nueva meta institucional
-            </h2>
+            <!-- Encabezado -->
+            <div class="mb-4">
 
-            <a href="{{ route('metas.listar') }}"
-               class="mt-0.5 inline-flex items-center text-sm font-medium
-                      text-blue-600 hover:text-blue-800">
+                <h2 class="text-2xl font-semibold leading-tight text-gray-800">
+                    Registrar una nueva meta institucional
+                </h2>
 
-                <i class="bi bi-arrow-left-short mr-1 text-lg"></i>
+                <a href="{{ route('metas.listar') }}"
+                   class="mt-0.5 inline-flex items-center text-sm font-medium
+                          text-blue-600 hover:text-blue-800">
 
-                Regresar
+                    <i class="bi bi-arrow-left-short mr-1 text-lg"
+                       aria-hidden="true"></i>
 
-            </a>
+                    Regresar
 
-        </div>
-
-        <!-- Validaciones -->
-        @if($errors->any())
-
-            <div class="mb-5 flex-shrink-0 rounded-lg border
-                        border-red-300 bg-red-50 p-4">
-
-                <p class="mb-2 text-sm font-semibold text-red-700">
-                    Revise los siguientes campos:
-                </p>
-
-                <ul class="list-inside list-disc text-sm text-red-700">
-
-                    @foreach($errors->all() as $error)
-
-                        <li>{{ $error }}</li>
-
-                    @endforeach
-
-                </ul>
+                </a>
 
             </div>
 
-        @endif
+            <!-- Validaciones -->
+            @if($errors->any())
 
-        <!-- Mensaje de error -->
-        @if(session('error'))
+                <div class="mb-5 rounded-lg border border-red-300 bg-red-50 p-4">
 
-            <div class="mb-5 flex-shrink-0 rounded-lg border
-                        border-red-300 bg-red-50 p-4 text-sm text-red-700">
+                    <p class="mb-2 text-sm font-semibold text-red-700">
+                        Revise los siguientes campos:
+                    </p>
 
-                {{ session('error') }}
+                    <ul class="list-inside list-disc text-sm text-red-700">
 
-            </div>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
 
-        @endif
+                    </ul>
 
-        <!-- Contenido con desplazamiento interno -->
-        <div class="min-h-0 w-full min-w-0 max-w-full flex-1
-                    overflow-y-auto overflow-x-hidden">
+                </div>
 
+            @endif
+
+            <!-- Mensaje de error -->
+            @if(session('error'))
+
+                <div class="mb-5 rounded-lg border border-red-300 bg-red-50
+                            p-4 text-sm text-red-700">
+
+                    {{ session('error') }}
+
+                </div>
+
+            @endif
+
+            <!-- Formulario -->
             <form method="POST"
                   action="{{ route('metas.store') }}"
                   class="w-full min-w-0 max-w-full">
@@ -99,20 +94,14 @@
 
                 @include('metas.partials.barra-progreso')
 
-                <!--
-                    Este encabezado aparece solamente cuando
-                    se continúa desde un objetivo registrado.
-                -->
+                <!-- Encabezado al continuar desde un objetivo registrado -->
                 @if($planSeleccionado && $objetivoSeleccionado)
 
                     @include('metas.partials.encabezado')
 
                 @endif
 
-                <!--
-                    Desde el menú mostrará los selectores Plan → Objetivo.
-                    Desde el asistente enviará ambos valores ocultos.
-                -->
+                <!-- Datos de la meta y asociación con Plan → Objetivo -->
                 @include('metas.partials.informacion-general')
 
                 @include('metas.partials.acciones')

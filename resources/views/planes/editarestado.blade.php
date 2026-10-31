@@ -1,136 +1,176 @@
-<x-planes-layout title="Editar Estado del Plan">
+@if(puedeHacer('planes', 'estado'))
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300">
+    @php
+        $recuperarEstado =
+            (string) old('_plan_estado_form', '') === (string) $plan->id;
 
-        <div class="flex">
+        $planHabilitado = $recuperarEstado
+            ? (string) old('estado', '0') === '1'
+            : $plan->estado === 'Activo';
+    @endphp
 
-            <a href="{{ route('planes.detalle', $plan->id) }}"
-               class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
 
-                <i class="bi bi-chevron-left"></i>
-                Regresar
+    <!-- Panel de estado -->
+    <dialog
+        id="panelEstadoPlan"
+        aria-labelledby="tituloPanelEstadoPlan"
+        class="bg-white p-0 shadow-xl"
+        style="position: fixed; inset: 0 0 0 auto; margin: 0 0 0 auto;
+               width: min(100%, 480px); height: 100dvh;
+               max-width: 100%; max-height: none; border: 0;">
 
-            </a>
+        <form
+            id="formularioEstadoPlan"
+            method="POST"
+            action="{{ route('planes.actualizarestado', $plan->id) }}"
+            class="flex h-full flex-col">
 
-        </div>
+            @csrf
+            @method('PUT')
 
-    </div>
+            <input type="hidden"
+                   name="_plan_estado_form"
+                   value="{{ $plan->id }}">
 
-    <!-- Scroll vertical -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
-        <!-- Encabezado -->
-        <div class="p-6">
+            <!-- Encabezado -->
+            <div class="flex shrink-0 items-center justify-between gap-4
+                        border-b border-gray-200 px-6 py-4">
 
-            <h2 class="text-2xl font-semibold text-gray-800">
-                Editar estado administrativo
-            </h2>
+                <div class="min-w-0">
 
-            <p class="mt-1 text-sm text-gray-500">
-                Habilite o deshabilite el plan institucional dentro del sistema.
-            </p>
+                    <h2 id="tituloPanelEstadoPlan"
+                        class="text-xl font-semibold text-gray-800">
+                        Editar estado administrativo
+                    </h2>
 
-        </div>
-
-        <!-- Formulario -->
-        <div class="bg-white p-6">
-
-            <!-- Información actual -->
-            <div class="mb-8">
-
-                <div class="flex items-center mb-4">
-
-                    <span class="w-44 text-sm font-semibold text-gray-700">
-                        Plan
-                    </span>
-
-                    <span class="text-sm text-gray-600">
+                    <p class="mt-1 break-words text-sm text-gray-500">
                         {{ $plan->nombre }}
-                    </span>
+                    </p>
 
                 </div>
 
-                <div class="flex items-center mb-4">
+                <button type="button"
+                        data-cerrar-panel-estado-plan
+                        aria-label="Cerrar panel"
+                        class="shrink-0 p-2 text-gray-500
+                               hover:bg-gray-100 hover:text-gray-800">
 
-                    <span class="w-44 text-sm font-semibold text-gray-700">
-                        Estado del proceso
-                    </span>
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
 
-                    <span class="text-sm text-gray-600">
-                        {{ $plan->estado_proceso }}
-                    </span>
-
-                </div>
-
-                <div class="flex items-center">
-
-                    <span class="w-44 text-sm font-semibold text-gray-700">
-                        Versión
-                    </span>
-
-                    <span class="text-sm text-gray-600">
-                        v{{ $plan->version }}
-                    </span>
-
-                </div>
+                </button>
 
             </div>
 
-            <form method="POST"
-                  action="{{ route('planes.actualizarestado', $plan->id) }}">
 
-                @csrf
-                @method('PUT')
+            <!-- Contenido -->
+            <div class="min-h-0 flex-1 overflow-y-auto px-6 py-5">
 
-                <div class="flex items-center gap-12">
+                @if($recuperarEstado && $errors->any())
 
-                    <label class="w-32 text-sm font-medium text-gray-700">
-                        Plan habilitado
-                    </label>
+                    <div role="alert"
+                         class="mb-5 rounded-md bg-red-50 px-4 py-3
+                                text-sm text-red-800">
 
-                    <input
-                        type="hidden"
-                        name="estado"
-                        value="0">
+                        @foreach($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+
+                    </div>
+
+                @endif
+
+
+                <div class="mb-6 space-y-3 rounded-md bg-gray-50 p-4">
+
+                    <div>
+
+                        <p class="text-xs font-semibold text-gray-700">
+                            Estado del proceso
+                        </p>
+
+                        <p class="mt-1 text-sm text-gray-600">
+                            {{ $plan->estado_proceso }}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <p class="text-xs font-semibold text-gray-700">
+                            Versión
+                        </p>
+
+                        <p class="mt-1 text-sm text-gray-600">
+                            v{{ $plan->version }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Estado administrativo -->
+                <input type="hidden"
+                       name="estado"
+                       value="0">
+
+                <label for="estadoPanelPlan"
+                       class="inline-flex items-center gap-3
+                              text-sm font-medium text-gray-700">
 
                     <input
                         type="checkbox"
+                        id="estadoPanelPlan"
                         name="estado"
                         value="1"
-                        {{ $plan->estado === 'Activo' ? 'checked' : '' }}
+                        @checked($planHabilitado)
                         class="w-5 h-5">
 
-                </div>
+                    Plan habilitado
 
-                <p class="mt-3 ml-44 text-xs text-gray-500">
-                    Este cambio afecta únicamente la disponibilidad administrativa del plan.
+                </label>
+
+                <p class="mt-3 text-xs text-gray-500">
+                    Este cambio afecta únicamente la disponibilidad
+                    administrativa del plan.
                 </p>
 
-                <!-- Botones -->
-                <div class="flex gap-3 mt-10">
+            </div>
 
-                    <button
-                        type="submit"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
 
-                        Guardar
+            <!-- Acciones -->
+            <div class="flex shrink-0 flex-wrap justify-end gap-3
+                        border-t border-gray-200 bg-white px-6 py-4">
 
-                    </button>
+                <button type="submit"
+                        class="inline-flex h-10 items-center justify-center gap-2
+                               rounded-md bg-[#024687] px-5 text-sm font-medium
+                               text-white transition hover:bg-[#01325f]
+                               focus:outline-none focus:ring-2 focus:ring-blue-600
+                               focus:ring-offset-2">
 
-                    <a href="{{ route('planes.detalle', $plan->id) }}"
-                       class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-md">
+                    <i class="bi bi-check-circle" aria-hidden="true"></i>
+                    Guardar cambios
 
-                        Cancelar
+                </button>
 
-                    </a>
+                <button type="button"
+                        data-cerrar-panel-estado-plan
+                        class="inline-flex h-10 items-center justify-center
+                               rounded-md bg-gray-200 px-5 text-sm font-medium
+                               text-gray-700 transition hover:bg-gray-300
+                               focus:outline-none focus:ring-2 focus:ring-gray-400
+                               focus:ring-offset-2">
 
-                </div>
+                    Cancelar
 
-            </form>
+                </button>
 
-        </div>
+            </div>
 
-    </div>
+        </form>
 
-</x-planes-layout>
+    </dialog>
+
+@endif

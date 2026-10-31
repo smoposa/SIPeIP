@@ -9,13 +9,14 @@
 
     </div>
 
-    <div class="pl-8">
+    <div class="min-w-0 pl-8">
 
         <!-- Objetivo PND -->
-        <div class="mb-5 flex items-center gap-4">
+        <div class="mb-5 flex min-w-0 flex-col gap-2 md:flex-row md:gap-4">
 
             <label for="pnd_id"
-                   class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+                   class="flex-shrink-0 text-sm font-semibold
+                          text-gray-700 md:w-52 md:pt-2">
 
                 Objetivo del PND
                 <span class="text-red-500">*</span>
@@ -27,16 +28,28 @@
                 <select id="pnd_id"
                         name="pnd_id"
                         required
-                        class="h-10 w-full min-w-0 rounded-md border-gray-300 px-3 text-sm">
+                        aria-describedby="descripcionObjetivoPnd"
+                        class="h-10 w-full min-w-0 rounded-md border-gray-300
+                               px-3 text-sm focus:border-blue-500
+                               focus:ring-blue-500">
 
-                    <option value="">Seleccione</option>
+                    <option value="">Seleccione un objetivo</option>
 
                     @foreach($pnd as $objetivo)
 
-                        <option value="{{ $objetivo->id }}"
-                            {{ old('pnd_id') == $objetivo->id ? 'selected' : '' }}>
+                        @php
+                            $textoObjetivoPnd =
+                                'Objetivo ' . $objetivo->numero .
+                                ' - ' . $objetivo->nombre;
+                        @endphp
 
-                            Objetivo {{ $objetivo->numero }} - {{ $objetivo->nombre }}
+                        <option value="{{ $objetivo->id }}"
+                                data-descripcion="{{ $textoObjetivoPnd }}"
+                                @selected(
+                                    (string) old('pnd_id') === (string) $objetivo->id
+                                )>
+
+                            {{ $textoObjetivoPnd }}
 
                         </option>
 
@@ -44,33 +57,73 @@
 
                 </select>
 
+                <p id="descripcionObjetivoPnd"
+                   aria-live="polite"
+                   class="mt-2 break-words text-sm leading-relaxed
+                          text-gray-600"></p>
+
             </div>
 
         </div>
 
-        <!-- Política Pública -->
-        <div class="flex items-center gap-4">
+        <!-- Política pública -->
+        <div class="flex min-w-0 flex-col gap-2 md:flex-row md:gap-4">
 
-            <label for="pnd_politica_id"
-                   class="w-52 flex-shrink-0 text-sm font-semibold text-gray-700">
+            <div id="etiquetaPoliticaPnd"
+                 class="flex-shrink-0 text-sm font-semibold
+                        text-gray-700 md:w-52 md:pt-2">
 
-                Política Pública
+                Política pública
                 <span class="text-red-500">*</span>
 
-            </label>
+            </div>
 
             <div class="min-w-0 flex-1">
 
-                <select id="pnd_politica_id"
-                        name="pnd_politica_id"
-                        required
-                        class="h-10 w-full min-w-0 rounded-md border-gray-300 px-3 text-sm">
+                <details id="selectorPoliticaPnd"
+                         class="rounded-md border border-gray-300 bg-white">
 
-                    <option value="">
-                        Seleccione un objetivo primero
-                    </option>
+                    <!-- Selección actual -->
+                    <summary id="resumenPoliticaPnd"
+                             aria-labelledby="etiquetaPoliticaPnd textoPoliticaPnd"
+                             class="flex cursor-pointer list-none items-start
+                                    justify-between gap-3 rounded-md px-3 py-2
+                                    text-sm focus:outline-none focus:ring-2
+                                    focus:ring-blue-500">
 
-                </select>
+                        <span id="textoPoliticaPnd"
+                              class="min-w-0 flex-1 whitespace-normal
+                                     break-words text-left leading-relaxed">
+
+                            Seleccione un objetivo primero
+
+                        </span>
+
+                        <i class="bi bi-chevron-down mt-1 flex-shrink-0
+                                  text-gray-500"
+                           aria-hidden="true"></i>
+
+                    </summary>
+
+                    <!-- Opciones con texto completo -->
+                    <div id="listaPoliticasPnd"
+                         role="group"
+                         aria-labelledby="etiquetaPoliticaPnd"
+                         class="max-h-80 overflow-y-auto border-t
+                                border-gray-200 p-2">
+
+                        <p class="px-3 py-2 text-sm text-gray-500">
+                            Seleccione un objetivo PND para consultar sus políticas.
+                        </p>
+
+                    </div>
+
+                </details>
+
+                <p id="mensajePoliticaPnd"
+                   role="status"
+                   aria-live="polite"
+                   class="mt-2 break-words text-sm text-red-600"></p>
 
             </div>
 
@@ -80,78 +133,273 @@
 
 </div>
 
+<style>
+    #resumenPoliticaPnd::-webkit-details-marker {
+        display: none;
+    }
+</style>
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const objetivo = document.getElementById('pnd_id');
-    const politica = document.getElementById('pnd_politica_id');
+    document.addEventListener('DOMContentLoaded', function () {
 
-    const politicaSeleccionada =
-        @json(old('pnd_politica_id'));
+        const objetivo = document.getElementById('pnd_id');
+        const descripcionObjetivo = document.getElementById(
+            'descripcionObjetivoPnd'
+        );
 
-    function cargarPoliticas(
-        objetivoId,
-        seleccionada = null
-    ) {
-        politica.innerHTML =
-            '<option value="">Cargando...</option>';
+        const selector = document.getElementById('selectorPoliticaPnd');
+        const resumen = document.getElementById('resumenPoliticaPnd');
+        const textoSeleccionado = document.getElementById('textoPoliticaPnd');
+        const lista = document.getElementById('listaPoliticasPnd');
+        const mensaje = document.getElementById('mensajePoliticaPnd');
+        const formulario = objetivo.closest('form');
 
-        if (!objetivoId) {
-            politica.innerHTML =
-                '<option value="">Seleccione un objetivo primero</option>';
+        const politicaAnterior = {{
+            \Illuminate\Support\Js::from(old('pnd_politica_id'))
+        }};
 
-            return;
+        const basePoliticas = {{
+            \Illuminate\Support\Js::from(url('/objetivos/pnd'))
+        }};
+
+        let solicitud = null;
+        let version = 0;
+
+
+        // Mostrar el nombre completo del objetivo seleccionado.
+        function mostrarObjetivo() {
+
+            const opcion = objetivo.selectedOptions[0];
+
+            descripcionObjetivo.textContent = opcion?.value
+                ? opcion.dataset.descripcion ?? ''
+                : '';
+
         }
 
-        fetch(`/objetivos/pnd/${objetivoId}/politicas`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(
-                        'Error al obtener las políticas.'
-                    );
+
+        // Mostrar un mensaje dentro de la lista.
+        function mostrarMensajeLista(texto) {
+
+            const parrafo = document.createElement('p');
+
+            parrafo.className = 'px-3 py-2 text-sm text-gray-500';
+            parrafo.textContent = texto;
+
+            lista.replaceChildren(parrafo);
+
+        }
+
+
+        // Cargar las políticas del objetivo seleccionado.
+        async function cargarPoliticas(
+            objetivoId,
+            seleccionada = null
+        ) {
+
+            const versionActual = ++version;
+
+            solicitud?.abort();
+
+            selector.open = false;
+            mensaje.textContent = '';
+
+            textoSeleccionado.textContent = objetivoId
+                ? 'Cargando políticas...'
+                : 'Seleccione un objetivo primero';
+
+            mostrarMensajeLista(
+                objetivoId
+                    ? 'Cargando políticas...'
+                    : 'Seleccione un objetivo PND para consultar sus políticas.'
+            );
+
+            if (!objetivoId) {
+                return;
+            }
+
+            const controlador = new AbortController();
+
+            solicitud = controlador;
+
+            try {
+
+                const respuesta = await fetch(
+                    `${basePoliticas}/${encodeURIComponent(objetivoId)}/politicas`,
+                    {
+                        signal: controlador.signal,
+                        credentials: 'same-origin',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    }
+                );
+
+                if (!respuesta.ok) {
+                    throw new Error('No se pudieron cargar las políticas.');
                 }
 
-                return response.json();
-            })
-            .then(data => {
-                politica.innerHTML =
-                    '<option value="">Seleccione una política</option>';
+                const registros = await respuesta.json();
 
-                if (data.length === 0) {
-                    politica.innerHTML =
-                        '<option value="">No existen políticas registradas</option>';
+                if (!Array.isArray(registros)) {
+                    throw new Error('La respuesta no es válida.');
+                }
 
+                if (versionActual !== version) {
                     return;
                 }
 
-                data.forEach(item => {
-                    const option = new Option(
-                        `${item.codigo} - ${item.nombre}`,
-                        item.id
+                textoSeleccionado.textContent = registros.length
+                    ? 'Seleccione una política'
+                    : 'No existen políticas disponibles';
+
+                lista.replaceChildren();
+
+                if (!registros.length) {
+
+                    mostrarMensajeLista(
+                        'No existen políticas disponibles para este objetivo.'
                     );
 
-                    option.selected =
-                        String(item.id) === String(seleccionada);
+                    return;
 
-                    politica.add(option);
+                }
+
+                registros.forEach(function (registro, indice) {
+
+                    const textoCompleto = [
+                        registro.codigo,
+                        registro.nombre
+                    ].filter(Boolean).join(' - ');
+
+                    const etiqueta = document.createElement('label');
+
+                    etiqueta.className =
+                        'flex cursor-pointer items-start gap-3 rounded-md ' +
+                        'px-3 py-3 hover:bg-blue-50';
+
+                    const radio = document.createElement('input');
+
+                    radio.type = 'radio';
+                    radio.name = 'pnd_politica_id';
+                    radio.id = `politicaPndOpcion-${indice}`;
+                    radio.value = String(registro.id);
+                    radio.required = true;
+
+                    radio.className =
+                        'mt-1 h-4 w-4 flex-shrink-0 border-gray-300 ' +
+                        'text-blue-600 focus:ring-blue-500';
+
+                    radio.checked = seleccionada != null
+                        && String(registro.id) === String(seleccionada);
+
+                    const texto = document.createElement('span');
+
+                    texto.className =
+                        'min-w-0 flex-1 whitespace-normal break-words ' +
+                        'text-left text-sm leading-relaxed text-gray-700';
+
+                    texto.textContent = textoCompleto;
+
+                    etiqueta.append(radio, texto);
+                    lista.append(etiqueta);
+
+                    if (radio.checked) {
+                        textoSeleccionado.textContent = textoCompleto;
+                    }
+
+                    radio.addEventListener('change', function () {
+
+                        if (!radio.checked) {
+                            return;
+                        }
+
+                        textoSeleccionado.textContent = textoCompleto;
+
+                        mensaje.textContent = '';
+                        selector.open = false;
+
+                        resumen.focus({
+                            preventScroll: true
+                        });
+
+                    });
+
+                    // Abrir la lista si falta seleccionar una política.
+                    radio.addEventListener('invalid', function () {
+
+                        selector.open = true;
+
+                        mensaje.textContent =
+                            'Seleccione una política pública.';
+
+                    });
+
                 });
-            })
-            .catch(error => {
-                console.error(error);
 
-                politica.innerHTML =
-                    '<option value="">Error al cargar las políticas</option>';
-            });
-    }
+            } catch (error) {
 
-    objetivo.addEventListener('change', function () {
-        cargarPoliticas(this.value);
+                if (
+                    error.name === 'AbortError'
+                    || versionActual !== version
+                ) {
+                    return;
+                }
+
+                textoSeleccionado.textContent =
+                    'No se pudieron cargar las políticas';
+
+                mostrarMensajeLista(
+                    'Vuelva a seleccionar el objetivo PND para intentar nuevamente.'
+                );
+
+                mensaje.textContent =
+                    'No se pudieron cargar las políticas.';
+
+            }
+
+        }
+
+
+        objetivo.addEventListener('change', function () {
+
+            mostrarObjetivo();
+
+            cargarPoliticas(objetivo.value);
+
+        });
+
+
+        // Impedir guardar mientras no exista una política seleccionada.
+        formulario?.addEventListener('submit', function (evento) {
+
+            const seleccionada = lista.querySelector(
+                'input[name="pnd_politica_id"]:checked'
+            );
+
+            if (!seleccionada) {
+
+                evento.preventDefault();
+
+                mensaje.textContent =
+                    'Seleccione una política pública antes de guardar.';
+
+                selector.open = true;
+                resumen.focus();
+
+            }
+
+        });
+
+
+        mostrarObjetivo();
+
+        if (objetivo.value) {
+            cargarPoliticas(
+                objetivo.value,
+                politicaAnterior
+            );
+        }
+
     });
-
-    if (objetivo.value) {
-        cargarPoliticas(
-            objetivo.value,
-            politicaSeleccionada
-        );
-    }
-});
 </script>

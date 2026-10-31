@@ -1,16 +1,18 @@
-<!-- Información general -->
+<!-- Información del plan -->
 <div class="border-b border-gray-200 bg-gray-100">
 
-    <div class="flex items-center justify-between px-4 py-2">
+    <div class="flex items-center justify-between gap-4 px-4 py-2">
 
         <h4 class="text-sm font-semibold text-gray-800">
-            Información general
+            Información del plan
         </h4>
 
         @if(puedeHacer('planes', 'editar'))
 
             <a href="{{ route('planes.edit', $plan->id) }}"
-               class="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+               data-editar-plan
+               class="text-sm text-blue-600 hover:text-blue-800
+                      hover:underline">
 
                 Editar
 
@@ -22,90 +24,62 @@
 
 </div>
 
-<!-- Datos del plan -->
+<!-- Datos editables del plan -->
 <div class="px-4 py-5">
 
-    <div class="min-w-0 space-y-5">
+    <dl class="min-w-0 space-y-5">
 
-        <!-- Entidad -->
-        <div class="flex min-w-0 items-start gap-4">
+        <!-- Nombre -->
+        <div class="flex min-w-0 flex-col gap-1 sm:flex-row sm:gap-4">
 
-            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                Nombre de la entidad
-            </span>
+            <dt class="flex-shrink-0 text-sm font-semibold
+                       text-gray-700 sm:w-44">
 
-            <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
-                {{ $plan->entidad?->nombre ?? 'No registra' }}
-            </span>
+                Nombre del plan
 
-        </div>
+            </dt>
 
-        <!-- Código -->
-        <div class="flex min-w-0 items-start gap-4">
+            <dd class="min-w-0 flex-1 break-words text-sm
+                       font-medium text-[#0F766E]">
 
-            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                Código del plan
-            </span>
+                {{ $plan->nombre ?? 'No registra' }}
 
-            <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
-                {{ $plan->codigo ?? 'No registra' }}
-            </span>
-
-        </div>
-
-        <!-- Tipo -->
-        <div class="flex min-w-0 items-start gap-4">
-
-            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                Tipo de plan
-            </span>
-
-            <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
-                {{ $plan->tipo ?: 'No registra' }}
-            </span>
+            </dd>
 
         </div>
 
         <!-- Período -->
-        <div class="flex min-w-0 items-start gap-4">
+        <div class="flex min-w-0 flex-col gap-1 sm:flex-row sm:gap-4">
 
-            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+            <dt class="flex-shrink-0 text-sm font-semibold
+                       text-gray-700 sm:w-44">
+
                 Período de vigencia
-            </span>
 
-            <span class="min-w-0 flex-1 break-words text-sm text-gray-600">
+            </dt>
+
+            <dd class="min-w-0 flex-1 text-sm text-gray-600">
+
                 {{ $plan->periodo_inicio }} - {{ $plan->periodo_fin }}
-            </span>
 
-        </div>
-
-        <!-- Nombre -->
-        <div class="flex min-w-0 items-start gap-4">
-
-            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
-                Nombre del plan
-            </span>
-
-            <span class="min-w-0 flex-1 break-words text-sm font-medium text-[#0F766E]">
-                {{ $plan->nombre ?? 'No registra' }}
-            </span>
+            </dd>
 
         </div>
 
         <!-- Descripción -->
-        <div class="flex min-w-0 items-start gap-4">
+        <div class="flex min-w-0 flex-col gap-1 sm:flex-row sm:gap-4">
 
-            <span class="w-44 flex-shrink-0 text-sm font-semibold text-gray-700">
+            <dt class="flex-shrink-0 text-sm font-semibold
+                       text-gray-700 sm:w-44">
+
                 Descripción
-            </span>
 
-            <span class="min-w-0 flex-1 whitespace-pre-line break-words
-                         text-sm leading-relaxed text-gray-600">
-                {{ $plan->descripcion ?: 'No registra' }}
-            </span>
+            </dt>
+
+            <dd class="min-w-0 flex-1 whitespace-pre-line break-words text-sm leading-relaxed text-gray-600">{{ $plan->descripcion ?: 'No registra' }}</dd>
 
         </div>
 
-    </div>
+    </dl>
 
 </div>

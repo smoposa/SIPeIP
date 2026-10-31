@@ -17,22 +17,18 @@ class PlanController extends Controller
     ) {
     }
 
-    /**
-     * Panel principal de planes.
-     */
+    // Mostrar el panel principal de planes.
     public function index(): View
     {
         $this->autorizar('planes');
 
         try {
+
             $resumen = $this->planService->obtenerResumen(
                 auth()->user()
             );
 
-            return view(
-                'planes.index',
-                $resumen
-            );
+            return view('planes.index', $resumen);
 
         } catch (DomainException $e) {
 
@@ -42,43 +38,38 @@ class PlanController extends Controller
                 'planesInactivos' => 0,
                 'errorContexto' => $e->getMessage(),
             ]);
+
         }
     }
 
-    /**
-     * Formulario para crear un plan institucional.
-     */
+    // Mostrar el formulario de creación.
     public function create(): View|RedirectResponse
     {
         $this->autorizar('planes', 'crear');
 
         try {
+
             $codigo = $this->planService->generarCodigo(
                 auth()->user()
             );
 
-            return view(
-                'planes.create',
-                compact('codigo')
-            );
+            return view('planes.create', compact('codigo'));
 
         } catch (DomainException $e) {
 
-            return $this->redirigirPorContextoInvalido(
-                $e
-            );
+            return $this->redirigirPorContextoInvalido($e);
+
         }
     }
 
-    /**
-     * Registrar un nuevo plan institucional.
-     */
+    // Registrar un plan institucional.
     public function store(
         StorePlanRequest $request
     ): RedirectResponse {
         $this->autorizar('planes', 'crear');
 
         try {
+
             $plan = $this->planService->crear(
                 $request->validated(),
                 auth()->user()
@@ -99,30 +90,23 @@ class PlanController extends Controller
 
         } catch (DomainException $e) {
 
-            return $this->redirigirPorContextoInvalido(
-                $e
-            );
+            return $this->redirigirPorContextoInvalido($e);
+
         }
     }
 
-    /**
-     * Listar planes pertenecientes
-     * a la entidad del usuario autenticado.
-     */
+    // Listar los planes accesibles para el usuario.
     public function listar(): View|RedirectResponse
     {
         $this->autorizar('planes');
 
         try {
+
             $usuario = auth()->user();
 
-            $planes = $this->planService->listar(
-                $usuario
-            );
+            $planes = $this->planService->listar($usuario);
 
-            $resumen = $this->planService->obtenerResumen(
-                $usuario
-            );
+            $resumen = $this->planService->obtenerResumen($usuario);
 
             return view('planes.listar', [
                 'planes' => $planes,
@@ -133,9 +117,8 @@ class PlanController extends Controller
 
         } catch (DomainException $e) {
 
-            return $this->redirigirPorContextoInvalido(
-                $e
-            );
+            return $this->redirigirPorContextoInvalido($e);
+
         }
     }
 
@@ -148,9 +131,10 @@ class PlanController extends Controller
         $this->autorizar('planes');
 
         try {
-            $plan = $this->planService->obtenerAccesible(
+            $plan = $this->planService->obtenerDetalle(
                 $id,
-                auth()->user()
+                auth()->user(),
+                puedeVer('objetivos')
             );
 
             return view(
@@ -166,36 +150,30 @@ class PlanController extends Controller
         }
     }
 
-    /**
-     * Formulario para editar un plan.
-     */
-    public function edit(
-        int $id
-    ): View|RedirectResponse {
+    // Abrir el panel de información desde la ruta de edición.
+    public function edit(int $id): RedirectResponse
+    {
         $this->autorizar('planes', 'editar');
 
         try {
+
             $plan = $this->planService->obtenerAccesible(
                 $id,
                 auth()->user()
             );
 
-            return view(
-                'planes.edit',
-                compact('plan')
-            );
+            return redirect()
+                ->route('planes.detalle', $plan->id)
+                ->with('abrir_panel_plan', 'informacion');
 
         } catch (DomainException $e) {
 
-            return $this->redirigirPorContextoInvalido(
-                $e
-            );
+            return $this->redirigirPorContextoInvalido($e);
+
         }
     }
 
-    /**
-     * Actualizar información del plan.
-     */
+    // Actualizar la información del plan.
     public function update(
         UpdatePlanRequest $request,
         int $id
@@ -203,6 +181,7 @@ class PlanController extends Controller
         $this->autorizar('planes', 'editar');
 
         try {
+
             $plan = $this->planService->actualizar(
                 $id,
                 $request->validated(),
@@ -210,10 +189,7 @@ class PlanController extends Controller
             );
 
             return redirect()
-                ->route(
-                    'planes.detalle',
-                    $plan->id
-                )
+                ->route('planes.detalle', $plan->id)
                 ->with(
                     'success',
                     'Plan actualizado correctamente.'
@@ -221,44 +197,35 @@ class PlanController extends Controller
 
         } catch (DomainException $e) {
 
-            return $this->redirigirPorContextoInvalido(
-                $e
-            );
+            return $this->redirigirPorContextoInvalido($e);
+
         }
     }
 
-    /**
-     * Formulario para cambiar
-     * el estado administrativo.
-     */
-    public function editarEstado(
-        int $id
-    ): View|RedirectResponse {
+    // Abrir el panel de estado desde la ruta existente.
+    public function editarEstado(int $id): RedirectResponse
+    {
         $this->autorizar('planes', 'estado');
 
         try {
+
             $plan = $this->planService->obtenerAccesible(
                 $id,
                 auth()->user()
             );
 
-            return view(
-                'planes.editarestado',
-                compact('plan')
-            );
+            return redirect()
+                ->route('planes.detalle', $plan->id)
+                ->with('abrir_panel_plan', 'estado');
 
         } catch (DomainException $e) {
 
-            return $this->redirigirPorContextoInvalido(
-                $e
-            );
+            return $this->redirigirPorContextoInvalido($e);
+
         }
     }
 
-    /**
-     * Actualizar estado administrativo:
-     * Activo / Inactivo.
-     */
+    // Actualizar únicamente el estado administrativo.
     public function actualizarEstado(
         UpdatePlanStatusRequest $request,
         int $id
@@ -266,18 +233,15 @@ class PlanController extends Controller
         $this->autorizar('planes', 'estado');
 
         try {
-            $plan = $this->planService
-                ->cambiarEstadoAdministrativo(
-                    $id,
-                    $request->boolean('estado'),
-                    auth()->user()
-                );
+
+            $plan = $this->planService->cambiarEstadoAdministrativo(
+                $id,
+                $request->boolean('estado'),
+                auth()->user()
+            );
 
             return redirect()
-                ->route(
-                    'planes.detalle',
-                    $plan->id
-                )
+                ->route('planes.detalle', $plan->id)
                 ->with(
                     'success',
                     'Estado del plan actualizado correctamente.'
@@ -285,16 +249,12 @@ class PlanController extends Controller
 
         } catch (DomainException $e) {
 
-            return $this->redirigirPorContextoInvalido(
-                $e
-            );
+            return $this->redirigirPorContextoInvalido($e);
+
         }
     }
 
-    /**
-     * Redirigir al inicio de Planes cuando
-     * el contexto institucional no sea válido.
-     */
+    // Redirigir cuando el contexto institucional no sea válido.
     private function redirigirPorContextoInvalido(
         DomainException $exception
     ): RedirectResponse {

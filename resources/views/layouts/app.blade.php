@@ -14,7 +14,36 @@
         content="{{ csrf_token() }}"
     >
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    @php
+    $modulosTitulo = [
+        'roles' => 'Roles',
+        'usuarios' => 'Usuarios',
+        'entidades' => 'Entidades',
+        'planes' => 'Planes',
+        'objetivos' => 'Objetivos',
+        'metas' => 'Metas',
+        'indicadores' => 'Indicadores',
+        'programas' => 'Programas',
+        'proyectos' => 'Proyectos',
+        'avances' => 'Avances físicos',
+        'presupuestos' => 'Presupuestos',
+        'ods' => 'ODS',
+        'pnd' => 'PND',
+        'clasificacion_inversion' => 'Clasificación de inversión',
+        'reportes' => 'Reportes',
+    ];
+
+    $nombreRuta = request()->route()?->getName() ?? '';
+
+    $moduloActual = explode('.', $nombreRuta)[0];
+
+    $tituloModulo = $modulosTitulo[$moduloActual] ?? 'Inicio';
+@endphp
+
+<title>SIPeIP | {{ $tituloModulo }}</title>
+
+    <!-- Favicon -->
+    @include('layouts.partials.favicon')
 
 
     <!-- Fuentes -->
@@ -111,7 +140,7 @@
                 :aria-label="sidebarCollapsed
                     ? 'Expandir menú lateral'
                     : 'Contraer menú lateral'"
-                class="absolute right-0 top-5 z-50
+                class="absolute right-0 bottom-5 z-50
                        flex h-8 w-8 translate-x-1/2
                        items-center justify-center
                        rounded-full

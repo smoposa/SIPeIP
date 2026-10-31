@@ -25,6 +25,7 @@ use App\Http\Controllers\PresupuestoController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\DashboardController;
 
+
 // Página principal
 Route::get('/', function () {
     return redirect('/login');
@@ -358,7 +359,6 @@ Route::middleware([
                 ->name('objetivo');
 
     });
-
 
     /*
     |--------------------------------------------------------------------------

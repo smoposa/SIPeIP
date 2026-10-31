@@ -12,7 +12,6 @@ use App\Repositories\Contracts\PlanRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use DomainException;
 
-
 class PlanService
 {
     public function __construct(
@@ -21,8 +20,7 @@ class PlanService
     }
 
     /**
-     * Obtener resumen de planes accesibles
-     * para el usuario autenticado.
+     * Obtener resumen de planes accesibles.
      */
     public function obtenerResumen(User $usuario): array
     {
@@ -41,8 +39,7 @@ class PlanService
     }
 
     /**
-     * Listar planes accesibles para
-     * el usuario autenticado.
+     * Listar planes de la entidad del usuario.
      */
     public function listar(
         User $usuario,
@@ -57,8 +54,7 @@ class PlanService
     }
 
     /**
-     * Obtener un plan asegurando que
-     * pertenezca a la entidad del usuario.
+     * Obtener un plan de la entidad del usuario.
      */
     public function obtenerAccesible(
         int $id,
@@ -73,8 +69,35 @@ class PlanService
     }
 
     /**
-     * Generar el siguiente código automático
-     * para el Plan Estratégico Institucional.
+     * Obtener los datos para consultar el detalle del plan.
+     */
+    public function obtenerDetalle(
+        int $id,
+        User $usuario,
+        bool $consultarObjetivos = false
+    ): Plan {
+        $plan = $this->obtenerAccesible(
+            $id,
+            $usuario
+        );
+
+        if ($consultarObjetivos) {
+            $plan->loadMissing([
+                'objetivos.pnd',
+                'objetivos.politicaPnd',
+                'objetivos.ods',
+                'objetivos.metaOds',
+                'objetivos.usuario',
+            ]);
+
+            $plan->objetivos->loadCount('metas');
+        }
+
+        return $plan;
+    }
+
+    /**
+     * Generar el siguiente código del plan.
      */
     public function generarCodigo(User $usuario): string
     {
@@ -88,7 +111,7 @@ class PlanService
     }
 
     /**
-     * Crear un nuevo Plan Estratégico Institucional.
+     * Crear un Plan Estratégico Institucional.
      */
     public function crear(
         array $datos,
@@ -101,11 +124,8 @@ class PlanService
         $datos['codigo'] =
             $this->generarCodigoParaEntidad($entidad);
 
-        $datos['entidad_id'] =
-            $entidad->id;
-
-        $datos['usuario_id'] =
-            $usuario->id;
+        $datos['entidad_id'] = $entidad->id;
+        $datos['usuario_id'] = $usuario->id;
 
         $datos['tipo'] =
             'Plan Estratégico Institucional';
@@ -122,8 +142,7 @@ class PlanService
     }
 
     /**
-     * Actualizar un plan asegurando primero
-     * que pertenezca a la entidad del usuario.
+     * Actualizar información de un plan accesible.
      */
     public function actualizar(
         int $id,
@@ -142,8 +161,7 @@ class PlanService
     }
 
     /**
-     * Cambiar el estado administrativo
-     * Activo / Inactivo.
+     * Cambiar el estado administrativo.
      */
     public function cambiarEstadoAdministrativo(
         int $id,
@@ -166,8 +184,7 @@ class PlanService
     }
 
     /**
-     * Obtener una entidad institucional activa
-     * asociada al usuario.
+     * Obtener la entidad activa del usuario.
      */
     private function obtenerEntidadActiva(
         User $usuario
@@ -196,8 +213,7 @@ class PlanService
     }
 
     /**
-     * Obtener el identificador de la entidad
-     * asociada al usuario.
+     * Obtener el identificador de la entidad activa.
      */
     private function obtenerEntidadId(User $usuario): int
     {
@@ -207,8 +223,7 @@ class PlanService
     }
 
     /**
-     * Generar el código institucional
-     * utilizando la entidad validada.
+     * Generar el código institucional del plan.
      */
     private function generarCodigoParaEntidad(
         Entidad $entidad
