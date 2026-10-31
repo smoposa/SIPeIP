@@ -1,126 +1,172 @@
-<x-roles-layout title="Editar Estado del Rol">
+@if(puedeHacer('roles', 'estado'))
 
-    <!-- Barra de acciones -->
-    <div class="bg-white border-b border-gray-300">
+    @php
+        $recuperarEstado =
+            (string) old('_rol_estado_form', '') === (string) $rol->id;
 
-        <div class="flex">
+        $rolHabilitado = $recuperarEstado
+            ? (string) old('estado', '0') === '1'
+            : $rol->estado === 'Activo';
 
-            <a href="{{ request('origen') === 'asignacion'
-                        ? route('roles.asignacion')
-                        : route('roles.detalle', $rol->id) }}"
-            class="py-2 text-sm font-medium text-blue-500 hover:text-blue-800 mr-8">
-
-                <i class="bi bi-chevron-left"></i>
-
-                Regresar
-
-            </a>
-
-        </div>
-
-    </div>
-
-    <!-- Scroll vertical -->
-    <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
-
-        <!-- Encabezado -->
-        <div class="p-6">
-
-            <h2 class="text-2xl font-semibold text-gray-800">
-                Editar estado del rol
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-500">
-                Active o desactive este rol dentro del sistema.
-            </p>
-
-        </div>
+        $origenEstado = $recuperarEstado
+            ? old('origen')
+            : session('origen_panel_rol');
+    @endphp
 
 
-        <!-- Contenido -->
-        <div class="bg-white px-6 pb-6">
+    <!-- Panel lateral de estado -->
+    <dialog
+        id="panelEstadoRol"
+        aria-labelledby="tituloPanelEstadoRol"
+        class="bg-white p-0 shadow-xl"
+        style="position: fixed; inset: 0 0 0 auto; margin: 0 0 0 auto;
+               width: min(100%, 480px); height: 100dvh;
+               max-width: 100%; max-height: none; border: 0;">
 
-            <form method="POST"
-                action="{{ route('roles.actualizarestado', $rol->id) }}">
+        <form
+            id="formularioEstadoRol"
+            method="POST"
+            action="{{ route('roles.actualizarestado', $rol->id) }}"
+            class="flex h-full flex-col">
 
-                @csrf
-                @method('PUT')
+            @csrf
+            @method('PUT')
 
-                @if(request('origen') === 'asignacion')
-                    <input type="hidden" name="origen" value="asignacion">
-                @endif
+            <input type="hidden"
+                   name="_rol_estado_form"
+                   value="{{ $rol->id }}">
+
+            @if($origenEstado === 'asignacion')
+
+                <input type="hidden"
+                       name="origen"
+                       value="asignacion">
+
+            @endif
 
 
-                <!-- Rol -->
-                <div class="mb-6">
-                    <p class="mt-1 text-base font-semibold text-gray-800">
+            <!-- Encabezado -->
+            <div class="flex shrink-0 items-center justify-between gap-4
+                        border-b border-gray-200 px-6 py-4">
+
+                <div class="min-w-0">
+
+                    <h2 id="tituloPanelEstadoRol"
+                        class="text-xl font-semibold text-gray-800">
+                        Editar estado
+                    </h2>
+
+                    <p class="mt-1 break-words text-sm text-gray-500">
                         {{ $rol->nombre }}
                     </p>
+
                 </div>
 
+                <button
+                    type="button"
+                    data-cerrar-panel-estado-rol
+                    aria-label="Cerrar panel"
+                    class="shrink-0 p-2 text-gray-500
+                           hover:bg-gray-100 hover:text-gray-800">
 
-                <!-- Estado -->
-                <div class="flex items-center gap-10">
+                    <i class="bi bi-x-lg" aria-hidden="true"></i>
 
-                    <label for="estado"
-                        class="text-sm font-medium text-gray-700">
-                        Estado del rol
-                    </label>
+                </button>
 
-                    <div class="flex items-center gap-3">
+            </div>
 
-                        <input
-                            type="checkbox"
-                            id="estado"
-                            name="estado"
-                            value="1"
-                            {{ $rol->estado === 'Activo' ? 'checked' : '' }}
-                            class="w-5 h-5">
 
-                        <span class="text-sm font-medium
-                            {{ $rol->estado === 'Activo'
-                                ? 'text-green-600'
-                                : 'text-red-500' }}">
+            <!-- Contenido -->
+            <div class="min-h-0 flex-1 overflow-y-auto px-6 py-5">
 
-                            {{ $rol->estado === 'Activo'
-                                ? 'Activo'
-                                : 'Inactivo' }}
+                <!-- Errores -->
+                @if($recuperarEstado && $errors->any())
 
-                        </span>
+                    <div role="alert"
+                         class="mb-5 rounded-md bg-red-50 px-4 py-3
+                                text-sm text-red-800">
+
+                        @foreach($errors->all() as $error)
+
+                            <p>{{ $error }}</p>
+
+                        @endforeach
 
                     </div>
 
-                </div>
+                @endif
 
 
-                <!-- Acciones -->
-                <div class="flex gap-3 mt-16">
+                <p class="mb-6 text-sm text-gray-500">
+                    Active o desactive este rol dentro del sistema.
+                </p>
 
-                    <button
-                        type="submit"
-                        class="bg-blue-600 hover:bg-blue-700
-                            text-white px-5 py-2 rounded-md">
 
-                        Guardar
+                <!-- Estado -->
+                <input type="hidden"
+                       name="estado"
+                       value="0">
 
-                    </button>
+                <label for="estadoPanelRol"
+                       class="inline-flex items-center gap-3
+                              text-sm font-medium text-gray-700">
 
-                    <a href="{{ request('origen') === 'asignacion'
-                                ? route('roles.asignacion')
-                                : route('roles.detalle', $rol->id) }}"
-                    class="bg-gray-200 hover:bg-gray-300
-                            text-gray-700 px-5 py-2 rounded-md">
+                    <input
+                        type="checkbox"
+                        id="estadoPanelRol"
+                        name="estado"
+                        value="1"
+                        @checked($rolHabilitado)
+                        class="w-5 h-5">
 
-                        Cancelar
+                    Rol habilitado
 
-                    </a>
+                </label>
 
-                </div>
+            </div>
 
-            </form>
 
-        </div>
+            <!-- Acciones -->
+            <div class="flex shrink-0 flex-wrap justify-end gap-3
+                        border-t border-gray-200 bg-white px-6 py-4">
 
-    </div>
+                <button
+                    type="submit"
+                    class="inline-flex h-10 items-center justify-center gap-2
+                           rounded-md bg-[#024687] px-5 text-sm
+                           font-medium text-white transition hover:bg-[#01325f]
+                           focus:outline-none focus:ring-2 focus:ring-blue-600
+                           focus:ring-offset-2">
 
-</x-roles-layout>
+                    <i class="bi bi-check-circle" aria-hidden="true"></i>
+                    Guardar cambios
+
+                </button>
+
+                <button
+                    type="button"
+                    data-cerrar-panel-estado-rol
+                    class="inline-flex h-10 items-center justify-center
+                           rounded-md bg-gray-200 px-5 text-sm
+                           font-medium text-gray-700 transition hover:bg-gray-300
+                           focus:outline-none focus:ring-2 focus:ring-gray-400
+                           focus:ring-offset-2">
+
+                    Cancelar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+
+    <style>
+        #panelEstadoRol::backdrop {
+            background: rgb(0 0 0 / 20%);
+        }
+    </style>
+
+@endif

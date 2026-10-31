@@ -15,9 +15,7 @@ class RoleController extends Controller
     ) {
     }
 
-    /**
-     * Panel principal del módulo de roles.
-     */
+    // Mostrar el listado de roles.
     public function index()
     {
         $this->autorizar('roles');
@@ -27,10 +25,7 @@ class RoleController extends Controller
         return view('roles.index', $resumen);
     }
 
-    /**
-     * Mostrar configuración de roles permitidos
-     * para administradores institucionales.
-     */
+    // Mostrar los roles permitidos para administradores institucionales.
     public function asignacion()
     {
         $this->autorizar('roles');
@@ -40,10 +35,7 @@ class RoleController extends Controller
         return view('roles.asignacion', compact('roles'));
     }
 
-    /**
-     * Actualizar los roles permitidos
-     * para administradores institucionales.
-     */
+    // Actualizar la asignación institucional de roles.
     public function actualizarAsignacion(
         UpdateRoleAssignmentRequest $request
     ) {
@@ -63,9 +55,7 @@ class RoleController extends Controller
             );
     }
 
-    /**
-     * Mostrar formulario para crear un rol.
-     */
+    // Mostrar el formulario de creación.
     public function create()
     {
         $this->autorizar('roles', 'crear');
@@ -73,23 +63,21 @@ class RoleController extends Controller
         return view('roles.create');
     }
 
-    /**
-     * Registrar un nuevo rol.
-     */
+    // Registrar un rol.
     public function store(StoreRoleRequest $request)
     {
         $this->autorizar('roles', 'crear');
 
-        $this->roleService->crear($request->validated());
+        $this->roleService->crear(
+            $request->validated()
+        );
 
         return redirect()
             ->route('roles.index')
             ->with('success', 'Rol registrado correctamente.');
     }
 
-    /**
-     * Mostrar detalle de un rol.
-     */
+    // Mostrar el detalle del rol.
     public function detalle(int $id)
     {
         $this->autorizar('roles');
@@ -99,23 +87,23 @@ class RoleController extends Controller
         return view('roles.detalle', compact('rol'));
     }
 
-    /**
-     * Mostrar formulario para editar un rol.
-     */
+    // Abrir el panel de información desde la ruta de edición.
     public function edit(int $id)
     {
         $this->autorizar('roles', 'editar');
 
         $rol = $this->roleService->obtenerPorId($id);
 
-        return view('roles.editar', compact('rol'));
+        return redirect()
+            ->route('roles.detalle', $rol->id)
+            ->with('abrir_panel_rol', 'informacion');
     }
 
-    /**
-     * Actualizar un rol.
-     */
-    public function update(UpdateRoleRequest $request, int $id)
-    {
+    // Actualizar la información del rol.
+    public function update(
+        UpdateRoleRequest $request,
+        int $id
+    ) {
         $this->autorizar('roles', 'editar');
 
         $rol = $this->roleService->obtenerPorId($id);
@@ -130,21 +118,24 @@ class RoleController extends Controller
             ->with('success', 'Rol actualizado correctamente.');
     }
 
-    /**
-     * Mostrar formulario para modificar el estado.
-     */
+    // Abrir el panel de estado desde la ruta existente.
     public function editarEstado(int $id)
     {
         $this->autorizar('roles', 'estado');
 
         $rol = $this->roleService->obtenerPorId($id);
 
-        return view('roles.editarestado', compact('rol'));
+        $origen = request('origen') === 'asignacion'
+            ? 'asignacion'
+            : null;
+
+        return redirect()
+            ->route('roles.detalle', $rol->id)
+            ->with('abrir_panel_rol', 'estado')
+            ->with('origen_panel_rol', $origen);
     }
 
-    /**
-     * Actualizar estado del rol.
-     */
+    // Actualizar el estado del rol.
     public function actualizarEstado(
         UpdateRoleStatusRequest $request,
         int $id
@@ -158,10 +149,7 @@ class RoleController extends Controller
             $request->boolean('estado')
         );
 
-        /*
-        * Si el usuario llegó desde Asignación de Roles,
-        * regresar a esa pantalla después de guardar.
-        */
+        // Conservar el regreso a la pantalla de asignación.
         if ($request->input('origen') === 'asignacion') {
             return redirect()
                 ->route('roles.asignacion')
@@ -171,10 +159,6 @@ class RoleController extends Controller
                 );
         }
 
-        /*
-        * Flujo normal:
-        * regresar al detalle del rol.
-        */
         return redirect()
             ->route('roles.detalle', $rol->id)
             ->with(

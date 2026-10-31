@@ -45,7 +45,6 @@
 
             let ultimoBoton = null;
 
-
             // Abrir el panel y enfocar el primer campo.
             function abrirPanel(boton = null) {
 
@@ -63,7 +62,6 @@
 
             }
 
-
             // Abrir desde los botones del detalle.
             botonesAbrir.forEach(function (boton) {
 
@@ -77,7 +75,6 @@
 
             });
 
-
             // Cerrar sin enviar el formulario.
             botonesCerrar.forEach(function (boton) {
 
@@ -86,7 +83,6 @@
                 });
 
             });
-
 
             // Descartar cambios no guardados y devolver el foco.
             panel.addEventListener('close', function () {
@@ -98,7 +94,6 @@
                 }
 
             });
-
 
             // Abrir después de una redirección o un error de validación.
             if (opciones.abrirAlCargar) {
@@ -117,7 +112,6 @@
 
         }
 
-
         // Panel de información básica.
         configurarPanel({
             panel: 'panelEditarEntidad',
@@ -128,7 +122,6 @@
                 Illuminate\Support\Js::from($abrirInformacion)
             }}
         });
-
 
         // Panel de estado.
         configurarPanel({
