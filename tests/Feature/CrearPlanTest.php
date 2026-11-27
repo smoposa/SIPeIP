@@ -19,6 +19,8 @@ class CrearPlanTest extends TestCase
             'codigo' => 'ADMIN_SISTEMA',
         ]);
 
+        $this->asignarPermisosRol($rol);
+
         $usuario = User::factory()->create([
             'rol_id' => $rol->id,
         ]);

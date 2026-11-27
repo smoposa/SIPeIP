@@ -36,6 +36,8 @@ class SeguimientoAccessTest extends TestCase
             ['nombre' => $nombreRol, 'descripcion' => 'Rol para pruebas.', 'estado' => 'Activo']
         );
 
+        $this->asignarPermisosRol($rol);
+
         return User::factory()->create([
             'rol_id' => $rol->id,
             'entidad_id' => $entidad->id,

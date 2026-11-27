@@ -124,6 +124,8 @@ class ProyectoAccessTest extends TestCase
             ]
         );
 
+        $this->asignarPermisosRol($rol);
+
         return User::factory()->create([
             'rol_id' => $rol->id,
             'entidad_id' => $entidad->id,

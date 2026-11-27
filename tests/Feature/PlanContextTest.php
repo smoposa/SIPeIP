@@ -19,6 +19,8 @@ class PlanContextTest extends TestCase
             'codigo' => 'ADMIN_SISTEMA',
         ]);
 
+        $this->asignarPermisosRol($rol);
+
         $usuario = User::factory()->create([
             'rol_id' => $rol->id,
             'entidad_id' => null,
@@ -42,6 +44,8 @@ class PlanContextTest extends TestCase
             'nombre' => 'Administrador del Sistema',
             'codigo' => 'ADMIN_SISTEMA',
         ]);
+
+        $this->asignarPermisosRol($rol);
 
         $entidad = Entidad::factory()->create([
             'estado' => 'Inactivo',
@@ -70,6 +74,8 @@ class PlanContextTest extends TestCase
             'nombre' => 'Administrador del Sistema',
             'codigo' => 'ADMIN_SISTEMA',
         ]);
+
+        $this->asignarPermisosRol($rol);
 
         $entidad = Entidad::factory()->create([
             'siglas' => null,

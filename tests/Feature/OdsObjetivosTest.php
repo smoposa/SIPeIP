@@ -34,6 +34,8 @@ class OdsObjetivosTest extends TestCase
             ]
         );
 
+        $this->asignarPermisosRol($rol);
+
         $this->actingAs(User::factory()->create([
             'rol_id' => $rol->id,
             'entidad_id' => Entidad::factory()->create([

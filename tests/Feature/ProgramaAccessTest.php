@@ -21,6 +21,8 @@ class ProgramaAccessTest extends TestCase
             'estado' => 'Activo',
         ]);
 
+        $this->asignarPermisosRol($rol);
+
         $entidad = Entidad::factory()->create([
             'estado' => 'Activo',
         ]);
@@ -46,6 +48,8 @@ class ProgramaAccessTest extends TestCase
             'estado' => 'Activo',
         ]);
 
+        $this->asignarPermisosRol($rol);
+
         $entidad = Entidad::factory()->create([
             'estado' => 'Activo',
         ]);
@@ -70,6 +74,8 @@ class ProgramaAccessTest extends TestCase
             'codigo' => 'DIRECTOR_INVERSION',
             'estado' => 'Activo',
         ]);
+
+        $this->asignarPermisosRol($rol);
 
         $entidadUsuario = Entidad::factory()->create([
             'estado' => 'Activo',
@@ -139,6 +145,8 @@ class ProgramaAccessTest extends TestCase
             'codigo' => 'DIRECTOR_INVERSION',
             'estado' => 'Activo',
         ]);
+
+        $this->asignarPermisosRol($rol);
 
         $entidadUsuario = Entidad::factory()->create([
             'estado' => 'Activo',

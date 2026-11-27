@@ -34,6 +34,8 @@ class OdsAgendasTest extends TestCase
             ]
         );
 
+        $this->asignarPermisosRol($rol);
+
         $usuario = User::factory()->create([
             'rol_id' => $rol->id,
             'entidad_id' => Entidad::factory()->create([

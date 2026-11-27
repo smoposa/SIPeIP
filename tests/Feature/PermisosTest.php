@@ -18,6 +18,8 @@ class PermisosTest extends TestCase
             'codigo' => 'ADMIN_SISTEMA',
         ]);
 
+        $this->asignarPermisosRol($rol);
+
         $usuario = User::factory()->create([
             'rol_id' => $rol->id,
         ]);
@@ -34,6 +36,8 @@ class PermisosTest extends TestCase
             'nombre' => 'Administrador Institucional',
             'codigo' => 'ADMIN_INSTITUCIONAL',
         ]);
+
+        $this->asignarPermisosRol($rol);
 
         $usuario = User::factory()->create([
             'rol_id' => $rol->id,
