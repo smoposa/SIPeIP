@@ -14,93 +14,49 @@ class EntidadService
     ) {
     }
 
-
-    /**
-     * Obtener los datos generales del módulo de entidades
-     * según el ámbito institucional.
-     */
     public function obtenerResumen(User $usuarioAutenticado): array
     {
-        /*
-         * Administrador Global:
-         * puede consultar todas las entidades.
-         */
-        if ($this->esAdministradorGlobal($usuarioAutenticado)) {
+        $global = $this->esAdministradorGlobal($usuarioAutenticado);
+        // Un usuario sin entidad nunca recibe acceso global.
+        $entidadId = $global ? null : (int) $usuarioAutenticado->entidad_id;
+        $buscar = trim(request()->string('buscar')->toString());
+        $estado = request()->string('estado')->toString();
+        $porPagina = request()->integer('per_page', 7);
 
-            return [
-                'totalEntidades' => $this->entidadRepository->contarTodas(),
-
-                'entidadesActivas' => $this->entidadRepository->contarPorEstado(
-                    EstadoEntidad::ACTIVO->value
-                ),
-
-                'entidadesInactivas' => $this->entidadRepository->contarPorEstado(
-                    EstadoEntidad::INACTIVO->value
-                ),
-
-                'entidades' => $this->entidadRepository->obtenerTodasOrdenadas(),
-            ];
+        if (!in_array($estado, ['Activo', 'Inactivo'], true)) {
+            $estado = '';
+        }
+        if (!in_array($porPagina, [7, 10, 15], true)) {
+            $porPagina = 7;
         }
 
-
-        /*
-         * Usuario institucional:
-         * solamente puede consultar su propia entidad.
-         */
-        $entidadId = $usuarioAutenticado->entidad_id;
+        $activas = $global
+            ? $this->entidadRepository->contarPorEstado(EstadoEntidad::ACTIVO->value)
+            : $this->entidadRepository->contarPorEstadoYEntidad(EstadoEntidad::ACTIVO->value, $entidadId);
+        $inactivas = $global
+            ? $this->entidadRepository->contarPorEstado(EstadoEntidad::INACTIVO->value)
+            : $this->entidadRepository->contarPorEstadoYEntidad(EstadoEntidad::INACTIVO->value, $entidadId);
 
         return [
-            'totalEntidades' => 1,
-
-            'entidadesActivas' => $this->entidadRepository->contarPorEstadoYEntidad(
-                EstadoEntidad::ACTIVO->value,
-                $entidadId
-            ),
-
-            'entidadesInactivas' => $this->entidadRepository->contarPorEstadoYEntidad(
-                EstadoEntidad::INACTIVO->value,
-                $entidadId
-            ),
-
-            'entidades' => $this->entidadRepository->obtenerColeccionPorId(
-                $entidadId
-            ),
+            'totalEntidades' => $global ? $this->entidadRepository->contarTodas() : $activas + $inactivas,
+            'entidadesActivas' => $activas,
+            'entidadesInactivas' => $inactivas,
+            'entidades' => $this->entidadRepository->obtenerPaginadas($entidadId, $buscar, $estado, $porPagina),
         ];
     }
 
-
-    /**
-     * Obtener una entidad por su ID
-     * según el ámbito institucional.
-     */
-    public function obtenerPorId(
-        int $id,
-        User $usuarioAutenticado
-    ): Entidad {
-
+    public function obtenerPorId(int $id, User $usuarioAutenticado): Entidad
+    {
         $entidad = $this->entidadRepository->obtenerPorId($id);
-
-        // El Administrador Global puede acceder a cualquier entidad.
         if ($this->esAdministradorGlobal($usuarioAutenticado)) {
             return $entidad;
         }
-
-        // Los demás usuarios solo pueden acceder
-        // a la entidad a la que pertenecen.
         if ($entidad->id !== $usuarioAutenticado->entidad_id) {
-            abort(
-                403,
-                'No tiene autorización para acceder a esta entidad.'
-            );
+            abort(403, 'No tiene autorización para acceder a esta entidad.');
         }
-
         return $entidad;
     }
 
-
-    /**
-     * Crear una entidad.
-     */
     public function crear(array $datos): Entidad
     {
         return $this->entidadRepository->crear([
@@ -109,42 +65,18 @@ class EntidadService
         ]);
     }
 
-
-    /**
-     * Actualizar una entidad.
-     */
-    public function actualizar(
-        Entidad $entidad,
-        array $datos
-    ): Entidad {
-        return $this->entidadRepository->actualizar(
-            $entidad,
-            $datos
-        );
+    public function actualizar(Entidad $entidad, array $datos): Entidad
+    {
+        return $this->entidadRepository->actualizar($entidad, $datos);
     }
 
-
-    /**
-     * Actualizar el estado de una entidad.
-     */
-    public function actualizarEstado(
-        Entidad $entidad,
-        bool $activo
-    ): Entidad {
-        return $this->entidadRepository->actualizar(
-            $entidad,
-            [
-                'estado' => $activo
-                    ? EstadoEntidad::ACTIVO->value
-                    : EstadoEntidad::INACTIVO->value,
-            ]
-        );
+    public function actualizarEstado(Entidad $entidad, bool $activo): Entidad
+    {
+        return $this->entidadRepository->actualizar($entidad, [
+            'estado' => $activo ? EstadoEntidad::ACTIVO->value : EstadoEntidad::INACTIVO->value,
+        ]);
     }
 
-
-    /**
-     * Determinar si el usuario es Administrador Global.
-     */
     private function esAdministradorGlobal(User $usuario): bool
     {
         return $usuario->rol?->codigo === 'ADMIN_GLOBAL';

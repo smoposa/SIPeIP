@@ -4,6 +4,7 @@ namespace App\Repositories\Contracts;
 
 use App\Models\Entidad;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface EntidadRepositoryInterface
 {
@@ -11,6 +12,17 @@ interface EntidadRepositoryInterface
      * Obtener todas las entidades ordenadas por nombre.
      */
     public function obtenerTodasOrdenadas(): Collection;
+
+
+    /**
+     * Obtener las entidades paginadas según el ámbito institucional.
+     */
+    public function obtenerPaginadas(
+        ?int $entidadId,
+        string $buscar = '',
+        string $estado = '',
+        int $porPagina = 7
+    ): LengthAwarePaginator;
 
 
     /**
