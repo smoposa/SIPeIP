@@ -4,6 +4,7 @@ namespace App\Repositories\Contracts;
 
 use App\Models\Rol;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface RoleRepositoryInterface
 {
@@ -11,6 +12,15 @@ interface RoleRepositoryInterface
      * Obtener todos los roles ordenados por nombre.
      */
     public function obtenerTodosOrdenados(): Collection;
+
+    /**
+     * Obtener los roles paginados.
+     */
+    public function obtenerPaginados(
+        string $buscar = '',
+        string $estado = '',
+        int $porPagina = 7
+    ): LengthAwarePaginator;
 
     /**
      * Obtener los roles activos permitidos

@@ -1,3 +1,4 @@
+
 {{-- =========================================================
      LISTADO DE ROLES
 ========================================================== --}}
@@ -5,7 +6,7 @@
 
     {{-- Scroll independiente --}}
     <div class="overflow-y-auto"
-         style="height: calc(100vh - 240px);">
+         style="height: calc(100vh - 290px);">
 
         <table class="min-w-full">
 
@@ -43,16 +44,13 @@
 
                 @forelse($roles as $rol)
 
-                    <tr
-                        class="fila-rol border-b border-gray-100 hover:bg-gray-50 transition"
-                        data-nombre="{{ strtolower($rol->nombre) }}"
-                        data-descripcion="{{ strtolower($rol->descripcion ?? '') }}"
-                        data-estado="{{ $rol->estado }}"
-                    >
+                    <tr class="fila-rol border-b border-gray-100 hover:bg-gray-50 transition">
 
                         {{-- Nro --}}
                         <td class="px-4 py-2 text-sm text-gray-600">
-                            {{ $loop->iteration }}
+
+                            {{ $roles->firstItem() + $loop->index }}
+
                         </td>
 
 
@@ -121,7 +119,7 @@
                         <td colspan="5"
                             class="px-4 py-6 text-center text-gray-500">
 
-                            No existen roles registrados.
+                            No se encontraron roles.
 
                         </td>
 
@@ -134,5 +132,9 @@
         </table>
 
     </div>
+
+
+    {{-- Paginación --}}
+    <x-pagination :paginator="$roles" />
 
 </div>

@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Rol;
 use App\Repositories\Contracts\RoleRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class RoleRepository implements RoleRepositoryInterface
 {
@@ -17,6 +18,31 @@ class RoleRepository implements RoleRepositoryInterface
             ->withCount('users')
             ->orderBy('nombre')
             ->get();
+    }
+
+    /**
+     * Obtener los roles paginados con búsqueda y filtro.
+     */
+    public function obtenerPaginados(
+        string $buscar = '',
+        string $estado = '',
+        int $porPagina = 7
+    ): LengthAwarePaginator {
+        return Rol::query()
+            ->withCount('users')
+            ->when($buscar !== '', function ($query) use ($buscar) {
+                $query->where(function ($query) use ($buscar) {
+                    $query->where('nombre', 'like', "%{$buscar}%")
+                        ->orWhere('descripcion', 'like', "%{$buscar}%");
+                });
+            })
+            ->when($estado !== '', function ($query) use ($estado) {
+                $query->where('estado', $estado);
+            })
+            ->orderBy('nombre')
+            ->orderBy('id')
+            ->paginate($porPagina)
+            ->withQueryString();
     }
 
     /**

@@ -1,3 +1,4 @@
+
 <x-roles-layout title="Asignación de Roles">
 
     <!-- Barra de navegación -->
@@ -47,9 +48,9 @@
     <div class="overflow-y-auto" style="height: calc(100vh - 180px);">
 
         <!-- Encabezado -->
-        <div class="p-2">
+        <div class="px-2 py-1">
 
-            <p class="mt-1 text-sm text-gray-500">
+            <p class="text-xs text-gray-500">
                 Seleccione los roles que podrán ser asignados por los administradores institucionales.
             </p>
 
@@ -57,7 +58,7 @@
 
 
         <!-- Contenido -->
-        <div class="bg-white px-6 pb-6">
+        <div class="bg-white px-6 pb-4">
 
             <form method="POST"
                   action="{{ route('roles.actualizarasignacion') }}">
@@ -67,7 +68,7 @@
 
 
                 <!-- Títulos -->
-                <div class="flex items-center py-3 border-b border-gray-200">
+                <div class="flex items-center py-2 border-b border-gray-200">
 
                     <div class="w-16 text-sm font-semibold text-gray-700">
                         Asignar
@@ -91,7 +92,8 @@
                         $rolActivo = $rol->estado === 'Activo';
                     @endphp
 
-                    <div class="flex items-center py-3 border-b border-gray-100">
+                    <div class="flex items-center py-2 border-b border-gray-100
+                                hover:bg-gray-50 transition">
 
                         <!-- Checkbox -->
                         <div class="w-16 flex items-center">
@@ -100,16 +102,17 @@
                                 type="checkbox"
                                 name="roles[]"
                                 value="{{ $rol->id }}"
+                                aria-label="Asignar {{ $rol->nombre }}"
                                 {{ $rol->asignable_institucion && $rolActivo ? 'checked' : '' }}
                                 {{ !$rolActivo ? 'disabled' : '' }}
-                                class="w-5 h-5
-                                    {{ !$rolActivo ? 'cursor-not-allowed opacity-50' : '' }}">
+                                class="w-4 h-4
+                                    {{ !$rolActivo ? 'cursor-not-allowed opacity-50' : 'cursor-pointer' }}">
 
                         </div>
 
 
                         <!-- Nombre del Rol -->
-                        <div class="w-80 text-sm
+                        <div class="w-80 text-xs
                                     {{ $rolActivo ? 'text-gray-700' : 'text-gray-400' }}">
 
                             {{ $rol->nombre }}
@@ -122,7 +125,7 @@
 
                             @if(!$rolActivo)
 
-                                <div class="flex flex-col text-sm">
+                                <div class="flex flex-col text-xs">
 
                                     <!-- Estado -->
                                     <span class="font-semibold text-gray-500">
@@ -153,7 +156,7 @@
 
                 @empty
 
-                    <div class="py-4 text-sm text-gray-500">
+                    <div class="py-4 text-xs text-gray-500">
 
                         No existen roles registrados.
 
@@ -163,12 +166,12 @@
 
 
                 <!-- Acciones -->
-                <div class="flex gap-3 mt-10">
+                <div class="flex gap-3 mt-4">
 
                     <button
                         type="submit"
                         class="bg-blue-600 hover:bg-blue-700
-                               text-white px-5 py-2 rounded-md">
+                               text-white text-sm px-4 py-2 rounded-md">
 
                         Guardar
 
@@ -176,7 +179,7 @@
 
                     <a href="{{ route('roles.index') }}"
                        class="bg-gray-200 hover:bg-gray-300
-                              text-gray-700 px-5 py-2 rounded-md">
+                              text-gray-700 text-sm px-4 py-2 rounded-md">
 
                         Cancelar
 

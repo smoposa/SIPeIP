@@ -1,3 +1,4 @@
+
 <x-roles-layout title="Todos los roles">
 
     <!-- Migas de pan -->
@@ -74,7 +75,7 @@
 
 
                 <!-- Actualizar -->
-                <a href="{{ url()->current() }}"
+                <a href="{{ route('roles.index') }}"
                    class="px-3 py-2 text-sm font-medium text-gray-700
                           border-b-2 border-transparent
                           hover:bg-gray-100 transition">
@@ -90,18 +91,25 @@
 
 
         <!-- Buscador, filtro, resumen y acciones -->
-        <div class="flex flex-wrap items-center gap-4 mb-4">
+        <form method="GET"
+              action="{{ route('roles.index') }}"
+              id="filtrosRoles"
+              class="flex flex-wrap items-center gap-4 mb-4">
 
             <!-- Buscador -->
             <div class="relative flex-1 max-w-md">
 
                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+
                     <i class="bi bi-search" aria-hidden="true"></i>
+
                 </span>
 
                 <input
                     type="text"
                     id="buscarRol"
+                    name="buscar"
+                    value="{{ request('buscar') }}"
                     placeholder="Buscar rol..."
                     aria-label="Buscar rol"
                     class="w-full border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm
@@ -113,13 +121,24 @@
             <!-- Filtro de estado -->
             <select
                 id="filtroEstado"
+                name="estado"
                 aria-label="Filtrar roles por estado"
                 class="w-48 rounded-md border border-gray-300 px-3 py-2 text-sm
                        text-gray-700 focus:border-blue-500 focus:ring-blue-500">
 
-                <option value="">Todos los estados</option>
-                <option value="Activo">Activos</option>
-                <option value="Inactivo">Inactivos</option>
+                <option value="">
+                    Todos los estados
+                </option>
+
+                <option value="Activo"
+                        @selected(request('estado') === 'Activo')>
+                    Activos
+                </option>
+
+                <option value="Inactivo"
+                        @selected(request('estado') === 'Inactivo')>
+                    Inactivos
+                </option>
 
             </select>
 
@@ -148,6 +167,7 @@
 
             </div>
 
+
             <!-- Crear rol -->
             @if(puedeHacer('roles', 'crear'))
 
@@ -164,7 +184,7 @@
 
             @endif
 
-        </div>
+        </form>
 
 
         <!-- Listado -->
@@ -183,37 +203,33 @@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
 
+                const formulario = document.getElementById('filtrosRoles');
                 const buscador = document.getElementById('buscarRol');
                 const filtroEstado = document.getElementById('filtroEstado');
-                const filas = document.querySelectorAll('.fila-rol');
 
-                function filtrarRoles() {
+                let temporizador;
 
-                    const texto = buscador.value.toLowerCase().trim();
-                    const estado = filtroEstado.value;
+                // Buscar automáticamente después de escribir.
+                buscador.addEventListener('input', function () {
 
-                    filas.forEach(function (fila) {
+                    clearTimeout(temporizador);
 
-                        const nombre = (fila.dataset.nombre || '').toLowerCase();
-                        const descripcion = (fila.dataset.descripcion || '').toLowerCase();
-                        const estadoRol = fila.dataset.estado || '';
+                    temporizador = setTimeout(function () {
 
-                        const coincideTexto =
-                            nombre.includes(texto) ||
-                            descripcion.includes(texto);
+                        formulario.requestSubmit();
 
-                        const coincideEstado =
-                            estado === '' || estadoRol === estado;
+                    }, 600);
 
-                        fila.style.display =
-                            coincideTexto && coincideEstado ? '' : 'none';
+                });
 
-                    });
+                // Aplicar el filtro de estado.
+                filtroEstado.addEventListener('change', function () {
 
-                }
+                    clearTimeout(temporizador);
 
-                buscador.addEventListener('input', filtrarRoles);
-                filtroEstado.addEventListener('change', filtrarRoles);
+                    formulario.requestSubmit();
+
+                });
 
             });
         </script>

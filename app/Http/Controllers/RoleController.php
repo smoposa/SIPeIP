@@ -9,6 +9,8 @@ use App\Http\Requests\Roles\UpdateRoleAssignmentRequest;
 use App\Http\Requests\Roles\UpdateRolePermissionsRequest;
 use App\Services\RoleService;
 use App\Models\Permiso;
+use Illuminate\Http\Request;
+
 
 class RoleController extends Controller
 {
@@ -18,11 +20,25 @@ class RoleController extends Controller
     }
 
     // Mostrar el listado de roles.
-    public function index()
+    public function index(Request $request)
     {
         $this->autorizar('roles');
 
-        $resumen = $this->roleService->obtenerResumen();
+        $buscar = trim($request->string('buscar')->toString());
+        $estado = $request->string('estado')->toString();
+
+        if (!in_array($estado, ['Activo', 'Inactivo'], true)) {
+            $estado = '';
+        }
+
+        $resumen = $this->roleService->obtenerResumen(
+            incluirRoles: false
+        );
+
+        $resumen['roles'] = $this->roleService->obtenerRolesPaginados(
+            $buscar,
+            $estado
+        );
 
         return view('roles.index', $resumen);
     }

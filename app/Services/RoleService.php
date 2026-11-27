@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Repositories\Contracts\RoleRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class RoleService
 {
@@ -19,7 +20,7 @@ class RoleService
     /**
      * Obtener los datos generales del módulo de roles.
      */
-    public function obtenerResumen(): array
+    public function obtenerResumen(bool $incluirRoles = true): array
     {
         return [
             'totalRoles' => $this->roleRepository->contarTodos(),
@@ -32,8 +33,31 @@ class RoleService
                 EstadoRol::INACTIVO->value
             ),
 
-            'roles' => $this->roleRepository->obtenerTodosOrdenados(),
+            'roles' => $incluirRoles
+            ? $this->roleRepository->obtenerTodosOrdenados()
+            : null,
         ];
+    }
+
+    /**
+     * Obtener el listado paginado de roles.
+     */
+    public function obtenerRolesPaginados(
+        string $buscar = '',
+        string $estado = ''
+    ): LengthAwarePaginator {
+
+        $porPagina = request()->integer('per_page', 7);
+
+        if (!in_array($porPagina, [7, 10, 15], true)) {
+            $porPagina = 7;
+        }
+
+        return $this->roleRepository->obtenerPaginados(
+            $buscar,
+            $estado,
+            $porPagina
+        );
     }
 
     
