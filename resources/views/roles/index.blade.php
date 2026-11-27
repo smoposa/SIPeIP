@@ -148,20 +148,19 @@
 
             </div>
 
-
             <!-- Crear rol -->
             @if(puedeHacer('roles', 'crear'))
 
-                <a href="{{ route('roles.create') }}"
-                   data-crear-rol
-                   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
-                          text-white text-sm font-medium px-4 py-2 rounded-md
-                          transition whitespace-nowrap">
+                <button type="button"
+                        data-crear-rol
+                        class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
+                               text-white text-sm font-medium px-4 py-2 rounded-md
+                               transition whitespace-nowrap">
 
                     <i class="bi bi-plus-lg" aria-hidden="true"></i>
                     Crear rol
 
-                </a>
+                </button>
 
             @endif
 

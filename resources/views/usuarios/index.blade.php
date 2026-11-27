@@ -119,16 +119,17 @@
             <!-- Crear usuario -->
             @if(puedeHacer('usuarios', 'crear'))
 
-                <a href="{{ route('usuarios.create') }}"
-                   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
-                          text-white text-sm font-medium px-4 py-2 rounded-md
-                          transition whitespace-nowrap">
+                <button type="button"
+                        data-crear-usuario
+                        class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
+                               text-white text-sm font-medium px-4 py-2 rounded-md
+                               transition whitespace-nowrap">
 
                     <i class="bi bi-plus-lg"></i>
 
                     Crear usuario
 
-                </a>
+                </button>
 
             @endif
 
@@ -137,6 +138,14 @@
 
         <!-- Listado de usuarios -->
         @include('usuarios.partials.listado-usuarios')
+
+
+        <!-- Panel lateral de creación de usuarios -->
+        @if(puedeHacer('usuarios', 'crear'))
+
+            @include('usuarios.panel-crear')
+
+        @endif
 
 
         <!-- Mensaje sin resultados -->

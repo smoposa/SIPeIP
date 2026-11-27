@@ -26,14 +26,6 @@ class EntidadController extends Controller
         return view('entidades.index', $resumen);
     }
 
-    // Mostrar el formulario de creación.
-    public function create()
-    {
-        $this->autorizar('entidades', 'crear');
-
-        return view('entidades.create');
-    }
-
     // Registrar una nueva entidad.
     public function store(StoreEntidadRequest $request)
     {

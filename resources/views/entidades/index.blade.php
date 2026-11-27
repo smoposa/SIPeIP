@@ -116,15 +116,16 @@
             <!-- Crear entidad -->
             @if(puedeHacer('entidades', 'crear'))
 
-                <a href="{{ route('entidades.create') }}"
-                   class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
-                          text-white text-sm font-medium px-4 py-2 rounded-md
-                          transition whitespace-nowrap">
+                <button type="button"
+                        data-crear-entidad
+                        class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700
+                               text-white text-sm font-medium px-4 py-2 rounded-md
+                               transition whitespace-nowrap">
 
                     <i class="bi bi-plus-lg" aria-hidden="true"></i>
                     Crear entidad
 
-                </a>
+                </button>
 
             @endif
 
@@ -133,6 +134,14 @@
 
         <!-- Listado -->
         @include('entidades.partials.listado-entidades')
+
+
+        <!-- Panel lateral de creación de entidades -->
+        @if(puedeHacer('entidades', 'crear'))
+
+            @include('entidades.crear')
+
+        @endif
 
 
         <!-- Buscador y filtro -->

@@ -57,16 +57,6 @@ class RoleController extends Controller
             );
     }
 
-    // Abrir el panel de creación desde la ruta existente.
-    public function create()
-    {
-        $this->autorizar('roles', 'crear');
-
-        return redirect()
-            ->route('roles.index')
-            ->with('abrir_panel_rol', 'crear');
-    }
-
     // Registrar un rol.
     public function store(StoreRoleRequest $request)
     {

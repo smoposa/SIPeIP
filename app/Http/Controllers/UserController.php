@@ -36,45 +36,41 @@ class UserController extends Controller
             $usuarioAutenticado
         );
 
+        $roles = collect();
+        $entidades = collect();
+
+        if (puedeHacer('usuarios', 'crear')) {
+
+            $roles = $this->roleService->obtenerRolesAsignables(
+                $usuarioAutenticado
+            );
+
+            // Conservar el ámbito institucional utilizado actualmente.
+            if ($usuarioAutenticado->rol?->codigo === 'ADMIN_GLOBAL') {
+
+                $entidades = Entidad::where('estado', 'Activo')
+                    ->orderBy('nombre')
+                    ->get();
+
+            } else {
+
+                $entidades = Entidad::where(
+                    'id',
+                    $usuarioAutenticado->entidad_id
+                )->get();
+
+            }
+
+        }
+
         return view('usuarios.index', [
             'usuarios' => $usuarios,
             'totalUsuarios' => $resumen['totalUsuarios'],
             'usuariosActivos' => $resumen['usuariosActivos'],
             'usuariosInactivos' => $resumen['usuariosInactivos'],
+            'roles' => $roles,
+            'entidades' => $entidades,
         ]);
-    }
-
-    // Mostrar el formulario de creación.
-    public function crear()
-    {
-        $this->autorizar('usuarios', 'crear');
-
-        $usuarioAutenticado = auth()->user();
-
-        $roles = $this->roleService->obtenerRolesAsignables(
-            $usuarioAutenticado
-        );
-
-        // Conservar el ámbito institucional utilizado actualmente.
-        if ($usuarioAutenticado->rol?->codigo === 'ADMIN_GLOBAL') {
-
-            $entidades = Entidad::where('estado', 'Activo')
-                ->orderBy('nombre')
-                ->get();
-
-        } else {
-
-            $entidades = Entidad::where(
-                'id',
-                $usuarioAutenticado->entidad_id
-            )->get();
-
-        }
-
-        return view('usuarios.crear', compact(
-            'roles',
-            'entidades'
-        ));
     }
 
     // Registrar un usuario.

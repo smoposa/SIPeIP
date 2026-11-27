@@ -62,9 +62,6 @@ Route::middleware([
             Route::get('/', [RoleController::class, 'index'])
                 ->name('roles.index');
 
-            Route::get('/crear', [RoleController::class, 'create'])
-                ->name('roles.create');
-
             Route::get('/asignacion', [RoleController::class, 'asignacion'])
                 ->name('roles.asignacion');
 
@@ -102,10 +99,6 @@ Route::middleware([
             // Información general
             Route::get('/', [UserController::class, 'index'])
                 ->name('usuarios.index');
-
-            // Crear
-            Route::get('/crear', [UserController::class, 'crear'])
-                ->name('usuarios.create');
 
             Route::post('/guardar', [UserController::class, 'store'])
                 ->name('usuarios.store');
@@ -157,9 +150,6 @@ Route::middleware([
 
             Route::get('/', [EntidadController::class, 'index'])
                 ->name('entidades.index');
-
-            Route::get('/crear', [EntidadController::class, 'create'])
-                ->name('entidades.create');
 
             Route::post('/guardar', [EntidadController::class, 'store'])
                 ->name('entidades.store');
