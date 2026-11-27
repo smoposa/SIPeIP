@@ -8,6 +8,7 @@ use App\Models\Subsector;
 use App\Repositories\Contracts\ClasificacionInversionRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ClasificacionInversionService
 {
@@ -236,51 +237,208 @@ class ClasificacionInversionService
         );
     }
 
-    // Listados del catálogo
 
     // Obtener los macrosectores según los permisos del usuario.
     public function datosListadoMacrosectores(): array
     {
+        $registros = $this->repository->listarMacrosectoresCatalogo(
+            soloActivos: !$this->puedeConsultarHistorial()
+        );
+
+        // Resumen general de registros.
+        $totalRegistros = $registros->count();
+        $totalActivos = $registros->where('estado', 'Activo')->count();
+        $totalInactivos = $registros->where('estado', 'Inactivo')->count();
+
+        // Aplicar los filtros antes de paginar.
+        $buscar = request()->string('buscar')->trim()->toString();
+        $estado = request()->string('estado')->toString();
+
+        if ($buscar !== '') {
+            $registros = $registros->filter(
+                fn ($registro) => str_contains(
+                    mb_strtolower(\Illuminate\Support\Str::ascii($registro->nombre)),
+                    mb_strtolower(\Illuminate\Support\Str::ascii($buscar))
+                )
+            );
+        }
+
+        if (in_array($estado, ['Activo', 'Inactivo'], true)) {
+            $registros = $registros->where('estado', $estado);
+        }
+
+        // Configurar la cantidad de registros por página.
+        $porPagina = request()->integer('per_page', 10);
+
+        if (!in_array($porPagina, [7, 10, 15], true)) {
+            $porPagina = 10;
+        }
+
+        $pagina = LengthAwarePaginator::resolveCurrentPage();
+
+        // Paginar los registros filtrados.
+        $paginador = new LengthAwarePaginator(
+            $registros->forPage($pagina, $porPagina)->values(),
+            $registros->count(),
+            $porPagina,
+            $pagina,
+            [
+                'path' => request()->url(),
+                'query' => request()->query(),
+            ]
+        );
+
         return [
             'nivel' => 'macrosector',
             'titulo' => 'Clasificación de la inversión',
-            'registros' => $this->repository->listarMacrosectoresCatalogo(
-                soloActivos: !$this->puedeConsultarHistorial()
-            ),
+            'registros' => $paginador,
+            'totalRegistros' => $totalRegistros,
+            'totalActivos' => $totalActivos,
+            'totalInactivos' => $totalInactivos,
         ];
     }
 
-    // Obtener los sectores de un macrosector visible.
-    public function datosListadoSectores(int $macrosectorId): array
-    {
-        $macrosector = $this->obtenerMacrosectorPorId($macrosectorId);
+        // Obtener los sectores de un macrosector visible.
+        public function datosListadoSectores(int $macrosectorId): array
+        {
+            $macrosector = $this->obtenerMacrosectorPorId($macrosectorId);
 
-        return [
-            'nivel' => 'sector',
-            'titulo' => 'Sectores',
-            'macrosector' => $macrosector,
-            'registros' => $this->repository->listarSectoresCatalogo(
+            $registros = $this->repository->listarSectoresCatalogo(
                 $macrosectorId,
                 soloActivos: !$this->puedeConsultarHistorial()
-            ),
-        ];
-    }
+            );
 
-    // Obtener los subsectores de un sector y macrosector visibles.
-    public function datosListadoSubsectores(int $sectorId): array
-    {
-        $sector = $this->obtenerSectorPorId($sectorId);
+            // Resumen general de registros.
+            $totalRegistros = $registros->count();
+            $totalActivos = $registros->where('estado', 'Activo')->count();
+            $totalInactivos = $registros->where('estado', 'Inactivo')->count();
 
-        return [
-            'nivel' => 'subsector',
-            'titulo' => 'Subsectores',
-            'sector' => $sector,
-            'registros' => $this->repository->listarSubsectoresCatalogo(
+            // Aplicar los filtros antes de paginar.
+            $buscar = request()->string('buscar')->trim()->toString();
+            $estado = request()->string('estado')->toString();
+
+            if ($buscar !== '') {
+                $registros = $registros->filter(
+                    fn ($registro) => str_contains(
+                        mb_strtolower(\Illuminate\Support\Str::ascii($registro->nombre)),
+                        mb_strtolower(\Illuminate\Support\Str::ascii($buscar))
+                    )
+                );
+            }
+
+            if (in_array($estado, ['Activo', 'Inactivo'], true)) {
+                $registros = $registros->where('estado', $estado);
+            }
+
+            // Configurar la cantidad de registros por página.
+            $porPagina = request()->integer('per_page', 10);
+
+            if (!in_array($porPagina, [7, 10, 15], true)) {
+                $porPagina = 10;
+            }
+
+            $pagina = LengthAwarePaginator::resolveCurrentPage();
+
+            // Paginar los registros filtrados.
+            $paginador = new LengthAwarePaginator(
+                $registros->forPage($pagina, $porPagina)->values(),
+                $registros->count(),
+                $porPagina,
+                $pagina,
+                [
+                    'path' => request()->url(),
+                    'query' => request()->query(),
+                ]
+            );
+
+            return [
+                'nivel' => 'sector',
+                'titulo' => 'Sectores',
+                'macrosector' => $macrosector,
+                'registros' => $paginador,
+                'totalRegistros' => $totalRegistros,
+                'totalActivos' => $totalActivos,
+                'totalInactivos' => $totalInactivos,
+            ];
+        }
+
+
+        // Obtener los subsectores de un sector y macrosector visibles.
+        public function datosListadoSubsectores(int $sectorId): array
+        {
+            $sector = $this->obtenerSectorPorId($sectorId);
+
+            $registros = $this->repository->listarSubsectoresCatalogo(
                 $sectorId,
                 soloActivos: !$this->puedeConsultarHistorial()
-            ),
-        ];
-    }
+            );
+
+            // Resumen general de registros.
+            $totalRegistros = $registros->count();
+            $totalActivos = $registros->where('estado', 'Activo')->count();
+            $totalInactivos = $registros->where('estado', 'Inactivo')->count();
+
+            // Aplicar los filtros antes de paginar.
+            $buscar = request()->string('buscar')->trim()->toString();
+            $estado = request()->string('estado')->toString();
+
+            if ($buscar !== '') {
+                $texto = mb_strtolower(
+                    \Illuminate\Support\Str::ascii($buscar)
+                );
+
+                $registros = $registros->filter(
+                    function ($registro) use ($texto) {
+                        $nombre = mb_strtolower(
+                            \Illuminate\Support\Str::ascii($registro->nombre)
+                        );
+
+                        $codigo = mb_strtolower(
+                            \Illuminate\Support\Str::ascii($registro->codigo ?? '')
+                        );
+
+                        return str_contains($nombre, $texto)
+                            || str_contains($codigo, $texto);
+                    }
+                );
+            }
+
+            if (in_array($estado, ['Activo', 'Inactivo'], true)) {
+                $registros = $registros->where('estado', $estado);
+            }
+
+            // Configurar la cantidad de registros por página.
+            $porPagina = request()->integer('per_page', 10);
+
+            if (!in_array($porPagina, [7, 10, 15], true)) {
+                $porPagina = 10;
+            }
+
+            $pagina = LengthAwarePaginator::resolveCurrentPage();
+
+            // Paginar los registros filtrados.
+            $paginador = new LengthAwarePaginator(
+                $registros->forPage($pagina, $porPagina)->values(),
+                $registros->count(),
+                $porPagina,
+                $pagina,
+                [
+                    'path' => request()->url(),
+                    'query' => request()->query(),
+                ]
+            );
+
+            return [
+                'nivel' => 'subsector',
+                'titulo' => 'Subsectores',
+                'sector' => $sector,
+                'registros' => $paginador,
+                'totalRegistros' => $totalRegistros,
+                'totalActivos' => $totalActivos,
+                'totalInactivos' => $totalInactivos,
+            ];
+        }
+
 
     // Gestión desde el panel
 

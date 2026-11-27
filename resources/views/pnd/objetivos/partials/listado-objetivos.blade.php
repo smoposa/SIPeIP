@@ -1,9 +1,10 @@
+
 <!-- Listado de objetivos -->
 <div class="border border-gray-200 rounded-lg overflow-hidden">
 
     <!-- Scroll independiente -->
     <div class="overflow-auto"
-         style="height: calc(100vh - 310px);">
+         style="height: calc(100vh - 290px);">
 
         <table class="min-w-full">
 
@@ -48,7 +49,7 @@
             <!-- Registros -->
             <tbody>
 
-                @forelse($eje->objetivos as $objetivo)
+                @forelse($objetivos as $objetivo)
 
                     <tr
                         class="fila-objetivo-pnd border-b border-gray-100 hover:bg-gray-50 transition"
@@ -59,8 +60,11 @@
 
                         <!-- Nro -->
                         <td class="px-4 py-2 text-center text-sm text-gray-600">
-                            {{ $loop->iteration }}
+
+                            {{ $objetivos->firstItem() + $loop->index }}
+
                         </td>
+
 
                         <!-- Objetivo -->
                         <td class="w-96 max-w-sm px-2 py-2 text-xs font-medium">
@@ -70,7 +74,9 @@
                                class="text-blue-600 hover:text-blue-800 hover:underline">
 
                                 <span class="block line-clamp-2">
+
                                     {{ $objetivo->nombre }}
+
                                 </span>
 
                             </a>
@@ -80,19 +86,25 @@
 
                         <!-- Políticas -->
                         <td class="px-2 py-2 text-center text-xs text-gray-600">
+
                             {{ $objetivo->politicas_count }}
+
                         </td>
 
 
                         <!-- Estrategias -->
                         <td class="px-2 py-2 text-center text-xs text-gray-600">
+
                             {{ $objetivo->politicas->sum('estrategias_count') }}
+
                         </td>
 
 
                         <!-- Metas -->
                         <td class="px-2 py-2 text-center text-xs text-gray-600">
+
                             {{ $objetivo->metas_count }}
+
                         </td>
 
 
@@ -146,10 +158,10 @@
 
                     <tr>
 
-                        <td colspan="8"
+                        <td colspan="7"
                             class="px-4 py-6 text-center text-sm text-gray-500">
 
-                            No existen objetivos registrados en este eje.
+                            No se encontraron registros.
 
                         </td>
 
@@ -161,7 +173,7 @@
                 <!-- Sin coincidencias -->
                 <tr id="sinResultadosObjetivoPnd" class="hidden">
 
-                    <td colspan="8"
+                    <td colspan="7"
                         class="px-4 py-6 text-center text-sm text-gray-500">
 
                         No se encontraron objetivos con los filtros seleccionados.
@@ -175,5 +187,9 @@
         </table>
 
     </div>
+
+
+    <!-- Paginación -->
+    <x-pagination :paginator="$objetivos" />
 
 </div>

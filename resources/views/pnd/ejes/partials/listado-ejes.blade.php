@@ -1,9 +1,10 @@
+
 <!-- Listado de ejes -->
 <div class="border border-gray-200 rounded-lg overflow-hidden">
 
     <!-- Scroll independiente -->
     <div class="overflow-auto"
-         style="height: calc(100vh - 310px);">
+         style="height: calc(100vh - 290px);">
 
         <table class="min-w-full">
 
@@ -45,9 +46,10 @@
             </thead>
 
 
+            <!-- Registros -->
             <tbody>
 
-                @forelse($pnd->ejes as $eje)
+                @forelse($ejes as $eje)
 
                     <tr
                         class="fila-eje-pnd border-b border-gray-100 hover:bg-gray-50 transition"
@@ -58,7 +60,9 @@
 
                         <!-- Nro -->
                         <td class="px-4 py-2 text-center text-sm text-gray-600">
-                            {{ $loop->iteration }}
+
+                            {{ $ejes->firstItem() + $loop->index }}
+
                         </td>
 
 
@@ -78,19 +82,25 @@
 
                         <!-- Objetivos -->
                         <td class="px-2 py-2 text-center text-xs text-gray-600">
+
                             {{ $eje->objetivos_count }}
+
                         </td>
 
 
                         <!-- Políticas -->
                         <td class="px-2 py-2 text-center text-xs text-gray-600">
+
                             {{ $eje->objetivos->sum('politicas_count') }}
+
                         </td>
 
 
                         <!-- Metas -->
                         <td class="px-2 py-2 text-center text-xs text-gray-600">
+
                             {{ $eje->objetivos->sum('metas_count') }}
+
                         </td>
 
 
@@ -147,7 +157,7 @@
                         <td colspan="7"
                             class="px-4 py-6 text-center text-sm text-gray-500">
 
-                            No existen ejes registrados en este plan.
+                            No se encontraron registros.
 
                         </td>
 
@@ -173,5 +183,9 @@
         </table>
 
     </div>
+
+
+    <!-- Paginación -->
+    <x-pagination :paginator="$ejes" />
 
 </div>
