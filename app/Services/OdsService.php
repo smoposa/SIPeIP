@@ -1,282 +1,86 @@
 <?php
-
 namespace App\Services;
-
-use App\Models\AgendaOds;
-use App\Models\Ods;
-use App\Models\OdsMeta;
+use App\Models\{AgendaOds,Ods,OdsMeta};
 use App\Repositories\Contracts\OdsRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
-
 class OdsService
 {
-    public function __construct(
-        private readonly OdsRepositoryInterface $odsRepository
-    ) {
+    public function __construct(private readonly OdsRepositoryInterface $odsRepository) {}
+    private function filtros(): array
+    {
+        $cantidad = request()->integer('per_page', 7);
+        $estado = request()->string('estado')->toString();
+        return [in_array($cantidad,[7,10,15],true)?$cantidad:7, trim(request()->string('buscar')->toString()), in_array($estado,['Activo','Inactivo'],true)?$estado:''];
     }
-
-    /**
-     * Listar agendas según los permisos de consulta del usuario.
-     */
     public function listarAgendas(): LengthAwarePaginator
     {
-        return $this->odsRepository->listarAgendas(
-            soloActivas: !$this->puedeConsultarHistorial()
-        );
+        return $this->odsRepository->listarAgendas(!$this->puedeConsultarHistorial(), ...$this->filtros());
     }
-
-    /**
-     * Obtener una agenda y validar su visibilidad.
-     */
     public function obtenerAgenda(int $id): AgendaOds
     {
         $agenda = $this->odsRepository->obtenerAgenda($id);
-
-        abort_unless(
-            $this->puedeConsultarHistorial()
-                || $agenda->estado === 'Activo',
-            404
-        );
-
+        abort_unless($this->puedeConsultarHistorial() || $agenda->estado === 'Activo',404);
         return $agenda;
     }
-
-    /**
-     * Registrar una agenda con estado inicial Activo.
-     */
     public function crearAgenda(array $datos): AgendaOds
     {
-        return $this->odsRepository->crearAgenda([
-            'nombre' => $datos['nombre'],
-            'periodo_inicio' => $datos['periodo_inicio'],
-            'periodo_fin' => $datos['periodo_fin'],
-            'descripcion' => $datos['descripcion'] ?? null,
-            'estado' => 'Activo',
-        ]);
+        return $this->odsRepository->crearAgenda(['nombre'=>$datos['nombre'],'periodo_inicio'=>$datos['periodo_inicio'],'periodo_fin'=>$datos['periodo_fin'],'descripcion'=>$datos['descripcion']??null,'estado'=>'Activo']);
     }
-
-    /**
-     * Actualizar los campos validados y autorizados de la agenda.
-     */
-    public function actualizarAgenda(int $id, array $datos): AgendaOds
+    private function validarEstado(array $campos): void
     {
-        $agenda = $this->obtenerAgenda($id);
-
-        $campos = array_intersect_key($datos, array_flip([
-            'nombre',
-            'periodo_inicio',
-            'periodo_fin',
-            'descripcion',
-            'estado',
-        ]));
-
-        if (
-            array_key_exists('estado', $campos)
-            && !in_array($campos['estado'], ['Activo', 'Inactivo'], true)
-        ) {
-            throw ValidationException::withMessages([
-                'estado' => 'El estado seleccionado no es válido.',
-            ]);
+        if (array_key_exists('estado',$campos) && !in_array($campos['estado'],['Activo','Inactivo'],true)) {
+            throw ValidationException::withMessages(['estado'=>'El estado seleccionado no es válido.']);
         }
-
-        return $this->odsRepository->actualizarAgenda(
-            $agenda,
-            $campos
-        );
     }
-
-    /**
-     * Actualizar únicamente el estado de la agenda.
-     */
-    public function actualizarEstadoAgenda(int $id, string $estado): AgendaOds
+    public function actualizarAgenda(int $id,array $datos): AgendaOds
     {
-        if (!in_array($estado, ['Activo', 'Inactivo'], true)) {
-            throw ValidationException::withMessages([
-                'estado' => 'El estado seleccionado no es válido.',
-            ]);
-        }
-
-        $agenda = $this->obtenerAgenda($id);
-
-        return $this->odsRepository->actualizarEstadoAgenda(
-            $agenda,
-            $estado
-        );
+        $agenda=$this->obtenerAgenda($id);
+        $campos=array_intersect_key($datos,array_flip(['nombre','periodo_inicio','periodo_fin','descripcion','estado']));
+        $this->validarEstado($campos);
+        return $this->odsRepository->actualizarAgenda($agenda,$campos);
     }
-
-    /**
-     * Obtener la agenda visible y sus objetivos.
-     */
+    public function actualizarEstadoAgenda(int $id,string $estado): AgendaOds
+    {
+        $this->validarEstado(['estado'=>$estado]);
+        return $this->odsRepository->actualizarEstadoAgenda($this->obtenerAgenda($id),$estado);
+    }
     public function datosAgenda(int $id): array
     {
-        $agenda = $this->obtenerAgenda($id);
-
-        return [
-            'agenda' => $agenda,
-            'ods' => $this->odsRepository->obtenerTodosOrdenados($agenda->id),
-        ];
+        $agenda=$this->obtenerAgenda($id);
+        return ['agenda'=>$agenda,'ods'=>$this->odsRepository->listarObjetivos($agenda->id,...$this->filtros())];
     }
-
-    /**
-     * Obtener todos los objetivos.
-     */
-    public function obtenerTodos(): Collection
+    public function obtenerTodos(): Collection { return $this->odsRepository->obtenerTodosOrdenados(); }
+    public function obtenerConMetas(Ods $ods): Ods { $this->obtenerAgenda((int)$ods->agenda_id); return $this->odsRepository->obtenerConMetas($ods); }
+    public function actualizarObjetivo(Ods $ods,array $datos): Ods
     {
-        return $this->odsRepository->obtenerTodosOrdenados();
+        $campos=array_intersect_key($datos,array_flip(['codigo','nombre','descripcion','estado']));
+        $this->validarEstado($campos);
+        return $this->odsRepository->actualizarObjetivo($ods,$campos);
     }
-
-    /**
-     * Obtener un objetivo con su agenda y metas.
-     */
-    public function obtenerConMetas(Ods $ods): Ods
-    {
-        $this->obtenerAgenda((int) $ods->agenda_id);
-
-        return $this->odsRepository->obtenerConMetas($ods);
-    }
-
-    /**
-     * Actualizar los campos validados y autorizados del objetivo.
-     */
-    public function actualizarObjetivo(Ods $ods, array $datos): Ods
-    {
-        $campos = array_intersect_key($datos, array_flip([
-            'codigo',
-            'nombre',
-            'descripcion',
-            'estado',
-        ]));
-
-        if (
-            array_key_exists('estado', $campos)
-            && !in_array($campos['estado'], ['Activo', 'Inactivo'], true)
-        ) {
-            throw ValidationException::withMessages([
-                'estado' => 'El estado seleccionado no es válido.',
-            ]);
-        }
-
-        return $this->odsRepository->actualizarObjetivo(
-            $ods,
-            $campos
-        );
-    }
-
-    /**
-     * Actualizar estado del objetivo.
-     */
-    public function actualizarEstadoObjetivo(Ods $ods, string $estado): Ods
-    {
-        if (!in_array($estado, ['Activo', 'Inactivo'], true)) {
-            throw ValidationException::withMessages([
-                'estado' => 'El estado seleccionado no es válido.',
-            ]);
-        }
-
-        return $this->odsRepository->actualizarEstadoObjetivo(
-            $ods,
-            $estado
-        );
-    }
-
-    /**
-     * Sugerir el siguiente código de objetivo dentro de una agenda.
-     */
+    public function actualizarEstadoObjetivo(Ods $ods,string $estado): Ods { $this->validarEstado(['estado'=>$estado]); return $this->odsRepository->actualizarEstadoObjetivo($ods,$estado); }
     public function siguienteCodigoObjetivo(int $agendaId): string
     {
-        $objetivos = $this->odsRepository->obtenerTodosOrdenados($agendaId);
-
-        $ultimoNumero = $objetivos->reduce(function (int $mayor, Ods $objetivo): int {
-
-            if (preg_match('/^ODS-(\d+)$/i', $objetivo->codigo, $coincidencias)) {
-                return max($mayor, (int) $coincidencias[1]);
-            }
-
-            return $mayor;
-
-        }, 0);
-
-        return 'ODS-' . str_pad(
-            (string) ($ultimoNumero + 1),
-            2,
-            '0',
-            STR_PAD_LEFT
-        );
+        $objetivos=$this->odsRepository->obtenerTodosOrdenados($agendaId);
+        $ultimoNumero=$objetivos->reduce(function(int $mayor,Ods $objetivo): int {
+            return preg_match('/^ODS-(\d+)$/i',$objetivo->codigo,$coincidencias)?max($mayor,(int)$coincidencias[1]):$mayor;
+        },0);
+        return 'ODS-'.str_pad((string)($ultimoNumero+1),2,'0',STR_PAD_LEFT);
     }
-
-    /**
-     * Registrar un objetivo con código consecutivo y estado inicial Activo.
-     */
-    public function crearObjetivo(int $agendaId, array $datos): Ods
+    public function crearObjetivo(int $agendaId,array $datos): Ods
     {
-        return DB::transaction(function () use ($agendaId, $datos) {
-
-            $agenda = $this->odsRepository->obtenerAgendaParaActualizar(
-                $agendaId
-            );
-
-            $codigo = $this->siguienteCodigoObjetivo($agenda->id);
-
-            return $this->odsRepository->crearObjetivo([
-                'agenda_id' => $agenda->id,
-                'codigo' => $codigo,
-                'nombre' => $datos['nombre'],
-                'descripcion' => $datos['descripcion'],
-                'estado' => 'Activo',
-            ]);
-
+        return DB::transaction(function() use($agendaId,$datos){
+            $agenda=$this->odsRepository->obtenerAgendaParaActualizar($agendaId);
+            return $this->odsRepository->crearObjetivo(['agenda_id'=>$agenda->id,'codigo'=>$this->siguienteCodigoObjetivo($agenda->id),'nombre'=>$datos['nombre'],'descripcion'=>$datos['descripcion'],'estado'=>'Activo']);
         });
     }
-
-    /**
-     * Registrar una meta dentro del objetivo seleccionado.
-     */
-    public function crearMeta(Ods $ods, array $datos): OdsMeta
+    public function crearMeta(Ods $ods,array $datos): OdsMeta { return $this->odsRepository->crearMeta(['ods_id'=>$ods->id,'codigo'=>$datos['codigo'],'nombre'=>$datos['nombre'],'descripcion'=>$datos['descripcion']??null,'estado'=>$datos['estado']??'Activo']); }
+    public function actualizarMeta(Ods $ods,OdsMeta $meta,array $datos): OdsMeta
     {
-        return $this->odsRepository->crearMeta([
-            'ods_id' => $ods->id,
-            'codigo' => $datos['codigo'],
-            'nombre' => $datos['nombre'],
-            'descripcion' => $datos['descripcion'] ?? null,
-            'estado' => $datos['estado'] ?? 'Activo',
-        ]);
+        abort_unless((int)$meta->ods_id===(int)$ods->id,404);
+        return $this->odsRepository->actualizarMeta($meta,array_intersect_key($datos,array_flip(['codigo','nombre','descripcion','estado'])));
     }
-
-    /**
-     * Actualizar una meta del objetivo seleccionado.
-     */
-    public function actualizarMeta(
-        Ods $ods,
-        OdsMeta $meta,
-        array $datos
-    ): OdsMeta {
-        abort_unless((int) $meta->ods_id === (int) $ods->id, 404);
-
-        $campos = array_intersect_key($datos, array_flip([
-            'codigo',
-            'nombre',
-            'descripcion',
-            'estado',
-        ]));
-
-        return $this->odsRepository->actualizarMeta(
-            $meta,
-            $campos
-        );
-    }
-
-    /**
-     * Determinar si el usuario puede consultar agendas inactivas.
-     */
-    private function puedeConsultarHistorial(): bool
-    {
-        return in_array(
-            auth()->user()?->rol?->codigo,
-            ['ADMIN_GLOBAL', 'ADMIN_SISTEMA'],
-            true
-        );
-    }
+    private function puedeConsultarHistorial(): bool { return in_array(auth()->user()?->rol?->codigo,['ADMIN_GLOBAL','ADMIN_SISTEMA'],true); }
 }
