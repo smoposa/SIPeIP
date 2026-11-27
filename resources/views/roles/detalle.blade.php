@@ -35,6 +35,10 @@
             @include('roles.partials.informacion-general')
 
 
+            <!-- Permisos y accesos -->
+            @include('roles.partials.permisos-asignados')
+
+
             <!-- Estado -->
             @include('roles.partials.estado')
 
@@ -53,6 +57,10 @@
 
     <!-- Panel de estado -->
     @include('roles.editarestado')
+
+
+    <!-- Panel de permisos -->
+    @include('roles.editarpermisos')
 
 
     <!-- Funcionamiento de los paneles -->

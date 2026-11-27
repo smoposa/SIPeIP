@@ -7,6 +7,7 @@ use App\Models\Rol;
 use App\Models\User;
 use App\Repositories\Contracts\RoleRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class RoleService
 {
@@ -72,12 +73,22 @@ class RoleService
      */
     public function crear(array $datos): Rol
     {
+        $permisosSeleccionados = $datos['permisos'] ?? [];
+        unset($datos['permisos']);
+
         $datos['estado'] = EstadoRol::ACTIVO->value;
 
         $datos['asignable_institucion'] =
             (bool) ($datos['asignable_institucion'] ?? false);
 
-        return $this->roleRepository->crear($datos);
+        // Registrar el rol y sus permisos en una sola transacción.
+        return DB::transaction(function () use ($datos, $permisosSeleccionados) {
+            $rol = $this->roleRepository->crear($datos);
+
+            $rol->permisos()->sync($permisosSeleccionados);
+
+            return $rol;
+        });
     }
 
     /**
@@ -92,6 +103,20 @@ class RoleService
             $rol,
             $datos
         );
+    }
+
+    /**
+     * Actualizar los permisos asignados a un rol.
+     */
+    public function actualizarPermisos(
+        Rol $rol,
+        array $permisosSeleccionados
+    ): void {
+        DB::transaction(function () use ($rol, $permisosSeleccionados) {
+            $rol->permisos()->sync($permisosSeleccionados);
+
+            $rol->touch();
+        });
     }
 
     /**

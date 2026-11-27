@@ -60,7 +60,7 @@
         <div class="overflow-y-auto" style="height: calc(100vh - 280px);">
             
             <!-- Formulario -->
-            <form method="POST" action="{{ route('roles.store') }}">
+            <form id="formCrearRol" method="POST" action="{{ route('roles.store') }}">
                 @csrf
 
                 <div class="space-y-4">
@@ -72,10 +72,11 @@
                             Nombre del Rol <span class="text-red-500">*</span>
                         </label>
 
-                        <div class="flex-1">
+                        <div class="flex-1 max-w-[810px]">
                             <input
                                 type="text"
                                 name="nombre"
+                                value="{{ old('nombre') }}"
                                 maxlength="100"
                                 required
                                 class="w-full h-9 border border-gray-300 rounded-md px-3 text-sm focus:ring-blue-500 focus:border-blue-500">
@@ -90,17 +91,20 @@
                             Descripción  <span class="text-red-500">*</span>
                         </label>
 
-                        <div class="flex-1">
+                        <div class="flex-1 max-w-[810px]">
 
                             <textarea
                                 name="descripcion"
                                 rows="4"
                                 maxlength="255"
-                                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                required
+                                class="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500">{{ old('descripcion') }}</textarea>
 
                         </div>
 
                     </div>
+
+                    @include('roles.partials.permisos')
 
                     <!-- Botones -->
                     <div class="flex justify-end gap-3 mt-6">
@@ -109,7 +113,9 @@
 
                             <button
                                 type="submit"
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md">
+                                id="btnGuardarRol"
+                                disabled
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md disabled:opacity-50">
                                 Guardar
                             </button>
 
@@ -128,5 +134,25 @@
         </div>
         
     </div>
+
+    <script>
+        (() => {
+            const formulario = document.getElementById('formCrearRol');
+            const guardar = document.getElementById('btnGuardarRol');
+
+            function actualizarBoton() {
+                guardar.disabled = !formulario.elements.nombre.value.trim()
+                    || !formulario.elements.descripcion.value.trim()
+                    || !formulario.querySelector('input[name="permisos[]"]:checked');
+            }
+
+            formulario.addEventListener('input', actualizarBoton);
+            formulario.addEventListener('change', actualizarBoton);
+            formulario.querySelector('[data-limpiar-permisos]')
+                .addEventListener('click', actualizarBoton);
+
+            actualizarBoton();
+        })();
+    </script>
 
 </x-roles-layout>

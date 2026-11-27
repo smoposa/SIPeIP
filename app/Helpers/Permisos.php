@@ -8,32 +8,17 @@ if (!function_exists('tienePermiso')) {
             return false;
         }
 
-        // Obtener el código técnico del rol del usuario autenticado
-        $rol = auth()->user()->rol?->codigo;
+        // Obtener el rol del usuario autenticado
+        $rol = auth()->user()->rol;
 
-        if (!$rol) {
+        if (!$rol || $rol->estado !== 'Activo') {
             return false;
         }
 
-        // Permisos para visualizar módulos
-        if ($accion === 'ver') {
-
-            $rolesPermitidos = config(
-                "permisos.modulos.$modulo",
-                []
-            );
-
-        } else {
-
-            // Permisos para acciones (crear, editar, cambiar estado, etc.)
-            $rolesPermitidos = config(
-                "permisos.acciones.$modulo.$accion",
-                []
-            );
-
-        }
-
-        return in_array($rol, $rolesPermitidos, true);
+        // Consultar los permisos asignados al rol
+        return $rol->permisos->contains(function ($permiso) use ($modulo, $accion) {
+            return $permiso->modulo === $modulo && $permiso->accion === $accion;
+        });
     }
 
 }

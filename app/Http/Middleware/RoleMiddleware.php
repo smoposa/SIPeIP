@@ -18,18 +18,15 @@ class RoleMiddleware
             return redirect()->route('login');
         }
 
-        // Obtener el código técnico del rol del usuario
-        $rol = auth()->user()->rol?->codigo;
+        // Obtener el rol del usuario
+        $rol = auth()->user()->rol;
 
-        if (!$rol) {
+        if (!$rol || $rol->estado !== 'Activo') {
             abort(403, 'El usuario no tiene un rol válido asignado.');
         }
 
-        // Obtener los roles permitidos para el módulo
-        $rolesPermitidos = config("permisos.modulos.$modulo", []);
-
         // Verificar autorización
-        if (!in_array($rol, $rolesPermitidos, true)) {
+        if (!puedeVer($modulo)) {
             abort(403, 'No tiene permisos para acceder a este módulo.');
         }
 

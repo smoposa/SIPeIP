@@ -31,6 +31,22 @@
         @endif
 
 
+        <!-- Editar permisos -->
+        @if(puedeHacer('roles', 'editar'))
+
+            <button type="button" data-editar-permisos-rol
+                    class="px-3 py-2 text-sm text-gray-700
+                           hover:bg-gray-100 transition">
+
+                <i class="bi bi-shield-check text-blue-500 me-2"
+                   aria-hidden="true"></i>
+                Editar permisos
+
+            </button>
+
+        @endif
+
+
         <!-- Editar estado -->
         @if(puedeHacer('roles', 'estado'))
 

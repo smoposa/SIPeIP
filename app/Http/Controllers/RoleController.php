@@ -6,7 +6,9 @@ use App\Http\Requests\Roles\StoreRoleRequest;
 use App\Http\Requests\Roles\UpdateRoleRequest;
 use App\Http\Requests\Roles\UpdateRoleStatusRequest;
 use App\Http\Requests\Roles\UpdateRoleAssignmentRequest;
+use App\Http\Requests\Roles\UpdateRolePermissionsRequest;
 use App\Services\RoleService;
+use App\Models\Permiso;
 
 class RoleController extends Controller
 {
@@ -60,7 +62,9 @@ class RoleController extends Controller
     {
         $this->autorizar('roles', 'crear');
 
-        return view('roles.create');
+        $permisos = Permiso::all();
+
+        return view('roles.create', compact('permisos'));
     }
 
     // Registrar un rol.
@@ -116,6 +120,33 @@ class RoleController extends Controller
         return redirect()
             ->route('roles.detalle', $rol->id)
             ->with('success', 'Rol actualizado correctamente.');
+    }
+
+    // Actualizar los permisos asignados al rol.
+    public function actualizarPermisos(
+        UpdateRolePermissionsRequest $request,
+        int $id
+    ) {
+        $this->autorizar('roles', 'editar');
+
+        $rol = $this->roleService->obtenerPorId($id);
+
+        // Proteger los roles administrativos y evitar la autoedición.
+        abort_if(
+            in_array($rol->codigo, ['ADMIN_GLOBAL', 'ADMIN_SISTEMA'], true)
+                || (int) $request->user()->rol->id === $rol->id,
+            403,
+            'No se pueden modificar los permisos de este rol protegido.'
+        );
+
+        $this->roleService->actualizarPermisos(
+            $rol,
+            $request->validated('permisos')
+        );
+
+        return redirect()
+            ->route('roles.detalle', $rol->id)
+            ->with('success', 'Permisos actualizados correctamente.');
     }
 
     // Abrir el panel de estado desde la ruta existente.

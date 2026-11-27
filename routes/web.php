@@ -54,7 +54,7 @@ Route::middleware([
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy');
 
-     // Roles
+    // Roles
     Route::prefix('roles')
         ->middleware('role:roles')
         ->group(function () {
@@ -82,6 +82,9 @@ Route::middleware([
 
             Route::put('/{id}', [RoleController::class, 'update'])
                 ->name('roles.update');
+
+            Route::put('/{id}/permisos', [RoleController::class, 'actualizarPermisos'])
+                ->name('roles.actualizarpermisos');
 
             Route::get('/{id}/estado', [RoleController::class, 'editarEstado'])
                 ->name('roles.estado');
